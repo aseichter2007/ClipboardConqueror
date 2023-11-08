@@ -1,8 +1,8 @@
-Clipboard Commander - Readme
+Clipboard Conqueror - Readme
 =============================
-
-Clipboard Commander is a powerful tool that harnesses the capabilities of locally run large language models to process and generate content, right from your clipboard. 
-With Clipboard Commander, you can leverage the AI's abilities by invoking it with `|||` and providing commands or requests for information.
+*Special thank you to the creators of  KoboldAi, KoboldCPP/lite, llamma, openAi, 
+Clipboard Conqueror is a powerful tool that harnesses the capabilities of locally run large language models to process and generate content, right from your clipboard. 
+With Clipboard Conqueror, you can leverage the AI's abilities by invoking it with `|||` and providing commands or requests for information.
 
 Usage:
 ------
@@ -28,6 +28,13 @@ Usage:
 ```
 Note: Remember to use four pipes (`||||`) for memory tags. They help to store data and instructions for later use. Chaining multiple tags is also possible, like `|||noban|memtag|Remember this message`.
 
+Productivity:
+Clipboard Conqueror makes the process of accessing an LLM simple and efficient in any workspace.
+
+Proofread documents, get feedback, find inspiration, or just run a game of dungeons and dragons with your friends.
+Clipboard Conqueror is ready to make ai simple and fast. 
+
+
 Key Features:
 --------------
 * Locally run large language models for powerful text processing.//todo install tutorial.
@@ -38,29 +45,29 @@ Key Features:
 
 Supported Platforms:
 --------------------
-Clipboard Commander is designed to work seamlessly across multiple platforms including Windows, macOS, and Linux. It has been rigorously tested and optimized to ensure stability and compatibility.
+Clipboard Conqueror is designed to work seamlessly across multiple platforms including Windows, macOS, and Linux. It has been rigorously tested and optimized to ensure stability and compatibility.
 
 Notice:
 --------
-Please use Clipboard Commander responsibly and respect copyright laws while generating content. Misuse of this tool might lead to unintended consequences and breaches of privacy or intellectual property rights.
+Please use Clipboard Conqueror responsibly and respect copyright laws while generating content. Misuse of this tool might lead to unintended consequences and breaches of privacy or intellectual property rights.
 
 Additional Resources:
-You can train Clipboard Commander to better understand your needs by providing examples of usage and instructional feedback. Personalizing your AI experience allows for more accurate results tailored specifically to your requirements. To train the AI, simply enter `|||train` followed by a description of the improvement you desire.
+You can train Clipboard Conqueror to better understand your needs by providing examples of usage formatted as a json. Personalizing your AI experience allows for more accurate results tailored specifically to your requirements. To train the AI, simply enter `|||train` followed by a description of the improvement you desire.
 
 Advanced Example:
 ```
    - |||newAgent, save| {  
-  "yourtag": \"Corporal Clip\",
-  description: "A helpful and friendly army man. He takes orders well.",
-  ExampleDilogue: ["Hello and welcome to the world of integrated AI!! I'm your host, Cpl Clip, so happy to be here!", "I'd take a bullet for you, if I had a body.]"
+  "yourtag": "Corporal Clip",
+  "anydescription": "A helpful and friendly army man. He takes orders well.",
+  "thisExampleDilogue": ["Hello and welcome to the world of integrated AI!! I'm your host, Cpl Clip, so happy to be here!", "I'd take a bullet for you, if I had a body.]"
 }
-will add that agent to the memory until next run. You can purchase a licence to the full version here: //todo: build website. 
+will add that agent json parsed into the memory until next run. You can purchase a licence to the full version here: //todo: build website. 
 ```"
 
 Bug Reports and Feature Requests:
 ---------------------------------
-If you encounter any issues while using Clipboard Commander or have suggestions for future improvements, please report them via our support forum at [https://support.clipboardcommander.ai](https://support.clipboardcommander.ai). Our dedicated team of developers will work diligently to address and resolve any concerns.
+If you encounter any issues while using Clipboard Conqueror or have suggestions for future improvements, please report them via our support forum at [https://support.clipboardConqueror.ai](https://support.clipboardConqueror.ai). Our dedicated team of developers will work diligently to address and resolve any concerns.
 
 Conclusion:
 -----------
-Embrace the power of Clipboard Commander and unlock endless possibilities with its advanced natural language processing capabilities. Take advantage of its flexible design and ease of use to improve your productivity, creativity, and communication. Join the ranks of users who have transformed their daily lives with the help of this remarkable AI assistant.
+Embrace the power of Clipboard Conqueror and unlock endless possibilities with its advanced natural language processing capabilities. Take advantage of its flexible design and ease of use to improve your productivity, creativity, and communication. Join the ranks of users who have transformed their daily lives with the help of this remarkable AI assistant.
