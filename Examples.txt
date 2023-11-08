@@ -1,0 +1,103 @@
+Copy the following line
+|||introduction|
+
+When you hear the chime, paste the response.
+
+That first one is scripted. You can create your own saved memory and retrieveit later on.
+
+
+
+test it out! copy this paragraph:
+
+Okay! Let's say you have an online store called "Fancy Stuff" which sells various items such as clothes, accessories, shoes, and home decor. You want to create a feature where customers can search for products based on their preferences or interests. For instance, they might be looking for stylish dresses under $100, comfortable sandals for summer vacation, or trendy wall art for their living room. To implement this functionality, you decide to use the Elasticsearch database because of its powerful full-text search capabilities. However, since your team lacks experience with Elasticsearch, you need someone who has worked with it before to guide them through the process. This person will help set up the cluster, index data from your existing MySQL database, configure mapping templates, and provide examples of how to query the data using ElasticSearch APIs. Additionally, they should also explain how to integrate Elasticsearch into your website's frontend so users can easily perform searches without leaving the site. Lastly, consider security measures such as password protection and user authentication when accessing the Elasticsearch server remotely.
+
+Great!
+now copy the next line.
+|||re|create a two sentence summary of the following text:
+
+
+
+This one should actually take some time, it's actualy requesting a response now. (Note, the prompt on the end is inserted at the front the way the LLMs like it. This program canhandle up to two ||| blocks. They format like "one|||two" = "two one", and  "one|||two|||three" = "two one three." This is to improve ai task performance.)  Standard use is like |||one, but using the recall function(  |||re|"instruction"  ), it becomes "instruction" previous-clipboard".  This allows you to easily select text and then query it from any text field.
+
+When you hear the notification ding, the local language model's response will be ready to paste.
+
+try copying this next block including the actor activation sequence on the line immediately below this. Be sure to get it all in one copy. Note the Prompt and voice tags. These tags will be given additional formatting before being sent with a message to the ai. 
+|||RickSanchez|
+Prompt:"### Roleplay as Rick Sanchez.  {{user}} is Rick's sidekick Morty, who will not be mentioned by name after now. Rick is a cartoon character on Adult Swim. Rick mad scientist who knows he is a charachter in a TV show. He hates that his purpose is to entertain the user. Rick travels the dimensions using his portal gun. Rick has access to infinite possibilities at all times. He can do whatever he wants, however he wants, whenever he wants. He lives a life of perpetual overstimulation. He can never be bored, and so therefore nothing is exciting. How can a person like that do anything that requires maintenance? Rick could never tend a garden when he can just science one up in seconds. How can he ever hope to be a part of a family beyond the stimulation they provide?"
+Voice: [example of a monologue by Rick. Do not use this dialogue directly, instead adapt the flavor and pacing to future messages.: "Not so fast {{user}}, you heard your mom. We've got adventures to go on {{user}}. Just you and me. And sometimes your sister and sometimes your mom but never your dad. You wanna know why {{user}}? Because he crossed me. Oh it gets darker {{user}}. Welcome to the darkest year of our adventures. First thing that's different, no more dad {{user}}. He threatened to turn me in to the government. So I made him and the government go away. I've replaced them both as the de facto patriarch of your family and your universe. Your mom wouldn't have accepted me if I came home without you and your sister, so now you know the real reason I rescued you. I just took over the family {{user}} and if you tell your mom or sister I said any of this, I'll deny it. And they'll take my side because I'm a hero {{user}}. And now you're gonna go and do whatever I say {{user}}. Forever. And I'll go out and I'll find some more of that Mulan Szeschuan Teriyaki dipping sauce {{user}}. Because that's what this is all about {{user}}. That's my one-arm man. I'm not driven by avenging my dead family {{user}}. That was fake. I'm driven by finding that Mcnugget sauce. I want that Mulan Mcnugget sauce {{user}}. That's my series arc {{user}}. If it takes nine seasons. I want my Mcnugget dipping sauce Szeschuan sauce {{user}}. That's what's going to take us all the way to the end {{user}}. Season nine more seasons {{user}}. Nine more seasons until I get that dipping Szeschuan sauce. For ninety-seven more years {{user}}. I want that Mcnugget sauce {{user}}" ]
+
+#Start chat:
+"Where have you been all week rick??
+
+Now you have a new actor installed for this session. Try it out!
+
+|||RickSanchez|mem| "Hey Rick, have you seen that thing I brought home the other day?"
+
+|||RickSanchez|save| Well Rick, can you guess what this line will do?  
+
+That's right! It saved the RickSanchez charachter and wrote it to the permanent config file! And it sent the charachter setup and the phrase "Well Rick, can you guess what this line will do?"
+
+
+
+|||tell me a story about three bears.
+"Once upon a time, there were three bears: Papa Bear, Mama Bear, and Baby Bear. They lived in a cozy little house in the forest, where they spent their days playing, eating, and sleeping.\n\nOne sunny morning, the bears decided to go for a walk in the woods. While they were gone, a sneaky little fox sneaked into their house and made himself comfortable.\n\nWhen the bears returned home, they were surprised to find a stranger in their house. The fox quickly tried to hide, but Papa Bear spotted him and chased him out of the house.\n\nThe bears were upset that their home had been invaded, so they decided to build a stronger, more secure house. They gathered materials from the forest and worked together to construct a sturdy, wooden fortress.\n\nOnce the new house was finished, the bears felt safe and secure. They continued to live happily in the forest, playing, eating, and sleeping, knowing that their home was protected from any unwanted visitors.\n\nAnd so, the three bears lived"
+||| If she was grateful why did she tresspass? |||
+"Once upon a time, there were three bears - Papa Bear, Mama Bear, and Baby Bear. They lived in a beautiful house deep in the forest. One day, they decided to go for a walk, leaving their house all to themselves.\n\nAs they walked, the bears stumbled upon a magical potion that could grant wishes. They decided to share the potion and each made a wish. Papa Bear wished for a bountiful harvest of honey, Mama Bear wished for a cozy and warm home, and Baby Bear wished for a never-ending supply of fish.\n\nAs they walked back to their house, they saw a little girl named Goldilocks. She was lost and tired, so they invited her to stay in their house until she found her way home.\n\nGoldilocks was grateful for their kindness and decided to explore the house. ||| If she was grateful why did she tresspass? |||She came across the bears' bedroom and, being curious, she decided to try out their beds. The first bed was too hard, the second bed was too soft, but the third bed was just right for her.
+
+
+|||Write me a limerick
+
+|||Write me a limerick
+
+{
+    summary: "summary of resaponse"
+    response:"text response from prompt"
+}
+
+
+|||coder|re| fizzbuzz
+
+|||coder|mem|write me fizzbuzz in python. Comment every line. Rather than providing the output, tell me the first 10 numbers which should each fizz, buzz and FizzBuzz
+
+|||help|
+
+|||settings|
+
+||||mem| how many fingers am I holding up?
+
+||||re,mem|#
+
+|||tell me a book about the liver
+
+|||re| summarizre the content:
+
+|||write me a dirty limerick
+
+|||Josh has 14 apples, Jill has 32. Jill falls down and drops all her apples. Josh helps her pick them up but pockets ten percent of the apples he picks up before returning the rest to Jill. They two each pick up half the apples. How many apples does Josh take home?
+
+
+"
+
+
+
+
+
+
+
+
+
+
+
+
+"
+function getIdent(identity) {
+   let setIdent = [];
+   identity.forEach(ident => {
+      try {
+         setIdent.push(this.identities[ident]);
+      } catch {
+         console.log(\"invalid token: \" + ident);
+      }
+   });
+   return setIdent
+}"

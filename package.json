@@ -1,0 +1,21 @@
+{
+  "name": "clipboardconqueror",
+  "version": "1.0.0",
+  "description": "",
+  "main": "copyconqueror.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon copyconqueror.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "audic": "^3.0.2",
+    "axios": "^1.6.0",
+    "clipboard-event": "^1.6.0",
+    "clipboardy": "^4.0.0",
+    "copy-paste": "^1.5.3",
+    "nodemon": "^3.0.1"
+  }
+}
