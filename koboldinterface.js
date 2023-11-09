@@ -9,12 +9,11 @@ class KoboldClient {
     this.setupRequest()
   }
 
-  send(query, lenght = 100){
-
-    this.params.prompt = query;
-    this.params.max_length = lenght;
-    this.currentRequest = this.params
-    this.sendKoboldRequest(this.currentRequest);
+  send(text, params){
+    params.prompt = text;
+    //this.params = params;
+    //this.currentRequest = params
+    this.sendKoboldRequest(params);
   }
 
   setupRequest( ) {
@@ -41,11 +40,13 @@ class KoboldClient {
       sampler_full_determinism: false,    //set it so the seed determines generation content
       frmttriminc: false,
       frmtrmblln: false,
-      mirostat_mode: 2,//mirostat disables top_p, top_k. It does it's own thing and kinda learns along somehow?. 
+      mirostat_mode: 2,//mirostat disables top_p, top_k, top_a It does it's own thing and kinda learns along somehow?. 
       mirostat_tau: 4,
       mirostat_eta: 0.1,
       guidance_scale: 1,
       negative_prompt: 'porn,sex,nsfw,racism,bawdy,racy',
+      banned_tokens: ["   ", "</s>", "\n# ", "\n##", "\n*{{user}} ","### Human: ", "\n\n\n", "\n{{user}}:", '\"role\":', '\"system\"', '{{user:}}>:', "###"]
+
     };
     if (this.params == ""){
       this.params = example;
@@ -86,7 +87,8 @@ class KoboldClient {
       guidance_scale: 1,
       negative_prompt: 'porn,sex,nsfw,racism,bawdy,racy',//I dont think this is implemented yet
       grammar_string: '',
-      banned_tokens: '["   ", "</s>", "\n# ", "\n##", "\n*{{user}} ", "\n\n\n", "\n{{user}}:"]',
+      banned_tokens: `["   ", "</s>", "\n# ", "\n##", "\n*{{user}} ","### Human: ", "\n\n\n", "\n{{user}}:", '\"role\":', '\"system\"', '{{user:}}>:',]`
+
       //type: textgen_types.OOBA,
   }
   }

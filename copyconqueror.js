@@ -27,9 +27,9 @@ const KoboldClient = require('./koboldinterface.js');
 
     }   
 
-function recieveProcessedClip(text, lenght = 5000) {
+function recieveProcessedClip(text, params) {
     //console.log("clipback: " + text);
-    client.send(text, lenght);
+    client.send(text, params);
 }
 function recieveApiResponse(text){
     NotificationBell("received");
@@ -41,6 +41,7 @@ function recieveApiResponse(text){
 function getSummary(text){
 
 }
+
 
 clipboardListener.on('change', () => {
     ncp.paste(clipboardChangeHandler)

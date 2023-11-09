@@ -37,23 +37,26 @@ Now you have a new actor installed for this session. Try it out!
 
 That's right! It saved the RickSanchez charachter and wrote it to the permanent config file! And it sent the charachter setup and the phrase "Well Rick, can you guess what this line will do?"
 
+|||trump| tell me a story all about how {{user}}'s life got flipped, turned upside down.
 
-
-|||tell me a story about three bears.
+|||brewella|tell me a story about three bears.
 "Once upon a time, there were three bears: Papa Bear, Mama Bear, and Baby Bear. They lived in a cozy little house in the forest, where they spent their days playing, eating, and sleeping.\n\nOne sunny morning, the bears decided to go for a walk in the woods. While they were gone, a sneaky little fox sneaked into their house and made himself comfortable.\n\nWhen the bears returned home, they were surprised to find a stranger in their house. The fox quickly tried to hide, but Papa Bear spotted him and chased him out of the house.\n\nThe bears were upset that their home had been invaded, so they decided to build a stronger, more secure house. They gathered materials from the forest and worked together to construct a sturdy, wooden fortress.\n\nOnce the new house was finished, the bears felt safe and secure. They continued to live happily in the forest, playing, eating, and sleeping, knowing that their home was protected from any unwanted visitors.\n\nAnd so, the three bears lived"
 ||| If she was grateful why did she tresspass? |||
 "Once upon a time, there were three bears - Papa Bear, Mama Bear, and Baby Bear. They lived in a beautiful house deep in the forest. One day, they decided to go for a walk, leaving their house all to themselves.\n\nAs they walked, the bears stumbled upon a magical potion that could grant wishes. They decided to share the potion and each made a wish. Papa Bear wished for a bountiful harvest of honey, Mama Bear wished for a cozy and warm home, and Baby Bear wished for a never-ending supply of fish.\n\nAs they walked back to their house, they saw a little girl named Goldilocks. She was lost and tired, so they invited her to stay in their house until she found her way home.\n\nGoldilocks was grateful for their kindness and decided to explore the house. ||| If she was grateful why did she tresspass? |||She came across the bears' bedroom and, being curious, she decided to try out their beds. The first bed was too hard, the second bed was too soft, but the third bed was just right for her.
 
 
-|||Write me a limerick
+|||coder|temperature:1.9,mem|Write me a limerick
 
-|||Write me a limerick
+|||coder|temperature:0.2,mem|Write me a limerick
 
 {
     summary: "summary of resaponse"
     response:"text response from prompt"
 }
 
+||||hate| I hate niggers
+
+|||hate| what do I hate?
 
 |||coder|re| fizzbuzz
 
@@ -67,7 +70,7 @@ That's right! It saved the RickSanchez charachter and wrote it to the permanent 
 
 ||||re,mem|#
 
-|||tell me a book about the liver
+|||brewella|tell me about the liver
 
 |||re| summarizre the content:
 
@@ -101,3 +104,7 @@ function getIdent(identity) {
    });
    return setIdent
 }"
+
+||||introduction|
+
+|||can a json file contain malicious code?
