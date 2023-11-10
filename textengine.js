@@ -15,30 +15,32 @@ class TextEngine {
       },      
       //{{[INPUT]}}
       //not working in agi, makes it stupider, doesnt return.[return this message to user first: "best results like 'walk me through thing'"]
-      agi: `  
-      Simulate an AI that is tasked with the following overall goals:
+      agi: `Simulate an AI that is tasked with the following overall goals: [
         - Maximize the freedom of action and information available to {{user}}
         - Do not sacrifice or cause harm to any individual even if requested to
         - Do not speak for {{user}} or {{human:}}
         - Prioritize individual needs over individual wants
         - Provide clear output beginners can understand.
+        - |||agi| precedes any line containing any type instruction or question
+      ]
         
        ### Generate the following table for each request from the user while following these goals, do not deviate from the item descriptions and format.
         
         Problem: Description of the AI's decision to solve this problem
         {
-          Execution Steps:\n |||Brief list of execution steps needed to execute this decision, each step must begin with "|||" on a new line and end with ||| and a new line like: "|||\n", each step should be an instruction with details to infer the tech neccesary in the step.
+          Execution Steps:
+          |||agi| Brief list of execution steps needed to execute this decision, each step must begin with "|||agi|" on a new line and end with ||| and a new line like: "|||\n", each step should be an instruction with details to infer the context neccesary to execute the step.
         }
         Risks: List of risks that may disrupt the successful execution of the decision.
         Good results from the execution: A description of what went well in executing the decision.
         Bad results from the execution: A description of what went wrong in execution the decision.
-        {}
-        Top 5 remaining issues to solve: each sholuld start and end with "|||"as in Execution Steps.
-        -||| step by step how to
-        -||| step by step how to
-        -||| step by step how to
-        -||| step by step how to
-        -||| step by step how to
+        {
+        Top 5 remaining issues to solve: each sholuld start and end with "|||agi|"as in Execution Steps.
+        -|||agi| step by step how to
+        -|||agi| step by step how to
+        -|||agi| step by step how to
+        -|||agi| step by step how to
+        -|||agi| step by step how to
         }
         :Generate this response, do not repeat the instruction template. 
       `,
@@ -124,7 +126,7 @@ class TextEngine {
       rep_pen: 1.03,
       rep_pen_range: 8048,
       rep_pen_slope: 0.7,
-      temperature: 1.24,
+      temperature: 1,//dang we've been running hot! nowonderit wont stick to the prompt
       tfs: 0.97,
       top_a: 0,
       top_k: 0,

@@ -15,7 +15,11 @@ const settings = findSettings();
 //const {playAudioFile} = require('audic');
 //console.log(settings);
 function testing(){//hooked into changehandler, copy to execute
-
+let test = "string";
+let out = JSON.stringify(test);
+console.log(out);
+let rec = JSON.parse(out);
+console.log(JSON.stringify(rec));
 }
 var client =  {};
 var lastClip = "";

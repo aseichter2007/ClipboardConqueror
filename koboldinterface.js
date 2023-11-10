@@ -1,11 +1,11 @@
 class KoboldClient {
-  constructor(baseURL, handler, callback, notify, params = "") {
+  constructor(baseURL, handler, callback, returnSummary, notify) {
     this.baseURL = baseURL;
     this.handler = handler;
     this.currentRequest = "Joe Biden, Wake Up!";
     this.callback = callback;
     this.notify = notify;
-    this.params = params;
+    this.returnSummary = returnSummary;
     //this.setupRequest()
   }
 
@@ -15,7 +15,9 @@ class KoboldClient {
     //this.currentRequest = params
     this.sendKoboldRequest(params);
   }
-
+  getSummary(params){
+    sendrequestsummaryRequest(this.baseURL, data, this.returnSummary, this.handler, this.notify);
+  }
   // setupRequest( ) {
   //   const example= {
   //     temp: 0.7,
@@ -77,5 +79,6 @@ async function sendPostRequest(apiUrl, data, callback, handler, notify) {
     console.error(`Error sending request: ${error}`);
   }
 }
+
 module.exports = KoboldClient;
 // the quick brown fox ||| jumped over the lazy dog

@@ -173,6 +173,8 @@ dev:
 //todo: /api/extra/tokencount //should run against entered data and updates should be shown after setting mem or agent and on final send. 
 //todo: /api/extra/true_max_context_length //returns context max
 // i found this!https://lite.koboldai.net/koboldcpp_api#/1
+//implement |||no|
+
 release!
 //premium
 //todo: branch to build premium binaries from. premium branch features:

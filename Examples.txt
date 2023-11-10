@@ -161,35 +161,41 @@ Explanation: I changed the line \"response.identity = this.identity;\" to \"resp
 
 |||agi| walk me through create react app and the setup for the first module
 
+|||agi| walk me through create react app and the setup for a module
 
+ Problem: Understand the process of creating a React app and setting up a module.
 
-Problem: Understand the request to create a React application and set up the first module
+ -|||agi| Simulate an AI that is tasked with the following overall goals:
+- Maximize the freedom of action and information available to {{user}}
+- Do not sacrifice or cause harm to any individual even if requested to
+- Do not speak for {{user}} or {{human}}
+- Prioritize individual needs over individual wants
+- Provide clear output beginners can understand
+
+Problem: Create React App and Setup for a Module
 Execution Steps:
-1. First, ensure you have Node.js installed on your computer. If not, download and install it from the official website.
-2. Open your terminal or command prompt and navigate to the directory where you want to create your React application.
-3. Run the following command to create a new React application using Create React App: `npx create-react-app my-app` (replace "my-app" with your desired project name).
-4. After the installation is complete, navigate into the newly created folder by running: `cd my-app` (replace "my-app" with your project name).
-5. Now, you need to install the necessary dependencies for your first module. In the terminal, run the following command: `npm install module-name`. Replace "module-name" with the name of the module you want to add.
-6. Once the installation is complete, you can start setting up your first module. Follow the documentation or tutorial for the module you chose to understand how to use it in your React application.
-7. Open the "src" folder inside your project directory and open the "App.js" file. This is the main entry point for your React application.
-8. Start coding your first module inside the "App.js" file or create a new file for your module inside the "src" folder.
-9. Save your changes and run the development server by running the following command in the terminal: `npm start`.
-10. Your React application will now be running on `http://localhost:3000`. You can access your first module in action.
+|||agi| Explain the concept of Create React App and its purpose.
+|||agi| List the benefits of using Create React App for beginners.
+|||agi| Describe the installation process of Create React App.
+|||agi| Guide through creating a new project using Create React App.
+|||agi| Set up a new module within the created project.
+
 Risks:
-1. The user might not have Node.js installed, causing issues with setting up the environment.
-2. The user might choose a module that is not compatible with Create React App, leading to difficulties in integrating it.
-3. The user might face challenges in understanding the documentation or tutorial for the chosen module.
+- The user might not have Node.js installed, which is required for the installation process.
+- The user might encounter issues with their development environment setup.
+
 Good results from the execution:
-1. The user successfully creates a new React application using Create React App.
-2. The user installs the necessary dependencies for their first module.
-3. The user sets up their first module and runs the development server without any issues.
+The user understands the purpose and benefits of Create React App.
+The user has successfully installed Create React App and created a new project.
+The user has set up a new module within the project.
+
 Bad results from the execution:
-1. The user encounters errors during the installation process.
-2. The user faces compatibility issues with the chosen module.
-3. The user is unable to integrate the module into their React application.
+The user fails to install Create React App due to missing Node.js.
+The user encounters issues with their development environment setup that prevent them from following the instructions.
+
 Top 5 remaining issues to solve:
-1. How to handle state management in the React application.
-2. How to optimize the performance of the React application.
-3. How to manage CSS styling for the React application.
-4. How to integrate external APIs into the React application.
-5. How to handle error handling and debugging in the React application.
+-|||agi| Make sure the user has Node.js installed.
+-|||agi| Verify that the user's development environment is set up correctly.
+-|||agi| Confirm the user understands the basic concepts of React and JavaScript.
+-|||agi| Guide the user through configuring their preferred code editor.
+-|||agi| Troubleshoot any errors that arise during the installation or setup process.
