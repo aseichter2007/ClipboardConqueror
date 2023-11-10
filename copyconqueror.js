@@ -6,11 +6,11 @@ const clipboardListener = require('clipboard-event');
 //const player = require('sound-play')(opts = {});
 const SendEngine = require('./textengine.js');
 const RecieveEngine = require('./responsengine.js');
+const ncp = require('copy-paste');
 const recieveEngine = new RecieveEngine();
-const sendEngine = new SendEngine(recieveProcessedClip);
+const sendEngine = new SendEngine(recieveProcessedClip,ncp.copy,NotificationBell, getSummary);
 const axios = require('axios');
 const fs = require('fs');
-const ncp = require('copy-paste');
 const settings = findSettings();
 //const {playAudioFile} = require('audic');
 //console.log(settings);
@@ -22,11 +22,19 @@ var lastClip = "";
 var lastResponse = "";
 const KoboldClient = require('./koboldinterface.js');
 //if (configs.client== "kobold")
-    {
-        client = new KoboldClient("http://127.0.0.1:5001/api/v1/generate/", axios, recieveApiResponse, NotificationBell);
+{
+    client = new KoboldClient("http://127.0.0.1:5001/api/v1/generate/", axios, recieveApiResponse, returnSummary, NotificationBell);
+    
+}   
 
-    }   
-
+function getSummary(text, params) {
+    client.send(text, params, true)
+}
+function returnSummary(text){
+    text = text.replace(/\\n/g, '\n');
+    lastResponse = recieveEngine.recieveMessageFindTerminatorsAndTrim(text);
+    sendEngine.recievesummary();
+}
 function recieveProcessedClip(text, params) {
     //console.log("clipback: " + text);
     client.send(text, params);

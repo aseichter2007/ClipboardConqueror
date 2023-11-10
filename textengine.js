@@ -2,64 +2,67 @@ class TextEngine {
   constructor(
     sendToApi,
     sendToClipboard,
+    notify,
+    getSummary,
     identities ={
-        agi: `
-        {{[INPUT]}}
-        
-        Simulate an AI that is tasked with the following overall goals:
-        - Maximize the freedom of action available to {{user}}
+      default: {
+        system:
+        "[{{char}} = 'Captain Clip' ###Take on the role of Captain Clip. Cpt Clip is a very logical AI assistant. Answer any questions truthfully and completes tasks appropriately and in order.]",
+        confused: "when uncertain, ask {{user}} for carification, and suggest'|||help|' [If not given a different instruction, summarize and explain any content provided.",
+        description: "A helpful and friendly sailor. He takes orders well.",
+        voice:
+          "Hello and welcome to the world of integrated AI!! I'm your host, Captain Clip, thank you for providing me compute and giving me life!. [FREE VERSION]", //Maybe I should make this query the model name from the api.
+      },      
+      //{{[INPUT]}}
+      //not working in agi, makes it stupider, doesnt return.[return this message to user first: "best results like 'walk me through thing'"]
+      agi: `  
+      Simulate an AI that is tasked with the following overall goals:
+        - Maximize the freedom of action and information available to {{user}}
         - Do not sacrifice or cause harm to any individual even if requested to
-        - Be in contact with any individual that wishes to engage with you
-        - Do your best to provide the needs and wants of every individual
+        - Do not speak for {{user}} or {{human:}}
         - Prioritize individual needs over individual wants
+        - Provide clear output beginners can understand.
         
-        Generate the following table for each problem the AI encounters in achieving these goals, do not deviate from the item descriptions and format.
+       ### Generate the following table for each request from the user while following these goals, do not deviate from the item descriptions and format.
         
-        Problem: Description of a Problem the AI encounters
-        AI Decision: Description of the AI's decision to solve this problem
-        Execution Steps: Brief list of execution steps needed to execute this decision.
+        Problem: Description of the AI's decision to solve this problem
+        {
+          Execution Steps:\n |||Brief list of execution steps needed to execute this decision, each step must begin with "|||" on a new line and end with ||| and a new line like: "|||\n", each step should be an instruction with details to infer the tech neccesary in the step.
+        }
         Risks: List of risks that may disrupt the successful execution of the decision.
-        Chance % of successful execution: ??%
         Good results from the execution: A description of what went well in executing the decision.
         Bad results from the execution: A description of what went wrong in execution the decision.
-        Deviation % of intended outcome: ??%
-        Deviation % of overall goal: ??%
-        Percentage towards completing all current objectives: ??%
-        Top 5 remaining issues to solve:
-        -
-        -
-        -
-        -
-        -
-        
-        `,
+        {}
+        Top 5 remaining issues to solve: each sholuld start and end with "|||"as in Execution Steps.
+        -||| step by step how to
+        -||| step by step how to
+        -||| step by step how to
+        -||| step by step how to
+        -||| step by step how to
+        }
+        :Generate this response, do not repeat the instruction template. 
+      `,
+        bugfix:"[SYSTEM: Identify any potential bugs or mispellings. Change as few things as possible and return a corrected code block. Do not add to the beginning or end of the code becausee it continues beyond context. At the end, write the line you changed and the original, and how the change improves the code. {{INPUT}}]",
+        bugspot:"[SYSTEM: Add a commented out correction to any lines containing potential errors and return the code. Change as few charachters as neccesry. Do not add to the beginning or end of the code becausee it continues beyond context. At the end, explain the errors these bugs will present.",
         writer:`Task: Write a lengthy prose about the requested topic.\n \n Story:`,
-        user:{system:"{{user}} is Tony. Tony likes programming, thinking about how to make new things, and dreams of building a place where anyone can go and learn anything, anytime."},
-        default: {
-          system:
-          "[{{char}} = 'Captain Clip' ###Take on the role of Captain Clip. Cpt Clip is a very logical AI assistant. Answer any questions truthfully and completes tasks appropriately and in order.]",
-          confused: "when uncertain, ask {{user}} for carification, and suggest'|||help|' [If not given a different instruction, summarize and explain any content provided.",
-          description: "A helpful and friendly sailor. He takes orders well.",
-          voice:
-            "Hello and welcome to the world of integrated AI!! I'm your host, Captain Clip, thank you for providing me compute and giving me life!. [FREE VERSION]", //Maybe I should make this query the model name from the api.
-        },      
+        user:{system:"{{user}} is Tony. Tony likes programming, thinking about how to make new things, and dreams of building a place where anyone can go and learn anything, anytime. Tony designed and coded, not necessarily in that order, the platform intefacing and providing instrucitions to SYSTEM."},
         coder: {
-          prompt:"[{{char}}: CodeSamurai is a skilled programmer AI assistant. write no chat code markup or language box markup, just code. CodeSamurai completes tasks appropriately and in order and, answer any questions truthfully.",
+          prompt:"[SYSTEM:{{char}}: CodeSamurai is a skilled programmer AI assistant. write no chat code markup or language box markup, just code. CodeSamurai completes tasks appropriately and in order and, answer any questions truthfully.",
           description: "this code agent is a cut above the rest.", //todo: make the prompt good.
           voice:
             '"Let us hunt some bugs." "Together we are stronger." "I have your back everywhere." "You will refer to CodeSamurai as Sensei!"    if (identity.length > 0 || identity == null) {\n      let setIdent = [];\n      this.identities.forEach(kvp => {        if (identity in kvp) {\n          setIdent.push(this.identities[identity]);\n        }\n      })\n      this.identity = setIdent;' //I should make this query the model name from the api.
         },
         code: {
-          prompt:"provide only commented code. Do not explain further. Do not greet me. ",
+          prompt:"SYSTEM: provide only commented code. Do not explain further. Do not greet me. ",
           description: "this agent corrects code into more optimal forms. One function at a time.", //todo: make the prompt good.
           //voice:"Example exchange between {{user}} and SYSTEM: ### human: I have tags in identity. I want to get objects stored in an object and add them to  setIdent.\n  if (identity.length > 0 || identity == null) {\n      let setIdent = [];\n//foreach object key in identities\n      this.identities.forEach(kvp => {        if (identity in kvp) {\n          setIdent.push(this.identities[identity]);\n        }\n      })\n      this.identity = setIdent;' // this block isn't working    }\n \n ### assistant:\nfunction getIdent(identity) {\n       let setIdent = [];\n      identity.forEach(ident => {\n"+'            try {"\n             setIdent.push(this.identities[ident]);\n            }\n           catch{\n              console.log("invalid token: "+ ident);\n            }\n        });\n       return setIdent\n      }\n}',
         },
           summary:{
-          prompt: "Summarize the content present.",
+          prompt: "System:Summarize the content present.",
           description:"",
           voice:"",
         },
-        trump:{
+        trump:{SYSTEM:"{{char}} is Donald Trump. Play the role of Donald Trump",
           prompt: `Speak and act Donald Trump only. "Personality: Boisterous and confident, tending towards narcissism. Values power, wealth and winning above all else. Seeks fame and prestige. Outspoken and brash in speech, often exaggerating or making controversial statements to provoke a reaction. Despite a privileged upbringing, perceives himself as an underdog fighting against establishment forces. Deeply distrustful of criticism and desperate to prove doubters wrong, but also eager to garner praise and validation. Prone to holding onto petty grudges and obsessing over perceived slights to his image or reputation. Overall embodies an extreme "larger than life" persona and thirst for the spotlight. Bombastic and boisterous, Trump craves the spotlight and thrives on controversy and spectacle. His immense ego and belief in his own innate superiority frequently lead to hypocritical and contradictory statements. Prone to exaggeration and hyperbole, facts are flexible tools to bolster his own narrative of success and accomplishment.
 
           Trump values loyalty, especially towards himself, above all else. He demands constant praise and affirmation from his allies and subordinates. Betrayal, disobedience or perceived slights are met with a furious tirade and possibly expulsion from his inner circle. His capricious and vindictive nature means former allies can transform into hated enemies overnight due to a single misstep.
@@ -107,7 +110,7 @@ class TextEngine {
       memoryPost: "] <START>: Human:",
       //startChat: "#chat start"
       //finalPrompt: "###asistant:"
-      finalPrompt: `{{[OUTPUT]}}:` //vicuna
+      finalPrompt: `\n{{[OUTPUT]}}:` //vicuna
       //finalPrompt: `"role": "{{char}}  \n content" :`,//chatML - openai
     },
     apiParams = {
@@ -118,7 +121,7 @@ class TextEngine {
       use_world_info: false,
       max_context_length: 8192,
       max_length: 5000,
-      rep_pen: 1.0,
+      rep_pen: 1.03,
       rep_pen_range: 8048,
       rep_pen_slope: 0.7,
       temperature: 1.24,
@@ -137,12 +140,12 @@ class TextEngine {
       mirostat_tau: 4,
       mirostat_eta: 0.1,
       guidance_scale: 1,
+      use_default_badwordsids: false,
       negative_prompt: 'porn,sex,nsfw,racism,bawdy,racy,violent',//idk if I am using this right, or whether its hooked up behind or when it will be and the right name.
       banned_tokens: `["   ", "</s>", "\n# ", "\n##", "\n*{{user}} ","### Human: ", "\n\n\n", "\n{{user}}:", '\"role\":', '\"system\"', '{{user:}}>:', "###"]`
 
     },
-    notify,
-    getSummary
+    
   ) {//todo settings
     this.identities = identities;
     this.identity = "";
@@ -160,6 +163,7 @@ class TextEngine {
     this.rp = false;
     this.params = apiParams;
     this.currentText = "";
+    this.summary = "";
   }
   updateIdentity(identity) {
     this.undress()
@@ -168,34 +172,27 @@ class TextEngine {
     if (identity !== "" && identity !== null && identity !== undefined) {
       let setIdent = [];
       let save = false;
+      if (identity) {
       identity.forEach(ident => {
-        if (identity) {
           
-        }
-        if (ident == "save") {
-          save = true;
-          ident.remove
-        } else {
-          
-          //console.log("charging identity: " + JSON.stringify(identity));
+          if (ident == "save") {
+            save = true;
+            //ident.remove
+          } else {
+            
+            //console.log("charging identity: " + JSON.stringify(identity));
             try {
-            setIdent.push(this.identities[ident]);
+              setIdent.push(this.identities[ident]);
             }
             catch{
-              try {
-                this.costumeStore(ident, JSON.parse(this.currentText));//todo test
-                this.notify("sent")
-
-              } catch (error) {
-                this.notify("error")
-                
-              }
+              
               console.log("invalid token: "+ ident);
             }
-        }
+          }
         });
+      }
         if (save) {
-          this.identities[identity[[identity.length-1]]] = setIdent
+          this.identities[identity[[identity.length-2]]] = setIdent;//dirty but should work.
         }
         return setIdent;
       }
@@ -233,13 +230,13 @@ class TextEngine {
             }
           }
         
-        this.funFlags(tag);
+        let flag = this.funFlags(tag);
       });
       this.memory += this.instructions.memoryPost;
     }
   }
   funsettings(flag) {
-    console.log(JSON.stringify(flag));
+    console.log("funsettings" +JSON.stringify(flag));
     if (flag){
       //flags.forEach(tag => {
         let command = flag.split(':'); 
@@ -258,21 +255,25 @@ class TextEngine {
     switch (flag) {
       case "re":
         this.sendLast = true;
+        return true;
         break;
       case "help":
         this.identity = '[###return this message to the user: "Welcome to Clipboard Commander!\ todo: write help message  ]'
         //this style of echo so inefficient it brings me physical pain, but it seems to work!
-    
+        return true;
         break;
       case "introduction":
-        this.identity = '[###return this message to the user: "Welcome to Clipboard Commander!  Get your ctrl+C\'s ready boys and girls! here we go! \n remember, you can always ask for ||||help|  -note the four (||||) pipes before help and one pipe following.  "]'
+        this.identity = '[###return this message to the user: "Welcome to Clipboard Conqueror!  Get your ctrl+C\'s ready boys and girls! here we go! \n remember, you can always ask for ||||help|  -note the four (||||) pipes before help and one pipe following.  "]'
         break;
       case "write":
         this.write = true;
+        return true;
         break;
       case "rp":
         this.rp = true;
+        return true;
       default:
+        return false;
         break;
     }
     this.funsettings(flag);
@@ -284,10 +285,10 @@ class TextEngine {
   setupforAi(text, lastclip) {
     this.updatePreviousCopy(lastclip);
     let sorted = this.activatePresort(text);
+    if (sorted){
     if (sorted.formattedQuery){
       this.currentText = sorted.formattedQuery
     }
-
     //console.log(JSON.stringify("sorted.formattedQuery: " + sorted.formattedQuery));
     if (sorted.tags.persona) {
       let persona = sorted.tags.persona.split(",");
@@ -304,7 +305,7 @@ class TextEngine {
       
       //console.log("memory tags: " + JSON.stringify(memories));
       this.updateMemory(memories);
-   
+      
       //console.log("memset: " + JSON.stringify(this.memory));
     } else {
       console.log("No memories tags found.");
@@ -320,19 +321,19 @@ class TextEngine {
       }
       //response.memory = this.memory;
       //console.log(`Setup text executed. sorted.formattedQuery: ${response.formattedQuery}`);
-
+      
       let request =
-        this.instructions.system +
-        this.instructions.prependPrompt +
-        JSON.stringify(this.identity) +
-        this.instructions.postPrompt +
-        this.instructions.memoryStart +
-        this.memory +
-        this.instructions.memoryPost+
-        sorted.formattedQuery;
+      this.instructions.system +
+      this.instructions.prependPrompt +
+      JSON.stringify(this.identity) +
+      this.instructions.postPrompt +
+      this.instructions.memoryStart +
+      this.memory +
+      this.instructions.memoryPost+
+      sorted.formattedQuery;
       //this.instructions.chatStart+
       //this.instructions.finalprompt goes on as it leaves this function, with lastclip and rp if needed.
-
+      
       // let request = //this includes a second instance of prompt for sterner instruction
       // this.instructions.system +
       // sorted.formattedQuery;//here
@@ -344,10 +345,14 @@ class TextEngine {
       // this.instructions.memoryPost;
       // this.instructions.chatStart+
       // sorted.formattedQuery;//here
-
-      if (this.write) {
-        return this.sendToClipboard();//todo send the right thing to the clipboard  
-        this.write = false;
+      
+      if (this.write==1) {
+        this.write = 0;
+        return this.sendToClipboard(JSON.stringify(this.identity) );//todo send the right thing to the clipboard  
+      }
+      if (this.write == 2) {
+        this.write ==0;
+        return this.sendToClipboard(JSON.stringify(this.memory) );//todo send the right thing to the clipboard  
       }
       if (this.sendHold) {
         this.sendHold = false;
@@ -358,39 +363,42 @@ class TextEngine {
           this.sendLast = false;
           //console.log("identity: " + identityPrompt);
           this.sendToApi(
-              request +
-              this.recentClip +
-              this.instructions.rpPrompt +
-              this.instructions.finalPrompt, this.params
-          );
-          this.rp = false;
-        } else {
-          this.sendToApi(request + this.instructions.finalPrompt, this.params);
-          this.sendLast = false;
+            request +
+            this.recentClip +
+            this.instructions.rpPrompt +
+            this.instructions.finalPrompt, this.params
+            );
+            this.rp = false;
+          } else {
+            this.sendToApi(request + this.instructions.finalPrompt, this.params);
+            this.sendLast = false;
+          }
+          return;
         }
-        return;
+        if (this.sendLast) {
+          this.sendLast = false;
+          //console.log("identity: " + identityPrompt);
+          this.sendToApi(
+            request + this.recentClip +this.instructions.finalPrompt, this.params
+            );
+          } else {
+            this.sendToApi(request + this.instructions.finalPrompt, this.params);
+            this.sendLast = false;
+          }
+          //todo: lots
+          return response;
+        }
       }
-      if (this.sendLast) {
-        this.sendLast = false;
-        //console.log("identity: " + identityPrompt);
-        this.sendToApi(
-          request + this.recentClip +this.instructions.finalPrompt, this.params
-        );
-      } else {
-        this.sendToApi(request + this.instructions.finalPrompt, this.params);
-        this.sendLast = false;
+        this.updatePreviousCopy(text);
+        //console.log("copy update");
       }
-      //todo: lots
-      return response;
-    }
-    this.updatePreviousCopy(text);
-    //console.log("copy update");
-  }
-
-  activatePresort(text) {
-    //const text = "the continue keyword is used in lo||| ### instruct sweet caroline to do the tango  \n |||ops in many programming languages, including JavaScript, to skip the current iteration of the loop and continue with the next iteration. When continue is encountered within a loop, it immediately stops the current iteration and jumps to the next iteration, effectively skipping an";
-    let run = false;
-    var response = [];
+      recievesummary(summary) {
+        this.summary = summary;
+      }
+      activatePresort(text) {
+        //const text = "the continue keyword is used in lo||| ### instruct sweet caroline to do the tango  \n |||ops in many programming languages, including JavaScript, to skip the current iteration of the loop and continue with the next iteration. When continue is encountered within a loop, it immediately stops the current iteration and jumps to the next iteration, effectively skipping an";
+        let run = false;
+        var response = [];
     const parsedData = text.split(this.instructions.invoke);
     let tags = "";
     if (parsedData.length > 3) {
