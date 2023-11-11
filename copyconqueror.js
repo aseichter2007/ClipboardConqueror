@@ -1,5 +1,5 @@
+let botresponse = false
 const path = require("path");
-const sound = require('sound-play');
 const myconfig = require("./defaultconfig.js");
 const {findSettings} = require("./setup.js");
 const clipboardListener = require('clipboard-event');
@@ -24,34 +24,83 @@ console.log(JSON.stringify(rec));
 var client =  {};
 var lastClip = "";
 var lastResponse = "";
+var lastgen = "";
+var memout = '';
 const KoboldClient = require('./koboldinterface.js');
 //if (configs.client== "kobold")
 {
-    client = new KoboldClient("http://127.0.0.1:5001/api/v1/generate/", axios, recieveApiResponse, returnSummary, NotificationBell);
+    client = new KoboldClient( axios, recieveApiResponse, returnSummary, NotificationBell);
     
 }   
+const notifier = require('node-notifier');
+function notify(title = "Paste Ready", text = "Your generation is ready"){
+// Define the notificatio
+const notification = {
+    title: 'Paste Ready',
+    message: 'Hello, this is a notification!',
+    icon: 'path/to/icon.png', // Optional
+    sound: true, // Optional, plays a sound with the notification
+};
+notifier.notify(notification, function (err, response) {
 
+// Display the notification
+  // Handle errors or response if needed
+  console.log(response);
+});
+}
 function getSummary(text, params) {
-    client.send(text, params, true)
+    client.send(text, params)
 }
 function returnSummary(text){
     text = text.replace(/\\n/g, '\n');
-    lastResponse = recieveEngine.recieveMessageFindTerminatorsAndTrim(text);
-    sendEngine.recievesummary();
+    let Response = recieveEngine.recieveMessageFindTerminatorsAndTrim(text);
+    sendEngine.recievesummary(Response);
+    client.getstats(sendData, "summary");
 }
-function recieveProcessedClip(text, params) {
+function recieveProcessedClip(text, params, lastTag) {
     //console.log("clipback: " + text);
     client.send(text, params);
 }
 function recieveApiResponse(text){
-    NotificationBell("received");
     text = text.replace(/\\n/g, '\n');
+    NotificationBell("Paste Response:", text);
+    botresponse = true
     lastResponse = recieveEngine.recieveMessageFindTerminatorsAndTrim(text);
     ncp.copy(lastResponse);
+    getPerfUser();
 }
 // To start listening
-function getSummary(text){
+function getPerfUser(){
+    client.getstats(sendData, "user");
 
+}
+function getPerfai(){
+    client.getstats(sendData, "ai");
+
+}
+function sendData(data, destination) {
+    const flags = ['summary', 'ai', 'user']; // Define your list of available destinations here
+
+    try {
+        switch (destination) {
+            case flags[0]:
+                console.log(`Sending data to summary`);
+                break;
+            case flags[1]:
+                console.log(`Sending data to ai memory`);
+                break;
+            case flags[2]:
+                console.log(`Sending data to user memory...`);
+                break;
+            default:
+                throw new Error('Invalid destination');
+        }
+
+        // Send data to the chosen destination
+        console.log(`Sent ${data} to ${destination}`);
+    } catch (error) {
+        console.error(`Error sending data: ${error.message}`);
+    }
 }
 
 
@@ -63,58 +112,27 @@ function clipboardChangeHandler(err,text, debug = true){
     //console.log(JSON.stringify(text));
     console.log("ClipboardChangeHandler: " +text);
     if (err) {
-        NotificationBell("error"); 
+        NotificationBell("error: ", err+text); 
         return console.log(err+text);
     }
     let out = text.trim();
-    if (lastClip !== out && lastResponse !== out) {
+    if (lastClip !== out && lastResponse !== out&& !botresponse) {
         sendEngine.setupforAi(out, lastClip);
         lastClip = out;
         //console.log(JSON.stringify(out));//|||coder|
         if(debug){
-            //NotificationBell("ready");
+            //NotificationBell("text copied", lastClip);
             testing();
         }
     }
+
+    botresponse = false;
 }
 //sounds spooky
-function NotificationBell(soundAction) {
-    const listeningSound = './media/Listening.mp3';
-    const replySound = './media/ReplyReady.mp3';
-    const sentSound = './media/sent.mp3';
-    const errorsound = './media/Error.mp3';
-    const readysound = './media/ready.wav';
-    switch (soundAction) {
-        case "ready":
-            playtargetsound(readysound)
-            break;
-        case "listening":
-            playtargetsound(listeningSound)
-            break;
-        case "received":
-            playtargetsound(replySound)
-            break;
-        case "sent":
-            playtargetsound(sentSound)
-            break;
-        case "error":
-            playtargetsound(errorsound)
-            break;
-        default:
-            console.log("unknown sound request");
-            break;
-    }
+function NotificationBell(title, text) {
+            notify(title, text);        
 }
-function playtargetsound(file){
-    // player.play(file, (error) => {
-    //     if (error) {
-    //         return console.error(`Error while playing audio: ${error}`);
-    //         }
-    //         //console.log('Audio started playing!')
-        
-    //     });
-    sound.play('./media/', file);
-}
+
 clipboardListener.startListening();
 {//cleanup listener
     process.on('SIGINT', () => {

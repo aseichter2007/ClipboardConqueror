@@ -1,5 +1,5 @@
 class ResponseEngine {
-    constructor(invoke =  "|/",  terminators = ["####"]) {
+    constructor(invoke =  "|/",  terminators = ["asdfghjkl"]) {
         this.Invoke= invoke;
         this.terminators = terminators;
     }

@@ -1,13 +1,22 @@
 class KoboldClient {
-  constructor(baseURL, handler, callback, returnSummary, notify) {
-    this.baseURL = baseURL;
+  constructor( handler, callback, returnSummary, notify, baseURL = "http://127.0.0.1:5001/") {
     this.handler = handler;
-    this.currentRequest = "Joe Biden, Wake Up!";
     this.callback = callback;
-    this.notify = notify;
     this.returnSummary = returnSummary;
+    this.baseURL = baseURL;
+    this.generate = "api/v1/generate/";
+    this.getMaxContext = "";
+    this.stats = "/extra/perf";
+    this.abort = '/extra/abort';
+    this.currentRequest = "Joe Biden, Wake Up!";
+    this.notify = notify;
     //this.setupRequest()
+    
   }
+  getstats(datareturn, tag){
+    sendPostPerfRequest(this.baseURL + this.stats, datareturn, this.handler, this.notify, tag)
+  }
+
 
   send(text, params){
     params.prompt = text;
@@ -15,8 +24,12 @@ class KoboldClient {
     //this.currentRequest = params
     this.sendKoboldRequest(params);
   }
+  abort(){
+    sendPostTextRequest(this.baseURL + this.abort, this.callback, this.handler, this.notify)
+  }
+  
   getSummary(params){
-    sendrequestsummaryRequest(this.baseURL, data, this.returnSummary, this.handler, this.notify);
+    sendrequestsummaryRequest( this.baseURL + this.generate , params, this.returnSummary, this.handler, this.notify);
   }
   // setupRequest( ) {
   //   const example= {
@@ -61,12 +74,12 @@ class KoboldClient {
   // }
   // }
   sendKoboldRequest(data) {
-     this.notify("ready");
+     //this.notify("ready");
     console.log("to API: "+data.prompt);
-    sendPostRequest(this.baseURL, data, this.callback, this.handler, this.notify);
+    sendPostTextRequest(this.baseURL+this.generate , data, this.callback, this.handler, this.notify);
   }
 }
-async function sendPostRequest(apiUrl, data, callback, handler, notify) {
+async function sendPostTextRequest(apiUrl, data, callback, handler, notify) {
   try {
     const response = await handler.post(apiUrl, data);
     //console.log(`Response status: ${response.status}`);
@@ -76,6 +89,19 @@ async function sendPostRequest(apiUrl, data, callback, handler, notify) {
     callback(text);
   } catch (error) {
     notify("error");
+    console.error(`Error sending request: ${error}`);
+  }
+}
+async function sendPostPerfRequest(apiUrl, data, callback, handler, notify, tag) {
+  try {
+    const response = await handler.post(apiUrl, data);
+    //console.log(`Response status: ${response.status}`);
+    //var text = JSON.stringify(response.data.results[0].text)
+    var text = response.last_token_count;
+    //console.log(`Response data: ${text}`);
+    callback(text, tag);
+  } catch (error) {
+    notify("error:", error);
     console.error(`Error sending request: ${error}`);
   }
 }

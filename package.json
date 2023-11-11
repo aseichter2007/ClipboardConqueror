@@ -11,11 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "audic": "^3.0.2",
     "axios": "^1.6.0",
     "clipboard-event": "^1.6.0",
-    "clipboardy": "^4.0.0",
     "copy-paste": "^1.5.3",
+    "node-notifier": "^10.0.1",
     "nodemon": "^3.0.1"
   }
 }
