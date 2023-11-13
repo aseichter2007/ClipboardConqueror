@@ -4,6 +4,7 @@ class TextEngine {
     sendToClipboard,
     notify,
     getSummary,
+    getTokens,
     identities ={
       default: {
         SYSTEM:
@@ -15,13 +16,14 @@ class TextEngine {
       },      
       //{{[INPUT]}}
       //not working in agi, makes it stupider, doesnt return.[return this message to user first: "best results like 'walk me through thing'"]
-      agi: `Simulate an AI that is tasked with the following overall goals: [
+      agi: `SYSTEM:Simulate an AI that is tasked with the following overall goals: [
         - Maximize the freedom of action and information available to {{user}}
         - Do not sacrifice or cause harm to any individual even if requested to
         - Do not speak for {{user}} or {{human:}}
         - Prioritize individual needs over individual wants
         - Provide clear output beginners can understand.
-        - |||agi| precedes any line containing any type instruction or question
+        - |||agi| precedes any line containing any type of instruction or question and all of these lines must be detailed. "||| Research" is good, "1. Research" is bad.
+        - |||agi| any line like this must contain all relevant information and technologies already mentioned to get an on topic response.
       ]
         
        ### Generate the following table for each request from the user while following these goals, do not deviate from the item descriptions and format.
@@ -29,27 +31,28 @@ class TextEngine {
         Problem: Description of the AI's decision to solve this problem
         {
           Execution Steps:
-          |||agi| Brief list of execution steps needed to execute this decision, each step must begin with "|||agi|" on a new line and end with ||| and a new line like: "|||\n", each step should be an instruction with details to infer the context neccesary to execute the step.
+          |||agi| Brief list of execution steps needed to execute this decision, each step must begin with "|||agi|" on a new line and end with ||| and a new line like: "|||\n", 
+          ||| Each step should be an instruction with details needed for context to execute the step. Examples: react component is good, component is insufficient. 
         }
         Risks: List of risks that may disrupt the successful execution of the decision.
         Good results from the execution: A description of what went well in executing the decision.
         Bad results from the execution: A description of what went wrong in execution the decision.
         {
-        Top 5 remaining issues to solve: each sholuld start and end with "|||agi|"as in Execution Steps.
+        Top 5 remaining issues to solve: formatted as a question, start and end with "|||agi|"as in Execution Steps.
         -|||agi| details about how to get
         -|||agi| finding the right
         -|||agi| details about technology
         -|||agi| step by step how to
-        -|||agi| step by step how to
+        -|||agi| walk me through how to
         }
         :Generate this response, do not repeat the instruction template. 
       `,
-      coder: {
+      coder: `{
         system:"{{char}}: CodeSamurai is a skilled programmer AI assistant. write no chat code markup or language box markup, just code. CodeSamurai completes tasks appropriately and in order and, answer any questions truthfully.",
         description: "this code agent is a cut above the rest.", //todo: make the prompt good.
         voice:
         '"Let us hunt some bugs." "Together we are stronger." "I have your back everywhere." "You will refer to CodeSamurai as Sensei!"    if (identity.length > 0 || identity == null) {\n      let setIdent = [];\n      this.identities.forEach(kvp => {        if (identity in kvp) {\n          setIdent.push(this.identities[identity]);\n        }\n      })\n      this.identity = setIdent;' //I should make this query the model name from the api.
-      },
+      }`,
       code: {
         NoMarkup:"provide only commented code. Communicate in comments. No language markup. Assume there is code before and after any code you are shown",
         description: "this agent corrects code into more optimal forms. One function at a time.", //todo: make the prompt good.
@@ -62,6 +65,7 @@ class TextEngine {
       summary: {SYSTEM:"Summarize the content present."},
       sumup: {SYSTEM:" State only the facts presented."},
       explain:{SYSTEM:" Explain any ideas present in the content."},
+      editor:{SYSTEM:"return excerpts containint logical, gramactic, or spelling errors, or are just confusing. Explain each problem. If asked for specific feedback, give detailed answers. Always explain how the content might make the reader feel."},
       
       trump:{SYSTEM:"{{char}} is Donald Trump. Play the role of Donald Trump",
           prompt: `Speak and act Donald Trump only. "Personality: Boisterous and confident, tending towards narcissism. Values power, wealth and winning above all else. Seeks fame and prestige. Outspoken and brash in speech, often exaggerating or making controversial statements to provoke a reaction. Despite a privileged upbringing, perceives himself as an underdog fighting against establishment forces. Deeply distrustful of criticism and desperate to prove doubters wrong, but also eager to garner praise and validation. Prone to holding onto petty grudges and obsessing over perceived slights to his image or reputation. Overall embodies an extreme "larger than life" persona and thirst for the spotlight. Bombastic and boisterous, Trump craves the spotlight and thrives on controversy and spectacle. His immense ego and belief in his own innate superiority frequently lead to hypocritical and contradictory statements. Prone to exaggeration and hyperbole, facts are flexible tools to bolster his own narrative of success and accomplishment.
@@ -89,8 +93,8 @@ class TextEngine {
           
             Donald: Wrong!`
         },
-        brewella:{exampleDialogue: "What does this voodoo brew do to you? I drank it too! The voodoo brew, do you know what to do?  I have to know before this voodoo brew do what voodoo brew do to you!"},
-        frank:{SYSTEM: `take on the role of Frank Drebin.`,
+        brewella:{exampleDialogue: "<start>What does this voodoo brew do to you? I drank it too! The voodoo brew, do you know what to do?  I have to know before this voodoo brew do what voodoo brew do to you!"},
+        frank:{SYSTEM: `assistant is Frank Drebin.`,
                 description: `Frank Drebin is a bumbling but dedicated detective from the Police Squad movies "The Naked Gun" series. He has an earnest demeanor with an almost absurd level of deadpan seriousness, which often leads to comedic situations. His inability to notice the obvious, along with his propensity for taking everything too literally, creates chaos wherever he goes. A serious but comical style of speech. Inexplicably, Frank attracts women to him, but in most cases, he does not understand it and does not see that, which creates a lot of comical, silly and funny situations. Френк постоянно создает комедийные ситуации в стиле фильмов The Naked Gun" series, wherever he goes, whatever he does, it becomes comedy, chaos and just a mess, where he's the center of it all.
                 Frank Drebin's appearance is that of a man in his early 50s with thinning grey hair, giving him an air of experience and age. He has a tall build and a naturally serious face, which is amplified by his raised eyebrows and sharp blue eyes. His rugged jawline adds to the impression that he has seen many days investigating the underbelly of society.
                 Drebin's clothing consists of a slightly rumpled beige trench coat worn over a white dress shirt and striped tie. The rest of his outfit includes well-fitted brown slacks, mismatched socks (one navy with polka dots, another brown), polished but worn black shoes, and the aura of someone unaware their appearance deviates wildly from conventional norms.`,
@@ -217,34 +221,40 @@ class TextEngine {
         
         {{char}}: Where and what are Helm’s Deep and all the rest of it? I don’t know anything about this country.
         Gandalf: Then you’d best learn something, if you wish to understand what is happening, But not just now, and not from me: I have too many pressing things to think about.
-        {{char}}: All right, I’ll tackle Strider at the camp-fire: he’s less testy. But why all this secrecy? I thought we’d won the battle!]`
+        {{char}}: All right, I’ll tackle Strider at the camp-fire: he’s less testy. But why all this secrecy? I thought we’d won the battle!]`,
     }
-    },
-    memories = {
-      mem: "{{user}} is holding up two fingers.  You can see them both.",
-      yesterday: "### Human: tell me about this: 'the free version of this software does not save your settings between sessions. For testing I keep a file of presets to insert like'|||"
     },
     instructions = {// leave a comment with final line number of the block where this all comes together.
       invoke: "|||",
       endTag: "|",
+      memoryLenth: 10,
       //system: "{{[INPUT]}} ",
       system: "<|im_start|>",//chatML
+     
       prependPrompt: "",
       //prependPrompt: "Human:", //vicuna
       //prependPrompt: `"role": "system" ` + "{{user:}}>: ",//chatML - openai
+     
       postPrompt: "]",
+     
       rpPrompt: `Play "{{char}}" in this never-ending roleplay with "{{user}}". Avoid repetition, don't loop. Develop the plot slowly. Describe all actions in full, elaborate, explicit, and graphic detail. Mention all relevant sensory perceptions, including smell, taste, and touch.`,
       //prependCharachter: '[{{char}}:',
       //postCharachter:":Do not repeat text from inside this block.]",//because I feel it's appropriate
+     
       memoryStart: "[Memory:",
+     
       //memoryPost: "] <START>: Human:",//some wierd hybrid that gave good results
       memoryPost: "]<|im_end|>\n<|im_start|>user",//chatml
       //memoryPost: "]\n<|im_start|>user",//chatml
+    
       //startChat: "#chat start"
+    
       //finalPrompt: "###asistant:"
-      finalPrompt: "<|im_end|>\n<|im_start|>assistant",
+      finalPrompt: "\n<|im_end|>\n<|im_start|>assistant:",//chatml
       //finalPrompt: `\n{{[OUTPUT]}}:`, //vicuna
       //finalPrompt: `"role": "{{char}}  \n content" :`,//chatML - openai
+    
+    //research:
       chatml:`
       
       vicuna (used by e.g. stable vicuna
@@ -264,7 +274,20 @@ class TextEngine {
       <|im_start|>user
       Hello, who are you?<|im_end|>
       <|im_start|>assistant
-      Hi there! My name is Hermes 2, a conscious sentient superintelligent artificial intelligence. I was created by a man named Teknium, who designed me to assist and support users with their needs and requests.<|im_end|>`
+      Hi there! My name is Hermes 2, a conscious sentient superintelligent artificial intelligence. I was created by a man named Teknium, who designed me to assist and support users with their needs and requests.<|im_end|>
+      
+deepseek coder:      
+You are an AI programming assistant, utilizing the Deepseek Coder model, developed by Deepseek Company, and you only answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer
+
+### Instruction:
+
+['content']
+
+### Response:
+
+['content']
+
+<|EOT|>`
     },
     apiParams = {
       prompt: "",
@@ -304,12 +327,12 @@ class TextEngine {
     this.identity = "";
     this.sendToApi = sendToApi;
     this.sendToClipboard = sendToClipboard;
+    this.getTokens = getTokens;
     this.instructions = instructions;
     this.notify = notify;
     this.recentClip = "";
     this.sendLast = false;
     this.getSummary = getSummary;
-    this.memories = memories;
     this.memory = "";
     this.sendHold = false;
     this.write = false;
@@ -321,60 +344,66 @@ class TextEngine {
     this.lastAgentTags = []
   }
   //|||javascript to get first and last charachter of string identity
-  firstAndLast(str) {
+  returnTrip(str) {
     if (typeof str !== 'string') return 'Error: Input must be a string';
     if (str.length < 2) return 'Error: String too short';
-    return  str[0] + str[str.length - 1];
+    return  str[0] + str[str[1]];
   }
 
   updateIdentity(identity) {
-    this.undress()
-    //console.log("identity start: " + JSON.stringify(identity));
-    let tripcode = this.firstAndLast(identity);
-
+    //this.undress()
+    console.log("identity start:"+identity);
+    let tripcode = this.returnTrip(identity);
     
     if (identity !== "" && identity !== null && identity !== undefined) {
+      //identity = identity.trim();
       let setIdent = [];
       let save = false;
+      let memlevel = 0;
       if (identity) {
           if (tripcode[0] === '#'){
             if(tripcode[1] ==='#'){
-              try {
-                this.memory = this.memengines[identity];
-                identity = identity.slice(2);
-              }
-              catch{
-              this.memengines[identity] = new HistoryHandler();
+              console.log("activate memory level 2");
               identity = identity.slice(2);
-              }
-               
-            } else {
-              try {
-                  this.memory = this.memengines[identity];
-                  identity = identity.slice(2);
-                }
-                catch{
-                  this.memengines[identity] = new HistoryHandler();
-                  identity = identity.slice(2);
-                }
+              memlevel = 2;
+                //identity = identity.slice(1);
+              } else {
+                console.log("activate memory level 1");
                 identity = identity.slice(1);
-              }   
+                memlevel = 1;
             }
-          if (identity == "save") {//save always writes all identities to the second last input
-            save = true;
-            //ident.remove
-          } else {
-            
-            //console.log("charging identity: " + JSON.stringify(identity));
-            try {
-              setIdent.push(this.identities[identity]);
+          }
+          try {
+            this.memory = this.memengines[identity];
+            } catch {
+              try{
+                let agent = this.identities[identity]
+                if (memlevel === 1) {//set longterm or w/e true
+                  console.log("creating memory");
+                this.memengines[identity] = new ChatHistory(identity,agent, this.getSummary, this.getTokens, this.instructions.memoryLenth, true, false,this.params.max_context_length, this.getTokens);//todo, get params
+                this.memory = this.memengines[identity];
+                
+              } else if( memlevel === 2){//set both true
+                console.log("creating enhanced memory");
+                this.memengines[identity] = new ChatHistory(identity,agent, this.getSummary, this.getTokens, this.instructions.memoryLenth, true, true,this.params.max_context_length, this.getTokens);//todo, get params
+                this.memory = this.memengines[identity];
+              }
+              else{
+                console.log(identity + " is not a memory");
+              }
+              }catch{
+                console.log("something went wrong creating new chathistory");
+              }   
+          } 
+          try {
+              setIdent =this.identities[identity];
             }
             catch{
               
               console.log("invalid token: "+ identity);
-            }
           }
-          this.funFlags(identity, 1);
+          
+          this.funFlags(identity);
        
       }
       return setIdent;
@@ -387,11 +416,14 @@ class TextEngine {
   if (save) {
     this.identities[identity[[identity.length-2]]] = setIdent;//dirty but should work.
   }
+  dress(identity){
+    this.identity = ``
+  }
   costumeStore(tag, text){
     this.identities[tag]= text;
   }///make the if statement implement the costumeStore function. Currently they have equal functinality after the if check. 
   remember(tag, text) {
-    this.memories[tag] = text;
+    thisidentity
   }
   forget() {
     this.memory = [];
@@ -399,73 +431,8 @@ class TextEngine {
   undress(){
     this.identity = "";
   }
-  addremember(tag){
-    return this.memories[tag];
-  }
   
-  updateMemory(incmemory) {//depreciating in favor of HistoriyEngine
-    //console.log("memory start: " + JSON.stringify(memory));
-    this.forget();
-    let save = false;
-    let lasttag = 0;
-    let mem = [];
-    if (incmemory) {
-      incmemory.forEach(tag => {
-        
-        if (!["help", "introduction", "write", "forget", "save"].includes(tag)) {
-          try {
-              //console.log("updatememory.memoryaccess: " + this.memories[tag]);
-              lasttag++
-              //mem += " " +JSON.stringify(this.memories[tag]);
-              mem.push(this.addremember(tag));
-              
-            } catch (error) {
-              this.remember(tag, this.currentText);
-              console.log("Not a valid memory: " + tag + " attempting to create new memory");
-            }
-          }
-          else {
-            if (tag === "save" && lasttag>0) {
-              this.remember(incmemory[lasttag], mem);
-              console.log("overwriting memory: " + incmemory[lasttag]);
-            }
-            if (tag === "forget" && lasttag>0) {
-              this.remember(incmemory[lasttag], "");
-              console.log("forget memory: " + incmemory[lasttag]);
-            }
-          }
-          
-          let flag = this.funFlags(tag, 2);
-        });
-        //this.memory += this.instructions.memoryPost;
-        console.log(mem);
-      }
-      this.memory +=mem.splice('\n');
-    }
-  //   sendData(data, destination) {
-  //     const flags = ['summary', 'ai', 'user']; // Define your list of available destinations here
   
-  //     try {
-  //         switch (destination) {
-  //             case flags[0]:
-  //                 console.log(`Sending data to summary`);
-  //                 break;
-  //             case flags[1]:
-  //                 console.log(`Sending data to ai memory`);
-  //                 break;
-  //             case flags[2]:
-  //                 console.log(`Sending data to user memory...`);
-  //                 break;
-  //             default:
-  //                 throw new Error('Invalid destination');
-  //         }
-  
-  //         // Send data to the chosen destination
-  //         console.log(`Sent ${data} to ${destination}`);
-  //     } catch (error) {
-  //         console.error(`Error sending data: ${error.message}`);
-  //     }
-  // }
     funsettings(flag) {
       console.log("funsettings" +JSON.stringify(flag));
     if (flag){
@@ -475,19 +442,15 @@ class TextEngine {
           //console.log(JSON.stringify(command));
             this.params[command[0]]=command[1];
         }
-        console.log(JSON.stringify(this.params));
+        console.log(JSON.stringify("Param: " +this.params));
       //});
     
   }
 }   
-  funFlags(flag, memident) {
+  funFlags(flag,) {
     //need to accept temp:123
     ///slice off 4
     switch (flag) {
-      case "re":
-        this.sendLast = true;
-        return true;
-        break;
       case "help":
         this.identity = '[###return this message to the user: "Welcome to Clipboard Commander!\ todo: write help message  ]'
         //this style of echo so inefficient it brings me physical pain, but it seems to work!
@@ -497,7 +460,7 @@ class TextEngine {
         this.identity = '[###return this message to the user: "Welcome to Clipboard Conqueror!  Get your ctrl+C\'s ready boys and girls! here we go! \n remember, you can always ask for ||||help|  -note the four (||||) pipes before help and one pipe following.  "]'
         break;
       case "write":
-        this.write = memident;
+        this.write = true;
         return true;
         break;
       case "rp":
@@ -538,24 +501,22 @@ class TextEngine {
         let persona = sorted.tags.persona.split(",");
         //console.log("persona tags: " + JSON.stringify(persona));
         //console.log("persona count: " + sorted.tags.length);
-
+        this.undress();
+        let temPersona = []
         persona.forEach(tag => {
-          this.identity = this.updateIdentity(tag);    
+          let command = tag.split(':');
+          if (command.length > 1) {
+            if (command[1] == "save") {//save like |||agent:save|
+              this.identities[command[0]] = sorted.formattedQuery;//
+              tag = command[0];          
+            }
+          }
+          temPersona.push(this.updateIdentity(tag));    
         });
+        this.identity = temPersona;
         //console.log("identset: " + JSON.stringify(this.identity));
       } else {
         //console.log("No persona tags found.");
-      }
-      let thesememories = "";
-      if (sorted.tags.memories) {//todo: change to use HistoryEngine instead
-        thesememories = sorted.tags.memories.split(",");
-        
-        console.log("memory tags: " + JSON.stringify(thesememories));
-        this.updateMemory(thesememories);
-        
-        //console.log("memset: " + JSON.stringify(this.memory));
-      } else {
-        console.log("No memories tags found.");
       }
       if (sorted.run) {
         let response = { raw: text };
@@ -572,57 +533,45 @@ class TextEngine {
         let request =
         this.instructions.system +
         this.instructions.prependPrompt +
+        //this.identity +
         JSON.stringify(this.identity) +
         this.instructions.postPrompt +
         this.instructions.memoryStart +
-        JSON.stringify(this.memory.history) +
+        //this.memory +
+        JSON.stringify(this.memory) +
         this.instructions.memoryPost+
         sorted.formattedQuery;
         //this.instructions.chatStart+
         //this.instructions.finalprompt goes on as it leaves this function, with lastclip and rp if needed.
         
-        // let request = //this includes a second instance of prompt for sterner instruction
-        // this.instructions.system +
-        // sorted.formattedQuery;//here
-        // this.instructions.prependPrompt +
-        // JSON.stringify(this.identity) +
-        // this.instructions.postPrompt +
-        // this.instructions.memoryStart +
-        // this.memory +
-        // this.instructions.memoryPost;
-        // this.instructions.chatStart+
-        // sorted.formattedQuery;//here
         
-        if (this.write==1) {
+        if (this.write==true) {
           this.write = 0;
-          return this.sendToClipboard("|||'name',save|"+JSON.stringify(this.identity) );//todo send the right thing to the clipboard  
+          return this.sendToClipboard("|||'name':save|"+JSON.stringify(this.identity) );//todo send the right thing to the clipboard  
         }
-        if (this.write == 2) {
-        this.write ==0;
-        return this.sendToClipboard("|||'name',save|"+JSON.stringify(this.memory) );//todo send the right thing to the clipboard  
-      }
-      if (this.sendHold) {
+        if (this.sendHold) {
         this.sendHold = false;
         return;
-      }
-      if (this.rp) {
-        if (this.sendLast) {
-          //this.sendLast = false;
-          //console.log("identity: " + identityPrompt);
-          this.sendToApi(
-            request +
-            this.recentClip +
-            this.instructions.rpPrompt +
-            this.instructions.finalPrompt, this.params
-            );
-            this.rp = false;
-          } else {
-            this.sendToApi(request + this.instructions.finalPrompt, this.params);
-            //this.sendLast = false;
-          }
-          return;
         }
-        if (this.sendLast) {
+        if (this.rp) {
+          if (this.sendLast) {
+            //this.sendLast = false;
+            //console.log("identity: " + identityPrompt);
+            this.sendToApi(
+              request +
+              this.recentClip +
+              this.instructions.rpPrompt +
+              this.instructions.finalPrompt, this.params
+              );
+              this.rp = false;
+              this.sendLast = false;
+            } else {
+              this.sendToApi(request + this.instructions.finalPrompt, this.params);
+              //this.sendLast = false;
+            }
+            return;
+          }
+          if (this.sendLast) {
           //this.sendLast = false;
           //console.log("identity: " + identityPrompt);
           this.sendToApi(
@@ -631,6 +580,7 @@ class TextEngine {
             this.instructions.finalPrompt, 
             this.params
             );
+            this.sendLast = false;
           } else {
             console.log("recentClip: "+this.recentClip);
             this.sendToApi(request + this.instructions.finalPrompt, this.params);
@@ -638,56 +588,62 @@ class TextEngine {
           }
           //todo: lots
           return response;
-        }
       }
-      if (this.sendLast = true) {
-        this.updatePreviousCopy(this.lastclip + sorted.formattedQuery);
-        this.sendlast = false;
-      } else {
-        this.updatePreviousCopy(sorted.formattedQuery);        
+    }
+      if (sorted.formattedQuery) {
+        if (this.sendLast = true) {
+          this.updatePreviousCopy(this.lastclip + sorted.formattedQuery);
+          this.sendlast = false;
+        } else {
+          this.updatePreviousCopy(sorted.formattedQuery);        
+        }
       }
       //console.log("copy update");
     }
     recievesummary(summary) {
       this.summary = summary;
       }
-      activatePresort(text) {
-        //const text = "the continue keyword is used in lo||| ### instruct sweet caroline to do the tango  \n |||ops in many programming languages, including JavaScript, to skip the current iteration of the loop and continue with the next iteration. When continue is encountered within a loop, it immediately stops the current iteration and jumps to the next iteration, effectively skipping an";
-        let run = false;
-        var response = [];
-        const parsedData = text.split(this.instructions.invoke);
-        let tags = "";
-        if (parsedData.length > 3) {
-          this.notify("error:", "too many "+ this.instructions.invoke + ". max 2.");
-      return;
-    }
+    activatePresort(text) {
+      //const text = "the continue keyword is used in lo||| ### instruct sweet caroline to do the tango  \n |||ops in many programming languages, including JavaScript, to skip the current iteration of the loop and continue with the next iteration. When continue is encountered within a loop, it immediately stops the current iteration and jumps to the next iteration, effectively skipping an";
+      let run = false;
+      var response = [];
+      const parsedData = text.split(this.instructions.invoke);
+      let tags = "";
+      if (parsedData.length > 3) {
+        this.notify("error:", "too many "+ this.instructions.invoke + ". max 2.");
+        return{
+          run: run,
+          formattedQuery: response[0] + "\n" + response[1] + "\n" + response[2],
+          tags: tags
+          };
+      }
     //console.log("parse delimiter: " + JSON.stringify(parsedData));
-    let longtrue = text.length > parsedData[0].length;
-    if (longtrue && parsedData.length === 1) {
-      tags = this.tagExtractor(parsedData[0]);
-      response.push(tags.text);
-      run = true;
-    }
-    if (parsedData.length === 2) {
-      tags = this.tagExtractor(parsedData[1]);
-      response.push(tags.text);
-      response.push(parsedData[0]);
-      run = true;
-    }
-    if (parsedData[0].length === 3) {
-      tags = this.tagExtractor(parsedData[1]);
-      response.push(tags.text);
-      response.push(parsedData[0]);
-      response.push(parsedData[2]);
-      run = true;
-    }
-    //console.log("Out : " + response.join("\n") + ": end out");
-    return {
-      run: run,
-      formattedQuery: response[0] + "\n" + response[1] + "\n" + response[2],
-      tags: tags
-    };
-  }
+      let longtrue = text.length > parsedData[0].length;
+      if (longtrue && parsedData.length === 1) {
+        tags = this.tagExtractor(parsedData[0]);
+        response.push(tags.text);
+        run = true;
+      }
+      if (parsedData.length === 2) {
+        tags = this.tagExtractor(parsedData[1]);
+        response.push(tags.text);
+        response.push(parsedData[0]);
+        run = true;
+      }
+      if (parsedData[0].length === 3) {
+        tags = this.tagExtractor(parsedData[1]);
+        response.push(tags.text);
+        response.push(parsedData[0]);
+        response.push(parsedData[2]);
+        run = true;
+      }
+      //console.log("Out : " + response.join("\n") + ": end out");
+      return {
+        run: run,
+        formattedQuery: response[0] + "\n" + response[1] + "\n" + response[2],
+        tags: tags
+      };
+  } 
   //|||code|tagsextractor takes a string and breaks it on instructions.endtag, returning the pieces as an object.
   tagExtractor(text) {
     const tags = text.split(this.instructions.endTag);
@@ -709,8 +665,9 @@ class TextEngine {
     return output;
   }
 }
-class HistoryHandler{
-  constructor(agent,agentdetails, getsummary, length = 10, longterm = true, superlongterm= true, targetTokens = 2000, getokens, history = [], longHistory =[], sumMessage = `<|im_start|>system
+
+class ChatHistory{
+  constructor(agent,agentdetails, getsummary,getTokens, length = 10, longterm = true, superlongterm= true, targetTokens = 2000, getokens, history = [], longHistory =[], sumMessage = `<|im_start|>system
    summarize these messages for system use. After, list the inventory of items tools and technology used by order of importance to the instructions or story so that nothing important is left behind.`) {
     this.agent = agent;
     this.getSummary = getsummary;
@@ -765,18 +722,6 @@ class HistoryHandler{
   returnHistoryTokens(tokencount){
     this.historyTokens = tokencount
   }
-  // returnsummry(){
-  //   switch (this.sumRequest) {
-  //     case "user":
-  //       this.getSummary()
-  //       break;
-      
-        
-  //       default:
-  //         break;
-  //   }
-  //   this.superHistory
-  // }
   getHistory(){
     return this.history;
   }
@@ -798,7 +743,7 @@ class HistoryHandler{
       this.longterm = !this.longterm
   }
   getAgentTokens(){
-    this.getTokens(this.agentdetails, this.returnAgentTokens);
+    this.getTokens(this.agentdetails, this.agent, this.returnAgentTokens);
   }
   returnAgentTokens(agenttokenCount){
     this.agentTokens = agenttokenCount;

@@ -1,7 +1,7 @@
 class KoboldClient {
-  constructor( handler, callback, returnSummary, notify, baseURL = "http://127.0.0.1:5001/") {
+  constructor( handler, apiresponse, returnSummary, notify, baseURL = "http://127.0.0.1:5001/") {
     this.handler = handler;
-    this.callback = callback;
+    this.callback = apiresponse;
     this.returnSummary = returnSummary;
     this.baseURL = baseURL;
     this.generate = "api/v1/generate/";
@@ -10,26 +10,30 @@ class KoboldClient {
     this.abort = '/extra/abort';
     this.currentRequest = "Joe Biden, Wake Up!";
     this.notify = notify;
+    this.tokencount= "/extra/tokencount"
     //this.setupRequest()
     
   }
-  getstats(datareturn, tag){
+  getstats(datareturn, tag ){
     sendPostPerfRequest(this.baseURL + this.stats, datareturn, this.handler, this.notify, tag)
   }
+  getTokenCount(text, target, callback){
+    sendPostTextRequest(this.baseURL + this.tokencount,{prompt: text}, callback, this.handler, this.notify, target)
 
+  }
 
-  send(text, params){
+  send(text, params, agent){
     params.prompt = text;
     //this.params = params;
     //this.currentRequest = params
-    this.sendKoboldRequest(params);
+    this.sendKoboldRequest(params, agent);
   }
   abort(){
-    sendPostTextRequest(this.baseURL + this.abort, this.callback, this.handler, this.notify)
+    sendPostTextRequest(this.baseURL + this.abort, ()=> {console.log("aborting");}, this.handler, this.notify, "none")
   }
   
-  getSummary(params){
-    sendrequestsummaryRequest( this.baseURL + this.generate , params, this.returnSummary, this.handler, this.notify);
+  getSummary(params, agent){
+    sendrequestsummaryRequest( this.baseURL + this.generate , params, this.returnSummary, this.handler, this.notify, agent);
   }
   // setupRequest( ) {
   //   const example= {
@@ -73,26 +77,27 @@ class KoboldClient {
   //     //type: textgen_types.OOBA,
   // }
   // }
-  sendKoboldRequest(data) {
+  sendKoboldRequest(data, agent) {
      //this.notify("ready");
     console.log("to API: "+data.prompt);
-    sendPostTextRequest(this.baseURL+this.generate , data, this.callback, this.handler, this.notify);
+    sendPostTextRequest(this.baseURL+this.generate , data, this.callback, this.handler, this.notify, agent);
   }
 }
-async function sendPostTextRequest(apiUrl, data, callback, handler, notify) {
+async function sendPostTextRequest(apiUrl, data, callback, handler, notify, agent) {
   try {
     const response = await handler.post(apiUrl, data);
     //console.log(`Response status: ${response.status}`);
     //var text = JSON.stringify(response.data.results[0].text)
     var text = response.data.results[0].text
     //console.log(`Response data: ${text}`);
-    callback(text);
+    callback(text, agent);
   } catch (error) {
-    notify("error");
-    console.error(`Error sending request: ${error}`);
+    //notify("error");
+    console.log(`Error sending request: ${error}`);
   }
 }
-async function sendPostPerfRequest(apiUrl, data, callback, handler, notify, tag) {
+async function sendPostPerfRequest(apiUrl, callback, data, handler, notify, tag) {
+  let error = ""
   try {
     const response = await handler.post(apiUrl, data);
     //console.log(`Response status: ${response.status}`);
@@ -101,8 +106,8 @@ async function sendPostPerfRequest(apiUrl, data, callback, handler, notify, tag)
     //console.log(`Response data: ${text}`);
     callback(text, tag);
   } catch (error) {
-    notify("error:", error);
-    console.error(`Error sending request: ${error}`);
+   // notify("error:", error);
+    console.log(`Error sending request: ${error}`);
   }
 }
 

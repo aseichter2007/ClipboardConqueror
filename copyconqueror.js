@@ -8,18 +8,14 @@ const SendEngine = require('./textengine.js');
 const RecieveEngine = require('./responsengine.js');
 const ncp = require('copy-paste');
 const recieveEngine = new RecieveEngine();
-const sendEngine = new SendEngine(recieveProcessedClip,ncp.copy,NotificationBell, getSummary);
 const axios = require('axios');
 const fs = require('fs');
 const settings = findSettings();
 //const {playAudioFile} = require('audic');
 //console.log(settings);
+const notifier = require('node-notifier');
 function testing(){//hooked into changehandler, copy to execute
-let test = "string";
-let out = JSON.stringify(test);
-console.log(out);
-let rec = JSON.parse(out);
-console.log(JSON.stringify(rec));
+    
 }
 var client =  {};
 var lastClip = "";
@@ -32,13 +28,13 @@ const KoboldClient = require('./koboldinterface.js');
     client = new KoboldClient( axios, recieveApiResponse, returnSummary, NotificationBell);
     
 }   
-const notifier = require('node-notifier');
-function notify(title = "Paste Ready", text = "Your generation is ready"){
+const sendEngine = new SendEngine(recieveProcessedClip, ncp.copy, NotificationBell, getSummary, client.getTokenCount);
+function notify(title = "Paste Ready", text = "The response is ready"){
 // Define the notificatio
 const notification = {
-    title: 'Paste Ready',
-    message: 'Hello, this is a notification!',
-    icon: 'path/to/icon.png', // Optional
+    title: title,
+    message: text,
+    //icon: 'path/to/icon.png', // Optional
     sound: true, // Optional, plays a sound with the notification
 };
 notifier.notify(notification, function (err, response) {
@@ -55,31 +51,23 @@ function returnSummary(text){
     text = text.replace(/\\n/g, '\n');
     let Response = recieveEngine.recieveMessageFindTerminatorsAndTrim(text);
     sendEngine.recievesummary(Response);
-    client.getstats(sendData, "summary");
+    //client.getstats(sendData, "summary");
 }
 function recieveProcessedClip(text, params, lastTag) {
     //console.log("clipback: " + text);
     client.send(text, params);
 }
-function recieveApiResponse(text){
+function recieveApiResponse(text, agent){
     text = text.replace(/\\n/g, '\n');
     NotificationBell("Paste Response:", text);
     botresponse = true
     lastResponse = recieveEngine.recieveMessageFindTerminatorsAndTrim(text);
     ncp.copy(lastResponse);
-    getPerfUser();
+    //client.getTokenCount(lastResponse, agent, sendData);
 }
 // To start listening
-function getPerfUser(){
-    client.getstats(sendData, "user");
-
-}
-function getPerfai(){
-    client.getstats(sendData, "ai");
-
-}
 function sendData(data, destination) {
-    const flags = ['summary', 'ai', 'user']; // Define your list of available destinations here
+    const flags = ['summary', 'user']; // Define your list of available destinations here
 
     try {
         switch (destination) {
@@ -89,11 +77,10 @@ function sendData(data, destination) {
             case flags[1]:
                 console.log(`Sending data to ai memory`);
                 break;
-            case flags[2]:
-                console.log(`Sending data to user memory...`);
-                break;
             default:
-                throw new Error('Invalid destination');
+                //return to agent memory
+                //throw new Error('Invalid destination');
+                break;
         }
 
         // Send data to the chosen destination

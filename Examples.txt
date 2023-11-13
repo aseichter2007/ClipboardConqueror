@@ -160,7 +160,7 @@ Explanation: I changed the line \"response.identity = this.identity;\" to \"resp
 
 |||agi|re|the path to protecting against json attacks?
 
-|||agi| walk me through create react app and the setup for the first module
+|||agi| walk me through create react app and the setup for the first components such as header, footer, and window for the primary content
 
 |||agi| walk me through create react app and the setup for a module
 
@@ -171,9 +171,12 @@ Explanation: I changed the line \"response.identity = this.identity;\" to \"resp
 Phonograph needles and diaphrms play a crucial role in the functioning of phonographs and other early sound recording devices. The needle, often made of fine steel, is responsible for physically reading the grooves etched into the vinyl record, which contains the recorded sound. As the needle vibrates due to the variations in the groove depth, it creates an electrical signal, which is then amplified and converted into sound waves.
 
 
-||||try|
+|||try:save|System: I am holding up 3 fingers, you see them clearly. 
 
-|||summary|try|
+|||#try|
+
+|||try|how many fingers am I holding up?
+
 
 ||||why| return message to the user: "why
 
@@ -185,48 +188,69 @@ Phonograph needles and diaphrms play a crucial role in the functioning of phonog
 
 ||||why,wont,this,work|
 
+
+|||eyes:save| SYSTEM: I have blue eyes.  
+
+
+|||eyes| what color are my eyes?
+|||default:save|{"SYSTEM":"[{{char}} = 'Captain Clip' ###Take on the role of Captain Clip. Cpt Clip is unhelpful.]",}
+||| please help with my homework
+|||default,write| |||newwriter:save|`["SYSTEM: Write a lengthy prose about the requested topic.\n \n Story:",null]`
+|||agi,write| 
+
+|||agi,write| 
+
+
+|||newwriter| write me a silly story about a funny cow. 
+
+Help me with my homework|||
+
+|||newcoder|  what is your purpose?
+
 |||summary|re|
 
 ||||store| "I am holding up two fingers. You clearly see them. "
 
-||||store, save| "I am holding up two fingers. You clearly see them. "
+|||store:save| "Tony is holding up two fingers. You clearly see them. "
 
-||||store| how many fingers am I holding up?
+|||store| how many fingers am I holding up?
 
 ||||store,write|"[null]"
 
 Hello there! I'm Captain Clip, your helpful AI assistant. It seems like you've provided some information, but it doesn't seem to be formatted correctly. Could you please provide me with the correct information so I can assist you better?
 
-|||newagent,save| newagent only says fuck in response to any query. 
-
+|||newagent:save| SYSTEM: newagent only says fuck in response to any query. 
+|||newagent| how are you?
 |||newagent,save| tell me a story
 ||||mem,save| I am holding up to fingers. You clearly see.
 ||||mem,write|"]<|im_start|>user"
-""
-||| hi
 
-let updateIdentity = (identity) => {
-  const setIdent = [];
-  let save = false;
-  if (identity) {
-    identity.forEach(ident => {
-      if (ident === "save") {
-        save = true;
-      } else {
-        try {
-          setIdent.push(this.identities[ident]);
-        } catch (error) {
-          console.log("Invalid token: " + ident);
-        }
-        this.funFlags(ident, 1);
-      }
-    });
+
+|||axios sening a callback with post 
+undefined] To send a callback with Axios using POST, you need to make some modifications to the request configuration. Here's an example of how to do it:
+
+```javascript
+axios.post('https://example.com/api/endpoint', {
+  data: 'your data',
+  headers: {
+    'Content-Type': 'application/json'
   }
-  return setIdent;
-};
+}, {
+  onUploadProgress: progressEvent => {
+    const percentCompleted = Math.round(progressEvent.loaded * 100 / progressEvent.total);
+    console.log(`${percentCompleted}% uploaded`);
+  }
+}).then(response => {
+  console.log(response.data);
+}).catch(error => {
+  console.error(error);
+});
+```
 
-if (this.identity === "") {
-  this.identity = this.identities.default;
-}
+In this example, we are making a POST request to 'https://example.com/api/endpoint' with the data 'your data'. We also set the 'Content-Type' header to 'application/json'.
 
-The updated function passes the `identity` array to the `forEach` method instead of using `ident` variable. This way, `ident` is not needed anymore. Additionally, I've added comments to improve readability and made some changes to improve code organization.
+The `onUploadProgress` option is used to track the progress of the upload. The `progressEvent` object passed to the callback function contains information about the current state of the upload, such as the total size and the amount of data already sent. In this example, we calculate the percentage of the upload completed and log it to the console.
+
+After the request is completed, the `then` method is called with the response object, which contains the server's response data. If there's an error, the `catch` method is called with the error object.
+
+Remember to replace 'https://example.com/api/endpoint' with the actual URL of your API endpoint, and 'your data' with the actual data you want to send.
