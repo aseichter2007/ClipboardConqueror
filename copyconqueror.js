@@ -25,7 +25,7 @@ var memout = '';
 const KoboldClient = require('./koboldinterface.js');
 //if (configs.client== "kobold")
 {
-    client = new KoboldClient( axios, recieveApiResponse, returnSummary, NotificationBell);
+    client = new KoboldClient( axios, recieveApiResponse, returnSummary, NotificationBell);//todo, this doesnt really belong like this, should be created directly into textengine constructor and eliminate all this mess running across the main program. Needed before adding openAI, untangling this will make that much easier. 
     
 }   
 const sendEngine = new SendEngine(recieveProcessedClip, ncp.copy, NotificationBell, getSummary, client.getTokenCount);
@@ -45,7 +45,7 @@ notifier.notify(notification, function (err, response) {
 });
 }
 function getSummary(text, params) {
-    client.send(text, params)
+   // client.send(text, params)
 }
 function returnSummary(text){
     text = text.replace(/\\n/g, '\n');
@@ -62,13 +62,14 @@ function recieveApiResponse(text, agent){
     NotificationBell("Paste Response:", text);
     botresponse = true
     lastResponse = recieveEngine.recieveMessageFindTerminatorsAndTrim(text);
+    lastClip = "";
     ncp.copy(lastResponse);
     //client.getTokenCount(lastResponse, agent, sendData);
 }
 // To start listening
 function sendData(data, destination) {
     const flags = ['summary', 'user']; // Define your list of available destinations here
-
+    console.log(JSON.stringify(data));
     try {
         switch (destination) {
             case flags[0]:

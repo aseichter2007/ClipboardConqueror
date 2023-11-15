@@ -12,79 +12,99 @@ One of my design inspirations for this application is to spread LLM models to as
 Usage:
 ------
 
-1. Enter `|||` followed by your request or command.
+1. Enter `|||` followed by your request or command. Pipe "|" can be typed by pressing shift + backslash(above enter).
 2.Copy the text to your clipboard. For example:
 ```
    - ||| Say hello
+      -select and copy the line above
 
-   - |||character|Say hello
+   - |||character|Say hello  
+       //this is exampular, character is not a default prompt. Captain Clip will respond. Try:
+          |||frank| Hello, Frank. You can't hide from me. Show yourself. 
 
-   - |||agentname| your text - sends your text to a specified agent
+   - |||stable| write a prompt for a picture of a beautiful forest with pixies playing with animals.
+          remember, no spaces inside the | pipes are allowed.
 
-   - |||clintEastwood|mem| how many fingers am I holding up?  -ask Clint Eastwood if he has information contained in memory "mem"
+   - |||frank,mem|Frank, how many fingers am I holding up?  
+         -ask Frank Drebin if he has information contained in tag "mem"
 
-    Note: Four pipes (||||) are used before memory tags and instructions, three before charachter agents, and can be combined like |||agent1,agent2|memory1,memory2| , count 'em 5 | pipes is the maximum supported. 
-    Three pipes, agents, one pipe, memories/command tags, one pipe. Any tags must be closed with one pipe, followed by memory if any. If memory, you require a fifth | pipe to close. *
-   - ||||noban| (overrides banned tokens)
-   - ||||1200| sets the max response length to 1200
-   - ||||temperature:1| sets the temperature to 1.
-   - ||||memory,save|** overwrites memory with this text:"overwrites memory with this text:"
-   - ||||memory,save,re| overwrites memory with the previous clipboard contents
-   - |||coder|re| what is this code doing? - sends the code you copied last, prepended by "what is this code doing", and invokes the coder assistant to help frame the output format and preconceptions. 
+    Note:agents, memory agents and instructions, and can be combined like |||agent1,agent2|.
+    Three pipes, agent, one pipe. No spaces.  Any agents or settings  must be closed with one pipe or they will be sent as text to the default agent (Captain Clip). 
+
+   - |||1200| sets the max response length to 1200. Also works like |||agent,setting:0.5,1000| just a number is always max response length.  
    
-      *save is the only command supported like `|||save, agent|memory,memory| {"description":"description"}`  - this does not save memory into the agent persona. It saves a persona called with the iternal(ai can't see tag, sees the entire object you send though.) flag "agent" defined like: {"description":"description"}.  Must use json format. Listen to the audio feedback to indicate success or failure. 
+   - |||temperature:1.1| sets the temperature to 1.1. This works for any setting ex: top_p, min_p. Use 1 and 0 to set true/false //true/false untested.
+   
+   - |||memory:save| writes or overwrites an identity called memory with this text:"writes or overwrites an identity..."
+      Note- extensive formatting causes errors. this can be sent json but it's really fiddly and the saved identity is just stringified back out anyway.
+      reccomendation: "|||mem:save| SYSTEM: take on the role of {{character}}, description:  description."  More formatting is more potential for errors, and errors don't make it in. 
+
+   - |||coder,re| what is this code doing? - sends the code you copied last, prepended by "what is this code doing", and invokes the coder assistant to help frame the output format and preconceptions. 
+      
+      *save is the only command supported like `|||agent:save|{"description":"description"}`  json format works but the syntax has to be perfect, recomend avoiding {}.
       ** no spaces in here or it will save seperate characters and memory I think.//needs testing or trim(), I can't decide if the utility of spaced tags is great or confusing. Also, spaces will break all the commands, but I could account for it.
-```
-3. Optionally, include a memory tag or command tag after the initial `|||`. For example:
-```
-   - |||coder,mute|re,memone,stevesdayoff
-       > This command will insert the coder card, apply the mute card to silence comments and explanations, then append the contents of memone and stevesdayoff. The AI will interpret these tags as instructions to create software, since it's using the coder persona.
-```
-Note: Remember to use four pipes (`||||`) for memory tags. They help to store data and instructions for later use. Chaining multiple tags is also possible, like `|||noban|memtag|Remember this message`.
+
+   - |||coder,mute,memone,stevesdayoff|
+       > This command will insert the coder character card, the mute card, memone and stevesdayoff. The AI will recieve each of these. Note, only coder is a standard character. 
+       
+   Its useful to save information like 
+   |||mem:save| information to make easily available or query against repeatedly
+   and then use it like 
+   |||coder,mem| describe the funtion of the code block. 
+   |||coder,mem| different question about the info in mem
+
+   
+
+
 
 Productivity:
 -------------
 Clipboard Conqueror makes the process of accessing an LLM simple and efficient in any workspace.
 
-Proofread documents, get feedback, find inspiration, or just run a game of dungeons and dragons with your friends.
+Proofread documents, test explainations, get feedback, find inspiration, or just run a game of dungeons and dragons with your friends.
 
 Clipboard Conqueror provides a whole toolbox of predefined assistants, ready to work for you.  
 
-|||summary| will summarize any text, allowing you to intelligently condense unimprtant emails to just the facts and data.
+|||summary| will summarize any text, allowing you to intelligently condense unimportant emails to just the facts and data.
 
-|||agi| will make you a plan to execute any operation you ask for. Captain Clip does well too, but this is based on the kobold agi script. 
+|||agi| will help you execute any operation you ask for help with. Captain Clip does well too, but this is based on the kobold agi script and is superior to a simple ask. 
+
+|||stable| will write you an image prompt for use in stable diffusion automatic 1111
+This identity and some other cards were found on chub.ai, some are my own or significant customizations.
+
 
 Key Features:
 --------------
-* Locally run large language model support with KoboldCPP/lite for powerful text processing.
-* Combines user-supplied text with AI output for precise customization.//done
-* Supports multiple languages and contexts for diverse applications.//sure
-* Can utilize various personas and roles for different tasks.//done
-* Capable of mimicking voices and generating unique content.
+* Locally run large language model support with KoboldCPP/lite for powerful, secure, text processing.
+* Combines user-supplied text with AI output for precise customization.
+* Supports multiple languages and contexts for diverse applications. Not all LLM models are multilingual, some configuration may be required.
+* Can utilize various personas and roles for different tasks.  
+* Quick saving of new agents and information for later use.
+* Capable of mimicking "voices" and generating unique content.
 
 Supported Platforms:
 --------------------
 Clipboard Conqueror is designed to work seamlessly across multiple platforms including Windows, macOS, and Linux. It has been rigorously tested and optimized to ensure stability and compatibility.
 
-Notice:
+Notice://gtp, openai unimplemented. LMStudio is not supported yet either.
 --------
-When using the |||gtp:3| or |||gpt:4| commands, be aware that data will be sent to outside systems. This may be a breach of your companies data protection policy.
-You can safely use any other command to 
-Please use Clipboard Conqueror responsibly and respect copyright laws while generating content. Misuse of this tool might lead to unintended consequences and breaches of privacy or intellectual property rights.
+When using the |||gtp:3| or |||gpt:4| commands, be aware that data will be sent to outside systems. This may be a breach of your companies data protection policy.//unimplemented
+You can safely use any other command to query sensitive data, and depending on your configuration, gtp commands can be sent to LMStudio to run against a larger slower model. //unimplemented
+Please use Clipboard Conqueror responsibly and respect copyright or laws in your country while generating content. Misuse of this tool might lead to unintended consequences and breaches of privacy or intellectual property rights. I hold no reponsibility for the data that passes through this tool on any system.  
 
 Additional Resources:
-You can train Clipboard Conqueror to better understand your needs by providing examples of usage formatted as a json. Personalizing your AI experience allows for more accurate results tailored specifically to your requirements. To train the AI, simply enter `|||train` followed by a description of the improvement you desire.
+//todo: link assorted knowlege banks. 
 
 Advanced Example:
 ```
-   - |||newAgent, save| {  
-  "yourtag": "Corporal Clip",
-  "anydescription": "A helpful and friendly army man. He takes orders well.",
-  "thisExampleDilogue": ["Hello and welcome to the world of integrated AI!! I'm your host, Cpl Clip, so happy to be here!", "I'd take a bullet for you, if I had a body.]"
+|||newAgent:save| {  
+  "yourName": "Corporal Dip",
+  "anydescription": "An unhelpful and unfriendly army man. He takes orders to the john and throws em in. He disrespects requests. He hates kind pleas for help.",
+  "thisExampleDilogue": ["Dip: What do you want, sarge?", "Dip: get out of my face."]
 }
 will add that agent json parsed into the memory until next run. You can purchase a licence to the full version here: //todo: build website. 
 ```"
-
+|||newAgent| hey can you help me find some cool memes on the internet?
 
 
 ---------------------------------
@@ -93,36 +113,48 @@ Installation:
 first get this. github.com/LostRuins/koboldcpp/releases/
 or for macOS get KoboldAi //untested
 a kobold compatible api must be running to use Clipboard Conqueror.
+I will supply a sample batch file for loading a model with your settings file after you get kobold dialed in from the launcher. 
 
-Kobold needs model. Here are my reccomendations 11/8/23:
+Kobold needs a model. Here are my reccomendations 11/8/23:
+https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF
 
-hardware("time to process")  [fast = 20+ tokens/sec, medium = <10 tokens/sec. slow = <2tokens/sec]* Lower on this chart is smarter. 
+OpenHermes-2.5-Mistral supports 8192 context. This is a decent couple of pages. 
 
-      32gb ram and not using graphicss card(medium):
-
-      8gb gfx cards and 16gb ram(fast):
-
-      8gb gfx cards and 32gb ram()
-
-      12gb gfx cards and 16gb ram(fast) and 32or 32gb ram and 8gb vram(mediumn):
-
-      12gb gfx cards and 32gb ram(medium):
-
-      12gb gfx cards and 32gb ram(slow): 
-
-      24gb vram(fast):
-
-      24gb vram(medium):
-
-      24gb vram(slow):
+Most of my prompts are specifically tuned against OpenHermes 2.5 Mistral 7b, and the default prompts follow chatML format. The system instuction in the training is an incredibly powerful tool. 
+any chatML model should work great out of the box.
+currently the entire settings for my app are in the constructor of textengine.js
 
 
+hardware("time to process")  [fast = 20+ tokens/sec, medium = <10 tokens/sec. slow = <1tokens/sec]* Lower on this chart is smarter. 
 
-      LLAMA 3B needs at least 4GB RAM total vram+ram
+      16gb ram and no graphics card, or laptop with shared gfx memory(medium):https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q3_K_L.gguf
+
+      32gb ram and not using graphicss card(medium):https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q5_K_M.gguf
+
+      8gb gfx cards and 16gb ram(fast):https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q3_K_M.gguf
+
+      8gb gfx cards and 32gb ram(medium):https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q5_K_M.gguf
+
+      12gb gfx cards and 16gb ram(fast):https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q5_K_M.gguf
+
+      12gb gfx cards and 32gb ram(medium-fast):https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q6_K.gguf
+
+      12gb gfx cards and 32gb ram(medium): https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q8_0.gguf
+
+      24gb vram(fast):https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q8_0.gguf
+
+      I thought about reccommending other models, but openhermes is simply decent and fast, even tested on a friend's old 1080. 
+      let me know about your harware and token speed and i will make this reflect the general experience better. 
+
+      Info for model selection. Preffered format chatML, but you can change the instructions in the settings.
+      Model sizes:
+      LLAMA 3B needs at least 4GB RAM total ram + vram (gfx card must support cuda or the amd one |||what's the amd verion of cuda called, I forgot.)
       LLAMA 7B needs at least 8GB RAM
       LLAMA 13B needs at least 16GB RAM
       LLAMA 30B needs at least 32GB RAM
       LLAMA 65B needs at least 64GB RAM
+
+      And they all need some space for the context.
 
 *Model bit depth is trade between output quality and output speed.  Generally, larger models are smarter and can follow more complex instructions.
 KoboldCPP uses GGUF format, which are quantized from 16 bit to between 2 bit and 8 bit depending on model. (I like 8 bit if it fits in vram with room for the context.)
@@ -133,6 +165,8 @@ for ease of use and organization, consider keeping kobold and the model you chos
 
 Finally run Clipboard Conqueror.  
 
+run the start.bat
+or
 //open terminal at folder and run
 npm i
 npm start
@@ -149,10 +183,12 @@ three pipes invokes the ai. If you want to skip the introduction you can get rig
 
 Have fun and remember you can always ask for 
 |||help|
+
+
 ---------------------------------
 Bug Reports and Feature Requests:
 ---------------------------------
-If you encounter any issues while using Clipboard Conqueror or have suggestions for future improvements, please report them via github or email me at //todo setup email. I will work diligently to address and resolve any concerns.
+If you encounter any issues while using Clipboard Conqueror or have suggestions for future improvements, please report them via github or email me at "clipboard.aseichter2007.gmail.com" I will work diligently to address and resolve any concerns.
 
 
 dev:

@@ -6,11 +6,11 @@ class KoboldClient {
     this.baseURL = baseURL;
     this.generate = "api/v1/generate/";
     this.getMaxContext = "";
-    this.stats = "/extra/perf";
-    this.abort = '/extra/abort';
+    this.stats = "extra/perf";
+    this.abort = 'extra/abort';
     this.currentRequest = "Joe Biden, Wake Up!";
     this.notify = notify;
-    this.tokencount= "/extra/tokencount"
+    this.tokencount= "extra/tokencount"
     //this.setupRequest()
     
   }
@@ -85,6 +85,7 @@ class KoboldClient {
 }
 async function sendPostTextRequest(apiUrl, data, callback, handler, notify, agent) {
   try {
+    console.log(JSON.stringify(data));
     const response = await handler.post(apiUrl, data);
     //console.log(`Response status: ${response.status}`);
     //var text = JSON.stringify(response.data.results[0].text)

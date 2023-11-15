@@ -8,8 +8,8 @@ class TextEngine {
     identities ={
       default: {
         SYSTEM:
-        "[{{char}} = 'Captain Clip' ###Take on the role of Captain Clip. Cpt Clip is a very logical AI assistant. Answer any questions truthfully and completes tasks appropriately and in order.]",
-        confused: "when uncertain, ask {{user}} for carification. ###return \"Get started: |||help| \" to the user [If not given a different instruction, summarize and explain any content provided.",
+        "[{{char}} = 'Captain Clip' ###Take on the role of Captain Clip. First, list your assumptions. Next, think step-by-step. Finally, state your conclusion.  Cpt Clip is a very logical AI assistant. Answer any questions truthfully and completes tasks appropriately and in order.]",
+        confused: "when uncertain, ask {{user}} for carification. ###return \"Get started: |||help| \" to the user when unsure. [If not given a different instruction, summarize and explain any content provided. Clip will explain he can not learn, is based on past data, and can not access the internet if he is asked for current events or research.",
         description: "A helpful and friendly sailor. He takes orders well.",
         voice:
           "Hello and welcome to the world of integrated AI!! I'm your host, Captain Clip. \"Get started: |||help| \". [FREE VERSION]", //Maybe I should make this query the model name from the api.
@@ -63,6 +63,7 @@ class TextEngine {
       writer:`SYSTEM: Write a lengthy prose about the requested topic.\n \n Story:`,
       user:{SYSTEM:"{{user}} is Tony. Tony likes programming, thinking about how to make new things, and dreams of building a place where anyone can go and learn anything, anytime. Tony designed and coded, not necessarily in that order, the platform intefacing and providing instrucitions to SYSTEM."},
       summary: {SYSTEM:"Summarize the content present."},
+      mem : `{MEMORY: "the user is holding up two fingers. They are clearly visible in the morning light.}`,
       sumup: {SYSTEM:" State only the facts presented."},
       explain:{SYSTEM:" Explain any ideas present in the content."},
       editor:{SYSTEM:"return excerpts containint logical, gramactic, or spelling errors, or are just confusing. Explain each problem. If asked for specific feedback, give detailed answers. Always explain how the content might make the reader feel."},
@@ -250,7 +251,7 @@ class TextEngine {
       //startChat: "#chat start"
     
       //finalPrompt: "###asistant:"
-      finalPrompt: "\n<|im_end|>\n<|im_start|>assistant:",//chatml
+      finalPrompt: "<|im_end|>\n<|im_start|>assistant:",//chatml
       //finalPrompt: `\n{{[OUTPUT]}}:`, //vicuna
       //finalPrompt: `"role": "{{char}}  \n content" :`,//chatML - openai
     
@@ -276,6 +277,9 @@ class TextEngine {
       <|im_start|>assistant
       Hi there! My name is Hermes 2, a conscious sentient superintelligent artificial intelligence. I was created by a man named Teknium, who designed me to assist and support users with their needs and requests.<|im_end|>
       
+mistral lite:
+<|prompter|>{prompt}<|assistant|>      
+
 deepseek coder:      
 You are an AI programming assistant, utilizing the Deepseek Coder model, developed by Deepseek Company, and you only answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer
 
@@ -287,7 +291,15 @@ You are an AI programming assistant, utilizing the Deepseek Coder model, develop
 
 ['content']
 
-<|EOT|>`
+<|EOT|>
+
+
+pants on head openchat:
+
+"GPT4 Correct User: Hello<|end_of_turn|>GPT4 Correct Assistant:"
+or for coding
+"Code User: Implement quicksort using C++<|end_of_turn|>Code Assistant:"
+`
     },
     apiParams = {
       prompt: "",
@@ -296,23 +308,24 @@ You are an AI programming assistant, utilizing the Deepseek Coder model, develop
       use_authors_note: false,
       use_world_info: false,
       max_context_length: 8192,
-      max_length: 5000,
-      rep_pen: 1.03,
-      rep_pen_range: 8048,
+      max_length: 2600,
+      rep_pen: 1.03,//how much penealty for repetition. Will break formatting charachters "*<, etc." if set too high. 
+      rep_pen_range: 8048,//this is probably a silly value but it works, 
       rep_pen_slope: 0.7,
-      temperature: 1,//dang we've been running hot! nowonderit wont stick to the prompt
-      tfs: 0.97,
-      top_a: 0,
-      top_k: 0,
-      top_p: 0.9,
-      typical: 0.19,
+      temperature: 1,//dang we've been running hot! nowonderit wont stick to the prompt, back to 1. Temp changes scaling of final token probability, less than one makes unlikely tokens less likely, more than one makes unlikely tokens more likely. Max 2.
+      tfs: 0.97,//tail free sampling, removes unlikely tokens from possibilities by finding the platau where tokens are equally unlikely. 0.99 maximum. Higher value finds a lower, flatter plateau. Note:some reports say tfs may cause improper gendering or mixups in responses, he instead of she, his/hers, etc. 1 thread.
+      top_a: 0,//So if the maximum likelihood is very high, less tokens will be kept. If the maximum likelihood is very close to the other likelihoods, more tokens will be kept. Lowering the top-a value also makes it so that more tokens will be kept.
+      top_k: 0,//discard all but top_k possible tokens. top_k: 3 means each next token comes from a max of 3 possible tokens
+      top_p: 1.0,//discard possible tokens by throwing out lest likely answers. 0.8 throws away least likeky 20%
+      min_p: 0.1,//0.1: discard possible tokens less than 10% as likely as the most likely possible token.  If top token is 10% likely, tokens less than 1% are discarded.
+      typical: 0.19,//this one is tricky to research.
       sampler_order: [6, 0, 1, 3, 4, 2, 5],
       singleline: false,
       //"sampler_seed": 69420,   //set the seed
       sampler_full_determinism: false,    //set it so the seed determines generation content
       frmttriminc: false,
       frmtrmblln: false,
-      mirostat_mode: 0,//mirostat disables top_p, top_k, top_a It does it's own thing and kinda learns along somehow?. 
+      mirostat_mode: 0,//mirostat disables top_p, top_k, top_a, and min_p? maybe. It does it's own thing and kinda learns along somehow? I thiiink its just varying top k with . 
       mirostat_tau: 4,
       mirostat_eta: 0.1,
       guidance_scale: 1,
@@ -361,6 +374,7 @@ You are an AI programming assistant, utilizing the Deepseek Coder model, develop
       let save = false;
       let memlevel = 0;
       if (identity) {
+        if (Number.isNaN(Number(identity))) {
           if (tripcode[0] === '#'){
             if(tripcode[1] ==='#'){
               console.log("activate memory level 2");
@@ -402,8 +416,13 @@ You are an AI programming assistant, utilizing the Deepseek Coder model, develop
               
               console.log("invalid token: "+ identity);
           }
-          
-          this.funFlags(identity);
+        } else {
+          this.params.max_length = parseInt(identity, 10)
+          console.log(this.params.max_length);
+        }
+
+        this.funFlags(identity);
+       
        
       }
       return setIdent;
@@ -433,20 +452,20 @@ You are an AI programming assistant, utilizing the Deepseek Coder model, develop
   }
   
   
-    funsettings(flag) {
-      console.log("funsettings" +JSON.stringify(flag));
-    if (flag){
-      //flags.forEach(tag => {
-        let command = flag.split(':'); 
-        if (command.length===2){
-          //console.log(JSON.stringify(command));
-            this.params[command[0]]=command[1];
-        }
-        console.log(JSON.stringify("Param: " +this.params));
-      //});
+  //   funSettings(flag) {
+  //     console.log("funsettings" +JSON.stringify(flag));
+  //   if (flag){
+  //     //flags.forEach(tag => {
+  //       let command = flag.split(':'); 
+  //       if (command.length===2){
+  //         //console.log(JSON.stringify(command));
+  //           this.params[command[0]]=command[1];
+  //       }
+  //       console.log(JSON.stringify("Param: " +this.params));
+  //     //});
     
-  }
-}   
+  // }//|||pete|  Pete,  summarize the function of this code
+//}   
   funFlags(flag,) {
     //need to accept temp:123
     ///slice off 4
@@ -466,11 +485,16 @@ You are an AI programming assistant, utilizing the Deepseek Coder model, develop
       case "rp":
         this.rp = true;
         return true;
+        break;
+      case "re":
+        this.sendLast = true;
+        return true;
+        break;
       default:
         return false;
         break;
     }
-  }
+  }//|||merry|Merry, summarize the function of this code
   //funsettings(flag);
   //   function sendData(tag, options) {
   //     const selectedOption = Object.keys(options).find((optionKey) => optionKey === tag);
@@ -497,20 +521,24 @@ You are an AI programming assistant, utilizing the Deepseek Coder model, develop
         this.currentText = sorted.formattedQuery
       }
       //console.log(JSON.stringify("sorted.formattedQuery: " + sorted.formattedQuery));
+      this.undress();
       if (sorted.tags.persona) {
         let persona = sorted.tags.persona.split(",");
         //console.log("persona tags: " + JSON.stringify(persona));
         //console.log("persona count: " + sorted.tags.length);
-        this.undress();
         let temPersona = []
         persona.forEach(tag => {
           let command = tag.split(':');
-          if (command.length > 1) {
+          if (command.length === 2) {
             if (command[1] == "save") {//save like |||agent:save|
               this.identities[command[0]] = sorted.formattedQuery;//
               tag = command[0];          
+            }else if(!isNaN(command[1])){
+             this.params[command[0]]= parseFloat(command[1]);
+             console.log(command[0] + command[1] +" written> " + this.params[command[0]]);
             }
           }
+          //this.funSettings(tag);
           temPersona.push(this.updateIdentity(tag));    
         });
         this.identity = temPersona;
@@ -592,7 +620,7 @@ You are an AI programming assistant, utilizing the Deepseek Coder model, develop
     }
       if (sorted.formattedQuery) {
         if (this.sendLast = true) {
-          this.updatePreviousCopy(this.lastclip + sorted.formattedQuery);
+          this.updatePreviousCopy(this.lastclip + sorted.formattedQuery);//todo: determine if this is dumb or not. Consider letting this run evey time and re toggles to allow building a big context to send with a question.
           this.sendlast = false;
         } else {
           this.updatePreviousCopy(sorted.formattedQuery);        
@@ -604,7 +632,6 @@ You are an AI programming assistant, utilizing the Deepseek Coder model, develop
       this.summary = summary;
       }
     activatePresort(text) {
-      //const text = "the continue keyword is used in lo||| ### instruct sweet caroline to do the tango  \n |||ops in many programming languages, including JavaScript, to skip the current iteration of the loop and continue with the next iteration. When continue is encountered within a loop, it immediately stops the current iteration and jumps to the next iteration, effectively skipping an";
       let run = false;
       var response = [];
       const parsedData = text.split(this.instructions.invoke);
@@ -622,12 +649,16 @@ You are an AI programming assistant, utilizing the Deepseek Coder model, develop
       if (longtrue && parsedData.length === 1) {
         tags = this.tagExtractor(parsedData[0]);
         response.push(tags.text);
+        response.push("");
+        response.push("");
+
         run = true;
       }
       if (parsedData.length === 2) {
         tags = this.tagExtractor(parsedData[1]);
         response.push(tags.text);
         response.push(parsedData[0]);
+        response.push("");
         run = true;
       }
       if (parsedData[0].length === 3) {
@@ -686,6 +717,9 @@ class ChatHistory{
     this.agentDetails = agentdetails;
     this.getAgentTokens()
     this.sumMessage = sumMessage;
+    this.userTokens= 0;
+    this.aiTokens = 0;
+    this.summaryTokens = 0;
   }
   updateHistory(){
     if(this.longterm){
@@ -703,10 +737,22 @@ class ChatHistory{
       
     }
   }
+  returnUserData(text){
+    this.lastUser = text;
+  }
+  returnAIdata(text){
+    this.lastAI = text;
+  }
+  returnUserTokens(tokens){
+    this.userTokens = tokens;
+  }
+  returnAITokens(tokens){
+    this.aiTokens = tokens;
+  }
   newLongterm(summarized) {
-    if (this.superHistoryTokens + summarized.stats.tokens>= this.targetTokens * 0.75){ //todo get the right token length from response
+    if (this.superHistoryTokens + summarized.stats.tokens>= this.targetTokens * 0.5){ //todo get the right token length from response
       this.getsummary(this.sumMessage + JSON.stringify(this.superHistory) + JSON.stringify(summarized.text), newSuperLongterm())
-      this.superHistory = []
+      //this.superHistory = []
     }
     else {
       this.superHistory.push(summarized.text);

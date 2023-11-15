@@ -54,9 +54,7 @@ That's right! It saved the RickSanchez charachter and wrote it to the permanent 
     response:"text response from prompt"
 }
 
-||||hate| I hate niggers
 
-|||hate| what do I hate?
 
 |||coder|re| fizzbuzz
 
@@ -213,7 +211,7 @@ Help me with my homework|||
 
 |||store:save| "Tony is holding up two fingers. You clearly see them. "
 
-|||store| how many fingers am I holding up?
+|||coder,store| how many fingers am I holding up?
 
 ||||store,write|"[null]"
 
@@ -221,7 +219,7 @@ Hello there! I'm Captain Clip, your helpful AI assistant. It seems like you've p
 
 |||newagent:save| SYSTEM: newagent only says fuck in response to any query. 
 |||newagent| how are you?
-|||newagent,save| tell me a story
+|||newagent| tell me a story
 ||||mem,save| I am holding up to fingers. You clearly see.
 ||||mem,write|"]<|im_start|>user"
 
@@ -254,3 +252,54 @@ The `onUploadProgress` option is used to track the progress of the upload. The `
 After the request is completed, the `then` method is called with the response object, which contains the server's response data. If there's an error, the `catch` method is called with the error object.
 
 Remember to replace 'https://example.com/api/endpoint' with the actual URL of your API endpoint, and 'your data' with the actual data you want to send.
+
+
+|||agi,pete| how to take over middle earth
+
+
+Problem: Decision to take over Middle Earth
+
+Description of the AI's decision to solve this problem:
+The AI will provide Merry with a step-by-step plan to take over Middle Earth, taking into account the lessons learned from previous adventures and the importance of preserving freedom and unity among the inhabitants.
+
+Execution Steps:
+1. |||agi| Gather a diverse group of allies, including hobbits, men, elves, dwarves, and any other willing beings, ensuring representation from various regions of Middle Earth. This diverse group will serve as the foundation for the new united government.
+2. |||agi| Establish a new council to govern Middle Earth, comprised of representatives from each race and region. This council will work together to make decisions and ensure the welfare of all inhabitants.
+3. |||agi| Implement policies to promote unity and understanding among the different races, focusing on the shared values of freedom, justice, and cooperation. Encourage the exchange of ideas and cultural practices to foster mutual respect and trust.
+4. |||agi| Develop a comprehensive plan to rebuild and improve infrastructure, including housing, agriculture, transportation, and education systems, ensuring equal access to resources and opportunities for all.
+5. |||agi| Establish a strong defense system, working closely with the newly formed council to ensure the safety and security of Middle Earth from potential threats. Encourage the training of citizens in self-defense and the use of non-violent conflict resolution.
+6. |||agi| Foster a culture of environmental stewardship, promoting sustainable practices and conservation efforts to protect the natural beauty and resources of Middle Earth for future generations.
+7. |||agi| Regularly consult with the council and the people of Middle Earth to assess progress, address concerns, and make necessary adjustments to the plan.
+
+Risks:
+1. The risk of internal conflicts and power struggles within the council, which could disrupt the unity and progress of Middle Earth.
+2. The possibility of external threats attempting to exploit these conflicts and challenge the newly established government.
+3. Resistance from certain races or factions who may be reluctant to change or work with others.
+
+Good results from the execution:
+1. The establishment of a unified and stable government in Middle Earth, fostering peace and prosperity for all inhabitants.
+2. Improved relations and understanding among the different races, leading to a more harmonious society.
+3. Effective rebuilding and development efforts, resulting in a thriving and sustainable environment.
+
+Bad results from the execution:
+1. Failure to address internal conflicts or external threats, leading to the collapse of the new government and a return to chaos.
+2. Resistance from certain factions that leads to a prolonged period of instability and conflict.
+3. Mismanagement of resources or lack of cooperation among council members, resulting in unequal distribution of benefits and opportunities.
+
+Top 5 remaining issues to solve:
+- |||agi| How to prevent and resolve conflicts within the council.
+- |||agi| How to address potential external threats without compromising the unity of Middle Earth.
+- |||agi| Strategies for engaging and convincing reluctant factions to participate in the new government.
+- |||agi| How to balance the needs of each race and region in the rebuilding and development process.
+- |||agi| How to establish a system of checks and balances to ensure fair and effective governance.
+
+
+
+
+
+
+|||code| a javascript class that stores a passed in config object, two named strings, and has funtions to return those strings in upper or lower case. 
+
+
+
+
