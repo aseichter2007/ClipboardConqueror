@@ -90,8 +90,9 @@ async function sendPostTextRequest(apiUrl, data, callback, handler, notify, agen
     //console.log(`Response status: ${response.status}`);
     //var text = JSON.stringify(response.data.results[0].text)
     var text = response.data.results[0].text
-    //console.log(`Response data: ${text}`);
-    callback(text, agent);
+    var tokens = response;
+    console.log(`Response data: ${JSON.stringify(response)}`);//todo: get tokens
+    callback(text, agent, tokens);
   } catch (error) {
     //notify("error");
     console.log(`Error sending request: ${error}`);

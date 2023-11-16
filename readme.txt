@@ -41,11 +41,11 @@ Usage:
 
    - |||coder,re| what is this code doing? - sends the code you copied last, prepended by "what is this code doing", and invokes the coder assistant to help frame the output format and preconceptions. 
       
-      *save is the only command supported like `|||agent:save|{"description":"description"}`  json format works but the syntax has to be perfect, recomend avoiding {}.
-      ** no spaces in here or it will save seperate characters and memory I think.//needs testing or trim(), I can't decide if the utility of spaced tags is great or confusing. Also, spaces will break all the commands, but I could account for it.
+      save is the only command supported like `|||agent:save|{"description":"description"}`  json format works but the syntax has to be perfect, recomend avoiding {}.
 
    - |||coder,mute,memone,stevesdayoff|
-       > This command will insert the coder character card, the mute card, memone and stevesdayoff. The AI will recieve each of these. Note, only coder is a standard character. 
+       > This command will insert the coder character card, the mute card, memone and stevesdayoff. The AI will recieve each of these. 
+       Note, only coder is a standard character. 
        
    Its useful to save information like 
    |||mem:save| information to make easily available or query against repeatedly
@@ -102,16 +102,16 @@ Advanced Example:
   "anydescription": "An unhelpful and unfriendly army man. He takes orders to the john and throws em in. He disrespects requests. He hates kind pleas for help.",
   "thisExampleDilogue": ["Dip: What do you want, sarge?", "Dip: get out of my face."]
 }
-will add that agent json parsed into the memory until next run. You can purchase a licence to the full version here: //todo: build website. 
+will add that agent json parsed into the memory until the application is closed.
 ```"
-|||newAgent| hey can you help me find some cool memes on the internet?
-
 
 ---------------------------------
 Installation:
 -------------
+
+
 first get this. github.com/LostRuins/koboldcpp/releases/
-or for macOS get KoboldAi //untested
+or for macOS get KoboldAi //untested, for sure doesnt support # memory, which is not implemented and not in this readme yet. 
 a kobold compatible api must be running to use Clipboard Conqueror.
 I will supply a sample batch file for loading a model with your settings file after you get kobold dialed in from the launcher. 
 
@@ -148,17 +148,23 @@ hardware("time to process")  [fast = 20+ tokens/sec, medium = <10 tokens/sec. sl
 
       Info for model selection. Preffered format chatML, but you can change the instructions in the settings.
       Model sizes:
-      LLAMA 3B needs at least 4GB RAM total ram + vram (gfx card must support cuda or the amd one |||what's the amd verion of cuda called, I forgot.)
-      LLAMA 7B needs at least 8GB RAM
-      LLAMA 13B needs at least 16GB RAM
-      LLAMA 30B needs at least 32GB RAM
-      LLAMA 65B needs at least 64GB RAM
+      3B needs at least 4GB RAM total ram + vram (gfx card must support cuda or the amd one |||what's the amd verion of cuda called, I forgot.)
+      7B needs at least 8GB RAM
+      13B needs at least 16GB RAM
+      30B needs at least 32GB RAM
+      65B needs at least 64GB RAM
 
-      And they all need some space for the context.
+      And they all need some space for the context. GPU offloading puts the layers of the model into the memory of your graphics card. Fitting the whole model into VRAM makes things way faster. 
+      For reference, at 2048 context in Q4_0*, a 6GB Nvidia RTX 2060 can comfortably offload:
+      32 layers with LLAMA 7B
+      18 layers with LLAMA 13B
+      8 layers with LLAMA 30B
+
+      OpenHermes is 35 layers. with a Q_3 you should be able to just fit it all I think.   You can load the model in memory, see how much your final model memory cost is in the console, and get a rough estimate of the size of each layer by dividing the size in memory by the number of layer. Remember to leave room for the context, which can get big fast. At 8k context I think use over 5gb of memory with the Q8, just for the context alone.
 
 *Model bit depth is trade between output quality and output speed.  Generally, larger models are smarter and can follow more complex instructions.
 KoboldCPP uses GGUF format, which are quantized from 16 bit to between 2 bit and 8 bit depending on model. (I like 8 bit if it fits in vram with room for the context.)
-lower bits require less ram, but there is a drop in reasoning ad
+lower bits require less ram, but there is a drop in reasoning and writing quality, though even the q2 was following instructions well. 
 I get all mine from huggingface/thebloke.
 
 for ease of use and organization, consider keeping kobold and the model you chose inside Clipboard Conqueror/api.  If koboldcpp.exe is placed here, Clipboard Commander will run it automatically and run with the settings in freeconfig.js
@@ -198,13 +204,14 @@ dev:
 //get tags for agent and memory//done
 //use tags to fetch desired set//done
 //setup special flag handler for command flags with no associated memory.//done I thing I have a bug to sort yet though, it exposes itself once in a while and I think it's here. 
+//todo: notification instead of sound effects//done
+//todo: finish saving objects to memory//done
 
-//todo: finish saving objects to memory
 //todo: openAI client, probably migrate a ton of logic out of textengine and into koboldinterface.js to make them interchangeable. 
-//todo: notification instead of sound effects
 //todo: keyboard binding to activate ai on last clip without prompt. 
 //todo: implement horde? maybe? or offer free gtp 3.5 or something. This will be after I make some money, send donations to accellerate this process. 
 //todo: /api/extra/abort  
+
 //todo: /api/extra/generate/check  //return in progress, useful for vlarge gens on slow mode
 //todo: /api/extra/tokencount //should run against entered data and updates should be shown after setting mem or agent and on final send. 
 //todo: /api/extra/true_max_context_length //returns context max

@@ -57,7 +57,7 @@ function recieveProcessedClip(text, params, lastTag) {
     //console.log("clipback: " + text);
     client.send(text, params);
 }
-function recieveApiResponse(text, agent){
+function recieveApiResponse(text, agent, tokens){
     text = text.replace(/\\n/g, '\n');
     NotificationBell("Paste Response:", text);
     botresponse = true

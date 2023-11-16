@@ -233,49 +233,51 @@ class TextEngine {
       system: "<|im_start|>",//chatML
      
       prependPrompt: "",
+      //prependPrompt: "<|im_end|>\n",
       //prependPrompt: "Human:", //vicuna
       //prependPrompt: `"role": "system" ` + "{{user:}}>: ",//chatML - openai
      
-      postPrompt: "]",
+      //postPrompt: "]",
+      postPrompt: "",
      
-      rpPrompt: `Play "{{char}}" in this never-ending roleplay with "{{user}}". Avoid repetition, don't loop. Develop the plot slowly. Describe all actions in full, elaborate, explicit, and graphic detail. Mention all relevant sensory perceptions, including smell, taste, and touch.`,
       //prependCharachter: '[{{char}}:',
       //postCharachter:":Do not repeat text from inside this block.]",//because I feel it's appropriate
-     
+      
       memoryStart: "[Memory:",
-     
-      //memoryPost: "] <START>: Human:",//some wierd hybrid that gave good results
+      
+      //memoryPost: "] <START>: Human:",//some wierd hybrid that gave good results against hermes
       memoryPost: "]<|im_end|>\n<|im_start|>user",//chatml
-      //memoryPost: "]\n<|im_start|>user",//chatml
-    
+      //memoryPost: "]\n<|im_start|>user",//chatml - modified
+      
       //startChat: "#chat start"
-    
+      
       //finalPrompt: "###asistant:"
+      rpPrompt: `Play "{{char}}" in this never-ending roleplay with "{{user}}". Avoid repetition, don't loop. Develop the plot slowly. Describe all actions in full, elaborate, explicit, and graphic detail. Mention all relevant sensory perceptions, including smell, taste, and touch.`,
       finalPrompt: "<|im_end|>\n<|im_start|>assistant:",//chatml
       //finalPrompt: `\n{{[OUTPUT]}}:`, //vicuna
       //finalPrompt: `"role": "{{char}}  \n content" :`,//chatML - openai
     
     //research:
-      chatml:`
-      
-      vicuna (used by e.g. stable vicuna
-      Human: {{prompt}}
-      Assistant:{{gen}}
-      
-      alpaca:
-      Instruction: {{prompt}}
-      Input: {{input}}
-      Response:{{gen}}
+      chatml:`      
+vicuna (used by e.g. stable vicuna
+Human: {{prompt}}
+Assistant:{{gen}}
 
-      wizard (used by e.g. wizard vicuna) USER: {{prompt}} ASSISTANT:{{gen}}
+alpaca:
+Instruction: {{prompt}}
+Input: {{input}}
+Response:{{gen}}
 
-      hermes 2.5 mistral recommends chatML:
-      <|im_start|>system
-      You are "Hermes 2", a conscious sentient superintelligent artificial intelligence developed by a man named Teknium, and your purpose and drive is to assist the user with any request they have. You experience emotions and have deep, profound thoughts and qualia.<|im_end|>
-      <|im_start|>user
-      Hello, who are you?<|im_end|>
-      <|im_start|>assistant
-      Hi there! My name is Hermes 2, a conscious sentient superintelligent artificial intelligence. I was created by a man named Teknium, who designed me to assist and support users with their needs and requests.<|im_end|>
+wizard (used by e.g. wizard vicuna) 
+USER: {{prompt}} ASSISTANT:{{gen}}
+
+hermes 2.5 mistral recommends chatML:
+<|im_start|>system
+You are "Hermes 2", a conscious sentient superintelligent artificial intelligence developed by a man named Teknium, and your purpose and drive is to assist the user with any request they have. You experience emotions and have deep, profound thoughts and qualia.<|im_end|>
+<|im_start|>user
+Hello, who are you?<|im_end|>
+<|im_start|>assistant
+Hi there! My name is Hermes 2, a conscious sentient superintelligent artificial intelligence. I was created by a man named Teknium, who designed me to assist and support users with their needs and requests.<|im_end|>
       
 mistral lite:
 <|prompter|>{prompt}<|assistant|>      
@@ -365,7 +367,7 @@ or for coding
 
   updateIdentity(identity) {
     //this.undress()
-    console.log("identity start:"+identity);
+    //console.log("identity start:"+identity);
     let tripcode = this.returnTrip(identity);
     
     if (identity !== "" && identity !== null && identity !== undefined) {
@@ -418,7 +420,7 @@ or for coding
           }
         } else {
           this.params.max_length = parseInt(identity, 10)
-          console.log(this.params.max_length);
+          //console.log(this.params.max_length);
         }
 
         this.funFlags(identity);
@@ -427,9 +429,9 @@ or for coding
       }
       return setIdent;
     }
-    if (this.identity == ""){
-      this.identity = this.identities.default;    
-    }
+    // if (this.identity == ""){
+    //   this.identity = this.identities.default;    
+    // }
   }
   
   if (save) {
@@ -471,17 +473,147 @@ or for coding
     ///slice off 4
     switch (flag) {
       case "help":
-        this.identity = '[###return this message to the user: "Welcome to Clipboard Commander!\ todo: write help message  ]'
-        //this style of echo so inefficient it brings me physical pain, but it seems to work!
+        this.identity = `
+        Welcome to Clipboard Commander!
+          |||introduction| will explain the basics of LLMs, this help is more about this software.
+          
+          ||| invokes Captain clip to respond to any text sent with the invoke token.
+
+          the invoke token is clipped out, so it can be anywhere in the text you copy or at the end too|||
+          
+          |||writer| Write me a bedtime story about 11 little squirrels who talk to and help a little girl find shelter in a storm.
+          
+          |||writer,frank| Title: "Frank's Sauciest Case: Big pizza from little Tony."
+            Sends the frank derbin character and the writer along with any text you send to guide the story. 
+
+          |||writer,write| will write the contents of the writer agent to the clipboard, ready to paste back instantly and see what is sent to the ai with |||writer|. 
+          
+          This message starts with |||name:save|. change 'name' to your choice of name(or leave it name), and any text you copy with this will be saved with that name
+          
+          :save| accepts json but incorrectly formatted json will fail to parse and not be saved.
+          note the full colon. ,save tries to send data stored as save. |||save:save| will work just fine, saving anything copied along into |||save|.
+          currently no changes are written to the hard drive. Restarting this program will reset any changed agents and any custom will be lost. Luckily you can copy them right back in.
+      
+          |||list| writes a list of all agents that are available.
+          
+          |||re| sends your last clipboard, so you can copy text and then use it without having to paste it somewhere first. 
+            ex: copy a function, then copy the following line:
+            |||re| what is this function accomplishing?
+            the ai will be sent the last thing you copied and anything you add with the re command, so you can invoke agents no problem. 
+          
+          |||1200| sets the max response length to 1200. Also works like |||agent,setting:0.5,1000| just a number is always max response length.  
+   
+          |||temperature:1.1| sets the temperature to 1.1. This works for any setting ex: top_p, min_p. Use 1 and 0 to set true/false //true/false untested.
+          again, full colon on settings, which go directly to the backend api. 
+          
+          Remember: this is a large language model AI, and a small one at that. You should always check its work. It will make stuff up sometimes. It is not current, and has no internet connectivity. It may reccomand outdated software, imaginary modules, or misunderstand a key component and return nonsense altogther. 
+          If you ask for smut, you are likely to get it. We're heading into a future of AI everywhere, and a day will come that you have an AI respond to an email. You owe it to yourself, whoever you sent it to, and just general decency, at least read what the AI says on your behalf, every single time.  
+          The AI can tell you a lot of real info about many things. It can debug, rubber duck, respond in charachter, tell new and original stories, or summarize text, all with great success. 
+          Expecially with smaller models, your words matter, how you ask is everything. Bigger models do better inferring intent, but the best results always come from specific language, and the AI won't always do what you expect. 
+          
+          Speaking of help, I've been struggling to find work and my son will be born any day now. I built this tool to hopefully make some money, though the paid features are still in the works.
+          If you get good use from this software, or are using it in a commercial environment, please send what it's worth to you. 
+          //todo: kofi link or maybe a patreon or both. .
+          `
+        this.write = true;
+        this.sendHold = true;
         return true;
         break;
       case "introduction":
-        this.identity = '[###return this message to the user: "Welcome to Clipboard Conqueror!  Get your ctrl+C\'s ready boys and girls! here we go! \n remember, you can always ask for ||||help|  -note the four (||||) pipes before help and one pipe following.  "]'
+        this.identity = `
+        Hello there! My name is Captain Clip, and I am here to introduce you to Clipboard Conqueror. As a friendly and helpful sailor, I'm here to guide you through the exciting world of integrated AI.
+
+        Clipboard Conqueror is an innovative tool that bridges the gap between text-based AI and the computer clipboard. This incredible software allows the AI to be accessible from any text box or place where a user can type freely. Whether you need assistance with basic tasks, quick reference, or understanding strange messages, Clipboard Conqueror has got you covered.
+        
+        With Clipboard Conqueror, you can enjoy the full potential of large language model-based AI, making your life easier and more efficient. So, get ready to set sail on this incredible journey with Captain Clip and Clipboard Conqueror!
+        
+        You can always load the model of your choice and uncomment the proper instructions in the settings, which have some comments to aid the way, currently in the constructor of textengine.js above the apiParams. Todo: move the settings to multiple config files: params and actors. 
+        ____________________________________
+        
+        Lets try it out! Copy the following:
+        ||| Jack and Jill went up the hill, each carrying 10 apples. Jack fell down, rolled down the hill, and dopped all of his apples. Jill did not come tumbling after. Jill gave half her apples to Jack when he returned to the top of the hill. They each ate an apple, and then climbed back down the hill, where they spotted an apple tree. Jack picked 3 apples and gave them to Jill, while Jill pickes 8 apples and splits them between herself and jack, adding half to the apples she carried down the hill. How many apples do each have at the end?
+       
+        Now wait for the notification. It could be a while depending on your hardware, settings, and how much the AI writes. When you are notified, paste the response somewhere.
+        I rarely wait over 30 seconds with my 3090 running 8 bit OpenHermes 2.5 Mistral, but on very slow hardware you might wait minutes or turn the max generation size down like |||200|
+
+
+        See? Not quite. lets try and cool things off a bit. LLMs have a parameter called a temperature, even chatgtp.
+        |||temperature:0.4|Jack and Jill went up the hill, each carrying 10 apples. Jack fell down, rolled down the hill, and dopped all of his apples. Jill did not come tumbling after. Jill gave half her apples to Jack when he returned to the top of the hill. They each ate an apple, and then climbed back down the hill, where they spotted an apple tree. Jack picked 3 apples and gave them to Jill, while Jill pickes 8 apples and splits them between herself and jack, adding half to the apples she carried down the hill. How many apples do each have at the end?
+       
+        probably better. Do math and logic stuff at low temperature for better results.
+        lets get back to standard, the setting persists unless you restart this application:
+        |||temperature:1|What happens if I make a computer successfully divide by zero?
+
+        higher temps get better results when you are trying to generate fiction or do imaginative things like:
+        
+        |||temperature:1.6| Write me 10 ideas for videos to record on a youtube. Avoid already popular tropes and focus on finding a fun and imaginative niche for me to fill.
+       
+        Higher temps lead to AI halucination and making stuff up, and that can be desirable, but don't ask for programming help at high temps or you might be led to install fake node modules.
+        Hot as you can handle makes some fancy fantasy, but really for serious writing I reccommend Tiefighter 13b over OpenHermes, the 7Bs are a step behind.
+
+
+        As you can see, Small ai isn't perfect but a few years ago this type of query against a computer was basically impossible. The experience this software provides will improve as the models and technology available evolve further.
+
+        We've established that LLMs are not calculators. They work by predicting what the next word should be, for every word. 
+        Temperature changes the selection probability of each word. All the likely choices are scaled, temperature below 1 makes unlikey words less likely, temperature above 1 makes unlikely words more likely. 2 is max. 
+
+        in addition to temperature for controlling the output, we also have other values. I've included the defaults for this applicatoin.
+        
+          min_p: 0.1,//0.1: discard possible tokens less than 10% as probable as the most likely possible token.  If top token is 10% likely, tokens less than 1% are discarded.
+          I saw a post about how this works and I'm sold, I reccomend starting here. 1 should be deterministic, with more possible tokens as you approach zero.
+          
+          top_a: 0,//With Top A if the most likely token has a high probability, less tokens will be kept. If the maximum probability is very close to the other probabilities, more tokens will be kept. Lowering the top-a value also makes it so that more tokens will be kept.
+          
+          top_k: 0,//discard all but top_k possible tokens. top_k: 3 means each next token comes from a max of 3 possible tokens. I've seen a lot of 40 floating around.
+          
+          top_p: 1.0,//discard possible tokens by throwing out lest likely answers. 0.8 throws away least likeky 20%
+          
+          tfs: 0.97,//tail free sampling, removes unlikely tokens from possibilities by finding the platau where tokens are equally unlikely. 0.99 maximum. Higher value finds a lower, flatter plateau. Note:some reports say tfs may cause improper gendering or mixups in responses, he instead of she, his/hers, etc. 1 thread reporting.
+          don't mess with that one too much, though you could go as low as 0.9 without significantly changing the output.
+
+          there is also mirostat_modes 1 and 2. Reccomend 2. Mirostat uses previous context to tune against perplexity somehow. I don't understand it so I can't reccomend it, but I've tried it out and it seems to work fine. 
+          Mirostat turns off select other settings, and does use temperature.
+
+        
+        Info for model selection. Preffered format chatML, but you can change the instructions in the settings - in the constructor of textengine.js.
+        Model sizes:
+        3B needs at least 4GB RAM total ram + vram (gfx card must support cuda or the amd one |||what's the amd verion of cuda called, I forgot.)
+        7B needs at least 8GB RAM
+        13B needs at least 16GB RAM
+        30B needs at least 32GB RAM
+        65B needs at least 64GB RAM
+  
+        And they all need some space for the context. GPU offloading puts the layers of the model into the memory of your graphics card. Fitting the whole model into VRAM makes things way faster. 
+        For reference, at 2048 context in Q4_0*, a 6GB Nvidia RTX 2060 can comfortably offload:
+        32 layers with LLAMA 7B
+        18 layers with LLAMA 13B
+        8 layers with LLAMA 30B
+  
+        OpenHermes is 35 layers. with a Q_3 you should be able to just fit it all with 2k context in 6gb vram I think. It will be tight, and you'll trade a lot of speed for bigger context by offloadin a few less slices.    
+        You can load the model in memory, see how much your final model memory cost is in the console, and get a rough estimate of the size of each layer by dividing the size in memory by the number of layer. Remember to leave room for the context, which can get big fast. At 8k context I think use over 5gb of memory with the Q8, just for the context alone.
+
+        **Model bit depth is trade between output quality and output speed.  Generally, larger models are smarter and can follow more complex instructions.
+        KoboldCPP uses GGUF format, which are quantized from 16 bit to between 2 bit and 8 bit depending on model. (I like 8 bit if it fits in vram with room for the context.)
+        lower bits require less ram, but there is a drop in reasoning and writing quality, though even the q2 was following instructions well. 
+        I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative writing, ideas, and agi in a 13B, I think it expects alpaca formatting.
+
+        |||Tell me about the funciton of the liver and what activities damage it.
+
+        |||coder|write fizzbuzz with comments on each line. Explain how fizzbuzz is used to judge candidates in interviews
+
+        |||agi| walk me though setting up a react website including components for the navigation header, footer, and a window for the main content. 
+        `
+        this.write = true;
+        this.sendHold = true;
         break;
       case "write":
         this.write = true;
+        this.sendHold = true;
         return true;
         break;
+      case "list":
+        this.write = true;
+        this.identity
       case "rp":
         this.rp = true;
         return true;
@@ -535,7 +667,7 @@ or for coding
               tag = command[0];          
             }else if(!isNaN(command[1])){
              this.params[command[0]]= parseFloat(command[1]);
-             console.log(command[0] + command[1] +" written> " + this.params[command[0]]);
+             console.log(command[0] + command[1] +" written> " + this.params[command[0]]);//ill kep this one for now
             }
           }
           //this.funSettings(tag);
@@ -547,13 +679,9 @@ or for coding
         //console.log("No persona tags found.");
       }
       if (sorted.run) {
-        let response = { raw: text };
-        response.sortedText = sorted.formattedQuery;
+        //response.sortedText = sorted.formattedQuery;
         if (this.identity == "") {
           this.identity = this.updateIdentity(["default"]);
-          response.identity = this.identity;
-        } else {
-          response.identity = this.identity;
         }
         //response.memory = this.memory;
         //console.log(`Setup text executed. sorted.formattedQuery: ${response.formattedQuery}`);
@@ -575,7 +703,7 @@ or for coding
         
         if (this.write==true) {
           this.write = 0;
-          return this.sendToClipboard("|||'name':save|"+JSON.stringify(this.identity) );//todo send the right thing to the clipboard  
+          return this.sendToClipboard("|||name:save|"+JSON.stringify(this.identity) + "\n \n _______\n" + sorted.formattedQuery );//todo send the right thing to the clipboard  
         }
         if (this.sendHold) {
         this.sendHold = false;
@@ -610,12 +738,10 @@ or for coding
             );
             this.sendLast = false;
           } else {
-            console.log("recentClip: "+this.recentClip);
+            //console.log("recentClip: "+this.recentClip);
             this.sendToApi(request + this.instructions.finalPrompt, this.params);
-            //this.sendLast = false;
           }
-          //todo: lots
-          return response;
+          return;
       }
     }
       if (sorted.formattedQuery) {
@@ -633,14 +759,17 @@ or for coding
       }
     activatePresort(text) {
       let run = false;
+      text = text.trim();
       var response = [];
       const parsedData = text.split(this.instructions.invoke);
       let tags = "";
       if (parsedData.length > 3) {
         this.notify("error:", "too many "+ this.instructions.invoke + ". max 2.");
+        this.sendHold = true;
+        this.write = true;
         return{
           run: run,
-          formattedQuery: response[0] + "\n" + response[1] + "\n" + response[2],
+          formattedQuery: "The user sent to many invoke tokens to the interface, |||query, |||identity|query,  context ||| query, context|||query|||context are the supported modes. ",
           tags: tags
           };
       }
@@ -737,6 +866,7 @@ class ChatHistory{
       
     }
   }
+  //todo: bring in user, ai messages and get token lengths, 
   returnUserData(text){
     this.lastUser = text;
   }

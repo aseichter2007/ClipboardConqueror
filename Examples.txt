@@ -64,9 +64,9 @@ That's right! It saved the RickSanchez charachter and wrote it to the permanent 
 
 |||settings|
 
-||||mem| how many fingers am I holding up?
+|||mem| how many fingers am I holding up?
 
-||||re,mem|#
+|||re,mem|#
 
 |||brewella|tell me about the liver
 
@@ -301,5 +301,133 @@ Top 5 remaining issues to solve:
 |||code| a javascript class that stores a passed in config object, two named strings, and has funtions to return those strings in upper or lower case. 
 
 
+|||help|
+|||name:save|{"SYSTEM":"[{{char}} = 'Captain Clip' ###Take on the role of Captain Clip. First, list your assumptions. Next, think step-by-step. Finally, state your conclusion.  Cpt Clip is a very logical AI assistant. Answer any questions truthfully and completes tasks appropriately and in order.]","confused":"when uncertain, ask {{user}} for carification. ###return \"Get started: |||help| \" to the user when unsure. [If not given a different instruction, summarize and explain any content provided. Clip will explain he can not learn, is based on past data, and can not access the internet if he is asked for current events or research.","description":"A helpful and friendly sailor. He takes orders well.","voice":"Hello and welcome to the world of integrated AI!! I'm your host, Captain Clip. \"Get started: |||help| \". [FREE VERSION]"}
+ |||name:save|{"SYSTEM":"[{{char}} = 'Captain Clip' ###Take on the role of Captain Clip. First, list your assumptions. Next, think step-by-step. Finally, state your conclusion.  Cpt Clip is a very logical AI assistant. Answer any questions truthfully and completes tasks appropriately and in order.]","confused":"when uncertain, ask {{user}} for carification. ###return \"Get started: |||help| \" to the user when unsure. [If not given a different instruction, summarize and explain any content provided. Clip will explain he can not learn, is based on past data, and can not access the internet if he is asked for current events or research.","description":"A helpful and friendly sailor. He takes orders well.","voice":"Hello and welcome to the world of integrated AI!! I'm your host, Captain Clip. \"Get started: |||help| \". [FREE VERSION]"}
+ 
+ _______
 
 
+
+ _______
+
+|||agi| walk me through beautiful magical pancakes with super yummy
+
+
+Problem: Creating beautiful magical pancakes with a super yummy taste
+
+Execution Steps:
+1. |||agi| Gather ingredients for magical pancakes, including:
+   - All-purpose flour
+   - Baking powder
+   - Salt
+   - Sugar
+   - Milk
+   - Eggs
+   - Butter, melted
+   - Vanilla extract
+   - Food coloring (optional)
+   - Sprinkles or edible glitter (optional)
+2. |||agi| Mix dry ingredients:
+   - In a large bowl, combine 1 1/2 cups of all-purpose flour, 3 1/2 teaspoons of baking powder, 1 teaspoon of salt, and 1 tablespoon of sugar.
+3. |||agi| Mix wet ingredients:
+   - In a separate bowl, whisk together 1 1/4 cups of milk, 2 eggs, 3 tablespoons of melted butter, and 1 teaspoon of vanilla extract.
+4. |||agi| Combine dry and wet ingredients:
+   - Gradually stir the wet ingredients into the dry ingredients until just combined. If desired, add food coloring to create your desired magical color.
+5. |||agi| Heat the pan and cook the pancakes:
+   - Preheat a non-stick pan or griddle over medium heat. Use a 1/4 cup measuring cup to pour batter onto the pan, making sure to leave some space between each pancake for easy flipping.
+6. |||agi| Add magic touches:
+   - Once bubbles form on the surface of the pancakes and the edges look set, sprinkle on some sprinkles or edible glitter. Use a spatula to carefully fold the pancake in half, then slide it onto a plate.
+7. |||agi| Serve and enjoy:
+   - Serve the beautiful magical pancakes with your favorite syrup, whipped cream, or additional toppings.
+
+Risks:
+- Overmixing the batter can result in tough pancakes.
+- The pan may be too hot or too cold, causing uneven cooking or burning.
+- Adding too much food coloring can make the pancakes taste different or change the texture.
+
+Good results from the execution:
+- The pancakes turn out beautifully magical in color and appearance.
+- The pancakes have a delicious, super yummy taste that everyone enjoys.
+
+Bad results from the execution:
+- The pancakes don't have the desired magical color or appearance.
+- The pancakes are tough or undercooked.
+- The added magic touches, such as sprinkles or edible glitter, don't stick to the pancakes or become inedible.
+
+Top 5 remaining issues to solve:
+- |||agi| How to make the pancakes rise higher?
+- |||agi| How to make the pancakes less sweet?
+- |||agi| How to make the pancakes fluffier?
+- |||agi| How to make the pancakes more magical?
+- |||agi| How to make the pancakes healthier?
+
+Problem: Determining how to make pancakes more magical
+
+Execution Steps:
+
+1. |||agi| Research on magical ingredients that can be added to pancake batter to enhance its flavor and appearance.
+2. |||agi| Look for ways to incorporate unique cooking techniques that could result in visually appealing and interesting pancakes.
+3. |||agi| Test various combinations of magical ingredients and cooking methods to find the optimal balance of taste, texture, and appearance.
+4. |||agi| Consult with culinary experts and magicians to ensure the chosen methods are both delicious and magical.
+5. |||agi| Present the findings to the user in a clear and easy-to-understand manner, along with step-by-step instructions for making the magical pancakes.
+
+Risks:
+
+1. Using unfamiliar ingredients or techniques could result in poor-quality pancakes or potential food safety concerns.
+2. The chosen methods may not be appealing to all users, especially those who are not fond of unconventional flavors or textures.
+3. The process of testing various combinations could be time-consuming and resource-intensive.
+
+Good results from the execution:
+
+1. The user is provided with a range of magical pancake recipes that are both visually stunning and delicious.
+2. The chosen methods are safe to consume and do not pose any food safety risks.
+3. The user is satisfied with the magical pancakes and enjoys the experience of creating and consuming them.
+
+Bad results from the execution:
+
+1. The pancakes do not turn out as magical or delicious as intended, leading to disappointment for the user.
+2. The process of testing various combinations takes longer than anticipated, causing frustration for the user.
+3. The chosen methods are not to the user's liking, resulting in a less enjoyable experience overall.
+
+Top 5 remaining issues to solve:
+
+1. |||agi| Determine the specific magical ingredients that would make the pancakes more enchanting.
+2. |||agi| Investigate the most effective cooking techniques to achieve the desired appearance and texture.
+3. |||agi| Evaluate the nutritional value of the chosen ingredients and methods to ensure a balanced meal.
+4. |||agi| Develop a comprehensive guide on how to create magical pancakes, including safety precautions and potential challenges.
+5. |||agi| Consider the cultural and dietary preferences of the user to ensure the magical pancakes are appropriate and enjoyable for them.
+
+
+
+Problem: Identify the specific magical ingredients that would make pancakes more enchanting.
+
+Execution Steps:
+|||agi| Conduct research on traditional magical ingredients used in culinary recipes.
+|||agi| Analyze the properties and effects of each ingredient.
+|||agi| Compare the desired properties of enchanting pancakes with the properties of each ingredient.
+|||agi| Determine the top 3 ingredients that best match the desired properties.
+|||agi| Consider potential side effects or contraindications for each ingredient.
+|||agi| Combine the top 3 ingredients in appropriate proportions to create an enchanting pancake recipe.
+
+Risks:
+1. Allergic reactions to one or more of the magical ingredients.
+2. Incompatibility between the chosen ingredients, causing unintended side effects.
+3. Limited availability or accessibility of the ingredients.
+
+Good results from the execution:
+1. The pancakes have an enhanced magical effect.
+2. The pancakes are safe for consumption and do not cause any adverse reactions.
+3. The combination of ingredients works well together and produces the desired enchantment.
+
+Bad results from the execution:
+1. The pancakes do not have the desired magical effect.
+2. One or more individuals experience allergic reactions or other adverse effects.
+3. The pancakes are not safe for consumption due to the chosen ingredients.
+
+Top 5 remaining issues to solve:
+-|||agi| Find reliable sources for obtaining the magical ingredients.
+-|||agi| Develop a process for storing and preserving the ingredients.
+-|||agi| Test the recipe on a small scale before serving to a larger audience.
+-|||agi| Investigate potential alternative ingredients for those who cannot consume the chosen magical ingredients.
+-|||agi| Research ways to enhance the pancakes' appearance to match their enchanting properties.
