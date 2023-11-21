@@ -1,21 +1,4 @@
-![Clipboard Conqueror Graphic logo. The letters are clouds and buildings on a lush estate.](CCfinal.jpg)|||how to insert an image into github to display with the readme. The image is in the top level of the repo and called CCfinal.jpg
-Captain Clip: I'm afraid I cannot assist you with uploading images to GitHub or modifying the repository directly, as I am based on past data and do not have access to the internet for current events or research. However, I can provide you with step-by-step instructions on how to do this manually:
-
-1. Navigate to your GitHub repository where you want to add the image.
-2. Click on the "Code" tab at the top of the page.
-3. Click on "Upload Files" at the top of the page.
-4. Select the "CCfinal.jpg" file from your computer.
-5. After uploading the file, you should see it listed under the "Files" section.
-6. Now, click on the "raw" button below the README.md file.
-7. Paste the following code snippet below the existing text in the README.md file:
-```
-![CCfinal.jpg](CCfinal.jpg)
-```
-8. Replace "CCfinal.jpg" with the name of your image file, and make sure the extension (e.g., ".jpg") is included.
-9. Save the changes to your README.md file.
-10. Push your changes to GitHub by clicking on the "Commit changes" button at the top of the page, then "Create Pull Request" to share your changes with others.
-
-Remember that these instructions are based on the assumption that you have the necessary permissions to modify the repository. If you do not, you may need to ask the repository owner or someone with administrative rights to perform these steps for you.
+![Clipboard Conqueror Graphic logo. The letters are clouds and buildings on a lush estate.](CCfinal.jpg)
 Clipboard Conqueror - Readme
 =============================
 *Special thank you to the creators of  KoboldAi, KoboldCPP/lite, llamma, openAi, 
@@ -33,56 +16,94 @@ With enough support, this app will become extremely useful for anyone.
 Usage:
 ------
 
-1. Enter `|||` followed by your request or command. Pipe "|" can be typed by pressing shift + backslash(above enter).
-2.Copy the text to your clipboard. For example:
-```
-   - ||| Say hello
-      -select and copy the line above
+Certainly! Here's the formatted text with only lines containing `|||` in code blocks:
 
-   - |||introduciton| will tell you about LLMs and how hey work, an explain the settings that are useful to control generation.
+1. Enter `|||` followed by your request or command. Pipe "|" can be typed by pressing shift + backslash (above enter).
+2. Copy the text to your clipboard. For example:
+   ```
+   - ||| Say hello
+   ```
+   Copy the line above
+
+   ```
+   - |||introduction|
+   ```
+   will tell you about LLMs and how they work, and explain the settings that are useful to control generation.
 
    - |||character|Say hello  
-       //this is exampular, character is not a default prompt. Captain Clip will respond. Try:
-          |||frank| Hello, Frank. You can't hide from me. Show yourself. 
-
+     // This is exemplary; character is not a default prompt. Captain Clip will respond. Try:
+     ```
+     |||frank| Hello, Frank. You can't hide from me. Show yourself.
+     ```
+   ```
    - |||stable| write a prompt for a picture of a beautiful forest with pixies playing with animals.
-          remember, no spaces inside the | pipes are allowed.
+   ```
+   Remember, no spaces inside the | pipes are allowed.
+   ```
+   - |||frank,mem|Frank, how many fingers am I holding up?
+   ```
+   - Ask Frank Drebin if he has information contained in tag "mem"
 
-   - |||frank,mem|Frank, how many fingers am I holding up?  
-         -ask Frank Drebin if he has information contained in tag "mem"
+   Note: Agents, memory agents, and instructions can be combined like |||agent1,agent2|.
+   Three pipes, agent, one pipe. No spaces. Any agents or settings must be closed with one pipe or they will be sent as text to the default agent (Captain Clip).
 
-    Note:agents, memory agents and instructions, and can be combined like |||agent1,agent2|.
-    Three pipes, agent, one pipe. No spaces.  Any agents or settings  must be closed with one pipe or they will be sent as text to the default agent (Captain Clip). 
+   ```
+   - |||1200|
+   ```
+   sets the max response length to 1200. Also works like |||agent,setting:0.5,1000| just a number is always max response length.
 
-   - |||1200| sets the max response length to 1200. Also works like |||agent,setting:0.5,1000| just a number is always max response length.  
+   ```
+   - |||temperature:1.1| 
+   ```
+   sets the temperature to 1.1. This works for any setting, e.g., top_p, min_p. Use 1 and 0 to set true/false //true/false untested.
+   ```
+    |||coder,re| what is this code doing? -
+   ```
+   sends the thing you copied last, prepended by "what is this code doing," and sends the coder assistant prompt to help frame the output format and preconceptions.
+
+   ```
+   - |||memory:save| writes or overwrites an identity called memory with this text: "writes or overwrites an identity..."
+   ```
+     Note - extensive formatting causes errors. This can be sent JSON, but it's really fiddly and the saved identity is just stringified back out anyway. Advanced example way below. 
+   ```
+   |||mem:save| SYSTEM: take on the role of {{character}}, description:  description.
+   ```
+   More formatting is more potential for errors, and errors don't make it into memory.
    
-   - |||temperature:1.1| sets the temperature to 1.1. This works for any setting ex: top_p, min_p. Use 1 and 0 to set true/false //true/false untested.
-   
-   - |||memory:save| writes or overwrites an identity called memory with this text:"writes or overwrites an identity..."
-      Note- extensive formatting causes errors. this can be sent json but it's really fiddly and the saved identity is just stringified back out anyway.
-      reccomendation: "|||mem:save| SYSTEM: take on the role of {{character}}, description:  description."  More formatting is more potential for errors, and errors don't make it in. 
 
-   - |||coder,re| what is this code doing? - sends the code you copied last, prepended by "what is this code doing", and invokes the coder assistant to help frame the output format and preconceptions. 
-      
-      save is the only command supported like `|||agent:save|{"description":"description"}`  json format works but the syntax has to be perfect, recomend avoiding {}.
+   Save is the only command supported like `|||agent:save|{"description":"description"}` JSON format works but the syntax has to be perfect; recommend avoiding {}.
 
    - |||coder,mute,memone,stevesdayoff|
-       > This command will insert the coder character card, the mute card, memone and stevesdayoff. The AI will recieve each of these. 
-       Note, only coder is a standard character. 
-       
-   Its useful to save information like 
-   |||mem:save| information to make easily available or query against repeatedly
-   and then use it like 
-   |||coder,mem| describe the funtion of the code block. 
-   |||coder,mem| different question about the info in mem
+     > This command will insert the coder character card, the mute card, memone, and stevesdayoff. The AI will receive each of these.
+     Note, only coder is a standard character.
 
-   
-|||list|
+   It's useful to save information like
+   ```
+   |||memory:save| user is holding up two fingers.
+   ```
+   and then use it like
+   ```
+   |||coder,memory| describe the function of the code block.
+   ```
+   ```
+   |||coder,memory| different question about the info in mem
+   ```
 
+   ```
+   |||list|
+   ```
+   The list command sends a list of current agents in memory to the clipboard, ready to paste out.
+
+   ```
+   |||mem,write|
+   ```
+   The write command will copy the entire prompt of all entered agent tags to the clipboard ready to paste, and then copy back under a new name or edited. 
 
 Productivity:
 -------------
 Clipboard Conqueror makes the process of accessing an LLM simple and efficient in any workspace.
+
+Locally run models can be trusted with private data and do not phone home or report any metrics. Local LLMS are private and secure. 
 
 Proofread documents, test explainations, get feedback, find inspiration, or just run a game of dungeons and dragons with your friends.
 
@@ -107,9 +128,9 @@ Key Features:
 
 Supported Platforms:
 --------------------
-Clipboard Conqueror is designed to work seamlessly across multiple platforms including Windows, macOS, and Linux. It has been rigorously tested and optimized to ensure stability and compatibility.
+Clipboard Conqueror is designed to work seamlessly across multiple platforms including Windows, macOS, and Linux. It has been rigorously tested and optimized to ensure stability and compatibility.//??!! Dang, that is a complete lie. I have no idea if this works on linux or mac. Report your findings please. 
 
-Notice://gtp, openai unimplemented. LMStudio is not supported yet either.
+Notice://gtp, openai unimplemented. LMStudio is not supported yet either. And the koboldCPP api is currently under rapid development so I really should get after it.
 --------
 When using the |||gtp:3| or |||gpt:4| commands, be aware that data will be sent to outside systems. This may be a breach of your companies data protection policy.//unimplemented
 You can safely use any other command to query sensitive data, and depending on your configuration, gtp commands can be sent to LMStudio to run against a larger slower model. //unimplemented
@@ -125,8 +146,8 @@ Advanced Example:
   "anydescription": "An unhelpful and unfriendly army man. He takes orders to the john and throws em in. He disrespects requests. He hates kind pleas for help.",
   "thisExampleDilogue": ["Dip: What do you want, sarge?", "Dip: get out of my face."]
 }
-will add that agent json parsed into the memory until the application is closed.
 ```"
+will add that agent json parsed into the memory until the application is closed. Note: the entire JSON is sent to the LLM. Openhermes loves the format with keys like {"system":"You are {{char}}", "name": "SuperAIHELPErman5000", "description": "future roboto assistant mega help power"}
 
 ---------------------------------
 Installation:
@@ -134,7 +155,7 @@ Installation:
 
 
 first get this. github.com/LostRuins/koboldcpp/releases/
-or for macOS get KoboldAi //untested, for sure doesnt support # memory, which is not implemented and not in this readme yet. 
+or for macOS get KoboldAi or anything that hosts a koboldai compatible endpoint for tavern, etc. //untested
 a kobold compatible api must be running to use Clipboard Conqueror.
 I will supply a sample batch file for loading a model with your settings file after you get kobold dialed in from the launcher. 
 
