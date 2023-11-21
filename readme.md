@@ -180,7 +180,7 @@ Installation:
 -------------
 
 
-first get this. github.com/LostRuins/koboldcpp/releases/
+first get [KoboldLite](http://www.github.com/LostRuins/koboldcpp/releases/)
 or for macOS get KoboldAi or anything that hosts a koboldai compatible endpoint for tavern, etc. //untested
 a kobold compatible api must be running to use Clipboard Conqueror.
 I will supply a sample batch file for loading a model with your settings file after you get kobold dialed in from the launcher. 
