@@ -1,3 +1,21 @@
+![Clipboard Conqueror Graphic logo. The letters are clouds and buildings on a lush estate.]("CCfinal.jpg")|||how to insert an image into github to display with the readme. The image is in the top level of the repo and called CCfinal.jpg
+Captain Clip: I'm afraid I cannot assist you with uploading images to GitHub or modifying the repository directly, as I am based on past data and do not have access to the internet for current events or research. However, I can provide you with step-by-step instructions on how to do this manually:
+
+1. Navigate to your GitHub repository where you want to add the image.
+2. Click on the "Code" tab at the top of the page.
+3. Click on "Upload Files" at the top of the page.
+4. Select the "CCfinal.jpg" file from your computer.
+5. After uploading the file, you should see it listed under the "Files" section.
+6. Now, click on the "raw" button below the README.md file.
+7. Paste the following code snippet below the existing text in the README.md file:
+```
+![CCfinal.jpg](CCfinal.jpg)
+```
+8. Replace "CCfinal.jpg" with the name of your image file, and make sure the extension (e.g., ".jpg") is included.
+9. Save the changes to your README.md file.
+10. Push your changes to GitHub by clicking on the "Commit changes" button at the top of the page, then "Create Pull Request" to share your changes with others.
+
+Remember that these instructions are based on the assumption that you have the necessary permissions to modify the repository. If you do not, you may need to ask the repository owner or someone with administrative rights to perform these steps for you.
 Clipboard Conqueror - Readme
 =============================
 *Special thank you to the creators of  KoboldAi, KoboldCPP/lite, llamma, openAi, 
