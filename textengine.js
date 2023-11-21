@@ -669,7 +669,7 @@ or for coding
           temPersona.push(this.updateIdentity(tag));    
         });
         this.identity = temPersona;
-        //console.log("identset: " + JSON.stringify(this.identity));
+        console.log("identset: " + JSON.stringify(this.identity));
       } else {
         //console.log("No persona tags found.");
       }
