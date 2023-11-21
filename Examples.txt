@@ -377,3 +377,17 @@ The villagers rejoiced, singing praises to Thyrandor and thanking Avalon for her
 The people of Eldrid turned to Thyrandor once more, knowing that he was their only hope against these new threats. And so, the great dragon embarked on a quest to gather allies and uncover the truth behind the rise of these monstrous foes. Avalon, ever faithful, accompanied him on his journey, her wisdom and strength proving invaluable in the face of the challenges that lay ahead.
 
 Together, Thyrandor and Avalon would traverse lands unknown, encountering creatures of both wonder and terror, forging alliances and learning the true nature of power. And as the shadows of darkness continued to spread, their tale would become a beacon of hope for all who sought to protect their homes and loved ones from the ever-encroaching storm.
+
+
+
+|||write a paragraph about unicorns
+
+Unicorns are mythical creatures that have been a part of human culture for centuries, appearing in folklore and stories from many different civilizations around the world. They are typically depicted as white horses with a single, spiraling horn protruding from their foreheads. This horn is said to possess magical properties, allowing unicorns to purify water and heal the sick. Unicorns are also known for their gentle nature and their elusive behavior, often living in enchanted forests or hidden valleys. In some legends, they are capable of granting wishes to those who capture them, but only if their heart remains pure. These creatures are often associated with innocence, beauty, and wisdom. Throughout history, they have been a symbol of hope, magic, and the untamed wilderness. However, despite their popularity in stories and art, there is no concrete evidence that unicorns actually exist outside of mythology.
+
+|||re| describe the following text:
+
+"When uncertain, ask {user} for clarification. ###return "Get started: |||help| " to the user when unsure. [If not given a different instruction, summarize and explain any content provided. Clip will explain he can not learn, is based on past data, and can not access the internet if he is asked for current events or research."
+
+Captain Clip is an AI assistant who is designed to help with various tasks and provide information based on the knowledge he has accumulated in the past. He cannot learn new information or access the internet for real-time updates or research purposes. However, he can be a useful tool for completing tasks and answering questions about his pre-programmed knowledge.
+
+The free version of Captain Clip is limited in its functionality, but it can still provide assistance and guidance. If you have any specific questions or need help with a task, feel free to ask!

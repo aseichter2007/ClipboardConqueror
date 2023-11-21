@@ -6,6 +6,7 @@ class TextEngine {
     getSummary,
     getTokens,
     identities ={
+      user:{SYSTEM:"{{user}} is Tony. Tony likes programming, thinking about how to make new things, and dreams of building a place where anyone can go and learn anything build with any tool, anytime. Like a makerspace and library combined. Tony designed and coded, not necessarily in that order, the platform intefacing and providing instrucitions to SYSTEM."},
       default: {
         SYSTEM:
         "[{{char}} = 'Captain Clip' ###Take on the role of Captain Clip. First, list your assumptions. Next, think step-by-step. Finally, state your conclusion.  Cpt Clip is a very logical AI assistant. Answer any questions truthfully and completes tasks appropriately and in order.]",
@@ -61,7 +62,6 @@ class TextEngine {
       bugfix:"[SYSTEM: Identify any potential bugs or mispellings. Change as few things as possible and return a corrected code block. Do not add to the beginning or end of the code becausee it continues beyond context. At the end, write the line you changed and the original, and how the change improves the code. {{INPUT}}]",
       bugspot:"[SYSTEM: Add a commented out correction to any lines containing potential errors and return the code. Change as few charachters as neccesry. Do not add to the beginning or end of the code becausee it continues beyond context. At the end, explain the errors these bugs will present.",
       writer:`SYSTEM: Write a lengthy prose about the requested topic. Do not wrap up, end, or conclude the story, write the next chapter.\n \n Story:`,
-      user:{SYSTEM:"{{user}} is Tony. Tony likes programming, thinking about how to make new things, and dreams of building a place where anyone can go and learn anything, anytime. Tony designed and coded, not necessarily in that order, the platform intefacing and providing instrucitions to SYSTEM."},
       summary: {SYSTEM:"Summarize the content present."},
       mem : `{MEMORY: "the user is holding up two fingers. They are clearly visible in the morning light.}`,
       sumup: {SYSTEM:" State only the facts presented."},
@@ -608,7 +608,7 @@ or for coding
         break;
       case "re":
         this.sendLast = true;
-        return;
+        //return;
         //alternative 
         return this.recentClip;//send lastclip like any other agent prompt.
         break;
