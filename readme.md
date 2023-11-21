@@ -2,21 +2,32 @@
 Clipboard Conqueror - Readme
 =============================
 *Special thank you to the creators of  KoboldAi, KoboldCPP/lite, llamma, openAi, 
+
+
 Clipboard Conqueror is a powerful tool that harnesses the capabilities of locally run large language models to process and generate content, right from your clipboard. 
+
 With Clipboard Conqueror, you can leverage the AI's abilities by invoking it with `|||` and providing commands or requests for information.
 
 I solemnly promise that this application and at least one compatible backend will function in the absence of internet connectivity.
 One of my design inspirations for this application is to spread LLM models to as many computers as possible. I want to ensure at least one intact system is recovered by future archeologists, an incredible time capsule of culture, science, and data.  We should be sending intelligent boxes to deep space too. Our Knowledge and posterity must not go to waste. 
 
 This project is also a bit of a last gasp. I've been looking for work and getting nothing but scams.
-Please, if you get good use from this application, consider supporting me. My son will be born next month and debt is already starting to get out of hand. Chronic depression has always kicked my ass, I gotta get some traction and start rolling. 
-todo: patreon and kofi
+Please, if you get good use from this application, especially in a commercial setting, consider supporting me. My son will be born next month and debt is already starting to get out of hand. Chronic depression has always kicked my ass, I gotta get some traction and start rolling. 
+
+patreon.com/ClipboardConqueror
+
+ko-fi.com/aseichter2007
+
+|||make these links in markup for a .md file
+
+Captain Clip: Here are the links formatted as Markdown for a .md file:
+
+1. [Patreon](https://patreon.com/ClipboardConqueror)
+2. [Ko-fi](https://ko-fi.com/aseichter2007)
 
 With enough support, this app will become extremely useful for anyone. 
 Usage:
 ------
-
-Certainly! Here's the formatted text with only lines containing `|||` in code blocks:
 
 1. Enter `|||` followed by your request or command. Pipe "|" can be typed by pressing shift + backslash (above enter).
 2. Copy the text to your clipboard. For example:
@@ -28,7 +39,7 @@ Certainly! Here's the formatted text with only lines containing `|||` in code bl
    ```
    - |||introduction|
    ```
-   will tell you about LLMs and how they work, and explain the settings that are useful to control generation.
+   will tell you about LLMs and how they work, and explain the settings that are useful to control generation. Ready to paste immediately.
 
    - |||character|Say hello  
      // This is exemplary; character is not a default prompt. Captain Clip will respond. Try:
@@ -128,7 +139,7 @@ Key Features:
 
 Supported Platforms:
 --------------------
-Clipboard Conqueror is designed to work seamlessly across multiple platforms including Windows, macOS, and Linux. It has been rigorously tested and optimized to ensure stability and compatibility.//??!! Dang, that is a complete lie. I have no idea if this works on linux or mac. Report your findings please. 
+Clipboard Conqueror is designed to work seamlessly across multiple platforms including Windows, macOS, and Linux. It has been rigorously tested and optimized to ensure stability and compatibility.//??!! Dang, that is a complete lie. There are at least 2 bugs I havent nailed down, and I have no idea if this works on linux or mac. Report your findings please. 
 
 Notice://gtp, openai unimplemented. LMStudio is not supported yet either. And the koboldCPP api is currently under rapid development so I really should get after it.
 --------
@@ -231,9 +242,10 @@ three pipes invokes the ai. If you want to skip the introduction you can get rig
 
 |||what is an inverse square root and how is it useful. 
 
-Have fun and remember you can always ask for 
+Have fun and remember you can always ask for
+```
 |||help|
-
+```
 
 ---------------------------------
 Bug Reports and Feature Requests:
