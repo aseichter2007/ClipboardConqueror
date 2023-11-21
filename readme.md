@@ -145,19 +145,34 @@ Notice://gtp, openai unimplemented. LMStudio is not supported yet either. And th
 --------
 When using the |||gtp:3| or |||gpt:4| commands, be aware that data will be sent to outside systems. This may be a breach of your companies data protection policy.//unimplemented
 You can safely use any other command to query sensitive data, and depending on your configuration, gtp commands can be sent to LMStudio to run against a larger slower model. //unimplemented
-Please use Clipboard Conqueror responsibly and respect copyright or laws in your country while generating content. Misuse of this tool might lead to unintended consequences and breaches of privacy or intellectual property rights. I hold no reponsibility for the data that passes through this tool on any system.  
+Please use Clipboard Conqueror responsibly and respect copyright and laws in your country while generating content. Misuse of this tool might lead to unintended consequences and breaches of privacy or intellectual property rights. I hold no reponsibility for the data that passes through this tool on any system.  
+
+
+Project License:
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+Additional Terms:
+
+While the MIT License permits free use, modification, and distribution, I kindly request that you refrain from creating derivative works containing my code without permission from the original author (me). In part because it's terrible code. If you have any inquiries regarding modifications or feature requests, please contact me at clipboard.aseichter2007@gmail.com or open an issue.
+
+Your understanding and respect for these terms are appreciated.
+
 
 Additional Resources:
 //todo: link assorted knowlege banks. 
 
+
 Advanced Example:
+
 ```
 |||newAgent:save| {  
   "yourName": "Corporal Dip",
   "anydescription": "An unhelpful and unfriendly army man. He takes orders to the john and throws em in. He disrespects requests. He hates kind pleas for help.",
   "thisExampleDilogue": ["Dip: What do you want, sarge?", "Dip: get out of my face."]
 }
-```"
+```
+
 will add that agent json parsed into the memory until the application is closed. Note: the entire JSON is sent to the LLM. Openhermes loves the format with keys like {"system":"You are {{char}}", "name": "SuperAIHELPErman5000", "description": "future roboto assistant mega help power"}
 
 ---------------------------------
@@ -176,11 +191,12 @@ https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF
 OpenHermes-2.5-Mistral supports 8192 context. This is a decent couple of pages. 
 
 Most of my prompts are specifically tuned against OpenHermes 2.5 Mistral 7b, and the default prompts follow chatML format. The system instuction in the training is an incredibly powerful tool. 
-any chatML model should work great out of the box.
+any chatML model should work great out of the box. Psyfighter an xwin_mlewd work great too, though they don't nail the instructions as well. 
+
 currently the entire settings for my app are in the constructor of textengine.js
 
 
-hardware("time to process")  [fast = 20+ tokens/sec, medium = <10 tokens/sec. slow = <1tokens/sec]* Lower on this chart is smarter. 
+hardware("token speed")  [fast = 20+ tokens/sec, medium = <10 tokens/sec. slow = <1tokens/sec]* Lower on this chart is smarter. 
 
       16gb ram and no graphics card, or laptop with shared gfx memory(medium):https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q3_K_L.gguf
 
@@ -234,14 +250,14 @@ npm start
 
 
 Copy this line:
-
+```
 |||introduction|
-
+```
 paste in a text field. Read the introduction. 
 three pipes invokes the ai. If you want to skip the introduction you can get right to things like:
-
+```
 |||what is an inverse square root and how is it useful. 
-
+```
 Have fun and remember you can always ask for
 ```
 |||help|
