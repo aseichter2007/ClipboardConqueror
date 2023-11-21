@@ -1,7 +1,7 @@
 @echo off
 setlocal
 
-rem Relative path of the file
+rem Relative path of kobold settings kcpps file
 set RELATIVE_PATH=hermesq3.kcpps
 
 rem Get the full path
