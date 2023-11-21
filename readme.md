@@ -154,7 +154,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Additional Terms:
 
-While the MIT License permits free use, modification, and distribution, I kindly request that you refrain from creating derivative works containing my code without permission from the original author (me). In part because it's terrible code. If you have any inquiries regarding modifications or feature requests, please contact me at clipboard.aseichter2007@gmail.com or open an issue.
+While the MIT License permits free use, modification, and distribution, I kindly request that you refrain from creating derivative works containing my code without permission from the original author (aseichter2007). In part because it's terrible code. If you have any inquiries regarding modifications or feature requests, please contact me at clipboard.aseichter2007@gmail.com or open an issue.
 
 Your understanding and respect for these terms are appreciated.
 
