@@ -1,3 +1,5 @@
+![Alt Text](CCfinal.jpg)
+
 Clipboard Conqueror - Readme
 =============================
 *Special thank you to the creators of  KoboldAi, KoboldCPP/lite, llamma, openAi, 
