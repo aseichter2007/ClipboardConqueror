@@ -61,7 +61,7 @@ function recieveApiResponse(text, agent, tokens){
     text = text.replace(/\\n/g, '\n');
     NotificationBell("Paste Response:", text);
     botresponse = true
-    lastResponse = recieveEngine.recieveMessageFindTerminatorsAndTrim(text);
+    lastResponse = recieveEngine.recieveMessageFindTerminatorsAndTrim(text);//I don't think this ever activates but it will support function calling maybe.
     lastClip = "";
     ncp.copy(lastResponse);
     //client.getTokenCount(lastResponse, agent, sendData);

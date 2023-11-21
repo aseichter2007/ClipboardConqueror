@@ -296,13 +296,13 @@ or for coding
       guidance_scale: 1,
       use_default_badwordsids: false,
       negative_prompt: 'porn,sex,nsfw,racism,bawdy,racy,violent',//idk if I am using this right, or whether its hooked up behind or when it will be and the right name.
-      banned_tokens: `["   ", "</s>", "\n# ", "\n##", "\n*{{user}} ","### Human: ", "\n\n\n", "\n{{user}}:", '\"role\":', '\"system\"', '{{user:}}>:', "###"]`
+      banned_tokens: `["   ", "</s>", "\n# ", "\n##", "\n*{{user}} ","### Human: ", "\n\n\n", "\n{{user}}:", '\"role\":', '\"system\"', '{{user:}}>:', "###"]`//again not reall sure this is actually on
 
-    },
+    }
     
   ) {//todo settings
     this.identities = identities;
-    this.identity = "";
+    this.identity = '';
     this.sendToApi = sendToApi;
     this.sendToClipboard = sendToClipboard;
     this.getTokens = getTokens;
@@ -391,7 +391,7 @@ or for coding
           setIdent = this.funFlags(identity);
         }
         else{
-          this.funFlags(identity);
+          setIdent += this.funFlags(identity);
         }
         //console.log(JSON.stringify(this.identity));//looks good.
        
@@ -419,7 +419,7 @@ or for coding
     this.memory = [];
   }
   undress(){
-    this.identity = "";
+    this.identity = '';
   }
   
   
@@ -442,7 +442,7 @@ or for coding
     ///slice off 4
     switch (flag) {
       case "help":
-        var intro = `
+        const intro = `
         Welcome to Clipboard Commander!\n
 
           |||introduction| will explain the basics of LLMs, this help is more about this software.
@@ -465,7 +465,7 @@ or for coding
           |||writer| Write me a bedtime story about 11 little squirrels who talk to and help a little girl find shelter in a storm.
           
           |||writer,frank| Title: "Frank's Sauciest Case: Big pizza from little Tony."
-            Sends the frank derbin character and the writer along with any text you send to guide the story. 
+            Sends the frank derbin character and the writer along with any text you send to guide the story.  
 
           |||writer,write| will write the contents of the writer agent to the clipboard, ready to paste back instantly and see what is sent to the ai with |||writer|. 
           
@@ -501,7 +501,7 @@ or for coding
         return intro;
         break;
       case "introduction":
-        let identity = `
+        const identity = `
         Hello there! My name is Captain Clip, and I am here to introduce you to Clipboard Conqueror. As a friendly and helpful sailor, I'm here to guide you through the exciting world of integrated AI.
 
         Clipboard Conqueror is an innovative tool that bridges the gap between text-based AI and the computer clipboard. This incredible software allows the AI to be accessible from any text box or place where a user can type freely. Whether you need assistance with basic tasks, quick reference, or understanding strange messages, Clipboard Conqueror has got you covered.
@@ -528,9 +528,9 @@ or for coding
         higher temps get better results when you are trying to generate fiction or do imaginative things like:
         
         |||temperature:1.6| Write me 10 ideas for videos to record on a youtube. Avoid already popular tropes and focus on finding a fun and imaginative niche for me to fill.
-       
+          //with psyfighter, we get some actual sailing contaminatoin from the Captain Clip prompt. That's why there is a |||writer,agi,tot,code| 
         Higher temps lead to AI halucination and making stuff up, and that can be desirable, but don't ask for programming help at high temps or you might be led to install fake node modules.
-        Hot as you can handle makes some fancy fantasy, but really for serious writing I reccommend Tiefighter 13b over OpenHermes, the 7Bs are a step behind.
+        Hot as you can handle makes some fancy fantasy, but really for serious writing I reccommend Psyfighter 13b or something bigger over OpenHermes, the 7Bs are a step behind.
 
 
         As you can see, Small ai isn't perfect but a few years ago this type of query against a computer was basically impossible. The experience this software provides will improve as the models and technology available evolve further.
@@ -607,6 +607,7 @@ or for coding
         return "";
         break;
       case "re":
+        console.log("re hit!" + this.recentClip);
         this.sendLast = true;
         //return;
         //alternative 
@@ -641,10 +642,10 @@ or for coding
       this.write = false;
       return
     }
-    let sorted = this.activatePresort(text);
+    const sorted = this.activatePresort(text);
     if (sorted){
       if (sorted.formattedQuery){
-        this.currentText = sorted.formattedQuery
+        this.currentText = sorted.formattedQuery;
       }
       //console.log(JSON.stringify("sorted.formattedQuery: " + sorted.formattedQuery));
       this.undress();
@@ -661,7 +662,7 @@ or for coding
               tag = command[0];          
             }else if(!isNaN(command[1])){
              this.params[command[0]]= parseFloat(command[1]);
-             console.log(command[0] + command[1] +" written> " + this.params[command[0]]);//ill kep this one for now
+             console.log(command[0] + command[1] +" written> " + this.params[command[0]]);//ill keep this one for now
             }
           }
           //this.funSettings(tag);
@@ -674,7 +675,7 @@ or for coding
       }
       if (sorted.run) {
         //response.sortedText = sorted.formattedQuery;
-        if (this.identity == "") {
+        if (this.identity === '') {
           this.identity = this.updateIdentity(["default"]);
         }
         //response.memory = this.memory;
@@ -698,53 +699,54 @@ or for coding
         if (this.write==true) {
           return this.sendToClipboard("|||name:save|"+JSON.stringify(this.identity) + "\n \n _______\n" + sorted.formattedQuery );//todo send the right thing to the clipboard  
         }
-        if (this.sendHold) {
-        this.sendHold = false;
-        return;
-        }
-        if (this.rp) {
-          if (this.sendLast) {
+        if (!this.sendHold) {
+          if (this.rp) {
+            if (this.sendLast) {
+              //this.sendLast = false;
+              this.sendToApi(
+                request +
+                JSON.stringify(this.recentClip) +
+                this.instructions.rpPrompt +
+                this.instructions.finalPrompt, this.params
+                );
+                this.rp = false;
+                //this.sendLast = false;
+              } else {
+                this.sendToApi(request + this.instructions.finalPrompt, this.params);
+                //this.sendLast = false;
+              }
+              //return;
+            }else if (this.sendLast) {
             //this.sendLast = false;
             //console.log("identity: " + identityPrompt);
+            console.log("recent clip: " + this.recentClip);
             this.sendToApi(
-              request +
+              request + 
               this.recentClip +
-              this.instructions.rpPrompt +
-              this.instructions.finalPrompt, this.params
+              this.instructions.finalPrompt, 
+              this.params
               );
-              this.rp = false;
-              this.sendLast = false;
-            } else {
-              this.sendToApi(request + this.instructions.finalPrompt, this.params);
               //this.sendLast = false;
+            } else {
+              //console.log("recentClip: "+this.recentClip);
+              this.sendToApi(request + this.instructions.finalPrompt, this.params);
             }
-            return;
+            //return;
+            //return;
+          } else{
+            this.sendHold = false;
+            
+            }
           }
-          if (this.sendLast) {
-          //this.sendLast = false;
-          //console.log("identity: " + identityPrompt);
-          this.sendToApi(
-            request + 
-            this.recentClip +
-            this.instructions.finalPrompt, 
-            this.params
-            );
-            this.sendLast = false;
-          } else {
-            //console.log("recentClip: "+this.recentClip);
-            this.sendToApi(request + this.instructions.finalPrompt, this.params);
-          }
-          return;
-      }
     }
-      if (sorted.formattedQuery) {
+      //if (sorted.formattedQuery) {
         if (this.sendLast = true) {
-          this.updatePreviousCopy(this.lastclip + sorted.formattedQuery);//todo: determine if this is dumb or not. Consider letting this run evey time and re toggles to allow building a big context to send with a question.
+          this. recentClip = sorted.formattedQuery;// + "\n" + this.currentText);//todo: determine if this is dumb or not. Consider letting this run evey time and re toggles to allow building a big context to send with a question.
           this.sendlast = false;
-        } else {
-          this.updatePreviousCopy(sorted.formattedQuery);        
+          } else {
+          this. recentClip = sorted.formattedQuery;
         }
-      }
+      //}
       //console.log("copy update");
     }
     recievesummary(summary) {
@@ -766,7 +768,7 @@ or for coding
           tags: tags
           };
       }
-    //console.log("parse delimiter: " + JSON.stringify(parsedData));
+      //console.log("parse delimiter: " + JSON.stringify(parsedData));
       let longtrue = text.length > parsedData[0].length;
       if (longtrue && parsedData.length === 1) {
         tags = this.tagExtractor(parsedData[0]);
@@ -820,7 +822,7 @@ or for coding
 }
 
 class ChatHistory{
-  constructor(agent,agentdetails, getsummary,getTokens, length = 10, longterm = true, superlongterm= true, targetTokens = 2000, getokens, history = [], longHistory =[], sumMessage = `<|im_start|>system
+  constructor(agent,agentdetails, getsummary, getTokens, length = 10, longterm = true, superlongterm= true, targetTokens = 2000, getokens, history = [], longHistory =[], sumMessage = `<|im_start|>system
    summarize these messages for system use. After, list the inventory of items tools and technology used by order of importance to the instructions or story so that nothing important is left behind.`) {
     this.agent = agent;
     this.getSummary = getsummary;
