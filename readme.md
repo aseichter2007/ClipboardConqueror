@@ -1,4 +1,4 @@
-![Clipboard Conqueror Graphic logo. The letters are clouds and buildings on a lush estate.]("CCfinal.jpg")|||how to insert an image into github to display with the readme. The image is in the top level of the repo and called CCfinal.jpg
+![Clipboard Conqueror Graphic logo. The letters are clouds and buildings on a lush estate.](CCfinal.jpg)|||how to insert an image into github to display with the readme. The image is in the top level of the repo and called CCfinal.jpg
 Captain Clip: I'm afraid I cannot assist you with uploading images to GitHub or modifying the repository directly, as I am based on past data and do not have access to the internet for current events or research. However, I can provide you with step-by-step instructions on how to do this manually:
 
 1. Navigate to your GitHub repository where you want to add the image.
