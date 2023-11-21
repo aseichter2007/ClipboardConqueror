@@ -198,21 +198,25 @@ currently the entire settings for my app are in the constructor of textengine.js
 
 hardware("token speed")  [fast = 20+ tokens/sec, medium = <10 tokens/sec. slow = <1tokens/sec]* Lower on this chart is smarter. 
 
-      16gb ram and no graphics card, or laptop with shared gfx memory(medium):https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q3_K_L.gguf
+   
 
-      32gb ram and not using graphicss card(medium):https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q5_K_M.gguf
 
-      8gb gfx cards and 16gb ram(fast):https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q3_K_M.gguf
+16gb ram and no graphics card, or laptop with shared gfx memory(medium): [Q3_K_L](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q3_K_L.gguf)
 
-      8gb gfx cards and 32gb ram(medium):https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q5_K_M.gguf
+32gb ram and not using graphicss card(medium): [Q5_K_M](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q5_K_M.gguf)
 
-      12gb gfx cards and 16gb ram(fast):https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q5_K_M.gguf
+8gb gfx cards and 16gb ram(fast): [Q3_K_M](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q3_K_M.gguf)
 
-      12gb gfx cards and 32gb ram(medium-fast):https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q6_K.gguf
+8gb gfx cards and 32gb ram(medium): [Q5_K_M](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q5_K_M.gguf)
 
-      12gb gfx cards and 32gb ram(medium): https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q8_0.gguf
+12gb gfx cards and 16gb ram(fast): [Q5_K_M](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q5_K_M.gguf)
 
-      24gb vram(fast):https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q8_0.gguf
+12gb gfx cards and 32gb ram(medium-fast): [Q6_K](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q6_K.gguf)
+
+12gb gfx cards and 32gb ram(medium): [Q8_0](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q8_0.gguf)
+
+24gb vram(fast): [Q8_0](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q8_0.gguf)
+           
 
       I thought about reccommending other models, but openhermes is simply decent and fast, even tested on a friend's old 1080. 
       let me know about your harware and token speed and i will make this reflect the general experience better. 
@@ -296,12 +300,13 @@ release!
 //todo: branch to build premium binaries from. premium branch features:
 //todo: savesettings and getsettings in premium branch. //premium primary feature is inter session settings. without premium you must overwrite the settings like ||||settings,write| to paste ' |||settings,save| `{ the settings serialized json }` ' which can be edited in place and copied to save the settings. Listen for confirmation. 
 //todo: per charachter rolling memory to allow more natural exchanges and enable rp. 
-//todo: group chain interacting so you can batch like |||summary,writer|"text" and paste a summary, then you press the invoke key and it advances the chain and gives you the output from writer with the results of summary in the memory
+//todo: group chain interacting so you can batch like |||summary,writer|"text" and paste a summary, then you press the invoke key and it advances the chain and gives you the output from writer with the results of summary in the memory//todo: settings bulk in and out
 //todo: web api to host login server. 404 defaults to allow normal operation of paid branch users if I decide the server is expensive to run, or I die, or the internet is down. potential vulnerability: blocking in hosts to avoid subscriptoin check. Please pay for the full version of this software, this is my only income. Life is hard. 
 //todo: portal site to serve binary download links, take payment and manage your subscription level. Look up rules about re-serving chatgtp api on my key. Consider asp.net, it will just handle users and the front end only feels a little silly, no need for relational mongo or any silliness. Downside, I've never succssfullt hooked up a database right deploying to s2. consider aws lambda for auth,  serverless.  lambda auth has additional challenges
 //todo: make a lambda script to setup a lambda to serve a daily charachter, run a continuous contest so people vote for tomorrows char. |||dailycandidate,rate|10, assign up to ten points for the candidate last retrieved with |||dailycandidate| provies random from server. 
 //todo: consider price schedule. Leaning towards $2 monthly and $30-60 one time options at checkout.
-
+//todo: build agent portal with easy to copy and use workflow. 
+//todo: mystery agent of the day. vulnerability: the description is visible in the kobold terminal
 
 
 
