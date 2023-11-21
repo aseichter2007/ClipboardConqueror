@@ -1,3 +1,3 @@
 @echo off
 
-npm start
+npm i
