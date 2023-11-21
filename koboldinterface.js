@@ -91,7 +91,7 @@ async function sendPostTextRequest(apiUrl, data, callback, handler, notify, agen
     //var text = JSON.stringify(response.data.results[0].text)
     var text = response.data.results[0].text
     var tokens = response;
-    console.log(`Response data: ${JSON.stringify(response)}`);//todo: get tokens
+    //console.log(`Response data: ${JSON.stringify(response.data)}`);//todo: get tokens  THERE IS NO STATS NOOO
     callback(text, agent, tokens);
   } catch (error) {
     //notify("error");

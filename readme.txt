@@ -7,8 +7,11 @@ With Clipboard Conqueror, you can leverage the AI's abilities by invoking it wit
 I solemnly promise that this application and at least one compatible backend will function in the absence of internet connectivity.
 One of my design inspirations for this application is to spread LLM models to as many computers as possible. I want to ensure at least one intact system is recovered by future archeologists, an incredible time capsule of culture, science, and data.  We should be sending intelligent boxes to deep space too. Our Knowledge and posterity must not go to waste. 
 
+This project is also a bit of a last gasp. I've been looking for work and getting nothing but scams.
+Please, if you get good use from this application, consider supporting me. My son will be born next month and debt is already starting to get out of hand. Chronic depression has always kicked my ass, I gotta get some traction and start rolling. 
+todo: patreon and kofi
 
-
+With enough support, this app will become extremely useful for anyone. 
 Usage:
 ------
 
@@ -17,6 +20,8 @@ Usage:
 ```
    - ||| Say hello
       -select and copy the line above
+
+   - |||introduciton| will tell you about LLMs and how hey work, an explain the settings that are useful to control generation.
 
    - |||character|Say hello  
        //this is exampular, character is not a default prompt. Captain Clip will respond. Try:
@@ -54,7 +59,7 @@ Usage:
    |||coder,mem| different question about the info in mem
 
    
-
+|||list|
 
 
 Productivity:
@@ -160,14 +165,14 @@ hardware("time to process")  [fast = 20+ tokens/sec, medium = <10 tokens/sec. sl
       18 layers with LLAMA 13B
       8 layers with LLAMA 30B
 
-      OpenHermes is 35 layers. with a Q_3 you should be able to just fit it all I think.   You can load the model in memory, see how much your final model memory cost is in the console, and get a rough estimate of the size of each layer by dividing the size in memory by the number of layer. Remember to leave room for the context, which can get big fast. At 8k context I think use over 5gb of memory with the Q8, just for the context alone.
+      OpenHermes 2.5 is 35 layers. with a Q_3 you should be able to just fit it all with at least 2k context in 6gb of VRAM I think(untested).   You can load the model in memory, see how much your final model memory cost is in the console, and get a rough estimate of the size of each layer by dividing the size in memory by the number of layer. Remember to leave room for the context, which can get big fast. At 8k context I think use over 5gb of memory with the Q8, just for the context alone.
 
 *Model bit depth is trade between output quality and output speed.  Generally, larger models are smarter and can follow more complex instructions.
-KoboldCPP uses GGUF format, which are quantized from 16 bit to between 2 bit and 8 bit depending on model. (I like 8 bit if it fits in vram with room for the context.)
+KoboldCPP uses GGUF format, which are quantized from 16 bit to between 2 bit and 8 bit depending on model. (I like 8 bit if it fits in vram with room for 8k context.)
 lower bits require less ram, but there is a drop in reasoning and writing quality, though even the q2 was following instructions well. 
-I get all mine from huggingface/thebloke.
+I get all mine from huggingface/thebloke. Not all models 
 
-for ease of use and organization, consider keeping kobold and the model you chose inside Clipboard Conqueror/api.  If koboldcpp.exe is placed here, Clipboard Commander will run it automatically and run with the settings in freeconfig.js
+for ease of use and organization, consider keeping kobold and the model you chose inside Clipboard Conqueror application.  If koboldcpp.exe is placed here, Clipboard Commander will run it automatically.
 
 Finally run Clipboard Conqueror.  
 
@@ -208,9 +213,10 @@ dev:
 //todo: finish saving objects to memory//done
 
 //todo: openAI client, probably migrate a ton of logic out of textengine and into koboldinterface.js to make them interchangeable. 
-//todo: keyboard binding to activate ai on last clip without prompt. 
+//todo: keyboard binding to activate ai on last clip without prompt. t
 //todo: implement horde? maybe? or offer free gtp 3.5 or something. This will be after I make some money, send donations to accellerate this process. 
 //todo: /api/extra/abort  
+//todo text to speech agent that can interact with the clipboard contents. //waiting on upstream that runs on my hardware without dinkin around or enough generosity to set up a closet server. 
 
 //todo: /api/extra/generate/check  //return in progress, useful for vlarge gens on slow mode
 //todo: /api/extra/tokencount //should run against entered data and updates should be shown after setting mem or agent and on final send. 
@@ -234,3 +240,38 @@ release!
 
 
 
+|||agi| walk me through creating a javascript module that downloads a 10 gigabyte file from huggingface
+
+Problem: Create a JavaScript module to download a file from HuggingFace
+
+Execution Steps:
+1. |||agi| Determine the URL of the file you want to download from HuggingFace.
+2. |||agi| Create a new XMLHttpRequest object or use the fetch API to make a GET request to the URL.
+3. |||agi| Handle the response by listening for the "load" event and extract the file data from the response.
+4. |||agi| Check the content type of the response to determine the appropriate file format.
+5. |||agi| If necessary, convert the file data to a format suitable for the application's needs (e.g., Base64 encoding).
+6. |||agi| Create a function to handle the file download, either by providing a link for the user to download or by writing the file to disk.
+7. |||agi| Implement error handling for any potential issues that may arise during the download process.
+8. |||
+
+Risks:
+1. The URL provided may be incorrect or the file may no longer be available.
+2. The response from the server may be incomplete or corrupted.
+3. The user may not have permission to write to the specified location for saving the file.
+
+Good results from the execution:
+1. The file is successfully downloaded and available for use in the application.
+2. The download process is smooth and error-free.
+3. The user is informed of any issues that may arise during the download process.
+
+Bad results from the execution:
+1. The file cannot be downloaded due to an incorrect URL or the file being unavailable.
+2. The file is corrupted during the download process.
+3. The user is unable to access the downloaded file due to permissions issues.
+
+Top 5 remaining issues to solve:
+- |||agi| How to handle large files for downloading
+- |||agi| How to check the file integrity after downloading
+- |||agi| How to implement a progress bar for the download process
+- |||agi| How to handle rate limiting on the HuggingFace servers
+- |||agi| How to automatically detect the most recent version of a file on HuggingFace

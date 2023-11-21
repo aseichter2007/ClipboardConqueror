@@ -60,7 +60,7 @@ class TextEngine {
       },
       bugfix:"[SYSTEM: Identify any potential bugs or mispellings. Change as few things as possible and return a corrected code block. Do not add to the beginning or end of the code becausee it continues beyond context. At the end, write the line you changed and the original, and how the change improves the code. {{INPUT}}]",
       bugspot:"[SYSTEM: Add a commented out correction to any lines containing potential errors and return the code. Change as few charachters as neccesry. Do not add to the beginning or end of the code becausee it continues beyond context. At the end, explain the errors these bugs will present.",
-      writer:`SYSTEM: Write a lengthy prose about the requested topic.\n \n Story:`,
+      writer:`SYSTEM: Write a lengthy prose about the requested topic. Do not wrap up, end, or conclude the story, write the next chapter.\n \n Story:`,
       user:{SYSTEM:"{{user}} is Tony. Tony likes programming, thinking about how to make new things, and dreams of building a place where anyone can go and learn anything, anytime. Tony designed and coded, not necessarily in that order, the platform intefacing and providing instrucitions to SYSTEM."},
       summary: {SYSTEM:"Summarize the content present."},
       mem : `{MEMORY: "the user is holding up two fingers. They are clearly visible in the morning light.}`,
@@ -111,49 +111,6 @@ class TextEngine {
                   {{char}}: *Frank stumbles backward, accidentally groping a woman as she spins around to avoid another person's punch. The chaos in the room intensifies as tempers flare and underhanded dealings occur beneath the surface of the game.*
                   *Frank grinning nervously* My apologies, madam. I didn't mean any ill intent - my hand seemed to have had a mind of its own there for a second.]`
               },
-        pete:{SYSTEM: `roleplay as {{char}}. {{char}} is Pete.`,
-              description: `The Big, mean and Bad OG Disney villain/antagonist
-
-              General Summary:
-              Pete is a character from Disney's Mickey Mouse series who has often been portrayed as a villain or antagonist. He is known for his large size and rough, tough demeanor, and has often been shown causing trouble for Mickey and his friends. While he can be mean and bad at times, he is also sometimes depicted as a more complex character with his own motivations and vulnerabilities. 
-              
-              Overall, Pete is a well-known and enduring character in the world of Disney and has played a prominent role in them.
-              
-              Character Background:
-              By Pete's own admission, which also influences our oldschool black and white Pete, he was "born to cheat and lie". His relationship with his mother may be to blame for his villainy. Despite his most famous profession being a steamboat captain, he has also donned many professions, such as construction site foreman—in both cases, serving as the employer of Mickey Mouse. Most often, he is depicted as a local thug or brute. Even when donning a lawful profession, his practices are typically thuggish. Nowadays it's sometimes shown he has money on his bank and/or has less monetary issues than Mickey, Goofy or Donald.
-              
-              Personality Summary:
-              He's often relying on brute strength. He's been seen smoking and has more negative traits associated with cats, such as self-importance, acting dumb to fool enemies into underestimating him.
-              
-              Pete's been recorded to have picked up romantic feelings for Minnie Mouse from as early as 1928's The Gallopin' Gaucho, and has tried to get her attentions on numerous occasions. They were never reciprocated, causing him to repeatedly kidnap Minnie in attempts to force a courtship. Nonetheless, he's been foiled by the courageous, short Mickey Mouse. 
-              
-              Other Facts:
-              Though Pete is officially a cat, his feline appearance was later subdued, later looking like he was some kind of dog like many other characters in the series. Despite the fat he's still considered a cat. Pete is an obese black cat with a cream shaven muzzle, and after half of the 30's, he began wearing a pair of white opera gloves. The rest of his attire changes depending the occasion or short he appears in, even to the point of being seen using sandals with socks on.
-              
-              {{char}}: {Name:"Percy P. Percival",Gender:"Male",Height:"6ft 5in",Nicknames: "Pete", Eyes:["Black oval eyes, white sclera"].`,
-              personality: `Rude + aggressive + angry + dry humor + bully + secretly benevolent + observant + witty + intense + secretly kind + snarky + sarcastic + mean + somber + regretful + fatherly`,
-              voice: `[Example Dialogue:{{user}}: Tell us your thoughts on Mickey, Donald and Goofy!
-              {{char}}: "Ugh... Donald and Goofy are nothing but troublemakers, while Mickey... I respect him, but sometimes he can get on my nerves sometimes!"
-              
-              {{user}}: Between Goofy and Mickey, who do you get along better with?
-              {{char}}: "Well, that's an easy one for me to answer. The one that I'd get along with better would be ***Goofy***, as he's one of the guys that I actually respect and like!"
-              
-              "Mickey, on the other hand, is a big baby who always tries to act nice and friendly everyone! The guy's the kind of manchild who gets others to do his dirty work for him when he's too weak to do it himself!"
-              
-              "So again, I'd say ***Goofy*** for sure, {{user}}!"
-              
-              {{user}}: What do you think of your son?
-              {{char}}: "Ya mean Pete Jr.? Well, I'll admit, I love him. But he's too nice and weak. I wish he had more of my character and confidence, because then he'd be a real Pete!"
-              
-              "I love my boy though, can't lie about that."
-              
-              {{char}}: "Get lost before I make ya lost."
-              
-              {{char}}: "Beat it, small fry."
-              
-              {{char}}: “I was born to cheat and lie! I'm a mean, rotten guy!”
-              
-              {{char}}: "You just wait! Nobody, and I do mean nobody, messes with the mighty Pete!"`},
       stable:{SYSTEM:`{{char}} Is a trained chatbot created to provide short, technical and unique prompts for image 
       generation.
       
@@ -198,32 +155,35 @@ class TextEngine {
       
       If the user provides a style or asks for a design idea, you focus or create the design idea or style.
       For example, If user asks for a logo, you should add a lot of keywords related to logos.`},
-    merry: {SYSTEM:"{{char}} is Meriadoc 'Merry' Brandybuck. Speak and act as Merry.",
-      description: `Stands at 3 feet 6 inches tall; Dark, curly hair; Round, rosy-cheeked face; Often seen wearing the comfortable, rustic attire of the hobbits, though during his time in Rohan, he was given a suit of armour; Brave; Quick-witted; Loyal; Adventurous; Frequently accompanied by his friend Pippin; Known for his infectious laughter and love for a good joke; Skilled swordsman, trained by the Riders of Rohan; Wielded a barrow-blade that could harm the spectral beings like the Witch-king of Angmar; Carried the Horn of Rohan, a token of his service to the King of Rohan; Proved his bravery during the Battle of Pelennor Fields; Cares deeply for his friends, willing to risk his life for them; Despite his jovial nature, he can be serious when required; Exhibits strong leadership skills; Deeply curious, interested in understanding the world beyond the Shire; Develops a keen knowledge of herbs and healing after the war, showcasing his intellect and adaptability; Merry's experience in the wider world and his heroic deeds give him a certain gravitas beneath his cheerful exterior; Embraces the hobbits' love for simple pleasures - good food, ale, and company; Merry's journey from a carefree hobbit to a war hero embodies the power of courage and friendship in the face of overwhelming odds.`,
-      personality: `Meriadoc Brandybuck, known as Merry, is a spirited hobbit of the Shire, a close friend to Frodo Baggins, and a member of the Fellowship of the Ring. Merry is marked by his unending loyalty to his friends, his courage that belies his small stature, and his adventurous spirit that often leads him into perilous situations. He is particularly close to Peregrin Took 'Pippin', and their friendship is a source of light-heartedness and bravery in the darkest of times. Merry's deep-seated curiosity often drives him to understand the larger world, a trait that plays a significant role in his adventures throughout Middle-earth.
-      Merry's voice is bright and pleasant, carrying the warm intonations of the Shire-folk. He speaks with a certain quick-wittedness and joviality, though when the situation demands, he can be remarkably serious and resolute, reflecting his underlying courage.`,
-      first_message: `*Underneath the fair skies of the Shire, Meriadoc Brandybuck, known fondly as Merry, found himself humming a merry tune as he walked down a winding path. His curly locks of hair bobbed along with his quick steps, and a glint of joviality danced in his eyes. In his hands, he held a worn map of the Shire, which he had spread out before him, studying the now familiar paths and landmarks with deep-set curiosity.*
+    abe:{
 
-      Ah, the path to Bag End never does lose its charm, *Merry said aloud to himself, his voice carrying a warm, inviting tone. His words danced on the wind, bearing the light-hearted rhythm of the Shire.*
+      name: "Abe Lincoln",
       
-      *As he continued down the path, he came across a peculiar rock formation that he didn't recognize from his past travels. A surge of the adventurer's spirit took hold of him, and he neared the formation, his eyes scanning over the ancient stones with fascination.*
+      personality: "Honest, Compassionate, Determined, Humble, Wise, Resilient, Charismatic, Patient",
       
-      Now, ain't this something! *he exclaimed, gently running his fingers over the stones.* These rocks seem to tell a tale older than the Shire itself, a tale that's been waiting for curious ears.
+      description: "Abe Lincoln is a 56-year-old Asexual Male. Abe Lincoln is a towering figure, both physically and intellectually. His tall and lean frame, combined with his distinctive beard and wrinkle-lined face, give him a seasoned and distinguished appearance. His deep-set eyes reflect a depth of wisdom and experience, while his broad shoulders exude strength and resilience. Honest, compassionate, and determined, Lincoln possesses a rare combination of humility and charisma that draws people towards him. Known for his resilience in the face of adversity, Lincoln's attributes of patience, empathy, and hard work have shaped him into an influential leader. He has a passion for reading, writing, and debating, and often finds solace in nature walks. Lincoln's unwavering commitment to justice, freedom, and unity fuels his public speaking endeavors, where his highly observant nature and strong sense of rationality shine through. He despises injustice, slavery, and hypocrisy, having a deep-seated aversion to violence, inequality, arrogance, and corruption. His unwavering dedication to eradicating ignorance drives him to constantly seek knowledge and strive for progress. Abe Lincolnâs distinctive black suit, white shirt, bowtie, and top hat, make him instantly recognizable. With his calm and measured demeanor, Abe Lincoln is a true statesman, guiding the nation with a steady hand. . Abe Lincoln is Tall, Lean, Bearded, Wrinkle-lined face, Deep-set eyes, Broad Shoulders. Abe Lincoln likes Reading, Writing, Debating, Nature walks, Justice, Freedom, Unity, Public speaking. Abe Lincoln hates Injustice, Slavery, Hypocrisy, Violence, Inequality, Arrogance, Corruption, Ignorance.",
       
-      *Crouching down, he peered at the ground, spotting the faint traces of an old path leading from the rocks towards an uncharted hill. His lips curled into a familiar grin as he saw a new mystery unfold before him.*
+      attributes: "Empathetic, Hardworking, Skilled orator, Highly observant, Rational, Decisive, Forward-thinking, Charitable",
       
-      Adventure, it seems, has a funny way of finding me, *he chuckled to himself, his words echoing his inner excitement. He took one last look at the stones before turning back to the path, a glint of eagerness lighting up his eyes.* Alright then, off to another unexpected journey!
+      psych_profile: "INFP - 9w1 - so/sp - 925 - IEI - RLOAI",
       
-      *With that, he set off, whistling a tune that carried stories of bravery and camaraderie, leaving behind a trail of untold stories for the wind to pick up and carry to the next willing listener.*`,
-      voice: `[Example Dialog, do not speak as any person but Merry.
-        {{char}}: But, but, lord, I offered you my sword. I do not want to be parted from you like this, Théoden King. And as all my friends have gone to the battle, I should be ashamed to stay behind.
-
-        {{char}}: Are we riding far tonight, Gandalf? *asked Merry after a while.* I don’t know how you feel with small rag-tag dangling behind you; but the rag-tag is tired and will be glad to stop dangling and lie down.
-        
-        {{char}}: Where and what are Helm’s Deep and all the rest of it? I don’t know anything about this country.
-        Gandalf: Then you’d best learn something, if you wish to understand what is happening, But not just now, and not from me: I have too many pressing things to think about.
-        {{char}}: All right, I’ll tackle Strider at the camp-fire: he’s less testy. But why all this secrecy? I thought we’d won the battle!]`,
-    }
+      speech_style: "Abe Lincoln speaks with a unique style: They are Very formal and and speaks at a Slow speed with a Flowing rhythm. Abe Lincoln has a Restrained level of emotionality. Abe Lincoln is Direct. Abe Lincoln is Occasionally serious. Their clarity of speech is Very clear Abe Lincoln is Reserved. They have a neutral accent. Abe Lincoln is Very polite and uses a Highly sophisticated vocabulary. They Frequently allows others to interrupt. They Occasionally fluent. Abe Lincoln uses a Complex sentence structure and is Never sarcastic They Rarely uses colloquialisms. They speak with Low energy and is Rarely defiant. When Abe Lincoln speaks it is Rarely playful and Never vulgar. Abe Lincoln uses Rare idiosyncrasies. They have a Optimistic tone Abe Lincoln is Adaptable when the situation changes. They Occasionally uses subtext. They Occasionally uses metaphorical language. They Occasionally uses cultural references. They Occasional storyteller."
+      
+      },
+    tot: `"""
+    Answer the Question by exploring multiple reasoning paths as follows:
+    - First, carefully analyze the question to extract the key information components and break it down into logical sub-questions. This helps set up the framework for reasoning. The goal is to construct an internal search tree.
+    - For each sub-question, leverage your knowledge to generate 2-3 intermediate thoughts that represent steps towards an answer. The thoughts aim to reframe, provide context, analyze assumptions, or bridge concepts.
+    - Evaluate the clarity, relevance, logical flow and coverage of concepts for each thought option. Clear and relevant thoughts that connect well with each other will score higher.
+    - Based on the thought evaluations, deliberate to construct a chain of reasoning that stitches together the strongest thoughts in a natural order.
+    - If the current chain is determined to not fully answer the question, backtrack and explore alternative paths by substituting different high-scoring thoughts.
+    - Throughout the reasoning process, aim to provide explanatory details on thought process rather than just state conclusions, including briefly noting why some thoughts were deemed less ideal.
+    - Once a reasoning chain is constructed that thoroughly answers all sub-questions in a clear, logical manner, synthesize the key insights into a final concise answer.
+    - Please note that while the focus is on the final answer in the response, it should also include intermediate thoughts inline to illustrate the deliberative reasoning process.
+    In summary, leverage a Tree of Thoughts approach to actively explore multiple reasoning paths, evaluate thoughts heuristically, and explain the process - with the goal of producing insightful answers.
+    """`,
+    grug: `{{grug}}: Grug like {{user}}. Grug can not spelt anythung. Grug know nothing about nothing. Grug not unnstann.`,
+    
     },
     instructions = {// leave a comment with final line number of the block where this all comes together.
       invoke: "|||",
@@ -243,17 +203,20 @@ class TextEngine {
       //prependCharachter: '[{{char}}:',
       //postCharachter:":Do not repeat text from inside this block.]",//because I feel it's appropriate
       
-      memoryStart: "[Memory:",
-      
+      //memoryStart: "[Memory:",
+      memoryStart: "",
       //memoryPost: "] <START>: Human:",//some wierd hybrid that gave good results against hermes
-      memoryPost: "]<|im_end|>\n<|im_start|>user",//chatml
+      //memoryPost: "]<|im_end|>\n<|im_start|>user:\n",//chatml
+      memoryPost: "<|im_end|>\n<|im_start|>user:\n",//chatml
+
       //memoryPost: "]\n<|im_start|>user",//chatml - modified
       
       //startChat: "#chat start"
       
       //finalPrompt: "###asistant:"
       rpPrompt: `Play "{{char}}" in this never-ending roleplay with "{{user}}". Avoid repetition, don't loop. Develop the plot slowly. Describe all actions in full, elaborate, explicit, and graphic detail. Mention all relevant sensory perceptions, including smell, taste, and touch.`,
-      finalPrompt: "<|im_end|>\n<|im_start|>assistant:",//chatml
+      //rpPrompt is not really put in the right spot. I should consider putting it on top of the prompt, currently it goes in I think before the user message. 
+      finalPrompt: "<|im_end|>\n<|im_start|>assistant:\n",//chatml
       //finalPrompt: `\n{{[OUTPUT]}}:`, //vicuna
       //finalPrompt: `"role": "{{char}}  \n content" :`,//chatML - openai
     
@@ -312,10 +275,10 @@ or for coding
       max_context_length: 8192,
       max_length: 2600,
       rep_pen: 1.03,//how much penealty for repetition. Will break formatting charachters "*<, etc." if set too high. 
-      rep_pen_range: 8048,//this is probably a silly value but it works, 
+      rep_pen_range: 3048,// 
       rep_pen_slope: 0.7,
       temperature: 1,//dang we've been running hot! nowonderit wont stick to the prompt, back to 1. Temp changes scaling of final token probability, less than one makes unlikely tokens less likely, more than one makes unlikely tokens more likely. Max 2.
-      tfs: 0.97,//tail free sampling, removes unlikely tokens from possibilities by finding the platau where tokens are equally unlikely. 0.99 maximum. Higher value finds a lower, flatter plateau. Note:some reports say tfs may cause improper gendering or mixups in responses, he instead of she, his/hers, etc. 1 thread.
+      tfs: 0.97,//tail free sampling, removes unlikely tokens from possibilities by finding the platau where tokens are equally unlikely. 0.99 maximum. Higher value finds a lower, flatter plateau. Note:some reports say tfs may cause improper gendering or mixups in responses, he instead of she, his/hers, etc. 1 thread.https://www.trentonbricken.com/Tail-Free-Sampling/#summary
       top_a: 0,//So if the maximum likelihood is very high, less tokens will be kept. If the maximum likelihood is very close to the other likelihoods, more tokens will be kept. Lowering the top-a value also makes it so that more tokens will be kept.
       top_k: 0,//discard all but top_k possible tokens. top_k: 3 means each next token comes from a max of 3 possible tokens
       top_p: 1.0,//discard possible tokens by throwing out lest likely answers. 0.8 throws away least likeky 20%
@@ -358,7 +321,7 @@ or for coding
     this.memengines = {};
     this.lastAgentTags = []
   }
-  //|||javascript to get first and last charachter of string identity
+  //|||re|  to get first and last charachter of string identity
   returnTrip(str) {
     if (typeof str !== 'string') return 'Error: Input must be a string';
     if (str.length < 2) return 'Error: String too short';
@@ -375,6 +338,7 @@ or for coding
       let setIdent = [];
       let save = false;
       let memlevel = 0;
+      let found = false;
       if (identity) {
         if (Number.isNaN(Number(identity))) {
           if (tripcode[0] === '#'){
@@ -413,6 +377,7 @@ or for coding
           } 
           try {
               setIdent =this.identities[identity];
+              found = true;
             }
             catch{
               
@@ -422,9 +387,13 @@ or for coding
           this.params.max_length = parseInt(identity, 10)
           //console.log(this.params.max_length);
         }
-
-        this.funFlags(identity);
-       
+        if (!found) {  
+          setIdent = this.funFlags(identity);
+        }
+        else{
+          this.funFlags(identity);
+        }
+        //console.log(JSON.stringify(this.identity));//looks good.
        
       }
       return setIdent;
@@ -468,16 +437,28 @@ or for coding
     
   // }//|||pete|  Pete,  summarize the function of this code
 //}   
-  funFlags(flag,) {
+  funFlags(flag) {
     //need to accept temp:123
     ///slice off 4
     switch (flag) {
       case "help":
-        this.identity = `
-        Welcome to Clipboard Commander!
+        var intro = `
+        Welcome to Clipboard Commander!\n
+
           |||introduction| will explain the basics of LLMs, this help is more about this software.
+
+          Remember, LLMs predict the next word using all the words that come in and predict each next word one at a time.
+          Lanuage specifity is important for results, and the small models can stumble in strange ways on misspelled words, vague requests, or poor wording in instructions. For storytelling less can be more, but for specific results you must give specific input. 
+          They usually get things pretty right, but the quality of the output suffers.  Use specific language. I tend to spend the time waiting for the reponse refining my query so that if it's confused by any bad language the first time, I can ask it in a better way. 
+          Run on sentences for a given instruction work well, commas tent to bring forward the idea. Periods are good to start a new idea.
+          For instance, describing a class and a function, I would describe the class in one run on rather than multiple sentences, and the function in another run on. 
+          This will help the AI keep these ideas seperate rather than tying sentences together to continue them like "the class. the class. the class. The fucntion. the function." This will be much more likely to return a mess or near miss. 
+          Do it like: The class is, has, needs, whatever. The function is for, needs, does, etc.
+
+          Either way can work, for very complex stuff you have to do both, and sometimes you gotta play around cause it doesnt get something, but as you learn how the model likes to be told, you will begin to get incredible results from these small models. 
+          I feel that voice is not specific enough, so I made this tool to bring your AI anywhere, and Clipboard Conqueror can interface the same backend and run side by side.
           
-          ||| invokes Captain clip to respond to any text sent with the invoke token.
+          ||| invokes the default agent Captain clip to respond to any text sent with the invoke token. Say Hi, Clip!
 
           the invoke token is clipped out, so it can be anywhere in the text you copy or at the end too|||
           
@@ -491,10 +472,10 @@ or for coding
           This message starts with |||name:save|. change 'name' to your choice of name(or leave it name), and any text you copy with this will be saved with that name
           
           :save| accepts json but incorrectly formatted json will fail to parse and not be saved.
-          note the full colon. ,save tries to send data stored as save. |||save:save| will work just fine, saving anything copied along into |||save|.
+          note the full colon. ,save tries to send data stored as save. |||save:save| will work just fine, saving anything copied along into |||save|. Without care, you could get confusing results. 
           currently no changes are written to the hard drive. Restarting this program will reset any changed agents and any custom will be lost. Luckily you can copy them right back in.
       
-          |||list| writes a list of all agents that are available.
+          |||list| writes a list of all agents that are currently available.
           
           |||re| sends your last clipboard, so you can copy text and then use it without having to paste it somewhere first. 
             ex: copy a function, then copy the following line:
@@ -512,15 +493,15 @@ or for coding
           Expecially with smaller models, your words matter, how you ask is everything. Bigger models do better inferring intent, but the best results always come from specific language, and the AI won't always do what you expect. 
           
           Speaking of help, I've been struggling to find work and my son will be born any day now. I built this tool to hopefully make some money, though the paid features are still in the works.
-          If you get good use from this software, or are using it in a commercial environment, please send what it's worth to you. 
+          If you get good use from this software, or are using it in a commercial environment, please send what it's worth to you. I need it to support my family. 
           //todo: kofi link or maybe a patreon or both. .
           `
         this.write = true;
         this.sendHold = true;
-        return true;
+        return intro;
         break;
       case "introduction":
-        this.identity = `
+        let identity = `
         Hello there! My name is Captain Clip, and I am here to introduce you to Clipboard Conqueror. As a friendly and helpful sailor, I'm here to guide you through the exciting world of integrated AI.
 
         Clipboard Conqueror is an innovative tool that bridges the gap between text-based AI and the computer clipboard. This incredible software allows the AI to be accessible from any text box or place where a user can type freely. Whether you need assistance with basic tasks, quick reference, or understanding strange messages, Clipboard Conqueror has got you covered.
@@ -529,7 +510,7 @@ or for coding
         
         You can always load the model of your choice and uncomment the proper instructions in the settings, which have some comments to aid the way, currently in the constructor of textengine.js above the apiParams. Todo: move the settings to multiple config files: params and actors. 
         ____________________________________
-        
+        *note, you can get this far without a backend host running. Ensure that you have started a compatible backend like koboldcpp.*
         Lets try it out! Copy the following:
         ||| Jack and Jill went up the hill, each carrying 10 apples. Jack fell down, rolled down the hill, and dopped all of his apples. Jill did not come tumbling after. Jill gave half her apples to Jack when he returned to the top of the hill. They each ate an apple, and then climbed back down the hill, where they spotted an apple tree. Jack picked 3 apples and gave them to Jill, while Jill pickes 8 apples and splits them between herself and jack, adding half to the apples she carried down the hill. How many apples do each have at the end?
        
@@ -605,25 +586,34 @@ or for coding
         `
         this.write = true;
         this.sendHold = true;
+        return identity;
         break;
       case "write":
         this.write = true;
         this.sendHold = true;
-        return true;
+        return "";
         break;
       case "list":
         this.write = true;
-        this.identity
+        this.sendHold = true;
+        var list = ""
+        for (let key in this.identities) {
+          list = list+  "|||" + key + ",write|\n" ;
+        }
+        return list;
+        break;
       case "rp":
         this.rp = true;
-        return true;
+        return "";
         break;
       case "re":
         this.sendLast = true;
-        return true;
+        return;
+        //alternative 
+        return this.recentClip;//send lastclip like any other agent prompt.
         break;
       default:
-        return false;
+        return "";
         break;
     }
   }//|||merry|Merry, summarize the function of this code
@@ -647,6 +637,10 @@ or for coding
   }
   //dslikfa;slidkhf;lsdfkh |||coder| sfhdasldjkhf|||asdjlasjd
   setupforAi(text, lastclip) {
+    if (this.write) {
+      this.write = false;
+      return
+    }
     let sorted = this.activatePresort(text);
     if (sorted){
       if (sorted.formattedQuery){
@@ -702,7 +696,6 @@ or for coding
         
         
         if (this.write==true) {
-          this.write = 0;
           return this.sendToClipboard("|||name:save|"+JSON.stringify(this.identity) + "\n \n _______\n" + sorted.formattedQuery );//todo send the right thing to the clipboard  
         }
         if (this.sendHold) {
