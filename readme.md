@@ -30,11 +30,11 @@ Usage:
 ------
 
 1. Enter `|||` followed by your request or command. Pipe "|" can be typed by pressing shift + backslash (above enter).
-2. Copy the text to your clipboard. For example:
+2. Copy the text to your clipboard. After a few moments, you should get a notification and the response is ready to paste:
    ```
    - ||| Say hello
    ```
-   Copy the line above
+   Copy the line above. Wait for the notification the paste. 
 
    ```
    - |||introduction|
@@ -46,6 +46,7 @@ Usage:
      ```
      |||frank,user| "Hello, Frank. You can't hide from me. Show yourself."
      ```
+  
    ```
    - |||stable| write a prompt for a picture of a beautiful forest with pixies playing with animals.
    ```
@@ -59,7 +60,7 @@ Usage:
    Three pipes, agent, one pipe. No spaces. Any agents or settings must be closed with one pipe or they will be sent as text to the default agent (Captain Clip).
 
    ```
-   - |||1200| write a long story
+   - |||2700| write a long story
    ```
    sets the max response length to 1200. Also works like |||agent,setting:0.5,1000| just a number is always max response length.
 
