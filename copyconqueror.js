@@ -30,18 +30,18 @@ const KoboldClient = require('./koboldinterface.js');
 }   
 const sendEngine = new SendEngine(recieveProcessedClip, ncp.copy, NotificationBell, getSummary, client.getTokenCount);
 function notify(title = "Paste Ready", text = "The response is ready"){
-// Define the notificatio
+// Define the notification
 const notification = {
     title: title,
     message: text,
-    //icon: 'path/to/icon.png', // Optional
+    icon: './icon.jpg', // Optional
     sound: true, // Optional, plays a sound with the notification
 };
+// Display the notification
 notifier.notify(notification, function (err, response) {
 
-// Display the notification
   // Handle errors or response if needed
-  console.log(response);
+  //console.log(response);
 });
 }
 function getSummary(text, params) {
@@ -55,9 +55,9 @@ function returnSummary(text){
 }
 function recieveProcessedClip(text, params, lastTag) {
     //console.log("clipback: " + text);
-    client.send(text, params);
+    client.send(text, params, lastTag);
 }
-function recieveApiResponse(text, agent, tokens){
+function recieveApiResponse(text, agent){
     text = text.replace(/\\n/g, '\n');
     NotificationBell("Paste Response:", text);
     botresponse = true
@@ -105,7 +105,7 @@ function clipboardChangeHandler(err,text, debug = true){
     }
     let out = text.trim();
     if (lastClip !== out && lastResponse !== out&& !botresponse) {
-        sendEngine.setupforAi(out, lastClip);
+        sendEngine.setupforAi(out);
         lastClip = out;
         //console.log(JSON.stringify(out));//|||coder|
         if(debug){
