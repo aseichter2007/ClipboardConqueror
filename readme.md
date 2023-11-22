@@ -1,7 +1,7 @@
 ![Clipboard Conqueror Graphic logo. The letters are clouds and buildings on a lush estate.](CCfinal.jpg)
 Clipboard Conqueror - Readme
 =============================
-Clipboard Conqueror is a novel front end for interfacing with LLMs. Requring a kobold compatible backend, this software brings powerful LLM based tools to any text field, the universal copilot you deserve. It simply works anywhere. No need to sign in. 
+Clipboard Conqueror is a novel front end for working with LLMs. Requring a kobold compatible backend, this software brings powerful LLM based tools to any text field, the universal copilot you deserve. It simply works anywhere. No need to sign in. 
 
 *Special thank you to the creators of  KoboldAi, KoboldCPP/lite, llamma, openAi, 
 

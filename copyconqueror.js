@@ -1,6 +1,6 @@
 let botresponse = false
 const path = require("path");
-const myconfig = require("./defaultconfig.js");
+//const myconfig = require("./defaultconfig.js");
 const {findSettings} = require("./setup.js");
 const clipboardListener = require('clipboard-event');
 //const player = require('sound-play')(opts = {});

@@ -25,28 +25,6 @@ When you hear the notification ding, the local language model's response will be
 
 |||list|
 
-|||name:save|[[null,"|||user,write|
-|||default,write|
-|||agi,write|
-|||coder,write|
-|||code,write|
-|||bugfix,write|
-|||bugspot,write|
-|||writer,write|
-|||summary,write|
-|||mem,write|
-|||sumup,write|
-|||explain,write|
-|||editor,write|
-|||trump,write|
-|||brewella,write|
-|||frank,write|
-|||stable,write|
-|||abe,write|
-|||tot,write|
-|||grug,write|
-"]]
- 
  _______
 
 
