@@ -290,6 +290,7 @@ You are an AI programming assistant, utilizing the Deepseek Coder model, develop
 
 
 pants on head openchat:
+reportedly GPT4 User and Assistant work well.
 
 "GPT4 Correct User: Hello<|end_of_turn|>GPT4 Correct Assistant:"
 or for coding

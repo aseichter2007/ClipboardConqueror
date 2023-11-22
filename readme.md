@@ -1,6 +1,8 @@
 ![Clipboard Conqueror Graphic logo. The letters are clouds and buildings on a lush estate.](CCfinal.jpg)
 Clipboard Conqueror - Readme
 =============================
+Clipboard Conqueror is a novel front end for interfacing with LLMs. Requring a kobold compatible backend, this software brings powerful LLM based tools to any text field, the universal copilot you deserve. It simply works anywhere. No need to sign in. 
+
 *Special thank you to the creators of  KoboldAi, KoboldCPP/lite, llamma, openAi, 
 
 
@@ -240,7 +242,7 @@ hardware("token speed")  [fast = 20+ tokens/sec, medium = <10 tokens/sec. slow =
 *Model bit depth is trade between output quality and output speed.  Generally, larger models are smarter and can follow more complex instructions.
 KoboldCPP uses GGUF format, which are quantized from 16 bit to between 2 bit and 8 bit depending on model. (I like 8 bit if it fits in vram with room for 8k context.)
 lower bits require less ram, but there is a drop in reasoning and writing quality, though even the q2 was following instructions well. 
-I get all mine from huggingface/thebloke. Not all models 
+I get all mine from huggingface/thebloke. Not all models suport chatML format, and you will have to change some things around in the constructor of textengine.js.
 
 for ease of use and organization, consider keeping kobold and the model you chose inside Clipboard Conqueror application.  If koboldcpp.exe is placed here, Clipboard Commander will run it automatically.
 
