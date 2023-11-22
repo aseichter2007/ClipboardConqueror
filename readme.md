@@ -44,12 +44,12 @@ Usage:
    - |||character|Say hello  
      // This is exemplary; character is not a default prompt. Captain Clip will respond. Try:
      ```
-     |||frank| Hello, Frank. You can't hide from me. Show yourself.
+     |||frank,user| "Hello, Frank. You can't hide from me. Show yourself."
      ```
    ```
    - |||stable| write a prompt for a picture of a beautiful forest with pixies playing with animals.
    ```
-   Remember, no spaces inside the | pipes are allowed.
+   Remember, no spaces inside the | pipes are allowed.//maybe.
    ```
    - |||frank,mem|Frank, how many fingers am I holding up?
    ```
@@ -59,12 +59,12 @@ Usage:
    Three pipes, agent, one pipe. No spaces. Any agents or settings must be closed with one pipe or they will be sent as text to the default agent (Captain Clip).
 
    ```
-   - |||1200|
+   - |||1200| write a long story
    ```
    sets the max response length to 1200. Also works like |||agent,setting:0.5,1000| just a number is always max response length.
 
    ```
-   - |||temperature:1.1| 
+   - |||temperature:1.1| be more unpredictable, but only 10%
    ```
    sets the temperature to 1.1. This works for any setting, e.g., top_p, min_p. Use 1 and 0 to set true/false //true/false untested.
    ```

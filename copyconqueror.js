@@ -69,7 +69,7 @@ function recieveApiResponse(text, agent){
 // To start listening
 function sendData(data, destination) {
     const flags = ['summary', 'user']; // Define your list of available destinations here
-    console.log(JSON.stringify(data));
+    //console.log(JSON.stringify(data));
     try {
         switch (destination) {
             case flags[0]:

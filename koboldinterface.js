@@ -79,7 +79,7 @@ class KoboldClient {
   // }
   sendKoboldRequest(data, agent) {
      //this.notify("ready");
-    console.log("to API: "+data.prompt);
+    //console.log("to API: "+data.prompt);
     sendPostTextRequest(this.baseURL+this.generate , data, this.callback, this.handler, this.notify, agent);
   }
 }
