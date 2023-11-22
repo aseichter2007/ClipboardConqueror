@@ -245,8 +245,8 @@ I get all mine from huggingface/thebloke. Not all models
 for ease of use and organization, consider keeping kobold and the model you chose inside Clipboard Conqueror application.  If koboldcpp.exe is placed here, Clipboard Commander will run it automatically.
 
 Finally run Clipboard Conqueror.  
-
-run the start.bat
+run installCC.bat
+run runClipboardConqueror.bat
 or
 //open terminal at folder and run
 npm i
