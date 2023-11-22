@@ -6,9 +6,7 @@ Clipboard Conqueror is a novel front end for interfacing with LLMs. Requring a k
 *Special thank you to the creators of  KoboldAi, KoboldCPP/lite, llamma, openAi, 
 
 
-Clipboard Conqueror is a powerful front end for koboldCPP that harnesses the capabilities of locally run large language models to process and generate content, right from your clipboard. 
-
-With Clipboard Conqueror, you can leverage the AI's abilities by invoking it with `|||` and providing commands or requests for information.
+With Clipboard Conqueror, you can leverage the AI's abilities by invoking it with `|||` and copying commands or requests for information.
 
 I solemnly promise that this application and at least one compatible backend will function in the absence of internet connectivity.
 One of my design inspirations for this application is to spread LLM models to as many computers as possible. I want to ensure at least one intact system is recovered by future archeologists, an incredible time capsule of culture, science, and data.  We should be sending intelligent boxes to deep space too. Our Knowledge and posterity must not go to waste. 
