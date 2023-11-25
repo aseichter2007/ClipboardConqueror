@@ -134,7 +134,7 @@ This identity and some other cards were found on chub.ai, some are my own or sig
 
 Key Features:
 --------------
-* Locally run large language model support with KoboldCPP/lite for powerful, secure, text processing.
+* Locally run large language model support with KoboldCPP for powerful, secure, text processing.
 * Combines user-supplied text with AI output for precise customization.
 * Supports multiple languages and contexts for diverse applications. Not all LLM models are multilingual, some configuration may be required.
 * Can utilize various personas and roles for different tasks.  
@@ -185,7 +185,7 @@ Installation:
 
 
 first get [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/releases/)
-or for macOS get KoboldAi or anything that hosts a kobold united compatible endpoint for tavern, etc. //untested
+or for macOS get KoboldAi or anything that hosts a kobold united compatible endpoint for tavern, etc. //untested on mac, linux
 a kobold compatible api must be running to use Clipboard Conqueror.
 I will supply a sample batch file for loading a model with your settings file after you get kobold dialed in from the launcher. 
 
@@ -271,11 +271,16 @@ Have fun and remember you can always ask for
 |||help|
 ```
 
+
+
 ---------------------------------
 Bug Reports and Feature Requests:
 ---------------------------------
 If you encounter any issues while using Clipboard Conqueror or have suggestions for future improvements, please report them via github or email me at "clipboard.aseichter2007.gmail.com" I will work diligently to address and resolve any concerns.
 
+I'm chasing a bug where after |||list| the next copy is not parsed, but is stored, preventing the same thing being copied and invoking the AI.  Workaround: copy text without an invoke to clear the stored copy and allow a "fresh" copy that will activate the parsing engine. 
+
+Saving agents like |||re,name:save|"more details" is likely to mess you up, it will include both the copied text and any text surrounding the invoke that you copy with it. 
 
 dev:
 //access clipboard//done

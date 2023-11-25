@@ -26,6 +26,34 @@ When you hear the notification ding, the local language model's response will be
 |||list|
 
  _______
+ |||name:save|[[null,"|||user,write|
+|||default,write|
+|||agi,write|
+|||coder,write|
+|||code,write|
+|||bugfix,write|
+|||bugspot,write|
+|||writer,write|
+|||summary,write|
+|||mem,write|
+|||sumup,write|
+|||explain,write|
+|||editor,write|
+|||trump,write|
+|||joe,write|
+|||brewella,write|
+|||frank,write|
+|||stable,write|
+|||abe,write|
+|||tot,write|
+|||grug,write|
+|||dark,write|
+"]]
+ 
+ _______
+
+
+|||testing one two
 
 |||dark| write a standup comedy routine about a cantalope
  Well, at least you know where they got that from.

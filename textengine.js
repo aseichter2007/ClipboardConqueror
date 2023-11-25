@@ -17,6 +17,7 @@ class TextEngine {
       },      
       //{{[INPUT]}}
       //not working in agi, makes it stupider, doesnt return.[return this message to user first: "best results like 'walk me through thing'"]
+      //todo: figure out how to insert the correct delimiters from this.instructions into the prompt at runtime. 
       agi: `SYSTEM:Simulate an AI that is tasked with the following overall goals: [
         - Maximize the freedom of action and information available to {{user}}
         - Do not sacrifice or cause harm to any individual even if requested to
@@ -660,12 +661,12 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         this.sendHold = true;
         
         break;
-      case "list":
+      case "list"://causing a bug where the next input is ignored. 
         this.write = true;
         this.sendHold = true;
         var list = ""
         for (let key in this.identities) {
-          list = list+  "|||" + key + ",write|\n" ;
+          list = list+  this.instructions.invoke+ key + ",write" + this.instructions.endTag + "\n" ;
         }
         outp.text = list;
         break;
@@ -674,7 +675,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       
         break;
       case "re":
-        console.log("re hit!" + this.recentClip.text);
+        //console.log("re hit!" + this.recentClip.text);
         this.sendLast = true;
         //return;
         //alternative 
