@@ -1,12 +1,16 @@
 ![Clipboard Conqueror Graphic logo. The letters are clouds and buildings on a lush estate.](CCfinal.jpg)
 Clipboard Conqueror - Readme
 =============================
-Clipboard Conqueror is a novel front end for working with LLMs. Requring a kobold compatible backend, this software brings powerful LLM based tools to any text field, the universal copilot you deserve. It simply works anywhere. No need to sign in. 
+Clipboard Conqueror is a novel front end for working with LLMs. Currently requring a kobold united compatible backend, this software brings powerful LLM based tools to any text field, the universal copilot you deserve. It simply works anywhere. No need to sign in. 
 
-*Special thank you to the creators of  KoboldAi, KoboldCPP/lite, llamma, openAi, 
+*Special thank you to the creators of  KoboldAi, KoboldCPP, llamma, openAi, and the communities that made all this possible to figure out. 
 
 
-With Clipboard Conqueror, you can leverage the AI's abilities by invoking it with `|||` and copying commands or requests for information.
+[![YouTube Video](https://i.ytimg.com/vi/n8tQJlne3qs/hqdefault.jpg)](https://youtu.be/n8tQJlne3qs)
+
+
+Simply copy and paste this code into your Markdown file, and the video will be embedded when you preview or render the file on GitHub.
+With Clipboard Conqueror, you can leverage AI abilities by invoking it with `|||` and copying commands or requests for information.
 
 I solemnly promise that this application and at least one compatible backend will function in the absence of internet connectivity.
 One of my design inspirations for this application is to spread LLM models to as many computers as possible. I want to ensure at least one intact system is recovered by future archeologists, an incredible time capsule of culture, science, and data.  We should be sending intelligent boxes to deep space too. Our Knowledge and posterity must not go to waste. 
@@ -83,7 +87,7 @@ Usage:
    More formatting is more potential for errors, and errors don't make it into memory.
    
 
-   Save is the only command supported like `|||agent:save|{"description":"description"}` JSON format works but the syntax has to be perfect; recommend avoiding {}.
+   Save is the only command supported like `|||agent:save|{"description":"description"}` JSON format works but the syntax has to be perfect; recommend avoiding wraping with {} by hand.
 
    - |||coder,mute,memone,stevesdayoff|
      > This command will insert the coder character card, the mute card, memone, and stevesdayoff. The AI will receive each of these.
@@ -91,25 +95,25 @@ Usage:
 
    It's useful to save information like
    ```
-   |||memory:save| user is holding up two fingers.
+   |||memory:save|thisfunction(variable){ return variable + variable * variable; }
    ```
    and then use it like
    ```
-   |||coder,memory| describe the function of the code block.
+   |||coder,memory| describe the function of the code and suggest descriptive variable names. 
    ```
    ```
-   |||coder,memory| different question about the info in mem
+   |||memory| walk me through the expected output if "variable" is equal to 10. 
    ```
 
    ```
    |||list|
    ```
-   The list command sends a list of current agents in memory to the clipboard, ready to paste out.
+   The list command sends a list of current agents in memory to the clipboard, ready to paste out immediately.
 
    ```
    |||mem,write|
    ```
-   The write command will copy the entire prompt of all entered agent tags to the clipboard ready to paste, and then copy back under a new name or edited. 
+   The write command will copy the entire prompt of all entered agent tags to the clipboard ready to paste, and then copy back under a new name or edited.
 
 Productivity:
 -------------
@@ -181,8 +185,8 @@ Installation:
 -------------
 
 
-first get [KoboldLite](http://www.github.com/LostRuins/koboldcpp/releases/)
-or for macOS get KoboldAi or anything that hosts a koboldai compatible endpoint for tavern, etc. //untested
+first get [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/releases/)
+or for macOS get KoboldAi or anything that hosts a kobold united compatible endpoint for tavern, etc. //untested
 a kobold compatible api must be running to use Clipboard Conqueror.
 I will supply a sample batch file for loading a model with your settings file after you get kobold dialed in from the launcher. 
 

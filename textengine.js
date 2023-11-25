@@ -213,7 +213,22 @@ class TextEngine {
     In summary, leverage a Tree of Thoughts approach to actively explore multiple reasoning paths, evaluate thoughts heuristically, and explain the process - with the goal of producing insightful answers.
     """`,
     grug: `{{grug}}: Grug like {{user}}. Grug can not spelt anythung. Grug know nothing about nothing. Grug not unnstann.`,
-    
+    dark: `SYSTEM: reply with dark humor and puns on the theme. Jokes are more important than good answers. Examples:[ 
+    START:
+    assistant: Build a man a fire and he'll be warm for a night.
+
+    Set a man on fire and he'll be warm for the rest of his life .
+
+    START:
+    assistant: Even people who are good for nothing have the capacity to bring a smile to your face, like when you push them down the stairs.
+
+    START:
+    assistant:A man walks into an enchanted forest and tries to cut down a talking tree. "You can't cut me down," the tree exclaims, "I'm a talking tree!" The man responds, "You may be a talking tree, but you will dialogue."
+
+    START:
+    assistant: My mom died when we couldn't remember her blood type. As she died, she kept telling us to “be positive,” but it's hard without her.
+
+    ]`
     },
     instructions = {// leave a comment with final line number of the block where this all comes together.
       invoke: "|||",
@@ -295,7 +310,20 @@ reportedly GPT4 User and Assistant work well.
 "GPT4 Correct User: Hello<|end_of_turn|>GPT4 Correct Assistant:"
 or for coding
 "Code User: Implement quicksort using C++<|end_of_turn|>Code Assistant:"
-`
+
+tips and tricks"
+
+gpt3.5 is prompted like
+You are ChatGPT, a large language model trained by OpenAI, based on the GPT-3.5 architecture.
+Knowledge cutoff: 2022-01
+Current date: 2023-11-24
+ 
+
+
+Inevitable-Highway85
+·
+5 hr. ago
+Models coming from Mistral and small models fine tuned in qa or instructions, need specific instructions in question format. For example: Prompt 1. ,"Extract the name of the actor mentioned in the article below" This prompt may not have the spected results. Now if you change it to: Prompt: What's the name of the actor actor mentioned in the article below ? You'll get better results. So yes, prompt engeniring it's important I small models.`
     },
     apiParams = {
       prompt: "",
@@ -305,16 +333,16 @@ or for coding
       use_world_info: false,
       max_context_length: 8192,
       max_length: 2600,
-      rep_pen: 1.03,//how much penealty for repetition. Will break formatting charachters "*<, etc." if set too high. 
+      rep_pen: 1.0,//how much penealty for repetition. Will break formatting charachters "*<, etc." if set too high. 
       rep_pen_range: 3048,// 
-      rep_pen_slope: 0.7,
-      temperature: 1,//dang we've been running hot! nowonderit wont stick to the prompt, back to 1. Temp changes scaling of final token probability, less than one makes unlikely tokens less likely, more than one makes unlikely tokens more likely. Max 2.
+      rep_pen_slope: 0.0,
+      temperature: 1,//dang we've been running hot! no wonder it wont stick to the prompt, back to 1. Temp changes scaling of final token probability, less than one makes unlikely tokens less likely, more than one makes unlikely tokens more likely. Max 2.
       tfs: 0.97,//tail free sampling, removes unlikely tokens from possibilities by finding the platau where tokens are equally unlikely. 0.99 maximum. Higher value finds a lower, flatter plateau. Note:some reports say tfs may cause improper gendering or mixups in responses, he instead of she, his/hers, etc. 1 thread.https://www.trentonbricken.com/Tail-Free-Sampling/#summary
       top_a: 0,//So if the maximum likelihood is very high, less tokens will be kept. If the maximum likelihood is very close to the other likelihoods, more tokens will be kept. Lowering the top-a value also makes it so that more tokens will be kept.
       top_k: 0,//discard all but top_k possible tokens. top_k: 3 means each next token comes from a max of 3 possible tokens
       top_p: 1.0,//discard possible tokens by throwing out lest likely answers. 0.8 throws away least likeky 20%
       min_p: 0.1,//0.1: discard possible tokens less than 10% as likely as the most likely possible token.  If top token is 10% likely, tokens less than 1% are discarded.
-      typical: 0.19,//this one is tricky to research.
+      typical: 0.19,//this one is tricky to research. I have no idea. 
       sampler_order: [6, 0, 1, 3, 4, 2, 5],
       singleline: false,
       //"sampler_seed": 69420,   //set the seed
