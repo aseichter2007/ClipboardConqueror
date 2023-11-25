@@ -9,7 +9,6 @@ Clipboard Conqueror is a novel front end for working with LLMs. Currently requri
 [![YouTube Video](https://i.ytimg.com/vi/n8tQJlne3qs/hqdefault.jpg)](https://youtu.be/n8tQJlne3qs)
 
 
-Simply copy and paste this code into your Markdown file, and the video will be embedded when you preview or render the file on GitHub.
 With Clipboard Conqueror, you can leverage AI abilities by invoking it with `|||` and copying commands or requests for information.
 
 I solemnly promise that this application and at least one compatible backend will function in the absence of internet connectivity.
