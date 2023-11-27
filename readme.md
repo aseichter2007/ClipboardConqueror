@@ -5,10 +5,14 @@ Clipboard Conqueror is a novel front end for working with LLMs. Currently requri
 
 *Special thank you to the creators of  KoboldAi, KoboldCPP, llamma, openAi, and the communities that made all this possible to figure out. 
 
-Youtube demo:
+Quick demo on Youtube: 
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/n8tQJlne3qs?si=W5O8tyvy6UaQRmMi" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+[![YouTube Video](https://i.ytimg.com/vi/n8tQJlne3qs/hqdefault.jpg)](https://youtu.be/n8tQJlne3qs)
 
+
+Make sure to replace the video URL and thumbnail image URL in the Markdown code with the appropriate links for the video you want to embed.
+
+After following these steps, the video should be properly embedded in your GitHub .md file.
 With Clipboard Conqueror, you can leverage AI abilities by invoking it with `|||` and copying commands or requests for information.
 
 I solemnly promise that this application and at least one compatible backend will function in the absence of internet connectivity.
