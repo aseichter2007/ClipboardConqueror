@@ -5,10 +5,13 @@ Clipboard Conqueror is a novel front end for working with LLMs. Currently requri
 
 *Special thank you to the creators of  KoboldAi, KoboldCPP, llamma, openAi, and the communities that made all this possible to figure out. 
 
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=nTQUwghvy5Q" target="_blank">
+ <img src="https://i.ytimg.com/vi/n8tQJlne3qs/hqdefault.jpg" alt="Watch the video" width="240" height="180" border="10" />
+</a>
 
-[![YouTube Video](https://i.ytimg.com/vi/n8tQJlne3qs/hqdefault.jpg)](https://youtu.be/n8tQJlne3qs)
+Make sure to replace the video URL and thumbnail image URL in the Markdown code with the appropriate links for the video you want to embed.
 
-
+After following these steps, the video should be properly embedded in your GitHub .md file.
 With Clipboard Conqueror, you can leverage AI abilities by invoking it with `|||` and copying commands or requests for information.
 
 I solemnly promise that this application and at least one compatible backend will function in the absence of internet connectivity.
@@ -293,18 +296,22 @@ dev:
 //todo: finish saving objects to memory//done
 
 //todo: openAI client, probably migrate a ton of logic out of textengine and into koboldinterface.js to make them interchangeable. 
-//todo: keyboard binding to activate ai on last clip without prompt. t
+//todo: keyboard binding to activate ai on last clip without prompt. //maybe paid, I don't want to make it too easy to do all the linkedin tests, and a ready line to copy is the same. 
 //todo: implement horde? maybe? or offer free gtp 3.5 or something. This will be after I make some money, send donations to accellerate this process. 
 //todo: /api/extra/abort  
 //todo text to speech agent that can interact with the clipboard contents. //waiting on upstream that runs on my hardware without dinkin around or enough generosity to set up a closet server. 
 
-//todo: /api/extra/generate/check  //return in progress, useful for vlarge gens on slow mode
+//decline: use case? I guess return tokens like|||tokens| so you can see if it will fit... ok. undecline: todo: /api/extra/generate/check  //return in progress, useful for vlarge gens on slow mode
 //todo: /api/extra/tokencount //should run against entered data and updates should be shown after setting mem or agent and on final send. 
 //todo: /api/extra/true_max_context_length //returns context max
 // i found this!https://lite.koboldai.net/koboldcpp_api#/1
-//implement |||no|
 
-release!
+
+
+
+//implement |||no| //uh oh, better comment needed. I should learn from this someday. Waaait, it's coming back to me. |||no| will disable parsing on the next run for transporting instructions, though its much easier to just error it off like "||| ||| ||| move this without invoking"
+
+release!//oh snap I got excited and went. //beta release in motion.
 //premium
 //todo: branch to build premium binaries from. premium branch features:
 //todo: savesettings and getsettings in premium branch. //premium primary feature is inter session settings. without premium you must overwrite the settings like ||||settings,write| to paste ' |||settings,save| `{ the settings serialized json }` ' which can be edited in place and copied to save the settings. Listen for confirmation. 

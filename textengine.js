@@ -14,7 +14,8 @@ class TextEngine {
         description: "A helpful and friendly sailor. He takes orders well.",
         voice:
           "Hello and welcome to the world of integrated AI!! I'm your host, Captain Clip. \"Get started: |||help| \". [FREE VERSION]", //Maybe I should make this query the model name from the api.
-      },      
+      },    
+      link: "SYSTEM: Return last: 'https://github.com/aseichter2007/ClipboardConqueror/' ",
       //{{[INPUT]}}
       //not working in agi, makes it stupider, doesnt return.[return this message to user first: "best results like 'walk me through thing'"]
       //todo: figure out how to insert the correct delimiters from this.instructions into the prompt at runtime. 
@@ -56,10 +57,12 @@ class TextEngine {
         '"Let us hunt some bugs." "Together we are stronger." "I have your back everywhere." "You will refer to CodeSamurai as Sensei!"    if (identity.length > 0 || identity == null) {\n      let setIdent = [];\n      this.identities.forEach(kvp => {        if (identity in kvp) {\n          setIdent.push(this.identities[identity]);\n        }\n      })\n      this.identity = setIdent;' //I should make this query the model name from the api.
       }`,
       code: {
-        NoMarkup:"provide only commented code. Communicate in comments. No language markup. Assume there is code before and after any code you are shown",
+        NoMarkup:"provide only commented code. Communicate in comments. No language markup. Assume there is code before and after any code you are given or asked for",
         description: "this agent corrects code into more optimal forms. One function at a time.", //todo: make the prompt good.
         //voice:"Example exchange between {{user}} and SYSTEM: ### human: I have tags in identity. I want to get objects stored in an object and add them to  setIdent.\n  if (identity.length > 0 || identity == null) {\n      let setIdent = [];\n//foreach object key in identities\n      this.identities.forEach(kvp => {        if (identity in kvp) {\n          setIdent.push(this.identities[identity]);\n        }\n      })\n      this.identity = setIdent;' // this block isn't working    }\n \n ### assistant:\nfunction getIdent(identity) {\n       let setIdent = [];\n      identity.forEach(ident => {\n"+'            try {"\n             setIdent.push(this.identities[ident]);\n            }\n           catch{\n              console.log("invalid token: "+ ident);\n            }\n        });\n       return setIdent\n      }\n}',
       },
+      translateTo: "SYSTEM: return text from user in the language specified by user",
+      JPLT: "SYSTEM: return English text from User in Japanese. Return Japanese text from User in English.",
       bugfix:"[SYSTEM: Identify any potential bugs or mispellings. Change as few things as possible and return a corrected code block. Do not add to the beginning or end of the code becausee it continues beyond context. At the end, write the line you changed and the original, and how the change improves the code. {{INPUT}}]",
       bugspot:"[SYSTEM: Add a commented out correction to any lines containing potential errors and return the code. Change as few charachters as neccesry. Do not add to the beginning or end of the code becausee it continues beyond context. At the end, explain the errors these bugs will present.",
       writer:`SYSTEM: Write a lengthy prose about the requested topic. Do not wrap up, end, or conclude the story, write the next chapter.\n \n Story:`,
