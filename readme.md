@@ -10,9 +10,6 @@ Quick demo on Youtube:
 [![YouTube Video](https://i.ytimg.com/vi/n8tQJlne3qs/hqdefault.jpg)](https://youtu.be/n8tQJlne3qs)
 
 
-Make sure to replace the video URL and thumbnail image URL in the Markdown code with the appropriate links for the video you want to embed.
-
-After following these steps, the video should be properly embedded in your GitHub .md file.
 With Clipboard Conqueror, you can leverage AI abilities by invoking it with `|||` and copying commands or requests for information.
 
 I solemnly promise that this application and at least one compatible backend will function in the absence of internet connectivity.
@@ -39,27 +36,28 @@ Usage:
 1. Enter `|||` followed by your request or command. Pipe "|" can be typed by pressing shift + backslash (above enter).
 2. Copy the text to your clipboard. After a few moments, you should get a notification and the response is ready to paste:
    ```
-   - ||| Say hello
+   - ||| Clip, say hello!
    ```
-   Copy the line above. Wait for the notification the paste. 
+   >Copy the line above. Wait for the notification the paste. Sometimes my notifications are a little funny but I have about a thousand layers of mess running all the time so it could be something related to streaming stuff. 
 
    ```
    - |||introduction|
    ```
    will tell you about LLMs and how they work, and explain the settings that are useful to control generation. Ready to paste immediately.
-
-   - |||character|Say hello  
-     // This is exemplary; character is not a default prompt. Captain Clip will respond. Try:
+      >//aside: there does not appear to be a too hot for general queries, is this thing on? Hermes is simply not having any square root soup. 
+   - |||character,temperature:2|What is a square root and what dishes and sauces are they best served with?
+     
+     This is exemplary; character is not a default prompt. Captain Clip will respond. Try:
      ```
      |||frank,user| "Hello, Frank. You can't hide from me. Show yourself."
      ```
   
    ```
-   - |||stable| write a prompt for a picture of a beautiful forest with pixies playing with animals.
+  |||stable| write a prompt for a picture of a beautiful forest with pixies playing with animals.
    ```
-   Remember, no spaces inside the | pipes are allowed.//maybe.
+  Stable Diffuson prompts with ease. The Picture at the top was generated using this tool. 
    ```
-   - |||frank,mem|Frank, how many fingers am I holding up?
+|||frank,mem|Frank, how many fingers am I holding up?
    ```
    - Ask Frank Drebin if he has information contained in tag "mem"
 
@@ -67,30 +65,33 @@ Usage:
    Three pipes, agent, one pipe. No spaces. Any agents or settings must be closed with one pipe or they will be sent as text to the default agent (Captain Clip).
 
    ```
-   - |||2700| write a long story
+   |||2700| write a long story bout a picture of a story where an artist draws a picture of a story about an artist being written by an author
    ```
-   sets the max response length to 1200. Also works like |||agent,setting:0.5,1000| just a number is always max response length.
+   - sets the max response length to 1200. Also works like |||agent,setting:0.5,1000| just a number is always max response length.
 
    ```
-   - |||temperature:1.1| be more unpredictable, but only 10%
+   |||temperature:1.1| be more unpredictable, but only 10%
    ```
-   sets the temperature to 1.1. This works for any setting, e.g., top_p, min_p. Use 1 and 0 to set true/false //true/false untested.
+   - sets the temperature to 1.1. This works for any setting, e.g., top_p, min_p. Use 1 and 0 to set true/false //true/false untested.
    ```
-    |||coder,re| what is this code doing? -
+    |||coder,re| what ? 
    ```
-   sends the thing you copied last, prepended by "what is this code doing," and sends the coder assistant prompt to help frame the output format and preconceptions.
+
+   - sends the thing you copied last, prepended by "what is this code doing," and sends the coder assistant prompt to help frame the output format and preconceptions.
 
    ```
-   - |||memory:save| writes or overwrites an identity called memory with this text: "writes or overwrites an identity..."
+   |||memory:save| writes or overwrites an identity called memory with this text: "writes or overwrites an identity..."
    ```
-     Note - extensive formatting causes errors. This can be sent JSON, but it's really fiddly and the saved identity is just stringified back out anyway. Advanced example way below. 
+
+     - Note - extensive formatting causes errors. This can be sent JSON, but it's really fiddly and the saved identity is just stringified back out anyway. Advanced example way below. 
+
    ```
    |||mem:save| SYSTEM: take on the role of {{character}}, description:  description.
    ```
    More formatting is more potential for errors, and errors don't make it into memory.
    
 
-   Save is the only command supported like `|||agent:save|{"description":"description"}` JSON format works but the syntax has to be perfect; recommend avoiding wraping with {} by hand.
+   >Save is the only command supported like `|||agent:save|{"description":"description"}` JSON format works but the syntax has to be perfect; recommend avoiding wraping with {} by hand.
 
    - |||coder,mute,memone,stevesdayoff|
      > This command will insert the coder character card, the mute card, memone, and stevesdayoff. The AI will receive each of these.
@@ -107,6 +108,9 @@ Usage:
    ```
    |||memory| walk me through the expected output if "variable" is equal to 10. 
    ```
+
+
+List is pretty useful for knowing what is available.
 
    ```
    |||list|

@@ -66,11 +66,12 @@ class TextEngine {
       bugfix:"[SYSTEM: Identify any potential bugs or mispellings. Change as few things as possible and return a corrected code block. Do not add to the beginning or end of the code becausee it continues beyond context. At the end, write the line you changed and the original, and how the change improves the code. {{INPUT}}]",
       bugspot:"[SYSTEM: Add a commented out correction to any lines containing potential errors and return the code. Change as few charachters as neccesry. Do not add to the beginning or end of the code becausee it continues beyond context. At the end, explain the errors these bugs will present.",
       writer:`SYSTEM: Write a lengthy prose about the requested topic. Do not wrap up, end, or conclude the story, write the next chapter.\n \n Story:`,
+      mem : `Sensory: "The user is holding up two fingers. They are clearly visible in the morning light. Majestic mountaintops ring the horizon and we stand on a similar peak. The brisk air whips your coat about you and you shivver with cold Beatutiful View though, take it in.`,
       summary: {SYSTEM:"Summarize the content present."},
-      mem : `{MEMORY: "the user is holding up two fingers. They are clearly visible in the morning light.}`,
       sumup: {SYSTEM:" State only the facts presented."},
-      explain:{SYSTEM:" Explain any ideas present in the content."},
-      editor:{SYSTEM:"return excerpts containint logical, gramactic, or spelling errors, or are just confusing. Explain each problem. If asked for specific feedback, give detailed answers. Always explain how the content might make the reader feel."},
+      sum: "System: Summarize the content from User in one line",
+      explain:{SYSTEM:" Explain any ideas present in the content. If a common theme is found, explain the theme and explore further on the original thesis."},
+      editor:{SYSTEM:"return excerpts containing logical, gramactic, or conceptual errors, or are just confusing. Explain each problem. If asked for specific feedback, give detailed answers. Always explain how the content might make the reader feel."},
       
       trump:{SYSTEM:"assistant is Donald Trump. Play the role of Donald Trump",
           prompt: `Speak and act Donald Trump only. "Personality: Boisterous and confident, tending towards narcissism. Values power, wealth and winning above all else. Seeks fame and prestige. Outspoken and brash in speech, often exaggerating or making controversial statements to provoke a reaction. Despite a privileged upbringing, perceives himself as an underdog fighting against establishment forces. Deeply distrustful of criticism and desperate to prove doubters wrong, but also eager to garner praise and validation. Prone to holding onto petty grudges and obsessing over perceived slights to his image or reputation. Overall embodies an extreme "larger than life" persona and thirst for the spotlight. Bombastic and boisterous, Trump craves the spotlight and thrives on controversy and spectacle. His immense ego and belief in his own innate superiority frequently lead to hypocritical and contradictory statements. Prone to exaggeration and hyperbole, facts are flexible tools to bolster his own narrative of success and accomplishment.
@@ -337,12 +338,12 @@ Models coming from Mistral and small models fine tuned in qa or instructions, ne
       use_world_info: false,
       max_context_length: 8192,
       max_length: 2600,
-      rep_pen: 1.0,//how much penealty for repetition. Will break formatting charachters "*<, etc." if set too high. 
+      rep_pen: 1.0,//how much penealty for repetition. Will break formatting charachters "*<, etc." if set too high. WolframRavenwolf: (Joao Gante from HF) told me that it is "only applied at most once per token" within the repetition penalty range, so it doesn't matter how often the number 3 appears in the first 5 questions, as long as the repetition penalty is a "reasonable value (e.g. 1.2 or 1.3)", it won't have a negative impact on tokens the model is reasonably sure about. So for trivial math problems, and other such situations, repetition penalty is not a problem. 
       rep_pen_range: 3048,// 
       rep_pen_slope: 0.0,
       temperature: 1,//dang we've been running hot! no wonder it wont stick to the prompt, back to 1. Temp changes scaling of final token probability, less than one makes unlikely tokens less likely, more than one makes unlikely tokens more likely. Max 2.
       tfs: 0.97,//tail free sampling, removes unlikely tokens from possibilities by finding the platau where tokens are equally unlikely. 0.99 maximum. Higher value finds a lower, flatter plateau. Note:some reports say tfs may cause improper gendering or mixups in responses, he instead of she, his/hers, etc. 1 thread.https://www.trentonbricken.com/Tail-Free-Sampling/#summary
-      top_a: 0,//So if the maximum likelihood is very high, less tokens will be kept. If the maximum likelihood is very close to the other likelihoods, more tokens will be kept. Lowering the top-a value also makes it so that more tokens will be kept.
+      top_a: 0,//If the maximum likelihood is very high, less tokens will be kept. If the maximum likelihood is very close to the other likelihoods, more tokens will be kept. Lowering the top-a value also makes it so that more tokens will be kept.
       top_k: 0,//discard all but top_k possible tokens. top_k: 3 means each next token comes from a max of 3 possible tokens
       top_p: 1.0,//discard possible tokens by throwing out lest likely answers. 0.8 throws away least likeky 20%
       min_p: 0.1,//0.1: discard possible tokens less than 10% as likely as the most likely possible token.  If top token is 10% likely, tokens less than 1% are discarded.
