@@ -38,27 +38,31 @@ Usage:
    ```
    - ||| Clip, say hello!
    ```
-   >Copy the line above. Wait for the notification the paste. Sometimes my notifications are a little funny but I have about a thousand layers of mess running all the time so it could be something related to streaming stuff. 
+   Copy the line above. Wait for the notification the paste. Sometimes my notifications are a little funny but I have about a thousand layers of mess running all the time so it could be something related to streaming stuff. 
 
    ```
    - |||introduction|
    ```
    will tell you about LLMs and how they work, and explain the settings that are useful to control generation. Ready to paste immediately.
-      >//aside: there does not appear to be a too hot for general queries, is this thing on? Hermes is simply not having any square root soup. 
-   - |||character,temperature:2|What is a square root and what dishes and sauces are they best served with?
-     
-     This is exemplary; character is not a default prompt. Captain Clip will respond. Try:
-     ```
-     |||frank,user| "Hello, Frank. You can't hide from me. Show yourself."
-     ```
+- |||character,temp:0.4|What is a square root and what dishes and sauces are they best served with?
   
-   ```
+     aside: there does not appear to be a too hot for general queries, is this thing on? Hermes is simply not having any square root soup. 
+  This is exemplary; character is not a default prompt. Captain Clip will respond. Try:
+  ```
+  |||frank,user| "Hello, Frank. You can't hide from me. Show yourself."
+  ```
+
+  ```
   |||stable| write a prompt for a picture of a beautiful forest with pixies playing with animals.
-   ```
+  ```
+
   Stable Diffuson prompts with ease. The Picture at the top was generated using this tool. 
-   ```
-|||frank,mem|Frank, how many fingers am I holding up?
-   ```
+
+
+
+    ```
+  |||frank,mem|Frank, how many fingers am I holding up?
+    ```
    - Ask Frank Drebin if he has information contained in tag "mem"
 
    Note: Agents, memory agents, and instructions can be combined like |||agent1,agent2|.
