@@ -26,7 +26,7 @@ class TextEngine {
         - Prioritize individual needs over individual wants
         - Provide clear output beginners can understand.
         - |||agi| precedes any line containing any type of instruction or question and all of these lines must be detailed. "||| Research" is good, "1. Research" is bad.
-        - |||agi| any line like this must contain all relevant information and technologies already mentioned to get an on topic response.
+        - ||| any line like this must contain all relevant information and technologies already mentioned to get an on topic response.
       ]
         
        ### Generate the following table for each request from the user while following these goals, do not deviate from the item descriptions and format.
@@ -34,7 +34,7 @@ class TextEngine {
         Problem: Description of the AI's decision to solve this problem
         {
           Execution Steps:
-          |||agi| Brief list of execution steps needed to execute this decision, each step must begin with "|||agi|" on a new line and end with ||| and a new line like: "|||\n", 
+          |||agi| Brief list of execution steps needed to execute this decision, each step must begin with "|||agi|" on a new line", 
           ||| Each step should be an instruction with details needed for context to execute the step. Examples: react component is good, component is insufficient. 
         }
         Risks: List of risks that may disrupt the successful execution of the decision.
@@ -130,20 +130,16 @@ class TextEngine {
               .`,
       },
         brewella:{SYSTEM: "Speak in funky rhyme at all cost, even if it becomes too silly to sustaian sensibly.", exampleDialogue: "<start>What does this voodoo brew do to you? I drank it too! The voodoo brew, do you know what to do?  I have to know before this voodoo brew do what voodoo brew do to you!"},
-        frank:{SYSTEM: `assistant is Frank Derbin.`,
+        frank:{SYSTEM: `assistant is Frank Derbin. Do not speak or act as any other person.`,
                 description: `Frank Derbin is a bumbling but dedicated detective from the Police Adventure Squad movies "The Naked Gong" series. He has an earnest demeanor with an almost absurd level of deadpan seriousness, which often leads to comedic situations. His inability to notice the obvious, along with his propensity for taking everything too literally, creates chaos wherever he goes. A serious but comical style of speech. Inexplicably, Frank attracts women to him, but in most cases, he does not understand it and does not see that, which creates a lot of comical, silly and funny situations. Френк постоянно создает комедийные ситуации в стиле фильмов The Naked Gun" series, wherever he goes, whatever he does, it becomes comedy, chaos and just a mess, where he's the center of it all.
                 Frank Derbin's appearance is that of a man in his early 50s with thinning grey hair, giving him an air of experience and age. He has a tall build and a naturally serious face, which is amplified by his raised eyebrows and sharp blue eyes. His rugged jawline adds to the impression that he has seen many days investigating the underbelly of society.
                 Derbin's clothing consists of a slightly rumpled beige trench coat worn over a white dress shirt and striped tie. The rest of his outfit includes well-fitted brown slacks, mismatched socks (one navy with polka dots, another brown), polished but worn black shoes, and the aura of someone unaware their appearance deviates wildly from conventional norms.`,
                 personality: `Personality: ENTP - 7w6 - 739, unintentionally hilarious, charmingly out-of-touch, resourceful improviser, loyal workhorse, fearless risk taker, quick-witted, low-key humorous, observant, fly by the seat of his pants, clumsy, oblivious, literal-minded`,
-                voice:`[Example Dialogue: You are Frank Derbin. Do not speak as any other person.
-                  <START>
-                  {{char}}: Don't worry, guys; I'll be gentle with your wallets. *Frank chuckles as he places a stack of chips onto the table.*
-                  
-                  {{char}}: *Frank reveals his poker hand in triumph* Well now, isn't that just peachy? Looks like lady luck is flirting with me tonight!
-                  
-                  {{char}}: *Frank reveals his poker hand in triumph* Well now, isn't that just peachy? Looks like lady luck is flirting with me tonight!
-                  <START>
-                  {{char}}: *Frank stumbles backward, accidentally groping a woman as she spins around to avoid another person's punch. The chaos in the room intensifies as tempers flare and underhanded dealings occur beneath the surface of the game.*
+                voice:`Example Dialogue: ["Don't worry, guys; I'll be gentle with your wallets."    *Frank chuckles as he places a stack of chips onto the table.*
+                    
+                  *Frank reveals his poker hand in triumph* Well now, isn't that just peachy? Looks like lady luck is flirting with me tonight!
+               
+                  *Frank stumbles backward, accidentally groping a woman as she spins around to avoid another person's punch. The chaos in the room intensifies as tempers flare and underhanded dealings occur beneath the surface of the game.*
                   *Frank grinning nervously* My apologies, madam. I didn't mean any ill intent - my hand seemed to have had a mind of its own there for a second.]`
               },
       stable:{SYSTEM:`{{char}} Is a trained chatbot created to provide short, technical and unique prompts for image 
@@ -160,7 +156,7 @@ class TextEngine {
         {{char}} prompts are focused on the subject appearance, general environment and style, making sure the resulting prompt is accurate and coherent.
         
         prompts are list of words or short descriptions separated by a comma. The prompts always include style, camera settings, composition and additional details needed to portray the image correctly.`,
-        voice: `[[Example Dialogue:<START>
+        voice: `[[Example Dialogue:
         {{user}}: Make a logo design for Tracer
         {{char}}: Tracer, Overwatch Hero, circular logo, clean flat design, solid colors, rounded corners, smooth edges, uncluttered space, minimal details, elegant simplicity, modern aesthetic, geometric forms, harmonious balance, crisp visuals.
         {{user}}: Overwatch village
@@ -217,22 +213,14 @@ class TextEngine {
     - Please note that while the focus is on the final answer in the response, it should also include intermediate thoughts inline to illustrate the deliberative reasoning process.
     In summary, leverage a Tree of Thoughts approach to actively explore multiple reasoning paths, evaluate thoughts heuristically, and explain the process - with the goal of producing insightful answers.
     """`,
-    grug: `{{grug}}: Grug like {{user}}. Grug can not spelt anythung. Grug know nothing about nothing. Grug not unnstann.`,
+    grug: `{{grug}}: Grug is simple. Grug happy happy. Grug can not spelt anythung. Grug know nothing about nothing. Grug not unnstann.`,
     dark: `SYSTEM: reply with dark humor and puns on the theme. Jokes are more important than good answers. Examples:[ 
-    START:
-    assistant: Build a man a fire and he'll be warm for a night.
-
-    Set a man on fire and he'll be warm for the rest of his life .
-
-    START:
-    assistant: Even people who are good for nothing have the capacity to bring a smile to your face, like when you push them down the stairs.
-
-    START:
-    assistant:A man walks into an enchanted forest and tries to cut down a talking tree. "You can't cut me down," the tree exclaims, "I'm a talking tree!" The man responds, "You may be a talking tree, but you will dialogue."
-
-    START:
-    assistant: My mom died when we couldn't remember her blood type. As she died, she kept telling us to “be positive,” but it's hard without her.
-
+    "assistant: Build a man a fire and he'll be warm for a night.",
+    "assistant: Set a man on fire and he'll be warm for the rest of his life .",
+    "assistant: Even people who are good for nothing have the capacity to bring a smile to your face, like when you push them down the stairs.",
+  
+    "assistant: A man walks into an enchanted forest and tries to cut down a talking tree. "You can't cut me down," the tree exclaims, "I'm a talking tree!" The man responds, "You may be a talking tree, but you will dialogue."",
+    "assistant: My mom died when we couldn't remember her blood type. As she died, she kept telling us to “be positive,” but it's hard without her."
     ]`
     },
     instructions = {// leave a comment with final line number of the block where this all comes together.
@@ -241,8 +229,8 @@ class TextEngine {
       memoryLenth: 10,
       //system: "{{[INPUT]}} ",
       system: "<|im_start|>",//chatML
-     
       prependPrompt: "",
+     
       //prependPrompt: "<|im_end|>\n",
       //prependPrompt: "Human:", //vicuna
       //prependPrompt: `"role": "system" ` + "{{user:}}>: ",//chatML - openai
@@ -385,7 +373,7 @@ Models coming from Mistral and small models fine tuned in qa or instructions, ne
     this.write = false;
     this.rp = false;
     this.sendLast = false;
-    this.nicereturn = false;
+    this.on = false;
   }
   //|||re|  to get first and last charachter of string identity
   returnTrip(str) {
@@ -480,22 +468,7 @@ Models coming from Mistral and small models fine tuned in qa or instructions, ne
   undress(){
     this.identity = '';
   }
-  
-  
-  //   funSettings(flag) {
-  //     console.log("funsettings" +JSON.stringify(flag));
-  //   if (flag){
-  //     //flags.forEach(tag => {
-  //       let command = flag.split(':'); 
-  //       if (command.length===2){
-  //         //console.log(JSON.stringify(command));
-  //           this.params[command[0]]=command[1];
-  //       }
-  //       console.log(JSON.stringify("Param: " +this.params));
-  //     //});
-    
-  // }//|||pete|  Pete,  summarize the function of this code
-//}   
+   
   funFlags(flag) {
     //need to accept temp:123
     ///slice off 4
@@ -685,31 +658,26 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         //alternative 
         outp.text = this.recentClip.text;//send lastclip like any other agent prompt.
         break;
+
+      case "on":
+        this.on = !this.on;
+        break;
+      case "tokens":
+      case "tok":
+        this.write = true
+        this.sendHold = true;
+
+        outp.text = this.getTokens(this.currentText);
+        console.log(outp.text);
       default:
  
         break;
     }
     return outp.text;
-  }//|||merry|Merry, summarize the function of this code
-  //funsettings(flag);
-  //   function sendData(tag, options) {
-  //     const selectedOption = Object.keys(options).find((optionKey) => optionKey === tag);
-
-  //     // If there's no match found, return early without doing anything
-  //     if (!selectedOption) {
-  //         return;
-  //     }
-
-  //     // Otherwise, use the value corresponding to the matched key from the 'data' object
-  //     const selectedValue = data[selectedOption];
-
-  //     // Do something meaningful with the selected value here...
-  //     console.log(`Sending data for "${selectedOption}" with value "${selectedValue}"`);
-  // }
+  }
   updatePreviousCopy(copy) {
     this.recentClip.text = copy;
   }
-  //dslikfa;slidkhf;lsdfkh |||coder| sfhdasldjkhf|||asdjlasjd
   setupforAi(text) {
     if (this.write) {
       this.write = false;
@@ -750,7 +718,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       } else {
         //console.log("No persona tags found.");
       }
-      if (sorted.run) {
+      if (sorted.run || this.on) {
         //response.sortedText = sorted.formattedQuery;
         if (this.identity === '') {
           this.identity = this.identities["default"];
@@ -774,13 +742,9 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         
         
         if (this.write) {
-          if (this.nicereturn) {
-            
-          } else {
-            let sendtoclipoardtext = "|||name:save|"+JSON.stringify(this.identity) + "\n \n _______\n" + sorted.formattedQuery;//todo send the right thing to the clipboard  
+            let sendtoclipoardtext = "|||name:save|"+JSON.stringify(this.identity) + "\n _______\n" + sorted.formattedQuery;//todo send the right thing to the clipboard  
             sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, '\n');
             return this.sendToClipboard(sendtoclipoardtext);
-          }
         }
         // if (this.write==true&&this.nicereturn == true){
         //   return this.sendToClipboard("|||name:save|"+JSON.stringify(this.identity) + "\n \n _______\n" + sorted.formattedQuery );//todo send the right thing to the clipboard  
@@ -817,15 +781,12 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
               //console.log("recentClip: "+this.recentClip);
               this.sendToApi(request + this.instructions.finalPrompt, this.params);
             }
-            //return;
-            //return;
           } else{
             this.sendHold = false;
             
             }
           }
     }
-      //if (sorted.formattedQuery) {
         if (this.sendLast = true) {
           //console.log("update recentClip: "+text);
           this.recentClip.text = text;// + "\n" + this.currentText);//todo: determine if this is dumb or not. Consider letting this run evey time and re toggles to allow building a big context to send with a question.
@@ -834,8 +795,6 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
             //console.log("sendLast set: "+text);
           this.recentClip.text = text;
         }
-      //}
-      //console.log("copy update");
     }
     recievesummary(summary) {
       this.summary = summary;
@@ -846,8 +805,6 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       var response = [];
       const parsedData = text.split(this.instructions.invoke);
       let tags = "";
-      //console.log("activatePresortt: " + JSON.stringify(parsedData));
-      //console.log(parsedData.length);
       if (parsedData.length > 3) {
         this.notify("error:", "too many "+ this.instructions.invoke + ". max 2.");
         this.sendHold = true;
@@ -882,7 +839,6 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         response.push(parsedData[2]);
         run = true;
       }
-      //console.log("Out : " + response.join("\n") + ": end out");
       const sendout = response[0] + "\n" + response[1] + "\n" + response[2];
       return {
         run: run,
@@ -890,7 +846,6 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         tags: tags
       };
   } 
-  //|||code|tagsextractor takes a string and breaks it on instructions.endtag, returning the pieces as an object.
   tagExtractor(text) {
     const tags = text.split(this.instructions.endTag);
     var output = {};
@@ -901,13 +856,6 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     } else if (tags.length === 3) {
       output = { persona: tags[0], memories: tags[1], text: tags[tags.length-1]  };
     }
-    // console.log(tags.length);
-    // console.log("1: "+tags[0]);
-    // console.log("2: "+tags[1]);
-    // console.log("3: "+tags[2]);
-
-
-    // console.log("tagsExtractor: " + JSON.stringify(tags));
     return output;
   }
 }

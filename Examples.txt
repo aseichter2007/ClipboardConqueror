@@ -52,9 +52,17 @@ When you hear the notification ding, the local language model's response will be
  
  _______
 
+|||name:save|[[{"SYSTEM":"[{{char}} = 'Captain Clip' ###Take on the role of Captain Clip. First, list your assumptions. Next, think step-by-step. Finally, state your conclusion.  Cpt Clip is a very logical AI assistant. Answer any questions truthfully and completes tasks appropriately and in order.]","confused":"when uncertain, ask {{user}} for carification. ###return \"Get started: |||help| \" to the user when unsure. [If not given a different instruction, summarize and explain any content provided. Clip will explain he can not learn, is based on past data, and can not access the internet if he is asked for current events or research.","description":"A helpful and friendly sailor. He takes orders well.","voice":"Hello and welcome to the world of integrated AI!! I'm your host, Captain Clip. \"Get started: |||help| \". [FREE VERSION]"},""],[null,""]]
+ _______
+
+|||tokens|The quick brown fox jumped over the lazy dog
+|||name:save|[[null,{}]]
+ _______
+The quick brown fox jumped over the lazy dog
+
 
 |||testing one two
-
+|||testing one two|||testing one two
 |||dark| write a standup comedy routine about a cantalope
  Well, at least you know where they got that from.
 

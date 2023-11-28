@@ -8,17 +8,18 @@ class KoboldClient {
     this.getMaxContext = "";
     this.stats = "extra/perf";
     this.abort = 'extra/abort';
-    this.currentRequest = "Joe Biden, Wake Up!";
+    this.currentRequest = "";
     this.notify = notify;
     this.tokencount= "extra/tokencount"
     //this.setupRequest()
     
   }
-  getstats(datareturn, tag ){
-    sendPostPerfRequest(this.baseURL + this.stats, datareturn, this.handler, this.notify, tag)
+  getstats(datareturn ){
+    sendPostPerfRequest(this.baseURL + this.stats, datareturn, this.handler, this.notify)
   }
-  getTokenCount(text, target, callback){
-    sendPostTextRequest(this.baseURL + this.tokencount,{prompt: text}, callback, this.handler, this.notify, target)
+  getTokenCount(text){
+    const data = {prompt: text};
+    return sendPostPerfRequest(this.baseURL + this.tokencount, data, this.handler, this.notify)
 
   }
 
@@ -98,18 +99,18 @@ async function sendPostTextRequest(apiUrl, data, callback, handler, notify, agen
     console.log(`Error sending request: ${error}`);
   }
 }
-async function sendPostPerfRequest(apiUrl, callback, data, handler, notify, tag) {
+async function sendPostPerfRequest(apiUrl, data, handler, notify) {
   let error = ""
   try {
     const response = await handler.post(apiUrl, data);
     //console.log(`Response status: ${response.status}`);
     //var text = JSON.stringify(response.data.results[0].text)
     var text = response.last_token_count;
-    //console.log(`Response data: ${text}`);
-    callback(text, tag);
+    console.log(`Response data: ${response}`);
+    return text;
   } catch (error) {
    // notify("error:", error);
-    console.log(`Error sending request: ${error}`);
+    console.log(`Error sending token request: ${error}`);
   }
 }
 
