@@ -2,7 +2,7 @@
 setlocal
 
 rem Relative path of kobold settings kcpps file
-set RELATIVE_PATH=hermesq3.kcpps
+set RELATIVE_PATH=hermes16.kcpps.kcpps
 
 rem Get the full path
 set "FULL_PATH=%~dp0%RELATIVE_PATH%"

@@ -5,10 +5,6 @@ Clipboard Conqueror is a multi-platform omnipresent copilot alternative. Current
 
 *Special thank you to the creators of  KoboldAi, KoboldCPP, llamma, openAi, and the communities that made all this possible to figure out. 
 
-Quick demo on Youtube: 
-
-[![YouTube Video](https://i.ytimg.com/vi/n8tQJlne3qs/hqdefault.jpg)](https://youtu.be/n8tQJlne3qs)
-
 
 With Clipboard Conqueror, you can leverage AI abilities by invoking it with `|||` and copying commands or requests for information.
 
@@ -30,6 +26,13 @@ Captain Clip: Here are the links formatted as Markdown for a .md file:
 2. [Ko-fi](https://ko-fi.com/aseichter2007)
 
 With enough support, this app will become extremely useful for anyone. 
+Quick demo on Youtube: 
+[![YouTube Video](https://i.ytimg.com/vi/n8tQJlne3qs/hqdefault.jpg)](https://youtu.be/n8tQJlne3qs)
+
+Using Clipboard Conqueror to Create, and Installation:
+[![Youtube Video](https://i.ytimg.com/vi/NqnpBi0MHsc/hqdefault.jpg)](https://youtu.be/NqnpBi0MHsc)
+
+
 Usage:
 ------
 
@@ -311,7 +314,7 @@ Have fun and remember you can always ask for
 ```
 
 
-
+//I'll just leave this here https://www.reddit.com/r/bookmarklets/comments/d8pqe2/toggle_design_mode/
 ---------------------------------
 Bug Reports and Feature Requests:
 ---------------------------------
