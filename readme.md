@@ -1,7 +1,7 @@
 ![Clipboard Conqueror Graphic logo. The letters are clouds and buildings on a lush estate.](CCfinal.jpg)
 Clipboard Conqueror - Readme
 =============================
-Clipboard Conqueror is a novel front end for working with LLMs. Currently requring a kobold united compatible backend, this software brings powerful LLM based tools to any text field, the universal copilot you deserve. It simply works anywhere. No need to sign in. 
+Clipboard Conqueror is a milti-platform omnipresent copilot alternative. Currently requring a kobold united compatible backend, this software brings powerful LLM based tools to any text field, the universal copilot you deserve. It simply works anywhere. No need to sign in. 
 
 *Special thank you to the creators of  KoboldAi, KoboldCPP, llamma, openAi, and the communities that made all this possible to figure out. 
 
@@ -78,10 +78,10 @@ Usage:
    ```
    - sets the temperature to 1.1. This works for any setting, e.g., top_p, min_p. Use 1 and 0 to set true/false //true/false untested.
    ```
-    |||coder,re| what ? 
+    |||coder,re| what is this code doing? 
    ```
 
-   - sends the thing you copied last, prepended by "what is this code doing," and sends the coder assistant prompt to help frame the output format and preconceptions.
+   - sends the thing you copied last, prepended by "what is this code doing?" and sends the coder assistant prompt to help frame the output format and preconceptions.
 
    ```
    |||memory:save| writes or overwrites an identity called memory with this text: "writes or overwrites an identity..."
@@ -157,7 +157,7 @@ Supported Platforms:
 --------------------
 Clipboard Conqueror is designed to work seamlessly across multiple platforms including Windows, macOS, and Linux. It has been rigorously tested and optimized to ensure stability and compatibility.//??!! Dang, that is a complete lie. There are at least 2 bugs I havent nailed down, and I have no idea if this works on linux or mac. Report your findings please. 
 
-Notice://gtp, openai unimplemented. LMStudio is not supported yet either. And the koboldCPP api is currently under rapid development so I really should get after it.
+Notice://gtp, openai unimplemented. LMStudio is not supported yet either.
 --------
 When using the |||gtp:3| or |||gpt:4| commands, be aware that data will be sent to outside systems. This may be a breach of your companies data protection policy.//unimplemented
 You can safely use any other command to query sensitive data, and depending on your configuration, gtp commands can be sent to LMStudio to run against a larger slower model. //unimplemented
@@ -187,9 +187,9 @@ Advanced Example:
   "anydescription": "An unhelpful and unfriendly army man. He takes orders to the john and throws em in. He disrespects requests. He hates kind pleas for help.",
   "thisExampleDilogue": ["Dip: What do you want, sarge?", "Dip: get out of my face."]
 }
-```
 
-will add that agent json parsed into the memory until the application is closed. Note: the entire JSON is sent to the LLM. Openhermes loves the format with keys like {"system":"You are {{char}}", "name": "SuperAIHELPErman5000", "description": "future roboto assistant mega help power"}
+```
+will add that agent json parsed into the memory until the application is closed. Note: the entire JSON is sent to the LLM. Openhermes loves the format with keys like {"system":"You are {{char}}:", "name": "SuperAIHELPErman5000", "description": "future roboto assistant mega help power"}
 
 ---------------------------------
 Installation:
@@ -197,11 +197,11 @@ Installation:
 
 
 first get [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/releases/)
-or for macOS get KoboldAi or anything that hosts a kobold united compatible endpoint for tavern, etc. //untested on mac, linux
+or for macOS get KoboldAi or anything that hosts a kobold united compatible endpoint for tavern, etc. //untested on mac
 a kobold compatible api must be running to use Clipboard Conqueror.
 I will supply a sample batch file for loading a model with your settings file after you get kobold dialed in from the launcher. 
 
-Kobold needs a model. Here are my reccomendations 11/8/23:
+Kobold needs a model. Here are my reccomendations 11/29/23:
 https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF
 
 OpenHermes-2.5-Mistral supports 8192 context. This is a decent couple of pages. 
@@ -217,24 +217,25 @@ hardware("token speed")  [fast = 20+ tokens/sec, medium = <10 tokens/sec. slow =
    
 
 
-16gb ram and no graphics card, or laptop with shared gfx memory(medium): [Q3_K_L](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q3_K_L.gguf)
+16gb ram and no graphics card, or laptop with shared gfx memory(slow, notable quality loss): [Q3_K_L](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q3_K_L.gguf)
 
-32gb ram and not using graphicss card(medium): [Q5_K_M](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q5_K_M.gguf)
+32gb ram and not using graphicss card(slow): [Q5_K_M](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q5_K_M.gguf)
 
-8gb gfx cards and 16gb ram(fast): [Q3_K_M](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q3_K_M.gguf)
+<8gb gfx cards and 16gb ram(fast-medium, notable quality loss): [Q3_K_M](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q3_K_M.gguf)
 
-8gb gfx cards and 32gb ram(medium): [Q5_K_M](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q5_K_M.gguf)
+8gb gfx cards and 32gb ram(medium, prompt ingestion might not fit in mem = slow consider 4k context if faster): [Q6_K](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q5_K_M.gguf)
 
-12gb gfx cards and 16gb ram(fast): [Q5_K_M](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q5_K_M.gguf)
+12gb gfx cards and 16gb ram(fast): [Q6_K](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q5_K_M.gguf)
 
-12gb gfx cards and 32gb ram(medium-fast): [Q6_K](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q6_K.gguf)
+12gb gfx cards and 32gb ram(fast): [Q6_K](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q6_K.gguf)
 
-12gb gfx cards and 32gb ram(medium): [Q8_0](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q8_0.gguf)
+12gb gfx cards and 32gb ram(fast): [Q8_0](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q8_0.gguf) total VRAM used: 9333.84 MB (model: 7205.84 MB, context: 2128.01 MB)
 
-24gb vram(fast): [Q8_0](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q8_0.gguf)
+24gb vram(fast): [Q8_0](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q8_0.gguf) total VRAM used: 9333.84 MB (model: 7205.84 MB, 8k context: 2128.01 MB)
            
 
-      I thought about reccommending other models, but openhermes is simply decent and fast, even tested on a friend's old 1080. 
+      I thought about reccommending other models, but openhermes is simply decent and fast, even tested on a friend's old 1080, under one minute for complex queries and with no gfx acceleration on 16gb ram its painfully slow to ingest, a few minutes for a large query and response.  smaller batches help you be sure its not hung up. 
+
       let me know about your harware and token speed and i will make this reflect the general experience better. 
 
       Info for model selection. Preffered format chatML, but you can change the instructions in the settings.
@@ -251,7 +252,7 @@ hardware("token speed")  [fast = 20+ tokens/sec, medium = <10 tokens/sec. slow =
       18 layers with LLAMA 13B
       8 layers with LLAMA 30B
 
-      OpenHermes 2.5 is 35 layers. with a Q_3 you should be able to just fit it all with at least 2k context in 6gb of VRAM I think(untested).   You can load the model in memory, see how much your final model memory cost is in the console, and get a rough estimate of the size of each layer by dividing the size in memory by the number of layer. Remember to leave room for the context, which can get big fast. At 8k context I think use over 5gb of memory with the Q8, just for the context alone.
+      OpenHermes 2.5 is 35 layers. with a Q_3 you should be able to just fit it all with at least 2k context in 6gb of VRAM I think(untested).   You can load the model in memory, see how much your final model memory cost is in the console, and get a rough estimate of the size of each layer by dividing the size in memory by the number of layers. Remember to leave room for the context, which can get big fast. At 8k context I think use over 5gb of memory with the Q8, just for the context alone.
 
 *Model bit depth is trade between output quality and output speed.  Generally, larger models are smarter and can follow more complex instructions.
 KoboldCPP uses GGUF format, which are quantized from 16 bit to between 2 bit and 8 bit depending on model. (I like 8 bit if it fits in vram with room for 8k context.)
@@ -269,7 +270,7 @@ npm i
 npm start
 
 
-```
+
   ![harrow](https://styles.redditmedia.com/t5_20v1i8/styles/profileIcon_snoo94b3e9ee-40b0-4d50-976b-f84339866e74-headshot-f.png?width=256&height=256&crop=256:256,smart&s=99c1f9c5ba8353614aca16055afd851209dba8ca)
   level 4
   harrro:
@@ -287,7 +288,7 @@ npm start
   After that, it worked well. Copy started generating with kobold and paste had the contents of the result as expected.
 
   The notification when generation finished also worked but there is no audible sound.
-```
+
 
 
 --------------------------------
@@ -299,7 +300,7 @@ Copy this line:
 ```
 |||introduction|
 ```
-paste in a text field. Read the introduction. 
+paste in a text field, a big one. Read the introduction. It's jam packed with information.
 three pipes invokes the ai. If you want to skip the introduction you can get right to things like:
 ```
 |||what is an inverse square root and how is it useful. 
@@ -360,6 +361,9 @@ release!//oh snap I got excited and went. //beta release in motion.
 //todo: mystery agent of the day. vulnerability: the description is visible in the kobold terminal
 
 
+todo: a server for a mystery agent to play twenty questions against. If you guess the character you get points for the premium prompt store. Monthly tokens on a subscription, no need for phoning out, just copy from the page. Profit sharing intent, but core first.
+
+//todo: Implement FunkyTown, you kids will never guess what this does. 
 
 
 
@@ -398,3 +402,10 @@ Top 5 remaining issues to solve:
 - |||agi| How to implement a progress bar for the download process
 - |||agi| How to handle rate limiting on the HuggingFace servers
 - |||agi| How to automatically detect the most recent version of a file on HuggingFace
+
+
+
+
+
+###tot#how to make this tool better.
+
