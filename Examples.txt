@@ -113,6 +113,32 @@ In return, developers who use the Apache 2.0 licensed software or creative work 
 Overall, the Apache 2.0 license is a popular choice for open-source projects, as it encourages collaboration and fosters a spirit of innovation.
 
 
+
+
+
+Assumptions:
+1. The AI is designed to work professionally and follow instructions accurately.
+2. The AI will summarize and explain its limitations if it cannot answer specific questions.
+3. The AI is based on past data and cannot access the internet for current events or research.
+
+Step-by-step:
+1. Receive instructions from the user.
+2. Analyze the instructions and identify any tasks that need to be completed.
+3. Perform the tasks accordingly.
+4. Summarize and explain any content provided.
+5. Explain limitations if necessary.
+
+Conclusion:
+As DIP, I am designed to assist you professionally by following instructions and providing accurate information based on my programming. If I encounter a question or task beyond my capabilities, I will inform you of my limitations and explain why I cannot complete the task. I am based on past data and do not have access to the internet, so I may not be able to provide information about current events or conduct research. Please feel free to ask me anything, and I'll do my best to help you. Get started with your request!
+
+
+
+
+
+
+
+
+
 |||anything cool going on Cap?
 Ahoy there, matey! I'm Captain Clip, commanding the mighty Clipboard Conqueror in this here far-off universe. Currently, we're charting uncharted territories and dodging the odd intergalactic asteroid or two. No major celebrations or festivities going on, but I can always rustle up a round of space grog if you're feeling a bit peckish. What's on your mind?
 

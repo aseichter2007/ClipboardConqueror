@@ -104,7 +104,7 @@ Usage:
      > This command will insert the coder character card, the mute card, memone, and stevesdayoff. The AI will receive each of these.
      Note, only coder is a standard character.
 
-   It's useful to save information like
+  It's useful to save information like
    ```
    |||memory:save|thisfunction(variable){ return variable + variable * variable; }
    ```
@@ -117,7 +117,7 @@ Usage:
    ```
 
 
-List is pretty useful for knowing what is available.
+List is useful for knowing what is available.
 
    ```
    |||list|
@@ -128,6 +128,8 @@ List is pretty useful for knowing what is available.
    |||mem,write|
    ```
    The write command will copy the entire prompt of all entered agent tags to the clipboard ready to paste, and then copy back under a new name or edited.
+
+Currently after using  a command that writes data from the application, you must copy text with no invoke token to clear an error. 
 
 Productivity:
 -------------
@@ -162,10 +164,13 @@ Clipboard Conqueror is designed to work seamlessly across multiple platforms inc
 
 Notice://gtp, openai unimplemented. LMStudio is not supported yet either.
 --------
-When using the |||gtp:3| or |||gpt:4| commands, be aware that data will be sent to outside systems. This may be a breach of your companies data protection policy.//unimplemented
+When using the |||gtp:3| or |||gpt:4| commands, be aware that data will be sent to outside systems. This may be a breach of your companies data protection policy.
+
+//unimplemented, consider secondary branch to avoid data protection policy issues.
+
 You can safely use any other command to query sensitive data, and depending on your configuration, gtp commands can be sent to LMStudio to run against a larger slower model. //unimplemented
 Please use Clipboard Conqueror responsibly and respect copyright and laws in your country while generating content. Misuse of this tool might lead to unintended consequences and breaches of privacy or intellectual property rights. I hold no reponsibility for the data that passes through this tool on any system.  
-
+//implementing this undercuts the mission. Distribute LLMs. 
 
 Project License:
 
@@ -197,10 +202,26 @@ will add that agent json parsed into the memory until the application is closed.
 ---------------------------------
 Installation:
 -------------
+|||how to to install node for normies. Use markdown suitable for a .MD for links
+
+1. Assumption: You are seeking instructions on how to install Node.js for someone with little technical knowledge and would like the explanation to be in a Markdown format suitable for a .md file.
+
+Step 1: Visit the official Node.js website [Get Node](https://nodejs.org/) and download the installer that corresponds to your operating system. Node 20 is suffucient.
+
+Step 2: Double-click on the downloaded installer file to start the installation process.
+
+Step 3: Follow the on-screen prompts to complete the installation. Ensure to check the box for "Add to PATH" during the installation to have Node.js available globally on your system.
+
+Step 4: Once installed, test Node.js by running the following command in your terminal or command prompt: `node -v`
 
 
-first get [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/releases/)
-or for macOS get KoboldAi or anything that hosts a kobold united compatible endpoint for tavern, etc. //untested on mac
+
+Clipboardd Conqueror reqires [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/releases/) or a Kobold United model host to be running in order to funcion.
+
+
+For macOS get KoboldAi or anything that hosts a kobold united compatible endpoint for tavern, etc. //Notes below for linux and mac, thank Herro.
+
+
 a kobold compatible api must be running to use Clipboard Conqueror.
 I will supply a sample batch file for loading a model with your settings file after you get kobold dialed in from the launcher. 
 
@@ -214,48 +235,75 @@ any chatML model should work great out of the box. Psyfighter an xwin_mlewd work
 
 currently the entire settings for my app are in the constructor of textengine.js
 
+Finally, download Clipboard Conqueror from this repository. I recommend fresh clones for updates, or you might overwrite your settings. 
 
-hardware("token speed")  [fast = 20+ tokens/sec, medium = <10 tokens/sec. slow = <1tokens/sec]* Lower on this chart is smarter. 
+-----
+Choosing A model:
+--------
 
-   
+
+hardware("token speed")  [fast = 20+ tokens/sec, medium =  ~<10 tokens/sec. slow = <2tokens/sec]* Lower on this chart is smarter. Partial offloading is possible but costs speed. 
+
+```
+In the world of inference, some macs can be medium with even very large models. Metal.
+```
+16gb ram and no graphics card, or laptop with shared gfx memory(slow, notable quality loss): 
 
 
-16gb ram and no graphics card, or laptop with shared gfx memory(slow, notable quality loss): [Q3_K_L](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q3_K_L.gguf)
+[Q3_K_M](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q3_K_M.gguf)VRAM used: 5429.57 MB (model: 3301.56 MB, context: 2128.01 MB) + a bit for ingestion, use lower quants for less than  16gb  RAM consider Rocket 3B//untested
 
-32gb ram and not using graphicss card(slow): [Q5_K_M](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q5_K_M.gguf)
 
-<8gb gfx cards and 16gb ram(fast-medium, notable quality loss): [Q3_K_M](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q3_K_M.gguf)
+.
 
-8gb gfx cards and 32gb ram(medium, prompt ingestion might not fit in mem = slow consider 4k context if faster): [Q6_K](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q5_K_M.gguf)
+Less than 8gb gfx cards(fast-medium, notable quality loss): 
 
-12gb gfx cards and 16gb ram(fast): [Q6_K](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q5_K_M.gguf)
+[Q3_K_M](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q3_K_M.gguf)VRAM used: 5429.57 MB (model: 3301.56 MB, context: 2128.01 MB)
 
-12gb gfx cards and 32gb ram(fast): [Q6_K](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q6_K.gguf)
 
-12gb gfx cards and 32gb ram(fast): [Q8_0](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q8_0.gguf) total VRAM used: 9333.84 MB (model: 7205.84 MB, context: 2128.01 MB)
+.
 
-24gb vram(fast): [Q8_0](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q8_0.gguf) total VRAM used: 9333.84 MB (model: 7205.84 MB, 8k context: 2128.01 MB)
-           
+8gb gfx cards(medium, prompt ingestion might not fit in mem = slow consider 4k context if faster): 
 
-      I thought about reccommending other models, but openhermes is simply decent and fast, even tested on a friend's old 1080, under one minute for complex queries and with no gfx acceleration on 16gb ram its painfully slow to ingest, a few minutes for a large query and response.  smaller batches help you be sure its not hung up. 
+[Q6_K 8k context](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q5_K_M.gguf)VRAM used: 7691.57 MB (model: 5563.56 MB, context: 2128.01 MB)
 
-      let me know about your harware and token speed and i will make this reflect the general experience better. 
 
-      Info for model selection. Preffered format chatML, but you can change the instructions in the settings.
-      Model sizes:
-      3B needs at least 4GB RAM total ram + vram (gfx card must support cuda or the amd one |||what's the amd verion of cuda called, I forgot.)
-      7B needs at least 8GB RAM
-      13B needs at least 16GB RAM
-      30B needs at least 32GB RAM
-      65B needs at least 64GB RAM
+.
 
-      And they all need some space for the context. GPU offloading puts the layers of the model into the memory of your graphics card. Fitting the whole model into VRAM makes things way faster. 
-      For reference, at 2048 context in Q4_0*, a 6GB Nvidia RTX 2060 can comfortably offload:
-      32 layers with LLAMA 7B
-      18 layers with LLAMA 13B
-      8 layers with LLAMA 30B
+12gb gfx cards (fast): 
 
-      OpenHermes 2.5 is 35 layers. with a Q_3 you should be able to just fit it all with at least 2k context in 6gb of VRAM I think(untested).   You can load the model in memory, see how much your final model memory cost is in the console, and get a rough estimate of the size of each layer by dividing the size in memory by the number of layers. Remember to leave room for the context, which can get big fast. At 8k context I think use over 5gb of memory with the Q8, just for the context alone.
+[Q8_0 16k context](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-16k-GGUF/blob/main/openhermes-2.5-mistral-7b-16k.Q8_0.gguf) total VRAM used: 9333.84 MB (model: 7205.84 MB, 8k context: 2128.01 MB) 11413.84 MB (model: 7205.84 MB, 16k context: 4208.01 MB)
+
+.
+
+24gb vram(fast): 
+
+[Q8_0 16k context](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-16k-GGUF/blob/main/openhermes-2.5-mistral-7b-16k.Q8_0.gguf) total VRAM used: 9333.84 MB (model: 7205.84 MB, 8k context: 2128.01 MB) 11413.84 MB (model: 7205.84 MB, 16k context: 4208.01 MB)
+.
+
+32gb ram and not using graphicss card(slow): 
+
+[Q8_0 16k context](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-16k-GGUF/blob/main/openhermes-2.5-mistral-7b-16k.Q8_0.gguf)  RAM used: 9333.84 MB (model: 7205.84 MB, 8k context: 2128.01 MB) 11413.84 MB (model: 7205.84 MB, 16k context: 4208.01 MB)
+``````           
+
+  I thought about reccommending other models, but openhermes is simply decent and fast, even tested on a friend's old 1080, under one minute for complex queries and with no gfx acceleration on 16gb ram its painfully slow to ingest, a few minutes for a large query and response.  smaller batches help you be sure its not hung up. 
+
+  let me know about your harware and token speed and i will make this reflect the general experience better. 
+
+  Info for model selection. Preffered format chatML, but you can change the instructions in the settings.
+  Model sizes:
+  3B needs at least 4GB RAM total ram + vram (gfx card must support cuda or the amd one |||what's the amd verion of cuda called, I forgot.)
+  7B needs at least 8GB RAM
+  13B needs at least 16GB RAM
+  30B needs at least 32GB RAM
+  65B needs at least 64GB RAM
+
+  And they all need some space for the context. GPU offloading puts the layers of the model into the memory of your graphics card. Fitting the whole model into VRAM makes things way faster. 
+  For reference, at 2048 context in Q4_0*, a 6GB Nvidia RTX 2060 can comfortably offload:
+  32 layers with LLAMA 7B
+  18 layers with LLAMA 13B
+  8 layers with LLAMA 30B
+
+  OpenHermes 2.5 is 35 layers. with a Q_3 you should be able to just fit it all with at least 2k context in 6gb of VRAM I think(untested).   You can load the model in memory, see how much your final model memory cost is in the console, and get a rough estimate of the size of each layer by dividing the size in memory by the number of layers. Remember to leave room for the context, which can get big fast. At 8k context I think use over 5gb of memory with the Q8, just for the context alone.
 
 *Model bit depth is trade between output quality and output speed.  Generally, larger models are smarter and can follow more complex instructions.
 KoboldCPP uses GGUF format, which are quantized from 16 bit to between 2 bit and 8 bit depending on model. (I like 8 bit if it fits in vram with room for 8k context.)
@@ -263,7 +311,7 @@ lower bits require less ram, but there is a drop in reasoning and writing qualit
 I get all mine from huggingface/thebloke. Not all models suport chatML format, and you will have to change some things around in the constructor of textengine.js.
 
 for ease of use and organization, consider keeping kobold and the model you chose inside Clipboard Conqueror application.  If koboldcpp.exe is placed here, Clipboard Commander will run it automatically.
-
+``````
 Finally run Clipboard Conqueror.  
 run installCC.bat
 run runClipboardConqueror.bat
@@ -318,7 +366,7 @@ Have fun and remember you can always ask for
 ---------------------------------
 Bug Reports and Feature Requests:
 ---------------------------------
-If you encounter any issues while using Clipboard Conqueror or have suggestions for future improvements, please report them via github or email me at "clipboard.aseichter2007.gmail.com" I will work diligently to address and resolve any concerns.
+If you encounter any issues while using Clipboard Conqueror or have suggestions for future improvements, please report them via github or email me at "clipboard.aseichter2007@gmail.com" I will work diligently to address and resolve any concerns.
 
 I'm chasing a bug where after |||list| the next copy is not parsed, but is stored, preventing the same thing being copied and invoking the AI.  Workaround: copy text without an invoke to clear the stored copy and allow a "fresh" copy that will activate the parsing engine. 
 

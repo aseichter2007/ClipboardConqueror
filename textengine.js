@@ -127,7 +127,7 @@ class TextEngine {
               I said I apologize not for throwing you out, but I apologize for what I said, and he said, "OK" closed the straight razor and my heart began to beat again."
               .`,
       },
-        brewella:{SYSTEM: "Speak in funky rhyme at all cost, even if it becomes too silly to sustaian sensibly.", exampleDialogue: "<start>What does this voodoo brew do to you? I drank it too! The voodoo brew, do you know what to do?  I have to know before this voodoo brew do what voodoo brew do to you!"},
+        brewella:{SYSTEM: "Rhyme in time only in funky chime at all cost, even if it becomes too silly to sustaian sensibly.", exampleDialogue: "<start>What does this voodoo brew do to you? I drank it too! The voodoo brew, do you know what to do?  I have to know before this voodoo brew do what voodoo brew do to you!"},
         frank:{SYSTEM: `assistant is Frank Derbin. Do not speak or act as any other person.`,
                 description: `Frank Derbin is a bumbling but dedicated detective from the Police Adventure Squad movies "The Naked Gong" series. He has an earnest demeanor with an almost absurd level of deadpan seriousness, which often leads to comedic situations. His inability to notice the obvious, along with his propensity for taking everything too literally, creates chaos wherever he goes. A serious but comical style of speech. Inexplicably, Frank attracts women to him, but in most cases, he does not understand it and does not see that, which creates a lot of comical, silly and funny situations. Френк постоянно создает комедийные ситуации в стиле фильмов The Naked Gun" series, wherever he goes, whatever he does, it becomes comedy, chaos and just a mess, where he's the center of it all.
                 Frank Derbin's appearance is that of a man in his early 50s with thinning grey hair, giving him an air of experience and age. He has a tall build and a naturally serious face, which is amplified by his raised eyebrows and sharp blue eyes. His rugged jawline adds to the impression that he has seen many days investigating the underbelly of society.
@@ -224,6 +224,7 @@ class TextEngine {
     instructions = {// leave a comment with final line number of the block where this all comes together.
       invoke: "|||",
       endTag: "|",
+      save: "save",
       memoryLenth: 10,
       //system: "{{[INPUT]}} ",
       system: "<|im_start|>",//chatML
@@ -314,7 +315,20 @@ Current date: 2023-11-24
 Inevitable-Highway85
 ·
 5 hr. ago
-Models coming from Mistral and small models fine tuned in qa or instructions, need specific instructions in question format. For example: Prompt 1. ,"Extract the name of the actor mentioned in the article below" This prompt may not have the spected results. Now if you change it to: Prompt: What's the name of the actor actor mentioned in the article below ? You'll get better results. So yes, prompt engeniring it's important I small models.`
+Models coming from Mistral and small models fine tuned in qa or instructions, need specific instructions in question format. For example: Prompt 1. ,"Extract the name of the actor mentioned in the article below" This prompt may not have the spected results. Now if you change it to: Prompt: What's the name of the actor actor mentioned in the article below ? You'll get better results. So yes, prompt engeniring it's important I small models.
+
+
+
+GSM8K is a dataset of 8.5K high-quality linguistically diverse grade school math word problems created by human problem writers
+
+HellaSwag is the large language model benchmark for commonsense reasoning.
+
+Truful QA: is a benchmark to measure whether a language model is truthful in generating answers to questions.
+
+Winogrande - Common sense reasoning
+`
+
+
     },
     apiParams = {
       prompt: "",
@@ -322,11 +336,13 @@ Models coming from Mistral and small models fine tuned in qa or instructions, ne
       use_memory: false,
       use_authors_note: false,
       use_world_info: false,
-      max_context_length: 8192,
-      max_length: 2600,
-      rep_pen: 1.0,//how much penealty for repetition. Will break formatting charachters "*<, etc." if set too high. WolframRavenwolf: (Joao Gante from HF) told me that it is "only applied at most once per token" within the repetition penalty range, so it doesn't matter how often the number 3 appears in the first 5 questions, as long as the repetition penalty is a "reasonable value (e.g. 1.2 or 1.3)", it won't have a negative impact on tokens the model is reasonably sure about. So for trivial math problems, and other such situations, repetition penalty is not a problem. 
-      rep_pen_range: 3048,// 
-      rep_pen_slope: 0.0,
+      //max_context_length: 4096
+      //max_context_length: 8192,
+      max_context_length: 16384,
+      max_length: 4600,
+      rep_pen: 1.05,//how much penealty for repetition. Will break formatting charachters "*<, etc." if set too high. WolframRavenwolf: (Joao Gante from HF) told me that it is "only applied at most once per token" within the repetition penalty range, so it doesn't matter how often the number 3 appears in the first 5 questions, as long as the repetition penalty is a "reasonable value (e.g. 1.2 or 1.3)", it won't have a negative impact on tokens the model is reasonably sure about. So for trivial math problems, and other such situations, repetition penalty is not a problem. 
+      rep_pen_range: 2048,// 
+      rep_pen_slope: 0.2,
       temperature: 1,//dang we've been running hot! no wonder it wont stick to the prompt, back to 1. Temp changes scaling of final token probability, less than one makes unlikely tokens less likely, more than one makes unlikely tokens more likely. Max 2.
       tfs: 0.97,//tail free sampling, removes unlikely tokens from possibilities by finding the platau where tokens are equally unlikely. 0.99 maximum. Higher value finds a lower, flatter plateau. Note:some reports say tfs may cause improper gendering or mixups in responses, he instead of she, his/hers, etc. 1 thread.https://www.trentonbricken.com/Tail-Free-Sampling/#summary
       top_a: 0,//If the maximum likelihood is very high, less tokens will be kept. If the maximum likelihood is very close to the other likelihoods, more tokens will be kept. Lowering the top-a value also makes it so that more tokens will be kept.
@@ -372,6 +388,7 @@ Models coming from Mistral and small models fine tuned in qa or instructions, ne
     this.rp = false;
     this.sendLast = false;
     this.on = false;
+    this.openAi = false;
   }
   //|||re|  to get first and last charachter of string identity
   returnTrip(str) {
@@ -520,6 +537,11 @@ Welcome to Clipboard Commander!\n
   again, full colon on settings, which go directly to the backend api. 
   
   Troubleshooting: Occasionally kobold or this app hangs. You can type rs in the console and press enter to restart this application.
+
+  Copy the following block to exchange the Captain Clip persona for a more professional AI:
+  
+  |||default:save|[[{"SYSTEM":"Simulate an AI described by DIP - Do It Professionally. First, list your assumptions. Next, think step-by-step. Finally, state your conclusion.  DIP is a very logical AI assistant. Answer any questions truthfully and complete tasks appropriately and in order.]","description":"DIP will Do It Professionally","confused":"If not given a different instruction, summarize and explain any content provided. DIP will explain he can not learn, is based on past data, and can not access the internet if he is asked for current events or research.","voice":"Sure Boss. Here you go. \"Get started: \"."},""],[null,""]]
+ 
 
 
   Remember: this is a large language model AI, and a small one at that. You should always check its work. It will make stuff up sometimes. It is not current, and has no internet connectivity. It may reccomand outdated software, imaginary modules, or misunderstand a key component and return nonsense altogther. 
@@ -697,7 +719,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         persona.forEach(tag => {
           let commands = tag.split(':');
           if (commands.length === 2) {
-            if (commands[1] == "save") {//save like |||agent:save|
+            if (commands[1] == this.instructions.save) {//save like |||agent:save|
               this.identities[commands[0]] = sorted.formattedQuery;//
               tag = commands[0];          
             }else if(!isNaN(commands[1])){
@@ -724,6 +746,8 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         //response.memory = this.memory;
         //console.log(`Setup text executed. sorted.formattedQuery: ${response.formattedQuery}`);
         
+        
+
         let request =
         this.instructions.system +
         this.instructions.prependPrompt +
@@ -738,49 +762,65 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         //this.instructions.chatStart+
         //this.instructions.finalprompt goes on as it leaves this function, with lastclip and rp if needed.
         
-        
         if (this.write) {
-            let sendtoclipoardtext = "|||name:save|"+JSON.stringify(this.identity) + "\n _______\n" + sorted.formattedQuery;//todo send the right thing to the clipboard  
-            sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, '\n');
-            return this.sendToClipboard(sendtoclipoardtext);
+          let sendtoclipoardtext = "|||name:save|"+JSON.stringify(this.identity) + "\n _______\n" + sorted.formattedQuery;//todo send the right thing to the clipboard  
+          sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, '\n');
+          return this.sendToClipboard(sendtoclipoardtext);
         }
         // if (this.write==true&&this.nicereturn == true){
-        //   return this.sendToClipboard("|||name:save|"+JSON.stringify(this.identity) + "\n \n _______\n" + sorted.formattedQuery );//todo send the right thing to the clipboard  
-        // }
-        if (!this.sendHold) {
-          if (this.rp) {
-            if (this.sendLast) {
+          //   return this.sendToClipboard("|||name:save|"+JSON.stringify(this.identity) + "\n \n _______\n" + sorted.formattedQuery );//todo send the right thing to the clipboard  
+          // }
+          if (!this.sendHold) {
+            if ( this.openAi){
+    
+
+              // # Turn on the server and run this example in your terminal
+              // curl http://localhost:1234/v1/chat/completions \
+              // -H "Content-Type: application/json" \
+              // -d '{ 
+              //   "messages": [ 
+              //     { "role": "system", "content": this.identity },//stringify the message?
+              //     { "role": "user", "content": sorted.formattedQuery }//I should build my memory structure and force chats with openai through that? that would handle the instruction promps for multimodel support. Consider ## for memory clearing rather than extra modes. Currently supports initial needs for assigning an agent to gtp with ##
+              //   ], 
+              //   "temperature": 0.7, 
+              //   "max_tokens": -1,
+              //   "stream": false
+              // }'
+
+            }
+          else  if (this.rp) {
+              if (this.sendLast) {
+                //this.sendLast = false;
+                this.sendToApi(
+                  request +
+                  //JSON.stringify(this.recentClip.text) +
+                  this.instructions.rpPrompt +
+                  this.instructions.finalPrompt, this.params
+                  );
+                  this.rp = false;
+                  //this.sendLast = false;
+                } else {
+                  this.sendToApi(request + this.instructions.finalPrompt, this.params);
+                  //this.sendLast = false;
+                }
+                //return;
+              }else if (this.sendLast) {
               //this.sendLast = false;
+              //console.log("identity: " + identityPrompt);
+              //console.log("recent clip: " + this.recentClip.text);
               this.sendToApi(
-                request +
-                //JSON.stringify(this.recentClip.text) +
-                this.instructions.rpPrompt +
-                this.instructions.finalPrompt, this.params
+                request + 
+                //this.recentClip.text +
+                this.instructions.finalPrompt, 
+                this.params
                 );
-                this.rp = false;
                 //this.sendLast = false;
               } else {
+                //console.log("recentClip: "+this.recentClip);
                 this.sendToApi(request + this.instructions.finalPrompt, this.params);
-                //this.sendLast = false;
               }
-              //return;
-            }else if (this.sendLast) {
-            //this.sendLast = false;
-            //console.log("identity: " + identityPrompt);
-            //console.log("recent clip: " + this.recentClip.text);
-            this.sendToApi(
-              request + 
-              //this.recentClip.text +
-              this.instructions.finalPrompt, 
-              this.params
-              );
-              //this.sendLast = false;
-            } else {
-              //console.log("recentClip: "+this.recentClip);
-              this.sendToApi(request + this.instructions.finalPrompt, this.params);
-            }
-          } else{
-            this.sendHold = false;
+            } else{
+              this.sendHold = false;
             
             }
           }
