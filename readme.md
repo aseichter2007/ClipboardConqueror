@@ -50,7 +50,7 @@ Usage:
 1. Enter `|||` followed by your request or command. Pipe "|" can be typed by pressing shift + backslash (above enter).
 2. Copy the text to your clipboard. After a few moments, you should get a notification and the response is ready to paste:
    ```
-   - ||| Clip, say hello!
+   - ||| "Ahoy Captain, open the airlock, we're coming on board the Clipboard Conqueror"
    ```
    Copy the line above. Wait for the notification the paste. Sometimes my notifications are a little funny but I have about a thousand layers of mess running all the time so it could be something related to streaming stuff. 
 
@@ -152,7 +152,7 @@ Proofread documents, test explainations, get feedback, find inspiration, or just
 
 Clipboard Conqueror provides a whole toolbox of predefined assistants, ready to work for you.  
 
-|||summary| will summarize any text, allowing you to intelligently condense unimportant emails to just the facts and data.
+
 
 |||agi| will help you execute any operation you ask for help with. Captain Clip does well too, but this is based on the kobold agi script and is superior to a simple ask. 
 
@@ -161,6 +161,8 @@ This identity and some other cards were found on chub.ai, some are my own or sig
 
 |||tot| or tree of thought will expand and include near concepts, questions, or ideas to produce a more comprehensive solution
 
+
+Save agents on the fly to store, sort, query, think, review, or just tell you jokes or anything you can  ask for, really. 
 
 Key Features:
 --------------
@@ -173,31 +175,15 @@ Key Features:
 
 Supported Platforms:
 --------------------
-Clipboard Conqueror is designed to work seamlessly across multiple platforms including Windows, macOS, and Linux. It has been rigorously tested and optimized to ensure stability and compatibility.//??!! Dang, that is a complete lie. There are at least 2 bugs I havent nailed down, and I have no idea if this works on linux or mac. Report your findings please. 
+Clipboard Conqueror is designed to work seamlessly across multiple platforms including Windows, macOS, and Linux. It has been rigorously tested and optimized to ensure stability and compatibility.//??!! Dang, that is a complete lie. There are at least 2 bugs I havent nailed down, and I have no idea if this works on mac. Report your findings please. Linux and probably IOS have a couple extra steps, thank Herro for figuring that out.
 
 Notice://gtp, openai unimplemented. LMStudio is not supported yet either.
 --------
 When using the |||gtp:3| or |||gpt:4| commands, be aware that data will be sent to outside systems. This may be a breach of your companies data protection policy.
-
+I  tried pounding the pavement, I made marketing materials, now I gotta get back after a better resume and rattle the job boards. Lets ride odds on interviewer reactons to this tool. Place your bets. 
 //unimplemented, consider secondary branch to avoid data protection policy issues.
 
 You can safely use any other command to query sensitive data, and depending on your configuration, gtp commands can be sent to LMStudio to run against a larger slower model. //unimplemented
-Please use Clipboard Conqueror responsibly and respect copyright and laws in your country while generating content. Misuse of this tool might lead to unintended consequences and breaches of privacy or intellectual property rights. I hold no reponsibility for the data that passes through this tool on any system.  
-//implementing this undercuts the mission. Distribute LLMs. 
-
-Project License:
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-Additional Terms:
-
-While the MIT License permits free use, modification, and distribution, I kindly request that you refrain from creating derivative works containing my code without permission from the original author (aseichter2007). In part because it's terrible code. If you have any inquiries regarding modifications or feature requests, please contact me at clipboard.aseichter2007@gmail.com or open an issue.
-
-Your understanding and respect for these terms are appreciated.
-
-
-Additional Resources:
-//todo: link assorted knowlege banks. 
 
 
 Advanced Example:
@@ -211,6 +197,19 @@ Advanced Example:
 
 ```
 will add that agent json parsed into the memory until the application is closed. Note: the entire JSON is sent to the LLM. Openhermes loves the format with keys like {"system":"You are {{char}}:", "name": "SuperAIHELPErman5000", "description": "future roboto assistant mega help power"}
+
+   super advanced save: 
+   
+      |||CurrentText:save,re,LastCopy:save|CurrentText
+  - if the re flag is set, saved agents come from the last copy. This allows saving an agent from the current text that is distinct from the lastCopy agent which comes from the last clipboard contents, and allows saving agents while making an initial query like:  
+  
+  |||re,frank,dataCopiedLast:save| Hey get a load of this!
+
+  this will save data and send it with the frank system agent and the question to the LLM. Note, tags between the | | parse left to right and 
+  
+  |||frank,dataCopiedLast:save,re| Hey get a load of this! - will save "Hey get a load of this!" to dataCopiedLast.
+    
+  |||CurrentText,LastCopy| query combined like this. 
 
 ---------------------------------
 Installation:
@@ -239,7 +238,7 @@ a kobold compatible api must be running to use Clipboard Conqueror.
 I will supply a sample batch file for loading a model with your settings file after you get kobold dialed in from the launcher. 
 
 Kobold needs a model. Here are my reccomendations 11/29/23:
-https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF
+https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-16k-GGUF
 
 OpenHermes-2.5-Mistral supports 8192 context. This is a decent couple of pages. 
 
@@ -385,6 +384,22 @@ I'm chasing a bug where after |||list| the next copy is not parsed, but is store
 
 Saving agents like |||re,name:save|"more details" is likely to mess you up, it will include both the copied text and any text surrounding the invoke that you copy with it. 
 
+Please use Clipboard Conqueror responsibly and respect copyright and laws in your country while generating content. Misuse of this tool might lead to unintended consequences and breaches of privacy or intellectual property rights. I hold no reponsibility for the data that passes through this tool on any system.  
+//implementing this undercuts the mission. Distribute LLMs. 
+
+Project License:
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+Additional Terms:
+
+While the MIT License permits free use, modification, and distribution, I kindly request that you refrain from creating derivative works containing my code without permission from the original author (aseichter2007). In part because it's terrible code. If you have any inquiries regarding modifications or feature requests, please contact me at clipboard.aseichter2007@gmail.com or open an issue.
+
+Your understanding and respect for these terms are appreciated.
+
+
+Additional Resources:
+//todo: link assorted knowlege banks. 
 dev:
 //access clipboard//done
 //access api//done
