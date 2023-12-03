@@ -44,6 +44,18 @@ Using Clipboard Conqueror to Create, and Installation:
 [![Youtube Video](https://i.ytimg.com/vi/NqnpBi0MHsc/hqdefault.jpg)](https://youtu.be/NqnpBi0MHsc)
 
 
+
+
+LLMs are powerful tools but it's important to understand how they work.The input text is vectorized and put through matrix transformations and a big complex vector is built, and then each word is added to that vector and as it is chosen in turn one at a time, with some randomity to get better speech flavor, until the next probable token is a stop token or max length is exceeded.
+
+In an LLM every word is a cloud of numbers that represent how that token relates to every other and some phrase structures or collections of tokens. By turning words into numbers, we can then beat them with math and determine which tokens probably are appropriate to go next.
+
+It doesn't really reason, it doesn't really think, it amplifies patterns and guesses using probabilities and random, each next word chosen with such accuracy and complexity that kind of functionally it simulates having thought.
+
+It's weird, but they have no state, it's data-crunch-out, no real consideration. Use them effectively within their limits to succeed in 2024.
+
+You can go find the right data and paste the text at an LLM and it can use that data, but no LLM should be trusted implicitly, just as a first resort, right here aboard the Clipboard Conqueror.
+
 Usage:
 ------
 
@@ -240,10 +252,10 @@ I will supply a sample batch file for loading a model with your settings file af
 Kobold needs a model. Here are my reccomendations 11/29/23:
 https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-16k-GGUF
 
-OpenHermes-2.5-Mistral supports 8192 context. This is a decent couple of pages. 
+OpenHermes-2.5-Mistral supports 16384 context. This is a decent few pages. 
 
 Most of my prompts are specifically tuned against OpenHermes 2.5 Mistral 7b, and the default prompts follow chatML format. The system instuction in the training is an incredibly powerful tool. 
-any chatML model should work great out of the box. Psyfighter an xwin_mlewd work great too, though they don't nail the instructions as well. 
+any chatML model should work great out of the box. Psyfighter2 works great too, though it doesn't nail the instructions as well being a storytelling model. 
 
 currently the entire settings for my app are in the constructor of textengine.js
 

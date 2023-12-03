@@ -957,6 +957,7 @@ class ChatHistory{
     }
   }
   //todo: bring in user, ai messages and get token lengths, 
+  
   returnUserData(text){
     this.lastUser = text;
   }
