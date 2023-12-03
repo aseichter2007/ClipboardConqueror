@@ -90,7 +90,7 @@ Usage:
    ```
    |||temperature:1.1| be more unpredictable, but only 10%
    ```
-   - sets the temperature to 1.1. This works for any setting, e.g., top_p, min_p. Use 1 and 0 to set true/false //true/false untested.
+   - sets the temperature to 1.1. This works for any setting, e.g., top_p, min_p. supports :true :false.
    ```
     |||coder,re| what is this code doing? 
    ```
@@ -158,6 +158,8 @@ Clipboard Conqueror provides a whole toolbox of predefined assistants, ready to 
 
 |||stable| will write you an image prompt for use in stable diffusion automatic 1111
 This identity and some other cards were found on chub.ai, some are my own or significant customizations.
+
+|||tot| or tree of thought will expand and include near concepts, questions, or ideas to produce a more comprehensive solution
 
 
 Key Features:

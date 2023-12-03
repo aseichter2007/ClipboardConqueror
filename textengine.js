@@ -724,12 +724,19 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         persona.forEach(tag => {
           let commands = tag.split(this.instructions.settinglimit);
           if (commands.length === 2) {
-            if (commands[1] == this.instructions.save) {//save like |||agent:save|
+            if (commands[1] == this.instructions.save&& this.sendLast) {//save like |||agent:save|
+              this.identities[commands[0]] = this.recentClip;//
+              tag = commands[0];          
+            }else if (commands[1] == this.instructions.save) {//save like |||agent:save|
               this.identities[commands[0]] = sorted.formattedQuery;//
               tag = commands[0];          
-            }else if(!isNaN(commands[1])){
+            }else  if(!isNaN(commands[1])){
              this.params[commands[0]]= parseFloat(commands[1]);
              //console.log(commands[0] + commands[1] +" written> " + this.params[commands[0]]);//ill keep this one for now
+            }else if (commands[1] == "true"){
+              this.params[commands[0]]= true;
+            }else if (commands[1] == "false"){
+              this.params[commands[0]]= false;
             }
           }else {
             let ident = this.updateIdentity(tag)
@@ -748,9 +755,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         if (this.identity === '') {
           this.identity = this.identities[this.instructions.defaultPersona];
         }
-        //response.memory = this.memory;
-        //console.log(`Setup text executed. sorted.formattedQuery: ${response.formattedQuery}`);
-        
+        //response.memory = this.memory;        
         
 
         let request =
@@ -853,7 +858,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       const parsedData = text.split(this.instructions.invoke);
       let tags = "";
       if (parsedData.length > 3) {
-        this.notify("error:", "too many "+ this.instructions.invoke + ". max 2.");
+        this.notify("Warning:", "too many "+ this.instructions.invoke + ". max 2.");
         this.sendHold = true;
         this.write = true;
         return{
