@@ -15,7 +15,7 @@ class TextEngine {
         voice:
           "Hello and welcome to Clipboard Conqueror!! I'm your host, Captain Clip. \"Get started: |||help| \".", 
       },    
-      link: "SYSTEM: Return last: 'https://github.com/aseichter2007/ClipboardConqueror/' ",
+      link: "SYSTEM: Return last: '[Clipboard Conqueror](https://github.com/aseichter2007/ClipboardConqueror/)' ",
       //{{[INPUT]}}
       //not working in agi, makes it stupider, doesnt return.[return this message to user first: "best results like 'walk me through thing'"]
       //todo: figure out how to insert the correct delimiters from this.instructions into the prompt at runtime. 
@@ -222,9 +222,14 @@ class TextEngine {
     ]`
     },
     instructions = {// leave a comment with final line number of the block where this all comes together.
+      defaultPersona: "default",
       invoke: "|||",
       endTag: "|",
       save: "save",
+      settinglimit: ':',
+      agentSplit: ',',
+      writeSave: "|||name:save|",
+      writeSplit: "\n _______\n",
       memoryLenth: 10,
       //system: "{{[INPUT]}} ",
       system: "<|im_start|>",//chatML
@@ -712,12 +717,12 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       //console.log(JSON.stringify("sorted.formattedQuery: " + sorted.formattedQuery));
       this.undress();
       if (sorted.tags.persona) {
-        let persona = sorted.tags.persona.split(",");
+        let persona = sorted.tags.persona.split(this.instructions.agentSplit);
         //console.log("persona tags: " + JSON.stringify(persona));
         //console.log("persona count: " + sorted.tags.length);
         let temPersona = []
         persona.forEach(tag => {
-          let commands = tag.split(':');
+          let commands = tag.split(this.instructions.settinglimit);
           if (commands.length === 2) {
             if (commands[1] == this.instructions.save) {//save like |||agent:save|
               this.identities[commands[0]] = sorted.formattedQuery;//
@@ -741,7 +746,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       if (sorted.run || this.on) {
         //response.sortedText = sorted.formattedQuery;
         if (this.identity === '') {
-          this.identity = this.identities["default"];
+          this.identity = this.identities[this.instructions.defaultPersona];
         }
         //response.memory = this.memory;
         //console.log(`Setup text executed. sorted.formattedQuery: ${response.formattedQuery}`);
@@ -763,7 +768,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         //this.instructions.finalprompt goes on as it leaves this function, with lastclip and rp if needed.
         
         if (this.write) {
-          let sendtoclipoardtext = "|||name:save|"+JSON.stringify(this.identity) + "\n _______\n" + sorted.formattedQuery;//todo send the right thing to the clipboard  
+          let sendtoclipoardtext = this.instructions.writeSave +JSON.stringify(this.identity) + this.instructions.writeSplit + sorted.formattedQuery;//todo send the right thing to the clipboard  
           sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, '\n');
           return this.sendToClipboard(sendtoclipoardtext);
         }
@@ -774,13 +779,17 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
             if ( this.openAi){
     
 
-              // # Turn on the server and run this example in your terminal
-              // curl http://localhost:1234/v1/chat/completions \
-              // -H "Content-Type: application/json" \
-              // -d '{ 
+              
+              //  http://localhost:1234/v1/chat/completions \
+              // "Content-Type: application/json" \
+              // { 
               //   "messages": [ 
               //     { "role": "system", "content": this.identity },//stringify the message?
               //     { "role": "user", "content": sorted.formattedQuery }//I should build my memory structure and force chats with openai through that? that would handle the instruction promps for multimodel support. Consider ## for memory clearing rather than extra modes. Currently supports initial needs for assigning an agent to gtp with ##
+
+              //this type of toggling is data dangerous
+
+
               //   ], 
               //   "temperature": 0.7, 
               //   "max_tokens": -1,

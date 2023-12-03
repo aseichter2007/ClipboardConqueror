@@ -26,10 +26,21 @@ Captain Clip: Here are the links formatted as Markdown for a .md file:
 2. [Ko-fi](https://ko-fi.com/aseichter2007)
 
 With enough support, this app will become extremely useful for anyone. 
-Quick demo on Youtube: 
+
+
+Quick Start Jam, Reccomended:
+
+[![YouTube Video](https://i.ytimg.com/vi/fcM8dDtVTYQ/hqdefault.jpg)](https://youtu.be/fcM8dDtVTYQ)
+
+Quick demo: 
+
 [![YouTube Video](https://i.ytimg.com/vi/n8tQJlne3qs/hqdefault.jpg)](https://youtu.be/n8tQJlne3qs)
 
+
+
 Using Clipboard Conqueror to Create, and Installation:
+
+
 [![Youtube Video](https://i.ytimg.com/vi/NqnpBi0MHsc/hqdefault.jpg)](https://youtu.be/NqnpBi0MHsc)
 
 
@@ -310,7 +321,7 @@ KoboldCPP uses GGUF format, which are quantized from 16 bit to between 2 bit and
 lower bits require less ram, but there is a drop in reasoning and writing quality, though even the q2 was following instructions well. 
 I get all mine from huggingface/thebloke. Not all models suport chatML format, and you will have to change some things around in the constructor of textengine.js.
 
-for ease of use and organization, consider keeping kobold and the model you chose inside Clipboard Conqueror application.  If koboldcpp.exe is placed here, Clipboard Commander will run it automatically.
+for ease of use and organization, consider keeping kobold and the model you chose inside Clipboard Conqueror application.  If koboldcpp.exe is placed here, Clipboard Commander will run it automatically.//ToDo: detect and run kobold with cc.kcpps
 ``````
 Finally run Clipboard Conqueror.  
 run installCC.bat
