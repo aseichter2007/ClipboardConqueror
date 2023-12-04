@@ -197,3 +197,6 @@ export default MyComponent;
 6. Finally, Grug teach you about props. Props (short for properties) are used to pass data from a parent component to a child component. This data can be anything, such as text, numbers, or even other components.
 
 Remember, Grug not know everything. But Grug happy to help you learn ReactJS! If you have any questions, feel free to ask.
+
+
+|||list|

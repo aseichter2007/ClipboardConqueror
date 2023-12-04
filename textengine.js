@@ -615,7 +615,7 @@ Welcome to Clipboard Commander!\n
 
   ^^^^note 4 "|" , and the close on the end
 
-  |||writer|SYSTEM: Command First.| User: after agent frank
+  |||writer|SYSTEM: Command First.| User: after agent writer
 
   System applies set formatting like:
   ``````
@@ -853,6 +853,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         if (this.write) {
           let sendtoclipoardtext = this.instructions.writeSave +JSON.stringify(this.identity) + this.instructions.writeSplit + sorted.formattedQuery;//todo send the right thing to the clipboard  
           sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, '\n');
+          this.notify("Paste Response:", sendtoclipoardtext);
           return this.sendToClipboard(sendtoclipoardtext);
         }
         // if (this.write==true&&this.nicereturn == true){

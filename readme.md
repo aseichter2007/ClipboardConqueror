@@ -232,7 +232,7 @@ Advanced Command:
 
 ^^^^note 4 "|" , and the close on the end
 
-|||writer|SYSTEM: Command First.| User: after agent frank
+|||writer|SYSTEM: Command First.| User: after agent writer
 
 System applies set formatting like:
 ``````
