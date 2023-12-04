@@ -214,52 +214,84 @@ will add that agent json parsed into the memory until the application is closed.
    
       |||CurrentText:save,re,LastCopy:save|CurrentText
   - if the re flag is set, saved agents come from the last copy. This allows saving an agent from the current text that is distinct from the lastCopy agent which comes from the last clipboard contents, and allows saving agents while making an initial query like:  
-  
+
+
+
   |||re,frank,dataCopiedLast:save| Hey get a load of this!
 
-  this will save data and send it with the frank system agent and the question to the LLM. Note, tags between the | | parse left to right and 
+    -This will save data and send it with the frank system agent and the question to the LLM. Note, tags between the | | parse left to right
   
   |||frank,dataCopiedLast:save,re| Hey get a load of this! - will save "Hey get a load of this!" to dataCopiedLast.
     
   |||CurrentText,LastCopy| query combined like this. 
 
+
+Advanced Command:
+
+||||System: Command first before Clip agent.|  text from <user> in the internal chain
+
+^^^^note 4 "|" , and the close on the end
+
+|||writer|SYSTEM: Command First.| User: after agent frank
+
+System applies set formatting like:
+``````
+"prompt":"<|im_start|>[\"SYSTEM: Command First.\",[\"SYSTEM: Write a lengthy prose about the requested topic. Do not wrap up, end, or conclude the story, write the next chapter.\\n \\n Story:\",\"\"]]<|im_end|>\n<|im_start|>user:\n User: after agent 
+frank\n\n<|im_end|>\n<|im_start|>assistant:\n
+
+``````
+
+|||re,frank|this text is invisible to :save| //also, :save in there may have unpredictable results...
+
 ---------------------------------
 Installation:
 -------------
+Currently there are no built binaries and Node is required to run Clipboard Conqueror.
+
 |||how to to install node for normies. Use markdown suitable for a .MD for links
 
 1. Assumption: You are seeking instructions on how to install Node.js for someone with little technical knowledge and would like the explanation to be in a Markdown format suitable for a .md file.
 
-Step 1: Visit the official Node.js website [Get Node](https://nodejs.org/) and download the installer that corresponds to your operating system. Node 20 is suffucient.
+    Step 1: Visit the official Node.js website [Get Node](https://nodejs.org/) and download the installer that corresponds to your operating system. Node 20 is suffucient.
 
-Step 2: Double-click on the downloaded installer file to start the installation process.
+    Step 2: Double-click on the downloaded installer file to start the installation process.
 
-Step 3: Follow the on-screen prompts to complete the installation. Ensure to check the box for "Add to PATH" during the installation to have Node.js available globally on your system.
+    Step 3: Follow the on-screen prompts to complete the installation. Ensure to check the box for "Add to PATH" during the installation to have Node.js available globally on your system.
 
-Step 4: Once installed, test Node.js by running the following command in your terminal or command prompt: `node -v`
-
-
-
-Clipboardd Conqueror reqires [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/releases/) or a Kobold United model host to be running in order to funcion.
+    Step 4: Once installed, test Node.js by running the following command in your terminal or command prompt: `node -v`
 
 
-For macOS get KoboldAi or anything that hosts a kobold united compatible endpoint for tavern, etc. //Notes below for linux and mac, thank Herro.
 
 
-a kobold compatible api must be running to use Clipboard Conqueror.
-I will supply a sample batch file for loading a model with your settings file after you get kobold dialed in from the launcher. 
+2. Clipboardd Conqueror reqires [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/releases/) or a Kobold United model host to be running in order to funcion.
 
-Kobold needs a model. Here are my reccomendations 11/29/23:
-https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-16k-GGUF
 
-OpenHermes-2.5-Mistral supports 16384 context. This is a decent few pages. 
+    For macOS get KoboldAi or anything that hosts a kobold united compatible endpoint for tavern, etc. //Notes below for linux and mac, thank Herro.
 
-Most of my prompts are specifically tuned against OpenHermes 2.5 Mistral 7b, and the default prompts follow chatML format. The system instuction in the training is an incredibly powerful tool. 
-any chatML model should work great out of the box. Psyfighter2 works great too, though it doesn't nail the instructions as well being a storytelling model. 
 
-currently the entire settings for my app are in the constructor of textengine.js
+    a kobold compatible api must be running to use Clipboard Conqueror.
+    I will supply a sample batch file for loading a model with your settings file after you get kobold dialed in from the launcher. 
 
-Finally, download Clipboard Conqueror from this repository. I recommend fresh clones for updates, or you might overwrite your settings. 
+3. Kobold needs a model. Here are my reccomendations 12/5/23:[OpenHermes 2.5 Mistral 7B 16K Context.GGUF](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-16k-GGUF)
+      ``````
+      OpenHermes-2.5-Mistral supports 16384 context. This is a decent few pages. If it seems slow reduce your context to 8, if the problem persists, select a lower Quantization.
+
+      Most of my prompts are specifically tuned against OpenHermes 2.5 Mistral 7b, and the default prompts follow chatML format. The system instuction in the training is an incredibly powerful tool. 
+      any chatML model should work great out of the box. Psyfighter2 works great too, though it doesn't nail the instructions as well being a storytelling model. 
+      ``````
+
+Finally, download Clipboard Conqueror from this repository. 
+
+run installCC.bat after it finishes run
+
+runClipboardConqueror.bat
+
+If Clipboard Conqueror closes on launch, ensure you  have Node installed, if the Clipboard Conqueror seems unresponsive, make sure Koboldcpp is running and type rs then press enter in the Clibpoard Conqueror console window to restart the applicatoin especially if any errors are displayed. 
+
+I recommend fresh clones for updates, or you might overwrite settings you changed.
+
+currently the entire settings for my app are in the constructor of textengine.js, uncomment or add the correct instruction format to the keys required.
+
 
 -----
 Choosing A model:
@@ -411,28 +443,49 @@ Your understanding and respect for these terms are appreciated.
 
 
 Additional Resources:
+
+[LLMs, how do they work?](https://bbycroft.net/llm)
+
 //todo: link assorted knowlege banks. 
+
+
 dev:
+
+
 //access clipboard//done
+
 //access api//done
+
 //format query in optimal programmable format//done
+
 //get tags for agent and memory//done
+
 //use tags to fetch desired set//done
-//setup special flag handler for command flags with no associated memory.//done I thing I have a bug to sort yet though, it exposes itself once in a while and I think it's here. 
+
+//setup special flag handler for command flags with no associated memory.//done
+ I thing I have a bug to sort yet though, it exposes itself once in a while and I think it's here. 
+
 //todo: notification instead of sound effects//done
+
 //todo: finish saving objects to memory//done
 
+
 //todo: openAI client, probably migrate a ton of logic out of textengine and into koboldinterface.js to make them interchangeable. 
+
+
 //todo: keyboard binding to activate ai on last clip without prompt. //maybe paid, I don't want to make it too easy to do all the linkedin tests, and a ready line to copy is the same. 
-//todo: implement horde? maybe? or offer free gtp 3.5 or something. This will be after I make some money, send donations to accellerate this process. 
-//todo: /api/extra/abort  
-//todo text to speech agent that can interact with the clipboard contents. //waiting on upstream that runs on my hardware without dinkin around or enough generosity to set up a closet server. 
+
+//todo: implement horde? maybe? or offer free gtp 3.5 or something. This will be after I make some money, send donations to accellerate this process. I want to deliver LLMs to as many PCs as possible. Give Koboldcpp a try before you turn local LLMs down on their face. 
+
+//todo: /api/extra/abort on esc and return 
+
+//todo text to speech agent that can interact with the clipboard contents. //waiting on upstream that runs on my hardware without dinkin around or enough generosity to set up a closet server or at least new harddrives, I'm too full to experimant with new envs. 
 
 //decline: use case? I guess return tokens like|||tokens| so you can see if it will fit... ok. undecline: todo: /api/extra/generate/check  //return in progress, useful for vlarge gens on slow mode
 //todo: /api/extra/tokencount //should run against entered data and updates should be shown after setting mem or agent and on final send. 
 //todo: /api/extra/true_max_context_length //returns context max
 // i found this!https://lite.koboldai.net/koboldcpp_api#/1
-
+//todo: implememnt some kind of update check and notificatoin.
 
 
 
@@ -441,13 +494,12 @@ dev:
 release!//oh snap I got excited and went. //beta release in motion.
 //premium
 //todo: branch to build premium binaries from. premium branch features:
-//todo: savesettings and getsettings in premium branch. //premium primary feature is inter session settings. without premium you must overwrite the settings like ||||settings,write| to paste ' |||settings,save| `{ the settings serialized json }` ' which can be edited in place and copied to save the settings. Listen for confirmation. 
+//todo: savesettings and getsettings in premium branch. //premium primary feature is inter session settings. without premium you must overwrite the settings like ||||settings,write| to paste ' |||settings,save| `{ the settings serialized json }` ' which can be edited in place and copied to save the settings. 
 //todo: per charachter rolling memory to allow more natural exchanges and enable rp. 
-//todo: group chain interacting so you can batch like |||summary,writer|"text" and paste a summary, then you press the invoke key and it advances the chain and gives you the output from writer with the results of summary in the memory//todo: settings bulk in and out
+//todo: group chain interacting so you can batch like |||@summary,@writer|"text" and paste a summary, then you press the invoke key and it advances the chain and gives you the output from writer with the results of summary in the memory//todo: settings bulk in and out
 //todo: web api to host login server. 404 defaults to allow normal operation of paid branch users if I decide the server is expensive to run, or I die, or the internet is down. potential vulnerability: blocking in hosts to avoid subscriptoin check. Please pay for the full version of this software, this is my only income. Life is hard. 
 //todo: portal site to serve binary download links, take payment and manage your subscription level. Look up rules about re-serving chatgtp api on my key. Consider asp.net, it will just handle users and the front end only feels a little silly, no need for relational mongo or any silliness. Downside, I've never succssfullt hooked up a database right deploying to s2. consider aws lambda for auth,  serverless.  lambda auth has additional challenges
-//todo: make a lambda script to setup a lambda to serve a daily charachter, run a continuous contest so people vote for tomorrows char. |||dailycandidate,rate|10, assign up to ten points for the candidate last retrieved with |||dailycandidate| provies random from server. 
-//todo: consider price schedule. Leaning towards $2 monthly and $30-60 one time options at checkout.
+//todo: make a lambda script to setup a lambda to serve a daily charachter, run a continuous contest so people vote for tomorrows char. |||dailycandidate,rate|10, assign up to ten points for the candidate last retrieved with |||dailycandidate| provies random from server. Points are gained by and blind?
 //todo: build agent portal with easy to copy and use workflow. 
 //todo: mystery agent of the day. vulnerability: the description is visible in the kobold terminal
 
