@@ -6,20 +6,43 @@ Clipboard Conqueror is a multi-platform omnipresent copilot alternative. Current
 *Special thank you to the creators of  KoboldAi, KoboldCPP, llamma, openAi, and the communities that made all this possible to figure out. 
 
 
-With Clipboard Conqueror, you can leverage AI abilities by invoking it with `|||` and copying commands or requests for information.
+With Clipboard Conqueror, you can leverage AI abilities, invoke it by copying `||| "request"` 
+
+Local AI responds after copying commands or requests for information.
+
+There is a wealth of information below and in this repo.
+All you really need to know is copying ||| with Clipboard Conqueror and Koboldcpp running will send any text you copy with that ||| to local AI.
+
+[Install Node](https://nodejs.org/) Clipboard Conqueror requires Node and NPM to run. 
+
+Clipboardd Conqueror reccomends [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/releases/) for Windows users. Kobold does the actual AI LLM processing, Clipboard Conqueror bridges kobold with the clipboard for use anywhere. 
+
+[OpenHermes 2.5 Mistral 7B 16K Context.GGUF](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-16k-GGUF)
+
+Get a model that fits in your graphics card or system ram, more details in installation, faaar below. 
+
+Download this repo.
+
+Run installCC.bat
+
+runClipboardConqueror.bat
+
+--------
+Copy, Conquer, Paste.
+--------
 
 I solemnly promise that this application and at least one compatible backend will function in the absence of internet connectivity.
 One of my design inspirations for this application is to spread LLM models to as many computers as possible. I want to ensure at least one intact system is recovered by future archeologists, an incredible time capsule of culture, science, and data.  We should be sending intelligent boxes to deep space too. Our Knowledge and posterity must not go to waste. 
 
-This project is also a bit of a last gasp. I've been looking for work and getting nothing but scams.
-Please, if you get good use from this application, especially in a commercial setting, consider supporting me. My son will be born next month and debt is already starting to get out of hand. Chronic depression has always kicked my ass, I gotta get some traction and start rolling. 
-
+This project is also a bit of a last ditch effort to remain software oriented, I need income. I've been looking for work and getting nothing but scams.
+Please, if you get good use from this application, especially in a commercial setting, consider supporting me. My son will be born next month and debt is already starting to get out of hand. I gotta get some traction and start rolling, and I start applying at fast food this week. 
+``````
 patreon.com/ClipboardConqueror
 
 ko-fi.com/aseichter2007
 
 |||make these links in markup for a .md file
-
+``````
 Captain Clip: Here are the links formatted as Markdown for a .md file:
 
 1. [Patreon](https://patreon.com/ClipboardConqueror)
@@ -64,7 +87,7 @@ Usage:
    ```
    - ||| "Ahoy Captain, open the airlock, we're coming on board the Clipboard Conqueror"
    ```
-   Copy the line above. Wait for the notification the paste. Sometimes my notifications are a little funny but I have about a thousand layers of mess running all the time so it could be something related to streaming stuff. 
+   Copy the line above. Wait for the notification to paste the AI response. Sometimes my notifications are a little funny but I have about a thousand layers of mess running all the time so it could be something related to streaming stuff. Also errors have been reported with linux notification sounds. 
 
    ```
    - |||introduction|
@@ -318,9 +341,9 @@ Less than 8gb gfx cards(fast-medium, notable quality loss):
 
 .
 
-8gb gfx cards(medium, prompt ingestion might not fit in mem = slow consider 4k context if faster): 
+8gb gfx cards(medium, prompt ingestion might not fit in mem = slow consider as low as 4k context if faster): 
 
-[Q6_K 8k context](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q5_K_M.gguf)VRAM used: 7691.57 MB (model: 5563.56 MB, context: 2128.01 MB)
+[Q5_K_M 16k context](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b-16k.Q5_K_M.gguf)VRAM used: 7691.57 MB (model: 5563.56 MB, 8k context: 2128.01 MB)//I think this data is for Q6
 
 
 .
