@@ -210,13 +210,13 @@ Key Features:
 
 Supported Platforms:
 --------------------
-Clipboard Conqueror is designed to work seamlessly across multiple platforms including Windows, macOS, and Linux. It has been rigorously tested and optimized to ensure stability and compatibility.//??!! Dang, that is a complete lie. There are at least 2 bugs I havent nailed down, and I have no idea if this works on mac. Report your findings please. Linux and probably IOS have a couple extra steps, thank Herro for figuring that out.
+Clipboard Conqueror is designed to work seamlessly across multiple platforms including Windows, macOS, and Linux. It has been rigorously tested and optimized to ensure stability and compatibility.//??!! Dang, that is a complete lie. There are at least 2 bugs I havent nailed down, and I have no idea if this works on mac. Report your findings please. Linux and probably IOS have a couple extra steps, thank harrro for figuring that out.
 
 Notice://gtp, openai unimplemented. LMStudio is not supported yet either.
 --------
 When using the |||gtp:3| or |||gpt:4| commands, be aware that data will be sent to outside systems. This may be a breach of your companies data protection policy.
 I  tried pounding the pavement, I made marketing materials, now I gotta get back after a better resume and rattle the job boards. Lets ride odds on interviewer reactons to this tool. Place your bets. 
-//unimplemented, consider secondary branch to avoid data protection policy issues.
+//openAI unimplemented, consider secondary branch to avoid data protection policy issues.
 
 You can safely use any other command to query sensitive data, and depending on your configuration, gtp commands can be sent to LMStudio to run against a larger slower model. //unimplemented
 
@@ -309,11 +309,13 @@ run installCC.bat after it finishes run
 
 runClipboardConqueror.bat
 
-If Clipboard Conqueror closes on launch, ensure you  have Node installed, if the Clipboard Conqueror seems unresponsive, make sure Koboldcpp is running and type rs then press enter in the Clibpoard Conqueror console window to restart the applicatoin especially if any errors are displayed. 
+If Clipboard Conqueror closes on launch in windows, ensure you have Node installed, if the Clipboard Conqueror seems unresponsive, make sure Koboldcpp is running and type rs then press enter in the Clibpoard Conqueror console window to restart the application especially if any errors are displayed. 
 
-I recommend fresh clones for updates, or you might overwrite settings you changed.
+For linux and mac, a the start parameter in package.json may need to be modified per harrro's instructions below.
 
-currently the entire settings for my app are in the constructor of textengine.js, uncomment or add the correct instruction format to the keys required.
+I recommend fresh clones for updates, or you might overwrite settings you liked.
+
+currently the entire settings for my app are in the constructor of textengine.js, uncomment or add the correct instruction format to the keys required for non ChatML model support.
 
 
 -----
@@ -324,7 +326,7 @@ Choosing A model:
 hardware("token speed")  [fast = 20+ tokens/sec, medium =  ~<10 tokens/sec. slow = <2tokens/sec]* Lower on this chart is smarter. Partial offloading is possible but costs speed. 
 
 ```
-In the world of inference, some macs can be medium with even very large models. Metal.
+In the world of inference, some macs can be medium with even very large models. Metal. 
 ```
 16gb ram and no graphics card, or laptop with shared gfx memory(slow, notable quality loss): 
 
@@ -401,7 +403,7 @@ npm start
 
 
 
-  ![harrow](https://styles.redditmedia.com/t5_20v1i8/styles/profileIcon_snoo94b3e9ee-40b0-4d50-976b-f84339866e74-headshot-f.png?width=256&height=256&crop=256:256,smart&s=99c1f9c5ba8353614aca16055afd851209dba8ca)
+  ![harrro](https://styles.redditmedia.com/t5_20v1i8/styles/profileIcon_snoo94b3e9ee-40b0-4d50-976b-f84339866e74-headshot-f.png?width=256&height=256&crop=256:256,smart&s=99c1f9c5ba8353614aca16055afd851209dba8ca)
   level 4
   harrro:
 
@@ -476,20 +478,13 @@ dev:
 
 
 //access clipboard//done
-
 //access api//done
-
 //format query in optimal programmable format//done
-
 //get tags for agent and memory//done
-
 //use tags to fetch desired set//done
-
 //setup special flag handler for command flags with no associated memory.//done
  I thing I have a bug to sort yet though, it exposes itself once in a while and I think it's here. 
-
 //todo: notification instead of sound effects//done
-
 //todo: finish saving objects to memory//done
 
 
@@ -515,12 +510,13 @@ dev:
 //implement |||no| //uh oh, better comment needed. I should learn from this someday. Waaait, it's coming back to me. |||no| will disable parsing on the next run for transporting instructions, though its much easier to just error it off like "||| ||| ||| move this without invoking"
 
 release!//oh snap I got excited and went. //beta release in motion.
-//premium
+//premium? //within the scope it's probably better to persue a character portal and just expose the settings sensibly in multiple files. 
+
 //todo: branch to build premium binaries from. premium branch features:
-//todo: savesettings and getsettings in premium branch. //premium primary feature is inter session settings. without premium you must overwrite the settings like ||||settings,write| to paste ' |||settings,save| `{ the settings serialized json }` ' which can be edited in place and copied to save the settings. 
+//todo: savesettings and getsettings. overwrite settings like |||settings,write| to paste ' |||settings,save| `{ the settings serialized json }` ' which can be edited in place and copied to save the settings. 
 //todo: per charachter rolling memory to allow more natural exchanges and enable rp. 
 //todo: group chain interacting so you can batch like |||@summary,@writer|"text" and paste a summary, then you press the invoke key and it advances the chain and gives you the output from writer with the results of summary in the memory//todo: settings bulk in and out
-//todo: web api to host login server. 404 defaults to allow normal operation of paid branch users if I decide the server is expensive to run, or I die, or the internet is down. potential vulnerability: blocking in hosts to avoid subscriptoin check. Please pay for the full version of this software, this is my only income. Life is hard. 
+//todo: web api to host login server. 404 defaults to allow full operation of paid branch users if I decide the server is expensive to run, or I die, or the internet is down. potential vulnerability: blocking in hosts to avoid subscriptoin check. Please pay for the full version of this software, this is my only income. Life is hard. 
 //todo: portal site to serve binary download links, take payment and manage your subscription level. Look up rules about re-serving chatgtp api on my key. Consider asp.net, it will just handle users and the front end only feels a little silly, no need for relational mongo or any silliness. Downside, I've never succssfullt hooked up a database right deploying to s2. consider aws lambda for auth,  serverless.  lambda auth has additional challenges
 //todo: make a lambda script to setup a lambda to serve a daily charachter, run a continuous contest so people vote for tomorrows char. |||dailycandidate,rate|10, assign up to ten points for the candidate last retrieved with |||dailycandidate| provies random from server. Points are gained by and blind?
 //todo: build agent portal with easy to copy and use workflow. 
