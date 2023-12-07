@@ -993,11 +993,11 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         }
       }
     }
-    if ((this.sendLast = true)) {
-      this.recentClip.text = + " "; // + "\n" + this.recentClip.text);//todo: determine if this is dumb or not. Consider letting this run evey time and re toggles to allow building a big context to send with a question.
+    if (this.sendLast === true) {
+      this.recentClip.text = text; // + "\n" + this.recentClip.text);//todo: determine if this is dumb or not. Consider letting this run evey time and re toggles to allow building a big context to send with a question.
       this.sendlast = false;
     } else {
-      this.recentClip.text = text + " ";
+      this.recentClip.text = text;
     }
   }
   recievesummary(summary) {
