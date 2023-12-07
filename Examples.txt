@@ -249,7 +249,7 @@ Remember, Grug not know everything. But Grug happy to help you learn ReactJS! If
 
 |||help|
 
-|||introduction|
+|||introduction
 
 |||grug| grug teach start fire
 

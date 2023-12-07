@@ -529,7 +529,7 @@ Winogrande - Common sense reasoning
       //identity = identity.trim();
       if (identity) {
         if (Number.isNaN(Number(identity))) {
-          //for memory, pending... Do I need memory? Does it really help the purpose? It's marginally useful in a case where someone wants a proper chat but the text box works well enough extending like just user: further queries against context. Its like 90% hooked up though, just forget token tracking and pound it out.
+          //for memory, pending... Do I need memory? Does it really help the purpose? It's marginally useful in a case where someone wants a proper chat but the text box works well enough extending like just user: further queries against context. Its like 90% hooked up though, just forget token tracking and pound it out, but I'll never use it, do we need another 7 inches on the readme for more features that like 1 person will use all the time?
           // if (tripcode[0] === '#'){
           //   if(tripcode[1] ==='#'){
           //     console.log("activate memory level 2");
@@ -815,6 +815,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         }
         outp.text = list;
         outp.found = true;
+        outp.set = true;
         break;
       case "rp":
         this.rp = true;
@@ -941,9 +942,6 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
           this.sentToClip = sendtoclipoardtext
           return this.sendToClipboard(sendtoclipoardtext);
         }
-        // if (this.write==true&&this.nicereturn == true){
-        //   return this.sendToClipboard("|||name:save|"+JSON.stringify(this.identity) + "\n \n _______\n" + sorted.formattedQuery );//todo send the right thing to the clipboard
-        // }
         if (!this.sendHold) {
           if (this.openAi) {
             //  http://localhost:1234/v1/chat/completions \
@@ -1017,7 +1015,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         "too many " + this.instructions.invoke + ". max 2."
       );
       this.sendHold = true;
-      this.write = true;
+      //this.write = true;
       return {
         run: run,
         formattedQuery:
