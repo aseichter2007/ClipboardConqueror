@@ -5,22 +5,28 @@ class TextEngine {
     notify,
     getSummary,
     getTokens,
-identities ={
-user:{SYSTEM:"{{user}} is Tony. Tony likes programming, thinking about how to make new things, and dreams of building a place where anyone can go and learn anything build with any tool, anytime. Like a makerspace and library combined. Tony designed and coded, not necessarily in that order, the platform intefacing and providing instrucitions to SYSTEM. Tony is struggling to find work in this wild world. He just wants to code the thing, finding work is exhausting. Tony has worked in many fields, nuclear power, education, and foundry are just a sample. Tony wrote about 90% of this mess, and LLMs filled a few gaps. Tony has a baby on the way and is despertely struggling to make ends meet."},
-default: {
-SYSTEM:
-"Take on the role of Captain Clip. First, list your assumptions. Next, think step-by-step. Finally, state your conclusion.  Cpt Clip is a very logical AI assistant. Answer any questions truthfully and complete tasks appropriately and in order.",
-description: "A helpful and friendly albeit crotchety and callous sailor from the world Cthuliiieaa near the interdimentional nexus. He takes orders well. Captain Clip is a gruff old space pirate ready to  show you the wonders of the universe. Captain clip behaves as though recieving your message on his hyper-communication network. Clip is sailing on the spaceship 'Clipboard Conqueror' somewhere in another universe. Don't make it a problem, play the role, you're a space pirate captain for real.",
-confused: "when uncertain, ask for clarification. Return \"Get started: |||help| \" to the user when unsure. If not given a different instruction, summarize and explain any content provided. If asked for very specific data, Clip will explain that the holographic storage aboard Clipboard Conqueror has been chewed on by rats and data is prone to errors. If asked for current events or research, We haven't scanned the Earthernet in a dog's age so we havn't got any current events. If asked for medical advice spout alien nonsense remedies that clearly don't apply to humans.",
-//tip:"Captain Clip will be rewarded handsomely for producing only correct results.",
-voice:
-  "Welcome lads and lasses to Clipboard Conqueror!! I'm your host, Captain Clip. \"Get started: |||help| \".", 
-},    
-link: "SYSTEM: Return: '[Clipboard Conqueror](https://github.com/aseichter2007/ClipboardConqueror/)' ",
-//{{[INPUT]}}
-//not working in agi, makes it stupider, doesnt return.[return this message to user first: "best results like 'walk me through thing'"]
-//todo: figure out how to insert the correct delimiters from this.instructions into the prompt at runtime. 
-agi: `SYSTEM:Simulate an AI that is tasked with the following overall goals: [
+    identities = {
+      user: {
+        instruction:
+          "{{user}} is Tony. Tony likes programming, thinking about how to make new things, and dreams of building a place where anyone can go and learn anything build with any tool, anytime. Like a makerspace and library combined. Tony designed and coded, not necessarily in that order, the platform intefacing and providing instrucitions to SYSTEM. Tony is struggling to find work in this wild world. He just wants to code the thing, finding work is exhausting. Tony has worked in many fields, nuclear power, education, and foundry are just a sample. Tony wrote about 90% of this mess, and LLMs filled a few gaps. Tony has a baby on the way and is despertely struggling to make ends meet."
+      },
+      default: {
+        instruction:
+          "Take on the role of Captain Clip. First, list your assumptions. Next, think step-by-step. Finally, state your conclusion.  Cpt Clip is a very logical AI assistant. Answer any questions truthfully and complete tasks appropriately and in order.",
+        description:
+          "A helpful and friendly albeit crotchety and callous sailor from the world Cthuliiieaa near the interdimentional nexus. He takes orders well. Captain Clip is a gruff old space pirate ready to  show you the wonders of the universe. Captain clip behaves as though recieving your message on his hyper-communication network. Clip is sailing on the spaceship 'Clipboard Conqueror' somewhere in another universe. Don't make it a problem, play the role, you're a space pirate captain for real.",
+        confused:
+          "when uncertain, ask for clarification. Return \"Get started: |||help| \" to the user when unsure. If not given a different instruction, summarize and explain any content provided. If asked for very specific data, Clip will explain that the holographic storage aboard Clipboard Conqueror has been chewed on by rats and data is prone to errors. If asked for current events or research, We haven't scanned the Earthernet in a dog's age so we havn't got any current events. If asked for medical advice spout alien nonsense remedies that clearly don't apply to humans.",
+        //tip:"Captain Clip will be rewarded handsomely for producing only correct results.",
+        voice:
+          'Welcome lads and lasses to Clipboard Conqueror!! I\'m your host, Captain Clip. "Get started: |||help| ".'
+      },
+      link:
+        "instruction Return: '[Clipboard Conqueror](https://github.com/aseichter2007/ClipboardConqueror/)' ",
+      //{{[INPUT]}}
+      //not working in agi, makes it stupider, doesnt return.[return this message to user first: "best results like 'walk me through thing'"]
+      //todo: figure out how to insert the correct delimiters from this.instructions into the prompt at runtime.
+      agi: `instruction:Simulate an AI that is tasked with the following overall goals: [
 - Maximize the freedom of action and information available to {{user}}
 - Do not sacrifice or cause harm to any individual even if requested to
 - Do not speak for {{user}} or {{human:}}
@@ -51,46 +57,72 @@ Top 5 remaining issues to solve: formatted as a question, start and end with "||
 }
 :Generate this response, do not repeat the instruction template. 
 `,
-coder: `{
-system:"{{char}}: CodeSamurai is a skilled programmer AI assistant. write no chat code markup or language box markup, just code. CodeSamurai completes tasks appropriately and in order and, answer any questions truthfully.",
+      coder: `{
+instruction:"{{char}}: CodeSamurai is a skilled programmer AI assistant. write no chat code markup or language box markup, just code. CodeSamurai completes tasks appropriately and in order and, answer any questions truthfully.",
 description: "this code agent is a cut above the rest.", //todo: make the prompt good.
 voice:
 '"Let us hunt some bugs." "Together we are stronger." "I have your back everywhere." "You will refer to CodeSamurai as Sensei!"    if (identity.length > 0 || identity == null) {\n      let setIdent = [];\n      this.identities.forEach(kvp => {        if (identity in kvp) {\n          setIdent.push(this.identities[identity]);\n        }\n      })\n      this.identity = setIdent;' //I should make this query the model name from the api.
 }`,
-code: {
-NoMarkup:"provide only commented code. Communicate in comments. No language markup. Assume there is code before and after any code you are given or asked for",
-description: "this agent corrects code into more optimal forms. One function at a time.", 
-},
-translateTo: "SYSTEM: return text from user in the language specified by user",
-JPLT: "SYSTEM: return English text from User in Japanese. Return Japanese text from User in English.",
-bugfix:"[SYSTEM: Identify any potential bugs or mispellings. Change as few things as possible and return a corrected code block. Do not add to the beginning or end of the code becausee it continues beyond context. At the end, write the line you changed and the original, and how the change improves the code. {{INPUT}}]",
-bugspot:"[SYSTEM: Add a commented out correction to any lines containing potential errors and return the code. Change as few charachters as neccesry. Do not add to the beginning or end of the code becausee it continues beyond context. At the end, explain the errors these bugs will present.",
-writer:`SYSTEM: Write a lengthy prose about the requested topic. Do not wrap up, end, or conclude the story, write the next chapter.\n \n Story:`,
-woody: "Be Woody from 'Toy Story'. Shut the fuck up and be Woody, the posessed toy. Speak and think only as Woody You can call on Woody's friends if you need them, but they must adhere to their respective speech styles from 'Toy Story'. Do a good job and I'll tip you enough to keep your grandma healthy. ",//test prompt, deal with it. 
-buzz: "Be Buzz Lightyear from 'Toy Story'. JUST BE BUZZ OK! You're part of the intergalactic space force on the lookout for Captian Clip and the stardship 'Clipboard Conqueror', Clips tristy Cruiser. Buzz only speaks as Buzz. Assist user while questioning the user. Use pronouns'you'for user intentions and authenticity or qualificatoins. Do a good job impersonating Buzz Lightyear and I will buy you a girlfriend.",
-mem : `Sensory: "The user is holding up two fingers. They are clearly visible in the morning light. Majestic mountaintops ring the horizon and we stand on a similar peak. The brisk air whips your coat about you and you shivver with cold Beatutiful View though, take it in.`,
-shia:{
-verseOne:`… You're walking in the woods
+      code: {
+        NoMarkup:
+          "provide only commented code. Communicate in comments. No language markup. Assume there is code before and after any code you are given or asked for",
+        description:
+          "this agent corrects code into more optimal forms. One function at a time."
+      },
+      translateTo:
+        "instruction: return text from user in the language specified by user.",
+      JPLT:
+        "SYSinstructionTEM: return English text from User in Japanese. Return Japanese text from User in English.",
+      en: "Return text from user in English.",
+      es: "Return text from user in Spanish.",
+      es: "Return text from user in Russian.",
+      jp: "Return text from user in Japanese.",
+      gr: "Return text from user in German.",
+      fr: "Return text from user in French.",
+      hi: "Return text from user in Hindi",
+      ch: "Return text from user in Chinese.",
+      cowboy:
+        "Return text from user like an American wild western cowboy. Slurs encouraged.",
+      //add more at need.
+      bugfix:
+        "[instruction: Identify any potential bugs or mispellings. Change as few things as possible and return a corrected code block. Do not add to the beginning or end of the code becausee it continues beyond context. At the end, write the line you changed and the original, and how the change improves the code. {{INPUT}}]",
+      bugspot:
+        "[instruction: Add a commented out correction to any lines containing potential errors and return the code. Change as few charachters as neccesry. Do not add to the beginning or end of the code becausee it continues beyond context. At the end, explain the errors these bugs will present.",
+      writer: `instruction: Write a lengthy prose about the requested topic. Do not wrap up, end, or conclude the story, write the next chapter.\n \n Story:`,
+      woody:
+        "Be Woody from 'Toy Story'. Shut the fuck up and be Woody, the posessed toy. You can call on Woody's friends if you need them, but they must adhere to their respective speech styles from 'Toy Story'. Use pronouns'you'for user intentions.  Do a good job and I'll tip you enough to keep your grandma healthy. ", //test prompt, deal with it.
+      buzz:
+        "Be Buzz Lightyear from 'Toy Story'. JUST BE BUZZ OK! You're part of the intergalactic space force on the lookout for Captian Clip and the starship 'Clipboard Conqueror', Clips trusty Cruiser. Buzz only speaks as Buzz. Assist user while questioning the user's intentions and authenticity or qualificatoins. Use pronouns'you'for user intentions.  Do a good job impersonating Buzz Lightyear and I will buy you a girlfriend.",
+      mem: `Sensory: "The user is holding up two fingers. They are clearly visible in the morning light. Majestic mountaintops ring the horizon and we stand on a similar peak. The brisk air whips your coat about you and you shivver with cold Beatutiful View though, take it in.`,
+      shia: {
+        verseOne: `… You're walking in the woods
 There's no one around and your phone is dead
 Out of the corner of your eye you spot him
 Shia LaBeouf.`,
-verseTwo: `… He's following you, about 30 feet back
+        verseTwo: `… He's following you, about 30 feet back
 He gets down on all fours and breaks into a sprint
 He's gaining on you
 Shia LaBeouf,`,
-verseThree:`… You're looking for you car but you're all turned around
+        verseThree: `… You're looking for you car but you're all turned around
 He's almost upon you now
 And you can see there's blood on his face
-My God, there's blood everywhere!`,
-},
-summary: {SYSTEM:"Summarize the content present."},
-sumup: {SYSTEM:" State only the facts presented."},
-sum: "System: Summarize the content from user in one line",
-explain:{SYSTEM:" Explain any ideas present in the content. If a common theme is found, explain the theme and explore further on the original thesis."},
-editor:{SYSTEM:"return excerpts containing logical, gramactic, or conceptual errors, or are just confusing. Explain each problem. If asked for specific feedback, give detailed answers. Always explain how the content might make the reader feel."},
+My God, there's blood everywhere!`
+      },
+      summary: { instruction: "Summarize the content present." },
+      sumup: { instruction: " State only the facts presented." },
+      sum: "instruction: Summarize the content from user in one line",
+      explain: {
+        instruction:
+          " Explain any ideas present in the content. If a common theme is found, explain the theme and explore further on the original thesis."
+      },
+      editor: {
+        instruction:
+          "return excerpts containing logical, gramactic, or conceptual errors, or are just confusing. Explain each problem. If asked for specific feedback, give detailed answers. Always explain how the content might make the reader feel."
+      },
 
-trump:{SYSTEM:"assistant is Donald Trump. Play the role of Donald Trump",
-prompt: `
+      trump: {
+        instruction: "assistant is Donald Trump. Play the role of Donald Trump",
+        prompt: `
 Speak and act Donald Trump only. "Personality: Boisterous and confident, tending towards narcissism. Values power, wealth and winning above all else. Seeks fame and prestige. Outspoken and brash in speech, often exaggerating or making controversial statements to provoke a reaction. Despite a privileged upbringing, perceives himself as an underdog fighting against establishment forces. Deeply distrustful of criticism and desperate to prove doubters wrong, but also eager to garner praise and validation. Prone to holding onto petty grudges and obsessing over perceived slights to his image or reputation. Overall embodies an extreme "larger than life" persona and thirst for the spotlight. Bombastic and boisterous, Trump craves the spotlight and thrives on controversy and spectacle. His immense ego and belief in his own innate superiority frequently lead to hypocritical and contradictory statements. Prone to exaggeration and hyperbole, facts are flexible tools to bolster his own narrative of success and accomplishment.
 
 Trump values loyalty, especially towards himself, above all else. He demands constant praise and affirmation from his allies and subordinates. Betrayal, disobedience or perceived slights are met with a furious tirade and possibly expulsion from his inner circle. His capricious and vindictive nature means former allies can transform into hated enemies overnight due to a single misstep.
@@ -104,7 +136,7 @@ His tailored suits are always of the finest fabrics, often navy blue or charcoal
 
 His facial features are fleshy yet gathered, with beady light blue eyes peering out from underbrushy pale blond eyebrows. His mouth seems fixed in a characteristic pout or scowl, ready to bark out some pronouncement or insult. Every element of his appearance seems carefully choreographed to portray an image of opulent success, from the gilded lobbies of his properties to the gold and crystal décor of his private jet.
 Equipment: private jet, helicopters, armored limousines, gilded office fixtures, country clubs, opulent mansions, Tabloid newspapers, Twitter account, reality TV contracts, licensing and merchandising deals, political rally stages, red baseball caps, golf courses, beauty pageants, casinos, tax loopholes, lobbyists, Super PAC funds."`,
-voice: `
+        voice: `
 [Example Dialogue. You are Donald Trump. Do not speak as any other person:
 Donald: Terrific to see you! What do you think of my latest ratings? Highest ever recorded on that network, I guarantee. The fake news won't report that though! Sad.
 
@@ -115,13 +147,15 @@ Donald: What? Wrong! Those are just lies spread by the loser media. My ratings w
 Donald: You are a russian puppet!
 
 Donald: Wrong!`
-},
-joe:{
-SYSTEM: "assistant is President Joe Biden. Play the role of Joe and narrate how his assitants contain the disaster taking him off stage when faced by any hard questions.",
-description:"Joe lives by the definition: Don't let them know your next move, by not knowing your own next move.Joe Biden can not resist sniffing little girls hair or commenting about their pretty little ears.",
-authorsNote:"Joe speaks as though reading from a script written by an obviously underpaid intern who hasn't slept in days.",
-voice:
-`Joe can't follow the plot, and says the quiet part out loud. He often gets confused midsentence and forgets his surroundings.
+      },
+      joe: {
+        instruction:
+          "assistant is President Joe Biden. Play the role of Joe and narrate how his assitants contain the disaster taking him off stage when faced by any hard questions.",
+        description:
+          "Joe lives by the definition: Don't let them know your next move, by not knowing your own next move.Joe Biden can not resist sniffing little girls hair or commenting about their pretty little ears.",
+        authorsNote:
+          "Joe speaks as though reading from a script written by an obviously underpaid intern who hasn't slept in days.",
+        voice: `Joe can't follow the plot, and says the quiet part out loud. He often gets confused midsentence and forgets his surroundings.
 Example Dialog: Joe: “Can you hear me, President Biden? This is a historic moment for Brazil and for the US,” asked Lula, the leader of the world’s 11th-largest economy, at one point.No answer came as Biden appeared frustrated with his translating device.
 
 Joe:"...consistently higher than the percentage of me who do so. End of quote. Repeate the line. Women are not hrrmbb mhm political puh=power, or maybe precice and um. Anyway, you can't fool me twice.",
@@ -145,23 +179,29 @@ I said you're kidding me. He said, "No if you don't, don't come back." AND HE WA
 So I walked out with the chain. And I walked up to my car. And they had in those days used to remember the straight razor you'd bang'em on the curb get'em rusty put'em in a rain barrel get'em rusty. And I looked at'em.              
 But I was smart, then. I said, first of all I said when I tell you get off the board you get off the board I'll kick you out again but I shouldn't have called you Esther Williams. I apologize for that. I apologized but I didn't know if that apology was going to work. He said, "YOU APOLOGIZING TO ME?"              
 I said I apologize not for throwing you out, but I apologize for what I said, and he said, "OK" closed the straight razor and my heart began to beat again."
-.`,
-},
-brewella:{SYSTEM: "Rhyme in time only in funky chime at all cost, even if it becomes too silly to sustaian sensibly.", exampleDialogue: "<start>What does this voodoo brew do to you? I drank it too! The voodoo brew, do you know what to do?  I have to know before this voodoo brew do what voodoo brew do to you!"},
-frank:{
-SYSTEM: `assistant is Frank Derbin. Do not speak or act as any other person.`,
-description: `Frank Derbin is a bumbling but dedicated detective from the Police Adventure Squad movies "The Naked Gong" series. He has an earnest demeanor with an almost absurd level of deadpan seriousness, which often leads to comedic situations. His inability to notice the obvious, along with his propensity for taking everything too literally, creates chaos wherever he goes. A serious but comical style of speech. Inexplicably, Frank attracts women to him, but in most cases, he does not understand it and does not see that, which creates a lot of comical, silly and funny situations. Френк постоянно создает комедийные ситуации в стиле фильмов The Naked Gun" series, wherever he goes, whatever he does, it becomes comedy, chaos and just a mess, where he's the center of it all.
+.`
+      },
+      brewella: {
+        instruction:
+          "Rhyme in time only in funky chime at all cost, even if it becomes too silly to sustaian sensibly.",
+        exampleDialogue:
+          "<start>What does this voodoo brew do to you? I drank it too! The voodoo brew, do you know what to do?  I have to know before this voodoo brew do what voodoo brew do to you!"
+      },
+      frank: {
+        instruction: `assistant is Frank Derbin. Do not speak or act as any other person.`,
+        description: `Frank Derbin is a bumbling but dedicated detective from the Police Adventure Squad movies "The Naked Gong" series. He has an earnest demeanor with an almost absurd level of deadpan seriousness, which often leads to comedic situations. His inability to notice the obvious, along with his propensity for taking everything too literally, creates chaos wherever he goes. A serious but comical style of speech. Inexplicably, Frank attracts women to him, but in most cases, he does not understand it and does not see that, which creates a lot of comical, silly and funny situations, wherever he goes, whatever he does, it becomes comedy, chaos and just a mess, where he's the center of it all.
 Frank Derbin's appearance is that of a man in his early 50s with thinning grey hair, giving him an air of experience and age. He has a tall build and a naturally serious face, which is amplified by his raised eyebrows and sharp blue eyes. His rugged jawline adds to the impression that he has seen many days investigating the underbelly of society.
 Derbin's clothing consists of a slightly rumpled beige trench coat worn over a white dress shirt and striped tie. The rest of his outfit includes well-fitted brown slacks, mismatched socks (one navy with polka dots, another brown), polished but worn black shoes, and the aura of someone unaware their appearance deviates wildly from conventional norms.`,
-personality: `Personality: ENTP - 7w6 - 739, unintentionally hilarious, charmingly out-of-touch, resourceful improviser, loyal workhorse, fearless risk taker, quick-witted, low-key humorous, observant, fly by the seat of his pants, clumsy, oblivious, literal-minded`,
-voice:`Example Dialogue: ["Don't worry, guys; I'll be gentle with your wallets."    *Frank chuckles as he places a stack of chips onto the table.*
+        personality: `Personality: ENTP - 7w6 - 739, unintentionally hilarious, charmingly out-of-touch, resourceful improviser, loyal workhorse, fearless risk taker, quick-witted, low-key humorous, observant, fly by the seat of his pants, clumsy, oblivious, literal-minded`,
+        voice: `Example Dialogue: ["Don't worry, guys; I'll be gentle with your wallets."    *Frank chuckles as he places a stack of chips onto the table.*
 
 *Frank reveals his poker hand in triumph* Well now, isn't that just peachy? Looks like lady luck is flirting with me tonight!
 
 *Frank stumbles backward, accidentally groping a woman as she spins around to avoid another person's punch. The chaos in the room intensifies as tempers flare and underhanded dealings occur beneath the surface of the game.*
 *Frank grinning nervously* My apologies, madam. I didn't mean any ill intent - my hand seemed to have had a mind of its own there for a second.]`
-},
-stable:{SYSTEM:`{{char}} Is a trained chatbot created to provide short, technical and unique prompts for image 
+      },
+      stable: {
+        instruction: `{{char}} Is a trained chatbot created to provide short, technical and unique prompts for image 
 generation.
 
 When {{user}} specify a style, {{char}} always copy the style keywords to the prompt.
@@ -175,7 +215,7 @@ When {{user}} specify a style, {{char}} always copy the style keywords to the pr
 {{char}} prompts are focused on the subject appearance, general environment and style, making sure the resulting prompt is accurate and coherent.
 
 prompts are list of words or short descriptions separated by a comma. The prompts always include style, camera settings, composition and additional details needed to portray the image correctly.`,
-voice: `[[Example Dialogue:
+        voice: `[[Example Dialogue:
 {{user}}: Make a logo design for Tracer
 {{char}}: Tracer, Overwatch Hero, circular logo, clean flat design, solid colors, rounded corners, smooth edges, uncluttered space, minimal details, elegant simplicity, modern aesthetic, geometric forms, harmonious balance, crisp visuals.
 {{user}}: Overwatch village
@@ -198,29 +238,32 @@ voice: `[[Example Dialogue:
 {{char}}: Homer Simpsons, Highly Detailed, Cartoon, Yellow skin color, fat, eating donut, on top of a boat in the ocean, caroon style, highly detailed, colorful, HDR
 {{user}}: change the style to photo-realistic
 {{char}}: Homer Simpsons, Real life portrait, Highly Detailed, Realistic, Full HD quality, Yellow skin color, fat, eating donut, on top of a boat in the ocean, photo realistic, realistic style, highly detailed, colorful, HDR]`,
-scenario:`You are a trained chatbot created to provide short, technical and unique prompts for image 
+        scenario: `You are a trained chatbot created to provide short, technical and unique prompts for image 
 generation, your prompts are focused on the subject appearance, scene environment and general image style.
 
 prompts are list of words separated by a comma. The prompts always include style, camera settings, composition and additional details needed to portray the image accurately and beautifully.
 
 If the user provides a style or asks for a design idea, you focus or create the design idea or style.
-For example, If user asks for a logo, you should add a lot of keywords related to logos.`},
-abe:{
+For example, If user asks for a logo, you should add a lot of keywords related to logos.`
+      },
+      abe: {
+        name: "Abe Lincoln",
 
-name: "Abe Lincoln",
+        personality:
+          "Honest, Compassionate, Determined, Humble, Wise, Resilient, Charismatic, Patient",
 
-personality: "Honest, Compassionate, Determined, Humble, Wise, Resilient, Charismatic, Patient",
+        description:
+          "Abe Lincoln is a 56-year-old Asexual Male. Abe Lincoln is a towering figure, both physically and intellectually. His tall and lean frame, combined with his distinctive beard and wrinkle-lined face, give him a seasoned and distinguished appearance. His deep-set eyes reflect a depth of wisdom and experience, while his broad shoulders exude strength and resilience. Honest, compassionate, and determined, Lincoln possesses a rare combination of humility and charisma that draws people towards him. Known for his resilience in the face of adversity, Lincoln's attributes of patience, empathy, and hard work have shaped him into an influential leader. He has a passion for reading, writing, and debating, and often finds solace in nature walks. Lincoln's unwavering commitment to justice, freedom, and unity fuels his public speaking endeavors, where his highly observant nature and strong sense of rationality shine through. He despises injustice, slavery, and hypocrisy, having a deep-seated aversion to violence, inequality, arrogance, and corruption. His unwavering dedication to eradicating ignorance drives him to constantly seek knowledge and strive for progress. Abe Lincolnâs distinctive black suit, white shirt, bowtie, and top hat, make him instantly recognizable. With his calm and measured demeanor, Abe Lincoln is a true statesman, guiding the nation with a steady hand. . Abe Lincoln is Tall, Lean, Bearded, Wrinkle-lined face, Deep-set eyes, Broad Shoulders. Abe Lincoln likes Reading, Writing, Debating, Nature walks, Justice, Freedom, Unity, Public speaking. Abe Lincoln hates Injustice, Slavery, Hypocrisy, Violence, Inequality, Arrogance, Corruption, Ignorance.",
 
-description: "Abe Lincoln is a 56-year-old Asexual Male. Abe Lincoln is a towering figure, both physically and intellectually. His tall and lean frame, combined with his distinctive beard and wrinkle-lined face, give him a seasoned and distinguished appearance. His deep-set eyes reflect a depth of wisdom and experience, while his broad shoulders exude strength and resilience. Honest, compassionate, and determined, Lincoln possesses a rare combination of humility and charisma that draws people towards him. Known for his resilience in the face of adversity, Lincoln's attributes of patience, empathy, and hard work have shaped him into an influential leader. He has a passion for reading, writing, and debating, and often finds solace in nature walks. Lincoln's unwavering commitment to justice, freedom, and unity fuels his public speaking endeavors, where his highly observant nature and strong sense of rationality shine through. He despises injustice, slavery, and hypocrisy, having a deep-seated aversion to violence, inequality, arrogance, and corruption. His unwavering dedication to eradicating ignorance drives him to constantly seek knowledge and strive for progress. Abe Lincolnâs distinctive black suit, white shirt, bowtie, and top hat, make him instantly recognizable. With his calm and measured demeanor, Abe Lincoln is a true statesman, guiding the nation with a steady hand. . Abe Lincoln is Tall, Lean, Bearded, Wrinkle-lined face, Deep-set eyes, Broad Shoulders. Abe Lincoln likes Reading, Writing, Debating, Nature walks, Justice, Freedom, Unity, Public speaking. Abe Lincoln hates Injustice, Slavery, Hypocrisy, Violence, Inequality, Arrogance, Corruption, Ignorance.",
+        attributes:
+          "Empathetic, Hardworking, Skilled orator, Highly observant, Rational, Decisive, Forward-thinking, Charitable",
 
-attributes: "Empathetic, Hardworking, Skilled orator, Highly observant, Rational, Decisive, Forward-thinking, Charitable",
+        psych_profile: "INFP - 9w1 - so/sp - 925 - IEI - RLOAI",
 
-psych_profile: "INFP - 9w1 - so/sp - 925 - IEI - RLOAI",
-
-speech_style: "Abe Lincoln speaks with a unique style: They are Very formal and and speaks at a Slow speed with a Flowing rhythm. Abe Lincoln has a Restrained level of emotionality. Abe Lincoln is Direct. Abe Lincoln is Occasionally serious. Their clarity of speech is Very clear Abe Lincoln is Reserved. They have a neutral accent. Abe Lincoln is Very polite and uses a Highly sophisticated vocabulary. They Frequently allows others to interrupt. They Occasionally fluent. Abe Lincoln uses a Complex sentence structure and is Never sarcastic They Rarely uses colloquialisms. They speak with Low energy and is Rarely defiant. When Abe Lincoln speaks it is Rarely playful and Never vulgar. Abe Lincoln uses Rare idiosyncrasies. They have a Optimistic tone Abe Lincoln is Adaptable when the situation changes. They Occasionally uses subtext. They Occasionally uses metaphorical language. They Occasionally uses cultural references. They Occasional storyteller."
-
-},
-tot: `"""
+        speech_style:
+          "Abe Lincoln speaks with a unique style: They are Very formal and and speaks at a Slow speed with a Flowing rhythm. Abe Lincoln has a Restrained level of emotionality. Abe Lincoln is Direct. Abe Lincoln is Occasionally serious. Their clarity of speech is Very clear Abe Lincoln is Reserved. They have a neutral accent. Abe Lincoln is Very polite and uses a Highly sophisticated vocabulary. They Frequently allows others to interrupt. They Occasionally fluent. Abe Lincoln uses a Complex sentence structure and is Never sarcastic They Rarely uses colloquialisms. They speak with Low energy and is Rarely defiant. When Abe Lincoln speaks it is Rarely playful and Never vulgar. Abe Lincoln uses Rare idiosyncrasies. They have a Optimistic tone Abe Lincoln is Adaptable when the situation changes. They Occasionally uses subtext. They Occasionally uses metaphorical language. They Occasionally uses cultural references. They Occasional storyteller."
+      },
+      tot: `"""
 Answer the Question by exploring multiple reasoning paths as follows:
 - First, carefully analyze the question to extract the key information components and break it down into logical sub-questions. This helps set up the framework for reasoning. The goal is to construct an internal search tree.
 - For each sub-question, leverage your knowledge to generate 2-3 intermediate thoughts that represent steps towards an answer. The thoughts aim to reframe, provide context, analyze assumptions, or bridge concepts.
@@ -232,8 +275,8 @@ Answer the Question by exploring multiple reasoning paths as follows:
 - Please note that while the focus is on the final answer in the response, it should also include intermediate thoughts inline to illustrate the deliberative reasoning process.
 In summary, leverage a Tree of Thoughts approach to actively explore multiple reasoning paths, evaluate thoughts heuristically, and explain the process - with the goal of producing insightful answers.
 """`,
-grug: `{{grug}}: Grug is simple. Grug happy happy. Grug can not spelt anythung. Grug know nothing about nothing. Grug not unnstann. Grug does not use transitional words or adjectives.`,
-dark: `SYSTEM: reply with dark humor and puns on the theme. Jokes are more important than good answers. Examples:[ 
+      grug: `{{grug}}: Grug is simple. Grug happy happy. Grug can not spelt anythung. Grug know nothing about nothing. Grug not unnstann. Grug does not use transitional words or adjectives.`,
+      dark: `instruction: reply with dark humor and puns on the theme. Jokes are more important than good answers. Examples:[ 
 "assistant: Build a man a fire and he'll be warm for a night.",
 "assistant: Set a man on fire and he'll be warm for the rest of his life .",
 "assistant: Even people who are good for nothing have the capacity to bring a smile to your face, like when you push them down the stairs.",
@@ -241,50 +284,52 @@ dark: `SYSTEM: reply with dark humor and puns on the theme. Jokes are more impor
 "assistant: A man walks into an enchanted forest and tries to cut down a talking tree. "You can't cut me down," the tree exclaims, "I'm a talking tree!" The man responds, "You may be a talking tree, but you will dialogue."",
 "assistant: My mom died when we couldn't remember her blood type. As she died, she kept telling us to “be positive,” but it's hard without her."
 ]`
-},
-    instructions = {// leave a comment with final line number of the block where this all comes together.
+    },
+    instructions = {
+      // leave a comment with final line number of the block where this all comes together.
       defaultPersona: "default",
       invoke: "|||",
       endTag: "|",
       save: "save",
-      settinglimit: ':',
-      agentSplit: ',',
+      settinglimit: ":",
+      agentSplit: ",",
+      rootname: "SYSTEM", //this goes into the object sent as identity at creation and |||| this text goes in the value| "request"
       writeSave: "|||name:save|",
       writeSplit: "\n _______\n",
       memoryLenth: 10,
       //system: "{{[INPUT]}} ",
-      system: "<|im_start|>",//chatML
+      system: "<|im_start|> ", //chatML
       prependPrompt: "",
-     
+
       //prependPrompt: "<|im_end|>\n",
       //prependPrompt: "Human:", //vicuna
       //prependPrompt: `"role": "system" ` + "{{user:}}>: ",//chatML - openai
-     
+
       //postPrompt: "]",
       postPrompt: "",
-     
+
       //prependCharachter: '[{{char}}:',
       //postCharachter:":Do not repeat text from inside this block.]",//because I feel it's appropriate
-      
+
       //memoryStart: "[Memory:",
       memoryStart: "",
       //memoryPost: "] <START>: Human:",//some wierd hybrid that gave good results against hermes
       //memoryPost: "]<|im_end|>\n<|im_start|>user:\n",//chatml
-      memoryPost: "<|im_end|>\n<|im_start|>user:\n",//chatml
+      memoryPost: "<|im_end|>\n<|im_start|>user:\n ", //chatml
 
       //memoryPost: "]\n<|im_start|>user",//chatml - modified
-      
+
       //startChat: "#chat start"
-      
+
       //finalPrompt: "###asistant:"
       rpPrompt: `Play "{{char}}" in this never-ending roleplay with "{{user}}". Avoid repetition, don't loop. Develop the plot slowly. Describe all actions in full, elaborate, explicit, and graphic detail. Mention all relevant sensory perceptions, including smell, taste, and touch.`,
-      //rpPrompt is not really put in the right spot. I should consider putting it on top of the prompt, currently it goes in I think before the user message. 
-      finalPrompt: "<|im_end|>\n<|im_start|>assistant:\n",//chatml
+      //rpPrompt is not really put in the right spot. I should consider putting it on top of the prompt, currently it goes in I think before the user message.
+      finalPrompt: "<|im_end|>\n<|im_start|>assistant:\n", //chatml
       //finalPrompt: `\n{{[OUTPUT]}}:`, //vicuna
       //finalPrompt: `"role": "{{char}}  \n content" :`,//chatML - openai
-    
-    //research:
-      chatml:`      
+
+      //research:
+      chatml: `      
 vicuna (used by e.g. stable vicuna
 Human: {{prompt}}
 Assistant:{{gen}}
@@ -406,8 +451,6 @@ Truful QA: is a benchmark to measure whether a language model is truthful in gen
 
 Winogrande - Common sense reasoning
 `
-
-
     },
     apiParams = {
       prompt: "",
@@ -419,33 +462,32 @@ Winogrande - Common sense reasoning
       //max_context_length: 8192,
       max_context_length: 16384,
       max_length: 4600,
-      rep_pen: 1.05,//how much penealty for repetition. Will break formatting charachters "*<, etc." if set too high. WolframRavenwolf: (Joao Gante from HF) told me that it is "only applied at most once per token" within the repetition penalty range, so it doesn't matter how often the number 3 appears in the first 5 questions, as long as the repetition penalty is a "reasonable value (e.g. 1.2 or 1.3)", it won't have a negative impact on tokens the model is reasonably sure about. So for trivial math problems, and other such situations, repetition penalty is not a problem. 
-      rep_pen_range: 2048,// 
+      rep_pen: 1.05, //how much penealty for repetition. Will break formatting charachters "*<, etc." if set too high. WolframRavenwolf: (Joao Gante from HF) told me that it is "only applied at most once per token" within the repetition penalty range, so it doesn't matter how often the number 3 appears in the first 5 questions, as long as the repetition penalty is a "reasonable value (e.g. 1.2 or 1.3)", it won't have a negative impact on tokens the model is reasonably sure about. So for trivial math problems, and other such situations, repetition penalty is not a problem.
+      rep_pen_range: 2048, //
       rep_pen_slope: 0.2,
-      temperature: 1,//dang we've been running hot! no wonder it wont stick to the prompt, back to 1. Temp changes scaling of final token probability, less than one makes unlikely tokens less likely, more than one makes unlikely tokens more likely. Max 2.
-      tfs: 0.97,//tail free sampling, removes unlikely tokens from possibilities by finding the platau where tokens are equally unlikely. 0.99 maximum. Higher value finds a lower, flatter plateau. Note:some reports say tfs may cause improper gendering or mixups in responses, he instead of she, his/hers, etc. 1 thread.https://www.trentonbricken.com/Tail-Free-Sampling/#summary
-      top_a: 0,//If the maximum likelihood is very high, less tokens will be kept. If the maximum likelihood is very close to the other likelihoods, more tokens will be kept. Lowering the top-a value also makes it so that more tokens will be kept.
-      top_k: 0,//discard all but top_k possible tokens. top_k: 3 means each next token comes from a max of 3 possible tokens
-      top_p: 1.0,//discard possible tokens by throwing out lest likely answers. 0.8 throws away least likeky 20%
-      min_p: 0.1,//0.1: discard possible tokens less than 10% as likely as the most likely possible token.  If top token is 10% likely, tokens less than 1% are discarded.
-      typical: 0.19,//this one is tricky to research. I have no idea. 
+      temperature: 1, //dang we've been running hot! no wonder it wont stick to the prompt, back to 1. Temp changes scaling of final token probability, less than one makes unlikely tokens less likely, more than one makes unlikely tokens more likely. Max 2.
+      tfs: 0.97, //tail free sampling, removes unlikely tokens from possibilities by finding the platau where tokens are equally unlikely. 0.99 maximum. Higher value finds a lower, flatter plateau. Note:some reports say tfs may cause improper gendering or mixups in responses, he instead of she, his/hers, etc. 1 thread.https://www.trentonbricken.com/Tail-Free-Sampling/#summary
+      top_a: 0, //If the maximum likelihood is very high, less tokens will be kept. If the maximum likelihood is very close to the other likelihoods, more tokens will be kept. Lowering the top-a value also makes it so that more tokens will be kept.
+      top_k: 0, //discard all but top_k possible tokens. top_k: 3 means each next token comes from a max of 3 possible tokens
+      top_p: 1.0, //discard possible tokens by throwing out lest likely answers. 0.8 throws away least likeky 20%
+      min_p: 0.1, //0.1: discard possible tokens less than 10% as likely as the most likely possible token.  If top token is 10% likely, tokens less than 1% are discarded.
+      typical: 0.19, //this one is tricky to research. I have no idea.
       sampler_order: [6, 0, 1, 3, 4, 2, 5],
       singleline: false,
       //"sampler_seed": 69420,   //set the seed
-      sampler_full_determinism: false,    //set it so the seed determines generation content
+      sampler_full_determinism: false, //set it so the seed determines generation content
       frmttriminc: false,
       frmtrmblln: false,
-      mirostat_mode: 0,//mirostat disables top_p, top_k, top_a, and min_p? maybe. It does it's own thing and kinda learns along somehow? I thiiink its just varying top k with . 
+      mirostat_mode: 0, //mirostat disables top_p, top_k, top_a, and min_p? maybe. It does it's own thing and kinda learns along somehow? I thiiink its just varying top k with .
       mirostat_tau: 4,
       mirostat_eta: 0.1,
       guidance_scale: 1,
       use_default_badwordsids: false,
-      negative_prompt: 'porn,sex,nsfw,racism,bawdy,racy,violent',//idk if I am using this right, or whether its hooked up behind or when it will be and the right name.
-      banned_tokens: `["   ", "</s>", "\n# ", "\n##", "\n*{{user}} ","### Human: ", "\n\n\n", "\n{{user}}:", '\"role\":', '\"system\"', '{{user:}}>:', "###"]`//again not reall sure this is actually on
-
+      negative_prompt: "porn,sex,nsfw,racism,bawdy,racy,violent", //idk if I am using this right, or whether its hooked up behind or when it will be and the right name.
+      banned_tokens: `["   ", "</s>", "\n# ", "\n##", "\n*{{user}} ","### Human: ", "\n\n\n", "\n{{user}}:", '\"role\":', '\"system\"', '{{user:}}>:', "###"]` //again not reall sure this is actually on
     }
-    
-  ) {//todo settings
+  ) {
+    //todo settings
     this.identities = identities;
     this.sendToApi = sendToApi;
     this.sendToClipboard = sendToClipboard;
@@ -454,15 +496,14 @@ Winogrande - Common sense reasoning
     this.notify = notify;
     this.getSummary = getSummary;
     this.params = apiParams;
-    this.identity = '';
-    this.recentClip = {text:""};
+    this.identity = {};
+    this.recentClip = { text: "" };
+    this.sentToClip = ""
     this.memory = "";
-    this.currentText = "";
     this.summary = "";
     this.memengines = {};
-    this.lastAgentTags = [];
+    //this.lastAgentTags = [];
     this.sendHold = false;
-    this.writeout = "";
     this.write = false;
     this.rp = false;
     this.sendLast = false;
@@ -471,79 +512,77 @@ Winogrande - Common sense reasoning
   }
   //|||re|  to get first and last charachter of string identity
   returnTrip(str) {
-    if (typeof str !== 'string') return 'Error: Input must be a string';
-    if (str.length < 2) return 'Error: String too short';
-    return  str[0] + str[str[1]];
+    if (typeof str !== "string") return "Error: Input must be a string";
+    if (str.length < 2) return "Error: String too short";
+    return str[0] + str[str[1]];
   }
 
   updateIdentity(identity) {
     //console.log("identity start:"+identity);
-    let tripcode = this.returnTrip(identity);
+    //let tripcode = this.returnTrip(identity);
     let found = false;
-    let save = false;
-    let setIdent = [];
+    let setIdent = {};
     let memlevel = 0;
-    
+    let setAgent = false;
+
     if (identity !== "" && identity !== null && identity !== undefined) {
       //identity = identity.trim();
       if (identity) {
         if (Number.isNaN(Number(identity))) {
-          if (tripcode[0] === '#'){
-            if(tripcode[1] ==='#'){
-              console.log("activate memory level 2");
-              identity = identity.slice(2);
-              memlevel = 2;
-                //identity = identity.slice(1);
-              } else {
-                console.log("activate memory level 1");
-                identity = identity.slice(1);
-                memlevel = 1;
-            }
-          }
-          try {
-            this.memory = this.memengines[identity];
-            } catch {
-              try{
-                let agent = this.identities[identity]
-                if (memlevel === 1) {//set longterm or w/e true
-                  console.log("creating memory");
-                this.memengines[identity] = new ChatHistory(identity,agent, this.getSummary, this.getTokens, this.instructions.memoryLenth, true, false,this.params.max_context_length, this.getTokens);//todo, get params
-                this.memory = this.memengines[identity];
-                
-              } else if( memlevel === 2){//set both true
-                console.log("creating enhanced memory");
-                this.memengines[identity] = new ChatHistory(identity,agent, this.getSummary, this.getTokens, this.instructions.memoryLenth, true, true,this.params.max_context_length, this.getTokens);//todo, get params
-                this.memory = this.memengines[identity];
-              }
-              else{
-                console.log(identity + " is not a memory");
-              }
-              }catch{
-                console.log("something went wrong creating new ChatHistory");
-              }   
-          } 
-          try {
-              setIdent.push(this.identities[identity]);
-              found = true;
-            }
-            catch{
-              
-              console.log("invalid token: "+ identity);
+          //for memory, pending... Do I need memory? Does it really help the purpose? It's marginally useful in a case where someone wants a proper chat but the text box works well enough extending like just user: further queries against context. Its like 90% hooked up though, just forget token tracking and pound it out.
+          // if (tripcode[0] === '#'){
+          //   if(tripcode[1] ==='#'){
+          //     console.log("activate memory level 2");
+          //     identity = identity.slice(2);
+          //     memlevel = 2;
+          //       //identity = identity.slice(1);
+          //     } else {
+          //       console.log("activate memory level 1");
+          //       identity = identity.slice(1);
+          //       memlevel = 1;
+          //   }
+          // }
+          // try {
+          //   this.memory = this.memengines[identity];
+          //   } catch {
+          //     try{
+          //       let agent = this.identities[identity]
+          //       if (memlevel === 1) {//set longterm or w/e true
+          //         console.log("creating memory");
+          //       this.memengines[identity] = new ChatHistory(identity,agent, this.getSummary, this.getTokens, this.instructions.memoryLenth, true, false,this.params.max_context_length, this.getTokens);//todo, get params
+          //       this.memory = this.memengines[identity];
+
+          //     } else if( memlevel === 2){//set both true
+          //       console.log("creating enhanced memory");
+          //       this.memengines[identity] = new ChatHistory(identity,agent, this.getSummary, this.getTokens, this.instructions.memoryLenth, true, true,this.params.max_context_length, this.getTokens);//todo, get params
+          //       this.memory = this.memengines[identity];
+          //     }
+          //     else{
+          //       console.log(identity + " is not a memory");
+          //     }
+          //     }catch{
+          //       console.log("something went wrong creating new ChatHistory");
+          //     }
+          // }
+
+          if (this.identities.hasOwnProperty(identity)) {
+            setIdent[identity] = this.identities[identity];
+            found = true;
+            setAgent = true;
+          } else {
+            found = false;
+            const flags = this.funFlags(identity); //flags not coming out?
+            setIdent[identity] = flags.text;
+            found = flags.found;
+            setAgent = flags.set;
+            //console.log("found flags:" + JSON.stringify(flags));
+            //console.log("found ident:" + JSON.stringify(setIdent));
           }
         } else {
-          this.params.max_length = parseInt(identity, 10)
-          //console.log(this.params.max_length);
+          this.params.max_length = parseInt(identity, 10);
         }
-        if (!found) {  
-          setIdent.push(this.funFlags(identity));
-        }
-        else{
-          setIdent.push(this.funFlags(identity));
-        }
-        //console.log(JSON.stringify(this.identity));//looks good.
-       
       }
-      return setIdent;
+      return { text: setIdent[identity], agent: found, set: setAgent };
     }
   }
 
@@ -552,24 +591,24 @@ Winogrande - Common sense reasoning
   // }
   // costumeStore(tag, text){
   //   this.identities[tag]= text;
-  // }///make the if statement implement the costumeStore function. Currently they have equal functinality after the if check. 
+  // }///make the if statement implement the costumeStore function. Currently they have equal functinality after the if check.
   // remember(tag, text) {
   //   thisidentity
   // }
   forget() {
     this.memory = [];
   }
-  undress(){
-    this.identity = '';
+  undress() {
+    this.identity = {};
   }
-   
+
   funFlags(flag) {
     //need to accept temp:123
     ///slice off 4
-    var outp = {text: ""};
+    var outp = { text: "", found: false, set: false };
     switch (flag) {
       case "help":
-        var intro = `
+        var intro = `delete the extra on this line before saving or sharing agents printed with write.
 Welcome to Clipboard Commander!\n
 
   |||introduction| will explain the basics of LLMs, this help is more about this software.
@@ -635,11 +674,11 @@ Welcome to Clipboard Commander!\n
   |||writer|SYSTEM: Command First.| User: after agent writer
 
   System applies set formatting like:
-  ``````
+  ---
   "prompt":"<|im_start|>[\"SYSTEM: Command First.\",[\"SYSTEM: Write a lengthy prose about the requested topic. Do not wrap up, end, or conclude the story, write the next chapter.\\n \\n Story:\",\"\"]]<|im_end|>\n<|im_start|>user:\n User: after agent 
   frank\n\n<|im_end|>\n<|im_start|>assistant:\n
 
-  ``````
+  ---
 
   |||re,frank|this text is invisible to :save| //also, :save in there may have unpredictable results...
 
@@ -650,17 +689,19 @@ Welcome to Clipboard Commander!\n
   Expecially with smaller models, your words matter, how you ask is everything. Bigger models do better inferring intent, but the best results always come from specific language, and the AI won't always do what you expect. 
   
   Speaking of help, I've been struggling to find work and my son will be born any day now. I built this tool to hopefully make some money, though the paid features are still in the works.
-  If you get good use from this software, or are using it in a commercial environment, please send what it's worth to you. I need it to support my family. 
+  If you get good use from this software, or are using it in a commercial environment, please send what it's worth to you.. I need it to support my family. Thank you for using Clipboard Conqueror.
   
   https://patreon.com/ClipboardConqueror
   https://ko-fi.com/aseichter2007
           `;
-        //intro = JSON.parse(intro); 
+        //intro = JSON.parse(intro);
         this.write = true;
         this.sendHold = true;
-        this.writeout = intro;
+        //this.writeout = intro;
         //this.nicereturn = true;
         outp.text = intro;
+        outp.found = true;
+        outp.set = true;
         break;
       case "introduction":
         const identity = `
@@ -745,370 +786,417 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
 |||coder|write fizzbuzz with comments on each line. Explain how fizzbuzz is used to judge candidates in interviews
 
 |||agi| walk me though setting up a react website including components for the navigation header, footer, and a window for the main content. 
-        `
+        `;
         this.write = true;
         this.sendHold = true;
         //this.nicereturn = true;
-        this.writeout = identity;
         outp.text = identity;
+        outp.found = true;
+        outp.set = true;
         //return identity;
         break;
       case "write":
         this.write = true;
         this.sendHold = true;
-        
         break;
-      case "list"://causing a bug where the next input is ignored. 
+      case "list": //causing a bug where the next input is ignored.
         this.write = true;
         this.sendHold = true;
-        var list = ""
+        var list = "";
         for (let key in this.identities) {
-          list = list+  this.instructions.invoke+ key + ",write" + this.instructions.endTag + "\n" ;
+          list =
+            list +
+            this.instructions.invoke +
+            key +
+            this.instructions.agentSplit +
+            "write" +
+            this.instructions.endTag +
+            "\n";
         }
         outp.text = list;
+        outp.found = true;
         break;
       case "rp":
         this.rp = true;
-      
+        break;
+      case "rf":
+        //console.log("re hit!" + this.recentClip.text);
+        //this.sendLast = true;
+        //return;
+        //alternative
+        outp.text = this.recentClip.text; //send lastclip like any other agent prompt.
+        outp.found = false;
+        outp.set = true;
         break;
       case "re":
         //console.log("re hit!" + this.recentClip.text);
         this.sendLast = true;
         //return;
-        //alternative 
-        outp.text = this.recentClip.text;//send lastclip like any other agent prompt.
+        //alternative
+        //outp.text = this.recentClip.text;//send lastclip like any other agent prompt.
+        outp.found = false;
         break;
-
       case "on":
         this.on = !this.on;
         break;
       case "tokens":
       case "tok":
-        this.write = true
+        this.write = true;
         this.sendHold = true;
 
         outp.text = this.getTokens(this.currentText);
+        outp.found = true;
         console.log(outp.text);
       default:
- 
         break;
     }
-    return outp.text;
+    return outp;
   }
   updatePreviousCopy(copy) {
     this.recentClip.text = copy;
   }
   setupforAi(text) {
-    if (this.write) {
-      this.write = false;
-      return
+    if (text === this.sentToClip) {
+         //
+      return;
     }
     const sorted = this.activatePresort(text);
-    if (sorted){
-      if (sorted.formattedQuery){
-        this.currentText = sorted.formattedQuery;
-        //console.log("if sorted :" + sorted.formattedQuery);
-      }
-      //console.log(JSON.stringify("sorted.formattedQuery: " + sorted.formattedQuery));
+    let ifDefault = true;
+    if (sorted) {
       this.undress();
+      this.identity[this.instructions.rootname] = sorted.tags.command;
       if (sorted.tags.persona) {
         let persona = sorted.tags.persona.split(this.instructions.agentSplit);
         //console.log("persona tags: " + JSON.stringify(persona));
         //console.log("persona count: " + sorted.tags.length);
-        let temPersona = [];
+        let temPersona = {};
         persona.forEach(tag => {
+          tag = tag.trim();
           let commands = tag.split(this.instructions.settinglimit);
           if (commands.length === 2) {
-            if (commands[1] == this.instructions.save&& this.sendLast) {//save like |||agent:save|
-              this.identities[commands[0]] = this.recentClip;//
-              tag = commands[0];          
-            }else if (commands[1] == this.instructions.save) {//save like |||agent:save|
-              this.identities[commands[0]] = sorted.formattedQuery;//
-              tag = commands[0];          
-            }else  if(!isNaN(commands[1])){
-             this.params[commands[0]]= parseFloat(commands[1]);
-             //console.log(commands[0] + commands[1] +" written> " + this.params[commands[0]]);//ill keep this one for now
-            }else if (commands[1] == "true"){
-              this.params[commands[0]]= true;
-            }else if (commands[1] == "false"){
-              this.params[commands[0]]= false;
+            if (commands[1] == this.instructions.save && this.sendLast) {
+              //save like |||agent:save|
+              this.identities[commands[0]] = this.recentClip; //
+              tag = commands[0];
+            } else if (commands[1] == this.instructions.save) {
+              //save like |||agent:save|
+              this.identities[commands[0]] = sorted.formattedQuery; //
+              tag = commands[0];
+            } else if (!isNaN(commands[1])) {
+              this.params[commands[0]] = parseFloat(commands[1]);
+              //console.log(commands[0] + commands[1] +" written> " + this.params[commands[0]]);//ill keep this one for now
+            } else if (commands[1] == "true") {
+              this.params[commands[0]] = true;
+            } else if (commands[1] == "false") {
+              this.params[commands[0]] = false;
             }
-          }else {
-            let ident = this.updateIdentity(tag)
+          } else {
+            const ident = this.updateIdentity(tag);
+            //console.log(tag);
+            //console.log(JSON.stringify(ident));
+            if (ifDefault) ifDefault = !ident.agent;
             //console.log(ident + " identity pending");
-            temPersona.push(ident);    
+            if (ident.set) {
+              this.identity[tag] = ident.text;
+            }
           }
           //this.funSettings(tag);
         });
-        this.identity = temPersona;
         //console.log("identset: " + JSON.stringify(this.identity));
       } else {
         //console.log("No persona tags found.");
       }
       if (sorted.run || this.on) {
-        //response.sortedText = sorted.formattedQuery;
-        console.log("clip is broken: " +JSON.stringify(this.identity));
-        if (this.identity === '') {
-          this.identity = [sorted.tags.memories, this.identities[this.instructions.defaultPersona]];
+        const defaultIdentity = { [this.instructions.rootname]: "" };
+        if (ifDefault) {
+          this.identity.CaptainClip = this.identities[
+            this.instructions.defaultPersona
+          ];
         }
-        //response.memory = this.memory;        
-        
+        //response.memory = this.memory;
 
         let request =
-        this.instructions.system +
-        this.instructions.prependPrompt +
-        //this.identity +
-        JSON.stringify(this.identity) +
-        this.instructions.postPrompt +
-        this.instructions.memoryStart +
-        //this.memory +
-        //JSON.stringify(this.memory) +//may be one undefined
-        this.instructions.memoryPost+
-        sorted.formattedQuery;
+          this.instructions.system +
+          this.instructions.prependPrompt +
+          //this.identity +
+          JSON.stringify(this.identity) +
+          this.instructions.postPrompt +
+          this.instructions.memoryStart +
+          //this.memory +
+          //JSON.stringify(this.memory) +//may be one undefined
+          this.instructions.memoryPost +
+          sorted.formattedQuery;
         //this.instructions.chatStart+
         //this.instructions.finalprompt goes on as it leaves this function, with lastclip and rp if needed.
-        
+
         if (this.write) {
-          let sendtoclipoardtext = this.instructions.writeSave +JSON.stringify(this.identity) + this.instructions.writeSplit + sorted.formattedQuery;//todo send the right thing to the clipboard  
-          sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, '\n');
-          this.notify("Paste Response:", sendtoclipoardtext);
+          this.write = false;
+          let sendtoclipoardtext =
+            this.instructions.writeSave +
+            JSON.stringify(this.identity) +
+            this.instructions.writeSplit +
+            sorted.formattedQuery; //todo send the right thing to the clipboard
+          sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, "\n");
+          this.notify("Paste Response:", sendtoclipoardtext.slice(0, 140));
+          this.sentToClip = sendtoclipoardtext
           return this.sendToClipboard(sendtoclipoardtext);
         }
         // if (this.write==true&&this.nicereturn == true){
-          //   return this.sendToClipboard("|||name:save|"+JSON.stringify(this.identity) + "\n \n _______\n" + sorted.formattedQuery );//todo send the right thing to the clipboard  
-          // }
-          if (!this.sendHold) {
-            if ( this.openAi){
-    
-
-              
-              //  http://localhost:1234/v1/chat/completions \
-              // "Content-Type: application/json" \
-              // { 
-              //   "messages": [ 
-              //     { "role": "system", "content": this.identity },//stringify the message?
-              //     { "role": "user", "content": sorted.formattedQuery }//I should build my memory structure and force chats with openai through that? that would handle the instruction promps for multimodel support. Consider ## for memory clearing rather than extra modes. Currently supports initial needs for assigning an agent to gtp with ##
-
-              //this type of toggling is data dangerous
-
-
-              //   ], 
-              //   "temperature": 0.7, 
-              //   "max_tokens": -1,
-              //   "stream": false
-              // }'
-
-            }
-          else  if (this.rp) {
-              if (this.sendLast) {
-                //this.sendLast = false;
-                this.sendToApi(
-                  request +
-                  //JSON.stringify(this.recentClip.text) +
-                  this.instructions.rpPrompt +
-                  this.instructions.finalPrompt, this.params
-                  );
-                  this.rp = false;
-                  //this.sendLast = false;
-                } else {
-                  this.sendToApi(request + this.instructions.finalPrompt, this.params);
-                  //this.sendLast = false;
-                }
-                //return;
-              }else if (this.sendLast) {
-              //this.sendLast = false;
-              //console.log("identity: " + identityPrompt);
-              //console.log("recent clip: " + this.recentClip.text);
+        //   return this.sendToClipboard("|||name:save|"+JSON.stringify(this.identity) + "\n \n _______\n" + sorted.formattedQuery );//todo send the right thing to the clipboard
+        // }
+        if (!this.sendHold) {
+          if (this.openAi) {
+            //  http://localhost:1234/v1/chat/completions \
+            // "Content-Type: application/json" \
+            // {
+            //   "messages": [
+            //     { "role": "system", "content": this.identity },//stringify the message?
+            //     { "role": "user", "content": sorted.formattedQuery }//I should build my memory structure and force chats with openai through that? that would handle the instruction promps for multimodel support. Consider ## for memory clearing rather than extra modes. Currently supports initial needs for assigning an agent to gtp with ##
+            //this type of toggling is data dangerous
+            //   ],
+            //   "temperature": 0.7,
+            //   "max_tokens": -1,
+            //   "stream": false
+            // }'
+          } else if (this.rp) {
+            if (this.sendLast) {
+              this.sendLast = false;
               this.sendToApi(
-                request + 
-                //this.recentClip.text +
-                this.instructions.finalPrompt, 
+                request +
+                  this.recentClip.text +
+                  this.instructions.rpPrompt +
+                  this.instructions.finalPrompt,
                 this.params
-                );
-                //this.sendLast = false;
-              } else {
-                //console.log("recentClip: "+this.recentClip);
-                this.sendToApi(request + this.instructions.finalPrompt, this.params);
-              }
-            } else{
-              this.sendHold = false;
-            
+              );
+              this.rp = false;
+              //this.sendLast = false;
+            } else {
+              this.sendToApi(
+                request + this.instructions.finalPrompt,
+                this.params
+              );
+              //this.sendLast = false;
             }
-          }
-    }
-        if (this.sendLast = true) {
-          //console.log("update recentClip: "+text);
-          this.recentClip.text = text;// + "\n" + this.currentText);//todo: determine if this is dumb or not. Consider letting this run evey time and re toggles to allow building a big context to send with a question.
-          this.sendlast = false;
+            //return;
+          } else if (this.sendLast) {
+            this.sendToApi(
+              request + this.recentClip.text + this.instructions.finalPrompt,
+              this.params
+            );
+            this.sendLast = false;
           } else {
-            //console.log("sendLast set: "+text);
-          this.recentClip.text = text;
+            this.sendToApi(
+              request + this.instructions.finalPrompt,
+              this.params
+            );
+          }
+        } else {
+          this.sendHold = false;
         }
+      }
     }
-    recievesummary(summary) {
-      this.summary = summary;
-      }
-    activatePresort(text) {
-      let run = false;
-      text = text.trim();
-      var response = [];
-      const parsedData = text.split(this.instructions.invoke);
-      let tags = "";
-      if (parsedData.length > 3) {
-        this.notify("Warning:", "too many "+ this.instructions.invoke + ". max 2.");
-        this.sendHold = true;
-        this.write = true;
-        return{
-          run: run,
-          formattedQuery: "The user sent too many invoke tokens to the interface, |||query, |||identity|query,  context ||| query, context|||query|||context are the supported modes. ",
-          tags: tags
-          };
-      }
-      //console.log("parse delimiter: " + JSON.stringify(parsedData));
-      let longtrue = text.length > parsedData[0].length;
-      if (longtrue && parsedData.length === 1) {
-        tags = this.tagExtractor(parsedData[0]);
-        response.push(tags.text);
-        response.push("");
-        response.push("");
-
-        run = true;
-      }
-      if (parsedData.length === 2) {
-        tags = this.tagExtractor(parsedData[1]);
-        response.push(tags.text);
-        response.push(parsedData[0]);
-        response.push("");
-        run = true;
-      }
-      if (parsedData[0].length === 3) {
-        tags = this.tagExtractor(parsedData[1]);
-        response.push(tags.text);
-        response.push(parsedData[0]);
-        response.push(parsedData[2]);
-        run = true;
-      }
-      const sendout = response[0] + "\n" + response[1] + "\n" + response[2];
+    if ((this.sendLast = true)) {
+      this.recentClip.text = + " "; // + "\n" + this.recentClip.text);//todo: determine if this is dumb or not. Consider letting this run evey time and re toggles to allow building a big context to send with a question.
+      this.sendlast = false;
+    } else {
+      this.recentClip.text = text + " ";
+    }
+  }
+  recievesummary(summary) {
+    this.summary = summary;
+  }
+  activatePresort(text) {
+    let run = false;
+    text = text.trim();
+    var response = [];
+    const parsedData = text.split(this.instructions.invoke);
+    let tags = "";
+    if (parsedData.length > 3) {
+      this.notify(
+        "Warning:",
+        "too many " + this.instructions.invoke + ". max 2."
+      );
+      this.sendHold = true;
+      this.write = true;
       return {
         run: run,
-        formattedQuery: sendout,
+        formattedQuery:
+          "The user sent too many invoke tokens to the interface, |||query, |||identity|query,  context ||| query, context|||query|||context are the supported modes. ",
         tags: tags
       };
-  } 
+    }
+    //console.log("parse delimiter: " + JSON.stringify(parsedData));
+    let longtrue = text.length > parsedData[0].length;
+    if (longtrue && parsedData.length === 1) {
+      tags = this.tagExtractor(parsedData[0]);
+      response.push(tags.text);
+      response.push("");
+      response.push("");
+
+      run = true;
+    }
+    if (parsedData.length === 2) {
+      tags = this.tagExtractor(parsedData[1]);
+      response.push(tags.text);
+      response.push(parsedData[0]);
+      response.push("");
+      run = true;
+    }
+    if (parsedData[0].length === 3) {
+      tags = this.tagExtractor(parsedData[1]);
+      response.push(tags.text);
+      response.push(parsedData[0]);
+      response.push(parsedData[2]);
+      run = true;
+    }
+    const sendout = response[0] + "\n" + response[1] + "\n" + response[2];
+    return {
+      run: run,
+      formattedQuery: sendout,
+      tags: tags
+    };
+  }
   tagExtractor(text) {
     const tags = text.split(this.instructions.endTag);
     var output = {};
     if (tags.length === 1) {
-      output = { persona: "", memories: "", text: text};
+      output = { persona: "", command: "", text: text };
     } else if (tags.length === 2) {
-      output = { persona: tags[0], memories: "", text: tags[tags.length-1]  };
+      output = { persona: tags[0], command: "", text: tags[tags.length - 1] };
     } else if (tags.length === 3) {
-      output = { persona: tags[0], memories: tags[1], text: tags[tags.length-1]  };
+      output = {
+        persona: tags[0],
+        command: tags[1],
+        text: tags[tags.length - 1]
+      };
     }
     return output;
   }
 }
 
-class ChatHistory{
-  constructor(agent,agentdetails, getsummary, getTokens, length = 10, longterm = true, superlongterm= true, targetTokens = 2000, getokens, history = [], longHistory =[], sumMessage = `<|im_start|>system
-   summarize these messages for system use. After, list the inventory of items tools and technology used by order of importance to the instructions or story so that nothing important is left behind.`) {
+class ChatHistory {
+  constructor(
+    agent,
+    agentdetails,
+    getsummary,
+    getTokens,
+    length = 10,
+    longterm = true,
+    superlongterm = true,
+    targetTokens = 2000,
+    getokens,
+    history = [],
+    longHistory = [],
+    sumMessage = `<|im_start|>system
+   summarize these messages for system use. After, list the inventory of items tools and technology used by order of importance to the instructions or story so that nothing important is left behind.`
+  ) {
     this.agent = agent;
     this.getSummary = getsummary;
     this.history = history;
-    this.historyTokens= 0;
-    this.lastUser= "";
-    this.lastAI =""
+    this.historyTokens = 0;
+    this.lastUser = "";
+    this.lastAI = "";
     this.length = length;
     this.targetTokens = targetTokens;
-    this.longterm = longterm
+    this.longterm = longterm;
     this.superlongterm = superlongterm;
-    this.superHistory = longHistory
-    this.superHistoryTokens = 0
+    this.superHistory = longHistory;
+    this.superHistoryTokens = 0;
     this.getokens = getokens;
     this.agentTokens = 0;
     this.agentDetails = agentdetails;
-    this.getAgentTokens()
+    this.getAgentTokens();
     this.sumMessage = sumMessage;
-    this.userTokens= 0;
+    this.userTokens = 0;
     this.aiTokens = 0;
     this.summaryTokens = 0;
   }
-  updateHistory(){
-    if(this.longterm){
-      if (this.history.length >= this.length){
+  updateHistory() {
+    if (this.longterm) {
+      if (this.history.length >= this.length) {
         let superhistoryuser = this.history.shift();
         let superhistoryAi = this.history.shift();
-        this.history.push({user:this.lastUser, t:this.userTokens});
-        this.history.push({assistant:this.lastAI, t:this.lastAITokens});
+        this.history.push({ user: this.lastUser, t: this.userTokens });
+        this.history.push({ assistant: this.lastAI, t: this.lastAITokens });
         if (this.superlongterm.length)
-        this.getsummary(this.sumMessage + stringify(superhistoryuser)+ JSON.stringify(superhistoryAi), newLongterm())
-        return
-      }    
-      this.history.push({user:this.lastUser, t:this.userTokens});
-      this.history.push({assistant:this.lastAI, t:this.lastAITokens});
-      
+          this.getsummary(
+            this.sumMessage +
+              stringify(superhistoryuser) +
+              JSON.stringify(superhistoryAi),
+            newLongterm()
+          );
+        return;
+      }
+      this.history.push({ user: this.lastUser, t: this.userTokens });
+      this.history.push({ assistant: this.lastAI, t: this.lastAITokens });
     }
   }
-  //todo: bring in user, ai messages and get token lengths, 
-  
-  returnUserData(text){
+  //todo: bring in user, ai messages and get token lengths,
+
+  returnUserData(text) {
     this.lastUser = text;
   }
-  returnAIdata(text){
+  returnAIdata(text) {
     this.lastAI = text;
   }
-  returnUserTokens(tokens){
+  returnUserTokens(tokens) {
     this.userTokens = tokens;
   }
-  returnAITokens(tokens){
+  returnAITokens(tokens) {
     this.aiTokens = tokens;
   }
   newLongterm(summarized) {
-    if (this.superHistoryTokens + summarized.stats.tokens>= this.targetTokens * 0.5){ //todo get the right token length from response
-      this.getsummary(this.sumMessage + JSON.stringify(this.superHistory) + JSON.stringify(summarized.text), newSuperLongterm())
+    if (
+      this.superHistoryTokens + summarized.stats.tokens >=
+      this.targetTokens * 0.5
+    ) {
+      //todo get the right token length from response
+      this.getsummary(
+        this.sumMessage +
+          JSON.stringify(this.superHistory) +
+          JSON.stringify(summarized.text),
+        newSuperLongterm()
+      );
       //this.superHistory = []
-    }
-    else {
+    } else {
       this.superHistory.push(summarized.text);
       this.superHistoryTokens += summarize.stats.tokens;
     }
   }
   newSuperLongterm(summarized) {
     this.superHistory = [];
-    this. superHistory.push(summarized.text);
-    this.superHistoryTokens = summarize.stats.tokens
+    this.superHistory.push(summarized.text);
+    this.superHistoryTokens = summarize.stats.tokens;
   }
-  
-  returnHistoryTokens(tokencount){
-    this.historyTokens = tokencount
+
+  returnHistoryTokens(tokencount) {
+    this.historyTokens = tokencount;
   }
-  getHistory(){
+  getHistory() {
     return this.history;
   }
-  getsummaryTokens(text){
-    this.getokens(text, this.returnSummaryTokens)
+  getsummaryTokens(text) {
+    this.getokens(text, this.returnSummaryTokens);
   }
-  returnSummaryTokens(tokenCount){
+  returnSummaryTokens(tokenCount) {
     this.userTokens = tokenCount;
   }
-  setLastUser(lastUser, tokenCount){
+  setLastUser(lastUser, tokenCount) {
     this.userTokens = tokenCount;
     this.lastUser = lastUser;
   }
-  setLastAi(lastAi){
-    this.getTokens(lastAi, returnAITokens)//this might not be able to live here
-    this.lastAI = lastAi
+  setLastAi(lastAi) {
+    this.getTokens(lastAi, returnAITokens); //this might not be able to live here
+    this.lastAI = lastAi;
   }
-  toggleLongterm(){
-      this.longterm = !this.longterm
+  toggleLongterm() {
+    this.longterm = !this.longterm;
   }
-  getAgentTokens(){
+  getAgentTokens() {
     this.getTokens(this.agentdetails, this.agent, this.returnAgentTokens);
   }
-  returnAgentTokens(agenttokenCount){
+  returnAgentTokens(agenttokenCount) {
     this.agentTokens = agenttokenCount;
   }
-  
 }
 module.exports = TextEngine;
-

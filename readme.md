@@ -127,10 +127,15 @@ Usage:
    ```
    - sets the temperature to 1.1. This works for any setting, e.g., top_p, min_p. supports :true :false.
    ```
-    |||coder,re| what is this code doing? 
+    |||re| what is this code doing? 
    ```
-
-   - sends the thing you copied last, prepended by "what is this code doing?" and sends the coder assistant prompt to help frame the output format and preconceptions.
+   - return copy at end of prompt inserted like continued user question.
+   - sends the thing you copied last after "what is this code doing, at the end of the prompt" and sends the Captian Clip assistant prompt first to help consider the instruction.
+   ```
+    |||rf| what is this code doing? 
+   ```
+   - return last copied first in prompt inserted like an agent.
+   - sends the thing you copied last before the Captian Clip assistant prompt to help frame the output format and preconceptions.
 
    ```
    |||memory:save| writes or overwrites an identity called memory with this text: "writes or overwrites an identity..."
