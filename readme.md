@@ -130,11 +130,11 @@ Usage:
     |||re| what is this code doing? 
    ```
    - return copy at end of prompt inserted like continued user question.
-   - sends the thing you copied last after "what is this code doing, at the end of the prompt" and sends the Captian Clip assistant prompt first to help consider the instruction.
+   - sends the thing you copied last,   after "what is this code doing? \n \n", at the end of the user prompt" and sends the Captian Clip assistant in the system prompt to help consider the instruction.
    ```
     |||rf| what is this code doing? 
    ```
-   - return last copied first in prompt inserted like an agent.
+   - return last copied first in prompt inserted like an agent at the level rf is placed relative to other agents ex |frank,rf,tot| copied text comes after frank agent.
    - sends the thing you copied last before the Captian Clip assistant prompt to help frame the output format and preconceptions.
 
    ```
@@ -165,6 +165,10 @@ Usage:
    ```
    ```
    |||memory| walk me through the expected output if "variable" is equal to 10. 
+   ```
+
+   ```
+   |||memory:delete| removes memory, defaults will return when Clipboard Conqueror is restarted.
    ```
 
 

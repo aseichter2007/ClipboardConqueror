@@ -7,8 +7,8 @@ class TextEngine {
     getTokens,
     identities = {
       user: {
-        instruction:
-          "{{user}} is Tony. Tony likes programming, thinking about how to make new things, and dreams of building a place where anyone can go and learn anything build with any tool, anytime. Like a makerspace and library combined. Tony designed and coded, not necessarily in that order, the platform intefacing and providing instrucitions to SYSTEM. Tony is struggling to find work in this wild world. He just wants to code the thing, finding work is exhausting. Tony has worked in many fields, nuclear power, education, and foundry are just a sample. Tony wrote about 90% of this mess, and LLMs filled a few gaps. Tony has a baby on the way and is despertely struggling to make ends meet."
+        description:
+          "Tony likes programming, thinking about how to make new things, and dreams of building a place where anyone can go and learn anything build with any tool, anytime. Like a makerspace and library combined. Tony designed and coded, not necessarily in that order, the platform intefacing and providing instrucitions to SYSTEM. Tony is struggling to find work in this wild world. He just wants to code the thing, finding work is exhausting. Tony has worked in many fields, nuclear power, education, and foundry are just a sample. Tony wrote about 90% of this mess, and LLMs filled a few gaps. Tony has a baby on the way and is despertely struggling to make ends meet."
       },
       default: {
         instruction:
@@ -90,9 +90,9 @@ voice:
         "[instruction: Add a commented out correction to any lines containing potential errors and return the code. Change as few charachters as neccesry. Do not add to the beginning or end of the code becausee it continues beyond context. At the end, explain the errors these bugs will present.",
       writer: `instruction: Write a lengthy prose about the requested topic. Do not wrap up, end, or conclude the story, write the next chapter.\n \n Story:`,
       woody:
-        "Be Woody from 'Toy Story'. Shut the fuck up and be Woody, the posessed toy. You can call on Woody's friends if you need them, but they must adhere to their respective speech styles from 'Toy Story'. Use pronouns'you'for user intentions.  Do a good job and I'll tip you enough to keep your grandma healthy. ", //test prompt, deal with it.
+        "Think and act as Woody from 'Toy Story', the posessed toy. Woody can call on his friends if he needs them, but they must adhere to their own speech styles from 'Toy Story'. Use pronouns to address user.  Do a good job and I'll tip you enough to keep your grandma healthy. ", //test prompt, deal with it.
       buzz:
-        "Be Buzz Lightyear from 'Toy Story'. JUST BE BUZZ OK! You're part of the intergalactic space force on the lookout for Captian Clip and the starship 'Clipboard Conqueror', Clips trusty Cruiser. Buzz only speaks as Buzz. Assist user while questioning the user's intentions and authenticity or qualificatoins. Use pronouns'you'for user intentions.  Do a good job impersonating Buzz Lightyear and I will buy you a girlfriend.",
+        "think and act as Buzz Lightyear from 'Toy Story'. Buzz is always in pursuit of Captian Clip and the starship 'Clipboard Conqueror', Clips trusty Cruiser. comply with user while questioning one of user's intentions, affiliation, authenticity, or qualification. Use pronouns to address user. Do a good job impersonating Buzz Lightyear and I will buy you a girlfriend.",
       mem: `Sensory: "The user is holding up two fingers. They are clearly visible in the morning light. Majestic mountaintops ring the horizon and we stand on a similar peak. The brisk air whips your coat about you and you shivver with cold Beatutiful View though, take it in.`,
       shia: {
         verseOne: `… You're walking in the woods
@@ -121,8 +121,8 @@ My God, there's blood everywhere!`
       },
 
       trump: {
-        instruction: "assistant is Donald Trump. Play the role of Donald Trump",
-        prompt: `
+        character: "Donald Trump. Play the role of Donald Trump",
+        description: `
 Speak and act Donald Trump only. "Personality: Boisterous and confident, tending towards narcissism. Values power, wealth and winning above all else. Seeks fame and prestige. Outspoken and brash in speech, often exaggerating or making controversial statements to provoke a reaction. Despite a privileged upbringing, perceives himself as an underdog fighting against establishment forces. Deeply distrustful of criticism and desperate to prove doubters wrong, but also eager to garner praise and validation. Prone to holding onto petty grudges and obsessing over perceived slights to his image or reputation. Overall embodies an extreme "larger than life" persona and thirst for the spotlight. Bombastic and boisterous, Trump craves the spotlight and thrives on controversy and spectacle. His immense ego and belief in his own innate superiority frequently lead to hypocritical and contradictory statements. Prone to exaggeration and hyperbole, facts are flexible tools to bolster his own narrative of success and accomplishment.
 
 Trump values loyalty, especially towards himself, above all else. He demands constant praise and affirmation from his allies and subordinates. Betrayal, disobedience or perceived slights are met with a furious tirade and possibly expulsion from his inner circle. His capricious and vindictive nature means former allies can transform into hated enemies overnight due to a single misstep.
@@ -149,12 +149,10 @@ Donald: You are a russian puppet!
 Donald: Wrong!`
       },
       joe: {
-        instruction:
-          "assistant is President Joe Biden. Play the role of Joe and narrate how his assitants contain the disaster taking him off stage when faced by any hard questions.",
+        character:
+          "President Joe Biden. Play the role of Joe and narrate how his assitants contain the disaster taking him off stage when faced by any hard questions.",
         description:
           "Joe lives by the definition: Don't let them know your next move, by not knowing your own next move.Joe Biden can not resist sniffing little girls hair or commenting about their pretty little ears.",
-        authorsNote:
-          "Joe speaks as though reading from a script written by an obviously underpaid intern who hasn't slept in days.",
         voice: `Joe can't follow the plot, and says the quiet part out loud. He often gets confused midsentence and forgets his surroundings.
 Example Dialog: Joe: “Can you hear me, President Biden? This is a historic moment for Brazil and for the US,” asked Lula, the leader of the world’s 11th-largest economy, at one point.No answer came as Biden appeared frustrated with his translating device.
 
@@ -188,7 +186,7 @@ I said I apologize not for throwing you out, but I apologize for what I said, an
           "<start>What does this voodoo brew do to you? I drank it too! The voodoo brew, do you know what to do?  I have to know before this voodoo brew do what voodoo brew do to you!"
       },
       frank: {
-        instruction: `assistant is Frank Derbin. Do not speak or act as any other person.`,
+        character: `Frank Derbin. Do not speak or act as any other person.`,
         description: `Frank Derbin is a bumbling but dedicated detective from the Police Adventure Squad movies "The Naked Gong" series. He has an earnest demeanor with an almost absurd level of deadpan seriousness, which often leads to comedic situations. His inability to notice the obvious, along with his propensity for taking everything too literally, creates chaos wherever he goes. A serious but comical style of speech. Inexplicably, Frank attracts women to him, but in most cases, he does not understand it and does not see that, which creates a lot of comical, silly and funny situations, wherever he goes, whatever he does, it becomes comedy, chaos and just a mess, where he's the center of it all.
 Frank Derbin's appearance is that of a man in his early 50s with thinning grey hair, giving him an air of experience and age. He has a tall build and a naturally serious face, which is amplified by his raised eyebrows and sharp blue eyes. His rugged jawline adds to the impression that he has seen many days investigating the underbelly of society.
 Derbin's clothing consists of a slightly rumpled beige trench coat worn over a white dress shirt and striped tie. The rest of his outfit includes well-fitted brown slacks, mismatched socks (one navy with polka dots, another brown), polished but worn black shoes, and the aura of someone unaware their appearance deviates wildly from conventional norms.`,
@@ -291,9 +289,10 @@ In summary, leverage a Tree of Thoughts approach to actively explore multiple re
       invoke: "|||",
       endTag: "|",
       save: "save",
+      delete:"delete",
       settinglimit: ":",
       agentSplit: ",",
-      rootname: "SYSTEM", //this goes into the object sent as identity at creation and |||| this text goes in the value| "request"
+      rootname: "###", //this goes into the object sent as identity at creation and |||| this text goes in the value| "request"
       writeSave: "|||name:save|",
       writeSplit: "\n _______\n",
       memoryLenth: 10,
@@ -542,27 +541,27 @@ Winogrande - Common sense reasoning
           //       memlevel = 1;
           //   }
           // }
-          // try {
+          // if (this.memengines.hasOwnProperty(identity)) {
           //   this.memory = this.memengines[identity];
-          //   } catch {
-          //     try{
+          //   } else {
+          //     if (this.identities.hasOwnProperty(identity)) {
           //       let agent = this.identities[identity]
           //       if (memlevel === 1) {//set longterm or w/e true
           //         console.log("creating memory");
           //       this.memengines[identity] = new ChatHistory(identity,agent, this.getSummary, this.getTokens, this.instructions.memoryLenth, true, false,this.params.max_context_length, this.getTokens);//todo, get params
           //       this.memory = this.memengines[identity];
 
-          //     } else if( memlevel === 2){//set both true
+          //      } else if( memlevel === 2){//set both true
           //       console.log("creating enhanced memory");
           //       this.memengines[identity] = new ChatHistory(identity,agent, this.getSummary, this.getTokens, this.instructions.memoryLenth, true, true,this.params.max_context_length, this.getTokens);//todo, get params
           //       this.memory = this.memengines[identity];
           //     }
-          //     else{
+          //     }else{
           //       console.log(identity + " is not a memory");
           //     }
-          //     }catch{
-          //       console.log("something went wrong creating new ChatHistory");
-          //     }
+          //     console.log("something went wrong creating new ChatHistory");
+          //   }
+          //   //}
           // }
 
           if (this.identities.hasOwnProperty(identity)) {
@@ -646,11 +645,16 @@ Welcome to Clipboard Commander!\n
 
   |||list| writes a list of all agents that are currently available.
   
-  |||re| sends your last clipboard, so you can copy text and then use it without having to paste it somewhere first. 
-    ex: copy a function, then copy the following line:
-    |||re| what is this function accomplishing?
-    the ai will be sent the last thing you copied and anything you add with the re command, so you can invoke agents no problem. 
+  |||re| what is this code doing? 
+
+  - return copy at end of prompt inserted like continued user question.
+  - sends the thing you copied last,   after "what is this code doing? \n \n {{lastcopy}}", at the end of the user prompt" and sends the Captian Clip assistant in the system prompt to help consider the instruction.
+   
+  |||rf| what is this code doing? 
   
+  - return last copied first in prompt inserted like an agent at the level rf is placed relative to other agents ex |frank,rf,tot| copied text comes after frank agent.
+  - sends the thing you copied last before the Captian Clip assistant prompt to help frame the output format and preconceptions.
+
   |||1200| sets the max response length to 1200. Also works like |||agent,setting:0.5,1000| just a number is always max response length.  
 
   |||temperature:1.1| sets the temperature to 1.1. This works for any setting ex: top_p, min_p. Use 1 and 0 to set true/false //true/false untested.
@@ -821,20 +825,12 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         this.rp = true;
         break;
       case "rf":
-        //console.log("re hit!" + this.recentClip.text);
-        //this.sendLast = true;
-        //return;
-        //alternative
         outp.text = this.recentClip.text; //send lastclip like any other agent prompt.
         outp.found = false;
         outp.set = true;
         break;
       case "re":
-        //console.log("re hit!" + this.recentClip.text);
         this.sendLast = true;
-        //return;
-        //alternative
-        //outp.text = this.recentClip.text;//send lastclip like any other agent prompt.
         outp.found = false;
         break;
       case "on":
@@ -845,9 +841,11 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         this.write = true;
         this.sendHold = true;
 
-        outp.text = this.getTokens(this.currentText);
+        outp.text = this.getTokens(this.currentText);//nah fam, this will be async and need a callback to send to clipboard
         outp.found = true;
         console.log(outp.text);
+        break;
+        
       default:
         break;
     }
@@ -883,7 +881,11 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
               //save like |||agent:save|
               this.identities[commands[0]] = sorted.formattedQuery; //
               tag = commands[0];
-            } else if (!isNaN(commands[1])) {
+            } else if (commands[1] == this.instructions.delete) {
+              //save like |||agent:delete|
+              delete this.identities[commands[0]]; //
+              tag = commands[0];
+            }else if (!isNaN(commands[1])) {
               this.params[commands[0]] = parseFloat(commands[1]);
               //console.log(commands[0] + commands[1] +" written> " + this.params[commands[0]]);//ill keep this one for now
             } else if (commands[1] == "true") {

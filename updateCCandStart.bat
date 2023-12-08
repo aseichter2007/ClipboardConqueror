@@ -1,5 +1,5 @@
 @echo off
-pushd %~dp0
+pushd %~dp0 
 git --version > nul 2>&1
 if %errorlevel% neq 0 (
     echo Git is not installed on this system. Skipping update.
@@ -12,5 +12,8 @@ if %errorlevel% neq 0 (
     )
 )
 call npm install
+npm start
 pause
 popd
+
+

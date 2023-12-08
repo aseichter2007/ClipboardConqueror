@@ -12,5 +12,6 @@ if %errorlevel% neq 0 (
     )
 )
 call npm install
+npm linux
 pause
 popd
