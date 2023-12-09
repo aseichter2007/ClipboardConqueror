@@ -687,6 +687,24 @@ Welcome to Clipboard Commander!\n
   ---
 
   |||re,frank|this text is invisible to :save| //also, :save in there may have unpredictable results...
+  
+  ||set|:
+
+  |||rf,frank,set,joe|these system commands persist| query goes out. 
+
+  - set will save all agents before it as a persistent default, and include any system command sent at this time. in this case joe does not persist with the next simple ||| 
+  
+  once set "|||"{query} will behave as 
+  
+  "|||(that last copy saved with rf),frank|these system commands persist|"{query}
+  
+  until |||set| is copied again, clearing the set agents. 
+
+  While set, |||any,additional,agents| can be sent and add after the set agents.
+
+  |||rf,set| is extremely useful for repeated queries against the same copied data. 
+
+  while set |||any|this instruction replaces the old system instruction before agents this time only| {query}
 
 
   Remember: this is a large language model AI, and a small one at that. You should always check its work. It will make stuff up sometimes. It is not current, and has no internet connectivity. It may reccomand outdated software, imaginary modules, or misunderstand a key component and return nonsense altogther. 
