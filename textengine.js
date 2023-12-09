@@ -876,8 +876,10 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       this.identity[this.instructions.rootname] = sorted.tags.command;
       if(this.set){
         this.identity = this.setAgent;
-        this.identity[this.instructions.rootname] += ", " +sorted.tags.command;
-        ifDefault = false;
+        if (sorted.tags.command != "") {
+          this.identity[this.instructions.rootname] = sorted.tags.command;          
+          ifDefault = false;
+        }
       }
       if (sorted.tags.persona) {
         let persona = sorted.tags.persona.split(this.instructions.agentSplit);

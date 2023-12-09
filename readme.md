@@ -275,17 +275,27 @@ frank\n\n<|im_end|>\n<|im_start|>assistant:\n
 
 |||re,frank|this text is invisible to :save| //also, :save in there may have unpredictable results...
 
-|||rf,frank,set,joe|these system commands persist as well| query goes out. 
+
+|||set|:
+
+|||rf,frank,set,joe|these system commands persist| query goes out. 
 
  - set will save all agents before it as a persistent default, and include any system command sent at this time. in this case joe does not persist with the next simple ||| 
- once set "|||" will behave as "|||(that last copy saved with rf),frank|these system commands persist as well|" until |||set| is copied again, clearing the set agents. 
+ 
+ once set "|||"{query} will behave as 
+ 
+ "|||(that last copy saved with rf),frank|these system commands persist|"{query}
+ 
+ until |||set| is copied again, clearing the set agents. 
 
- While set, |||additional,agents| can be sent and add after the set agents.
+ While set, |||any,additional,agents| can be sent and add after the set agents.
 
  |||rf,set| is extremely useful for repeated queries against the same copied data. 
 
+ while set |||any|this instruction replaces the old system instruction before agents this time only| {query}
 
-note: current default behavior removes chatml markup "<|any|>" from the ai return to ease use of non chatML models with default settings. For the most part monster merge models respond very well, but will markup charachter dialoge in a way I find undesireable. Comment line 17 "text = this.removeChatML(text);" in responsengine.js to stop this behavior. 
+
+note: current behavior removes chatml markup "<|any|>" from the ai return to ease use of non chatML models with default settings. For the most part monster merge models respond very well, but will markup charachter dialoge in a way I find undesireable. Comment line 17 "text = this.removeChatML(text);" in responsengine.js to stop this behavior. 
 
 ---------------------------------
 Installation:
