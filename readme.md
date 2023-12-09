@@ -327,8 +327,9 @@ Currently there are no built binaries and Node is required to run Clipboard Conq
     I will supply a sample batch file for loading a model with your settings file after you get kobold dialed in from the launcher. 
 
 3. Kobold needs a model. Here are my reccomendations 12/5/23:[OpenHermes 2.5 Mistral 7B 16K Context.GGUF](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-16k-GGUF)
+  minimum hardware:[rocket_3B](https://huggingface.co/TheBloke/rocket-3B-GGUF)//untested with CC but good for a 3B in kobold's ui. Should be 
       ``````
-      OpenHermes-2.5-Mistral supports 16384 context. This is a decent few pages. If it seems slow reduce your context to 8, if the problem persists, select a lower Quantization.
+      OpenHermes-2.5-Mistral 7b 16k.gguf supports 16384 context. This is a decent few pages. If it seems slow reduce your context to 8, if the problem persists, select a lower Quantization.
 
       Most of my prompts are specifically tuned against OpenHermes 2.5 Mistral 7b, and the default prompts follow chatML format. The system instuction in the training is an incredibly powerful tool. 
       any chatML model should work great out of the box. Psyfighter2 works great too, though it doesn't nail the instructions as well being a storytelling model. 
@@ -360,7 +361,6 @@ hardware("token speed")  [fast = 20+ tokens/sec, medium =  ~<10 tokens/sec. slow
 In the world of inference, some macs can be medium with even very large models. Metal. 
 ```
 16gb ram and no graphics card, or laptop with shared gfx memory(slow, notable quality loss): 
-
 
 [Q3_K_M](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q3_K_M.gguf)VRAM used: 5429.57 MB (model: 3301.56 MB, context: 2128.01 MB) + a bit for ingestion, use lower quants for less than  16gb  RAM consider Rocket 3B//untested
 
