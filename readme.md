@@ -1,7 +1,7 @@
 ![Clipboard Conqueror Graphic logo. The letters are clouds and buildings on a lush estate.](CCfinal.jpg)
 Clipboard Conqueror - Readme
 =============================
-Clipboard Conqueror is a multi-platform omnipresent copilot alternative. Currently requring a kobold united compatible backend, this software brings powerful LLM based tools to any text field, the universal copilot you deserve. It simply works anywhere. No need to sign in. 
+Clipboard Conqueror is a multi-platform omnipresent copilot alternative. Currently requiring a kobold united compatible backend, this software brings powerful LLM based tools to any text field, the universal copilot you deserve. It simply works anywhere. No need to sign in. 
 
 *Special thank you to the creators of  KoboldAi, KoboldCPP, llamma, openAi, and the communities that made all this possible to figure out. 
 
@@ -69,7 +69,7 @@ Using Clipboard Conqueror to Create, and Installation:
 
 
 
-LLMs are powerful tools but it's important to understand how they work.The input text is vectorized and put through matrix transformations and a big complex vector is built, and then each word is added to that vector and as it is chosen in turn one at a time, with some randomity to get better speech flavor, until the next probable token is a stop token or max length is exceeded.
+LLMs are powerful tools but it's important to understand how they work. The input text is vectorized and put through matrix transformations and a big complex vector is built, and then each word is added to that vector as it is chosen in turn one at a time, with some randomity to get better speech flavor, until the next probable token is a stop token or max length is exceeded.
 
 In an LLM every word is a cloud of numbers that represent how that token relates to every other and some phrase structures or collections of tokens. By turning words into numbers, we can then beat them with math and determine which tokens probably are appropriate to go next.
 
@@ -192,18 +192,18 @@ Clipboard Conqueror makes the process of accessing an LLM simple and efficient i
 
 Locally run models can be trusted with private data and do not phone home or report any metrics. Local LLMS are private and secure. 
 
-Proofread documents, test explainations, get feedback, find inspiration, or just run a game of dungeons and dragons with your friends.
+Proofread documents, test explanations, get feedback, find inspiration, or just run a game of dungeons and dragons with your friends.
 
 Clipboard Conqueror provides a whole toolbox of predefined assistants, ready to work for you.  
 
 
 
-|||agi| will help you execute any operation you ask for help with. Captain Clip does well too, but this is based on the kobold agi script and is superior to a simple ask. 
+|||agi|"AI Generate Instructions" will help you execute any operation you ask for help with. Captain Clip does well too, but this is based on the kobold agi script and is superior to a simple ask. 
 
 |||stable| will write you an image prompt for use in stable diffusion automatic 1111
 This identity and some other cards were found on chub.ai, some are my own or significant customizations.
 
-|||tot| or tree of thought will expand and include near concepts, questions, or ideas to produce a more comprehensive solution
+|||tot|"tree of thought" will expand and include near concepts, questions, or ideas to produce a more comprehensive solution
 
 
 Save agents on the fly to store, sort, query, think, review, or just tell you jokes or anything you can  ask for, really. 
@@ -258,7 +258,7 @@ will add that agent json parsed into the memory until the application is closed.
   |||CurrentText,LastCopy| query combined like this. 
 
 
-Advanced Command:
+Advanced Commands:
 
 ||||System: Command first before Clip agent.|  text from <user> in the internal chain
 
@@ -274,6 +274,18 @@ frank\n\n<|im_end|>\n<|im_start|>assistant:\n
 ``````
 
 |||re,frank|this text is invisible to :save| //also, :save in there may have unpredictable results...
+
+|||rf,frank,set,joe|these system commands persist as well| query goes out. 
+
+ - set will save all agents before it as a persistent default, and include any system command sent at this time. in this case joe does not persist with the next simple ||| 
+ once set "|||" will behave as "|||(that last copy saved with rf),frank|these system commands persist as well|" until |||set| is copied again, clearing the set agents. 
+
+ While set, |||additional,agents| can be sent and add after the set agents.
+
+ |||rf,set| is extremely useful for repeated queries against the same copied data. 
+
+
+note: current default behavior removes chatml markup "<|any|>" from the ai return to ease use of non chatML models with default settings. For the most part monster merge models respond very well, but will markup charachter dialoge in a way I find undesireable. Comment line 17 "text = this.removeChatML(text);" in responsengine.js to stop this behavior. 
 
 ---------------------------------
 Installation:

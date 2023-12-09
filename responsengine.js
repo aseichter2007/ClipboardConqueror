@@ -1,9 +1,20 @@
 class ResponseEngine {
-    constructor(invoke =  "|/",  terminators = ["asdfghjkl"]) {
+    constructor(invoke =  "|/",  terminators = ["asdfghjkl"], remove= /<\|[^|]*\|>/g){
         this.Invoke= invoke;
         this.terminators = terminators;
+        this.remove = remove;
     }
+
+    //###code#javascript function that takes a string "text"(example: ["<|im_start|>", "<|im_end|>"]), and removes each string from  []"this.eliminate" from the original string with regex
+  removeChatML(text) {
+      // Convert the eliminateArray to a regex pattern with | as the separator
+
+      
+      return text.replace(this.remove, '');
+    }
+    
     recieveMessageFindTerminatorsAndTrim(text){
+        text = this.removeChatML(text);
         let totals = []
         this.terminators.forEach(element => {
             

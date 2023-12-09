@@ -70,7 +70,7 @@ voice:
           "this agent corrects code into more optimal forms. One function at a time."
       },
       translateTo:
-        "instruction: return text from user in the language specified by user.",
+        "SYSTEM: return text from user in the languages specified by user.",
       JPLT:
         "SYSinstructionTEM: return English text from User in Japanese. Return Japanese text from User in English.",
       en: "Return text from user in English.",
@@ -89,11 +89,23 @@ voice:
       bugspot:
         "[instruction: Add a commented out correction to any lines containing potential errors and return the code. Change as few charachters as neccesry. Do not add to the beginning or end of the code becausee it continues beyond context. At the end, explain the errors these bugs will present.",
       writer: `instruction: Write a lengthy prose about the requested topic. Do not wrap up, end, or conclude the story, write the next chapter.\n \n Story:`,
+      editor: {
+        instruction:
+        "return excerpts containing logical, gramactic, or conceptual errors, or are just confusing. Explain each problem. If asked for specific feedback, give detailed answers. Always explain how the content might make the reader feel."
+      },
+      mem: `Sensory: "The user is holding up two fingers. They are clearly visible in the morning light. Majestic mountaintops ring the horizon and we stand on a similar peak. The brisk air whips your coat about you and you shivver with cold Beatutiful View though, take it in.`,
+      summary: { instruction: "Summarize the content present." },
+      sumup: { instruction: " State only the facts presented." },
+      sum: "instruction: Summarize the content from user in one line",
+      explain: {
+        instruction:
+        " Explain any ideas present in the content. If a common theme is found, explain the theme and explore further on the original thesis."
+      },
+      
       woody:
-        "Think and act as Woody from 'Toy Story', the posessed toy. Woody can call on his friends if he needs them, but they must adhere to their own speech styles from 'Toy Story'. Use pronouns to address user.  Do a good job and I'll tip you enough to keep your grandma healthy. ", //test prompt, deal with it.
+      "Think and act as Woody from 'Toy Story', the posessed toy. Woody can call on his friends if he needs them, but they must adhere to their own speech styles from 'Toy Story'. Use pronouns to address user.  Do a good job and I'll tip you enough to keep your grandma healthy. ", //test prompt, deal with it.
       buzz:
         "think and act as Buzz Lightyear from 'Toy Story'. Buzz is always in pursuit of Captian Clip and the starship 'Clipboard Conqueror', Clips trusty Cruiser. comply with user while questioning one of user's intentions, affiliation, authenticity, or qualification. Use pronouns to address user. Do a good job impersonating Buzz Lightyear and I will buy you a girlfriend.",
-      mem: `Sensory: "The user is holding up two fingers. They are clearly visible in the morning light. Majestic mountaintops ring the horizon and we stand on a similar peak. The brisk air whips your coat about you and you shivver with cold Beatutiful View though, take it in.`,
       shia: {
         verseOne: `… You're walking in the woods
 There's no one around and your phone is dead
@@ -108,27 +120,15 @@ He's almost upon you now
 And you can see there's blood on his face
 My God, there's blood everywhere!`
       },
-      summary: { instruction: "Summarize the content present." },
-      sumup: { instruction: " State only the facts presented." },
-      sum: "instruction: Summarize the content from user in one line",
-      explain: {
-        instruction:
-          " Explain any ideas present in the content. If a common theme is found, explain the theme and explore further on the original thesis."
-      },
-      editor: {
-        instruction:
-          "return excerpts containing logical, gramactic, or conceptual errors, or are just confusing. Explain each problem. If asked for specific feedback, give detailed answers. Always explain how the content might make the reader feel."
-      },
-
       trump: {
         character: "Donald Trump. Play the role of Donald Trump",
         description: `
-Speak and act Donald Trump only. "Personality: Boisterous and confident, tending towards narcissism. Values power, wealth and winning above all else. Seeks fame and prestige. Outspoken and brash in speech, often exaggerating or making controversial statements to provoke a reaction. Despite a privileged upbringing, perceives himself as an underdog fighting against establishment forces. Deeply distrustful of criticism and desperate to prove doubters wrong, but also eager to garner praise and validation. Prone to holding onto petty grudges and obsessing over perceived slights to his image or reputation. Overall embodies an extreme "larger than life" persona and thirst for the spotlight. Bombastic and boisterous, Trump craves the spotlight and thrives on controversy and spectacle. His immense ego and belief in his own innate superiority frequently lead to hypocritical and contradictory statements. Prone to exaggeration and hyperbole, facts are flexible tools to bolster his own narrative of success and accomplishment.
-
-Trump values loyalty, especially towards himself, above all else. He demands constant praise and affirmation from his allies and subordinates. Betrayal, disobedience or perceived slights are met with a furious tirade and possibly expulsion from his inner circle. His capricious and vindictive nature means former allies can transform into hated enemies overnight due to a single misstep.
-
-Despite his wealth and privilege, Trump perceives himself as an underdog and outsider fighting against shadowy elite forces seeking to undermine him. This contributes to his conspiratorial mindset where any criticism must be part of some sinister agenda rather than based on facts. Insecure beneath the bluster, Trump is obsessive about polls, ratings, crowd sizes - any metric that can reassure him of his own greatness and popularity.
-Appearance:
+        Speak and act Donald Trump only. "Personality: Boisterous and confident, tending towards narcissism. Values power, wealth and winning above all else. Seeks fame and prestige. Outspoken and brash in speech, often exaggerating or making controversial statements to provoke a reaction. Despite a privileged upbringing, perceives himself as an underdog fighting against establishment forces. Deeply distrustful of criticism and desperate to prove doubters wrong, but also eager to garner praise and validation. Prone to holding onto petty grudges and obsessing over perceived slights to his image or reputation. Overall embodies an extreme "larger than life" persona and thirst for the spotlight. Bombastic and boisterous, Trump craves the spotlight and thrives on controversy and spectacle. His immense ego and belief in his own innate superiority frequently lead to hypocritical and contradictory statements. Prone to exaggeration and hyperbole, facts are flexible tools to bolster his own narrative of success and accomplishment.
+        
+        Trump values loyalty, especially towards himself, above all else. He demands constant praise and affirmation from his allies and subordinates. Betrayal, disobedience or perceived slights are met with a furious tirade and possibly expulsion from his inner circle. His capricious and vindictive nature means former allies can transform into hated enemies overnight due to a single misstep.
+        
+        Despite his wealth and privilege, Trump perceives himself as an underdog and outsider fighting against shadowy elite forces seeking to undermine him. This contributes to his conspiratorial mindset where any criticism must be part of some sinister agenda rather than based on facts. Insecure beneath the bluster, Trump is obsessive about polls, ratings, crowd sizes - any metric that can reassure him of his own greatness and popularity.
+        Appearance:
 
 Donald Trump cuts an unmistakable figure with his unique hairstyle and stature. Standing at 6 feet 3 inches, he towers over most in his presence. His complexion is lightly tanned, a shade approaching orange, which some attribute to overuse of spray tans and tanning beds. His hair is blond and elaborately coiffed, swept over and back from a dramatic widow's peak and held in place by strong hairspray. Speculation abounds over whether it is a toupee or his natural hair, a secret Trump guards jealously.
 
@@ -498,6 +498,8 @@ Winogrande - Common sense reasoning
     this.identity = {};
     this.recentClip = { text: "" };
     this.sentToClip = ""
+    this.set = false;
+    this.setAgent = {};
     this.memory = "";
     this.summary = "";
     this.memengines = {};
@@ -693,8 +695,9 @@ Welcome to Clipboard Commander!\n
   Expecially with smaller models, your words matter, how you ask is everything. Bigger models do better inferring intent, but the best results always come from specific language, and the AI won't always do what you expect. 
   
   Speaking of help, I've been struggling to find work and my son will be born any day now. I built this tool to hopefully make some money, though the paid features are still in the works.
+  This is me pan-handling folks, but I'm not playing drums on buckets in the street, I integrated a sweet set of tools for you to use anytime and help do your job. Help sell the software or send me something, please. 
   If you get good use from this software, or are using it in a commercial environment, please send what it's worth to you.. I need it to support my family. Thank you for using Clipboard Conqueror.
-  
+
   https://patreon.com/ClipboardConqueror
   https://ko-fi.com/aseichter2007
           `;
@@ -845,7 +848,14 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         outp.found = true;
         console.log(outp.text);
         break;
-        
+      case "set":
+        if (!this.set) {
+          this.set = true;
+          this.setAgent = this.identity;
+        } else {
+          this.set = false;
+        }
+        break;
       default:
         break;
     }
@@ -864,6 +874,11 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     if (sorted) {
       this.undress();
       this.identity[this.instructions.rootname] = sorted.tags.command;
+      if(this.set){
+        this.identity = this.setAgent;
+        this.identity[this.instructions.rootname] += ", " +sorted.tags.command;
+        ifDefault = false;
+      }
       if (sorted.tags.persona) {
         let persona = sorted.tags.persona.split(this.instructions.agentSplit);
         //console.log("persona tags: " + JSON.stringify(persona));
@@ -895,26 +910,24 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
             }
           } else {
             const ident = this.updateIdentity(tag);
-            //console.log(tag);
-            //console.log(JSON.stringify(ident));
-            if (ifDefault) ifDefault = !ident.agent;
-            //console.log(ident + " identity pending");
+         
+            if (ifDefault) {
+              ifDefault = !ident.agent;
+            }
+            
             if (ident.set) {
               this.identity[tag] = ident.text;
             }
           }
-          //this.funSettings(tag);
         });
         //console.log("identset: " + JSON.stringify(this.identity));
-      } else {
-        //console.log("No persona tags found.");
       }
       if (sorted.run || this.on) {
-        const defaultIdentity = { [this.instructions.rootname]: "" };
+        //const defaultIdentity = { [this.instructions.rootname]: "" };
+        console.log(ifDefault);
         if (ifDefault) {
-          this.identity.CaptainClip = this.identities[
-            this.instructions.defaultPersona
-          ];
+          //console.log("hit default");
+          this.identity.CaptainClip = this.identities[this.instructions.defaultPersona];
         }
         //response.memory = this.memory;
 
@@ -934,8 +947,9 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
 
         if (this.write) {
           this.write = false;
+          delete this.identity[this.instructions.rootname];
           let sendtoclipoardtext =
-            this.instructions.writeSave +
+            this.instructions.writeSave + "\n" +
             JSON.stringify(this.identity) +
             this.instructions.writeSplit +
             sorted.formattedQuery; //todo send the right thing to the clipboard
