@@ -79,10 +79,46 @@ It's weird, but they have no state, it's data-crunch-out, no real consideration.
 
 You can go find the right data and paste the text at an LLM and it can use that data, but no LLM should be trusted implicitly, just as a first resort, right here aboard the Clipboard Conqueror.
 
+
+Productivity:
+-------------
+Clipboard Conqueror makes the process of accessing an LLM simple and efficient in any workspace.
+
+-  Locally run models can be trusted with private data and do not phone home or report any metrics. Local LLMS are private and secure. 
+
+- Proofread documents, test explanations, get feedback, find inspiration, or just run a game of dungeons and dragons with your friends.
+
+Clipboard Conqueror provides a whole toolbox of predefined assistants, ready to work for you.  
+
+
+
+- |||agi|"AI Generate Instructions" will help you execute any operation you ask for help with. Captain Clip does well too, but this is based on the kobold agi script and is superior to a simple ask. 
+
+- |||stable| will write you an image prompt for use in stable diffusion automatic 1111
+This identity and some other cards were found on chub.ai, some are my own or significant customizations.
+
+- |||tot|"tree of thought" will expand and include near concepts, questions, or ideas to produce a more comprehensive solution
+
+
+Save agents on the fly to store, sort, query, think, review, or just tell you jokes or anything you can  ask for, really. 
+
+Key Features:
+--------------
+* Locally run large language model support with KoboldCPP for powerful, secure, text processing.
+* Combines user-supplied text with AI output for precise customization.
+* Supports multiple languages and contexts for diverse applications. Not all LLM models are multilingual, some configuration may be required.
+* Targeted agents for specific tasks.
+* Quick saving of new agents and information for later use.
+
+
+Desktop Platforms:
+--------------------
+Clipboard Conqueror is designed to work seamlessly across multiple platforms including Windows, macOS, and Linux. It has been rigorously tested and optimized to ensure stability and compatibility.
+
 Usage:
 ------
 
-1. Enter `|||` followed by your request or command. Pipe "|" can be typed by pressing shift + backslash (above enter).
+1. Enter `|||` followed by your request or command. Pipe "|" can be typed by pressing shift + backslash (above enter, left of enter for European layouts).
 2. Copy the text to your clipboard. After a few moments, you should get a notification and the response is ready to paste:
    ```
    - ||| "Ahoy Captain, open the airlock, we're coming on board the Clipboard Conqueror"
@@ -120,7 +156,7 @@ Usage:
    ```
    |||2700| write a long story bout a picture of a story where an artist draws a picture of a story about an artist being written by an author
    ```
-   - sets the max response length to 1200. Also works like |||agent,setting:0.5,1000| just a number is always max response length.
+   - sets the max response length to 2700. Also works like |||agent,setting:0.5,1000| just a number is always max response length.
 
    ```
    |||temperature:1.1| be more unpredictable, but only 10%
@@ -186,48 +222,30 @@ List is useful for knowing what is available.
 
 Currently after using  a command that writes data from the application, you must copy text with no invoke token to clear an error. 
 
-Productivity:
--------------
-Clipboard Conqueror makes the process of accessing an LLM simple and efficient in any workspace.
 
-Locally run models can be trusted with private data and do not phone home or report any metrics. Local LLMS are private and secure. 
-
-Proofread documents, test explanations, get feedback, find inspiration, or just run a game of dungeons and dragons with your friends.
-
-Clipboard Conqueror provides a whole toolbox of predefined assistants, ready to work for you.  
-
-
-
-|||agi|"AI Generate Instructions" will help you execute any operation you ask for help with. Captain Clip does well too, but this is based on the kobold agi script and is superior to a simple ask. 
-
-|||stable| will write you an image prompt for use in stable diffusion automatic 1111
-This identity and some other cards were found on chub.ai, some are my own or significant customizations.
-
-|||tot|"tree of thought" will expand and include near concepts, questions, or ideas to produce a more comprehensive solution
-
-
-Save agents on the fly to store, sort, query, think, review, or just tell you jokes or anything you can  ask for, really. 
-
-Key Features:
---------------
-* Locally run large language model support with KoboldCPP for powerful, secure, text processing.
-* Combines user-supplied text with AI output for precise customization.
-* Supports multiple languages and contexts for diverse applications. Not all LLM models are multilingual, some configuration may be required.
-* Can utilize various personas and roles for different tasks.  
-* Quick saving of new agents and information for later use.
-* Capable of mimicking "voices" and generating unique content.
-
-Supported Platforms:
---------------------
-Clipboard Conqueror is designed to work seamlessly across multiple platforms including Windows, macOS, and Linux. It has been rigorously tested and optimized to ensure stability and compatibility.//??!! Dang, that is a complete lie. There are at least 2 bugs I havent nailed down, and I have no idea if this works on mac. Report your findings please. Linux and probably IOS have a couple extra steps, thank harrro for figuring that out.
-
-Notice://gtp, openai unimplemented. LMStudio is not supported yet either.
 --------
-When using the |||gtp:3| or |||gpt:4| commands, be aware that data will be sent to outside systems. This may be a breach of your companies data protection policy.
-I  tried pounding the pavement, I made marketing materials, now I gotta get back after a better resume and rattle the job boards. Lets ride odds on interviewer reactons to this tool. Place your bets. 
-//openAI unimplemented, consider secondary branch to avoid data protection policy issues.
+OpenAi Compatible 
+-----
+LMstudio support like |||#| or save an agent like |||lm:save|"instructions" and any time that agent is called, it will send those instructions with the system prompt and send to openAi compatible endpoints at the url defined in openai.json
 
-You can safely use any other command to query sensitive data, and depending on your configuration, gtp commands can be sent to LMStudio to run against a larger slower model. //unimplemented
+```
+|||#|this message will go to openAI compatible endpoint, default LMStudio;
+```
+
+```
+|||##|this will go to openAi url endpoint default chatGTP 
+```
+
+The system actually supports 3 seperate backends in it's current state. One kobold endpoint and two openAI urls. 
+
+When using these commands, be aware that data may  be sent to outside systems. This may be a breach of your company's data protection policy.
+
+|||model:gpt-3.5-turbo| will change the target openai model. names must be exact. I dont know them or have a gpt key to test this feature. 
+
+|||#,set| will set always behave as expected and send to the compatible endpoint until |||set| to release. 
+
+
+You can safely use any other command to query sensitive data, and depending on your configuration, gpt commands can be sent locally as well. 
 
 
 Advanced Example:
@@ -243,6 +261,7 @@ Advanced Example:
 will add that agent json parsed into the memory until the application is closed. Note: the entire JSON is sent to the LLM. Openhermes loves the format with keys like {"system":"You are {{char}}:", "name": "SuperAIHELPErman5000", "description": "future roboto assistant mega help power"}
 
    super advanced save: 
+   ---
    
       |||CurrentText:save,re,LastCopy:save|CurrentText
   - if the re flag is set, saved agents come from the last copy. This allows saving an agent from the current text that is distinct from the lastCopy agent which comes from the last clipboard contents, and allows saving agents while making an initial query like:  
@@ -255,10 +274,24 @@ will add that agent json parsed into the memory until the application is closed.
   
   |||frank,dataCopiedLast:save,re| Hey get a load of this! - will save "Hey get a load of this!" to dataCopiedLast.
     
-  |||CurrentText,LastCopy| query combined like this. 
+  |||CurrentText,LastCopy| query combined next like this. 
 
+
+ System commands
+ ---
+
+ ||||System command sends before captain clip | "user query"
+
+ |||writer| system command sends before writer| "user query"
+
+ This syntax lets you command the system directly at the same time you send as user
+
+ ```
+ |||| assistant gives really weird bogus advice: | how can I become as pretty as OPs mom?
+ ```
 
 Advanced Commands:
+---
 
 ||||System: Command first before Clip agent.|  text from <user> in the internal chain
 
@@ -276,7 +309,8 @@ frank\n\n<|im_end|>\n<|im_start|>assistant:\n
 |||re,frank|this text is invisible to :save| //also, :save in there may have unpredictable results...
 
 
-|||set|:
+|||set|
+---
 
 |||rf,frank,set,joe|these system commands persist| query goes out. 
 
@@ -292,7 +326,9 @@ frank\n\n<|im_end|>\n<|im_start|>assistant:\n
 
  |||rf,set| is extremely useful for repeated queries against the same copied data. 
 
- while set |||any|this instruction replaces the old system instruction before agents this time only| {query}
+ while set ||||any| any replaces the old system instruction before agents this time only| {query}
+ 
+ - again note 4 pipes. 
 
 
 note: current behavior removes chatml markup "<|any|>" from the ai return to ease use of non chatML models with default settings. For the most part monster merge models respond very well, but will markup charachter dialoge in a way I find undesireable. Comment line 17 "text = this.removeChatML(text);" in responsengine.js to stop this behavior. 
@@ -317,7 +353,7 @@ Currently there are no built binaries and Node is required to run Clipboard Conq
 
 
 
-2. Clipboardd Conqueror reqires [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/releases/) or a Kobold United model host to be running in order to funcion.
+2. Clipboardd Conqueror reqires [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/releases/), a kobold compatible API, or an [openAI compatible APT](https://lmstudio.ai/) to function. Or both! or just an openAI key. Or all three!
 
 
     For macOS get KoboldAi or anything that hosts a kobold united compatible endpoint for tavern, etc. //Notes below for linux and mac, thank Herro.
@@ -327,7 +363,7 @@ Currently there are no built binaries and Node is required to run Clipboard Conq
     I will supply a sample batch file for loading a model with your settings file after you get kobold dialed in from the launcher. 
 
 3. Kobold needs a model. Here are my reccomendations 12/5/23:[OpenHermes 2.5 Mistral 7B 16K Context.GGUF](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-16k-GGUF)
-  minimum hardware:[rocket_3B](https://huggingface.co/TheBloke/rocket-3B-GGUF)//untested with CC but good for a 3B in kobold's ui. Should be 
+  minimum hardware:[rocket_3B](https://huggingface.co/TheBloke/rocket-3B-GGUF)
       ``````
       OpenHermes-2.5-Mistral 7b 16k.gguf supports 16384 context. This is a decent few pages. If it seems slow reduce your context to 8, if the problem persists, select a lower Quantization.
 
@@ -343,7 +379,6 @@ runClipboardConqueror.bat
 
 If Clipboard Conqueror closes on launch in windows, ensure you have Node installed, if the Clipboard Conqueror seems unresponsive, make sure Koboldcpp is running and type rs then press enter in the Clibpoard Conqueror console window to restart the application especially if any errors are displayed. 
 
-For linux and mac, a the start parameter in package.json may need to be modified per harrro's instructions below.
 
 I recommend fresh clones for updates, or you might overwrite settings you liked.
 
@@ -424,13 +459,25 @@ I get all mine from huggingface/thebloke. Not all models suport chatML format, a
 
 for ease of use and organization, consider keeping kobold and the model you chose inside Clipboard Conqueror application.  If koboldcpp.exe is placed here, Clipboard Commander will run it automatically.//ToDo: detect and run kobold with cc.kcpps
 ``````
+
+
 Finally run Clipboard Conqueror.  
+
 run installCC.bat
-run runClipboardConqueror.bat
+
+run runClipboardConqueror.bat or Mac_Linux_Start.bat
+
 or
+
 //open terminal at folder and run
 npm i
 npm start
+
+
+
+
+
+I provide sampleLaunchKoboldBat.bat and hermes16.kcpps to ease making quick launch shortcuts. They need to be changed to match your system, and the bat expects to be in the same folder  as both koboldcpp.exe and hermes16.kcpps.  hermes16.kcpps contains a full path that must match the model location, reccomend loading and saving the file to change the target. 
 
 
 
@@ -478,6 +525,8 @@ Have fun and remember you can always ask for
 ---------------------------------
 Bug Reports and Feature Requests:
 ---------------------------------
+If it seems hung, copy text with no invoke and try again. 
+
 If you encounter any issues while using Clipboard Conqueror or have suggestions for future improvements, please report them via github or email me at "clipboard.aseichter2007@gmail.com" I will work diligently to address and resolve any concerns.
 
 I'm chasing a bug where after |||list| the next copy is not parsed, but is stored, preventing the same thing being copied and invoking the AI.  Workaround: copy text without an invoke to clear the stored copy and allow a "fresh" copy that will activate the parsing engine. 
@@ -519,7 +568,7 @@ dev:
 //todo: finish saving objects to memory//done
 
 
-//todo: openAI client, probably migrate a ton of logic out of textengine and into koboldinterface.js to make them interchangeable. 
+//todo: openAI client, probably migrate a ton of logic out of textengine and into koboldinterface.js to make them interchangeable. //half I should implement it properly but is's such a mystery without keys. 
 
 
 //todo: keyboard binding to activate ai on last clip without prompt. //maybe paid, I don't want to make it too easy to do all the linkedin tests, and a ready line to copy is the same. 
@@ -532,22 +581,22 @@ dev:
 
 //decline: use case? I guess return tokens like|||tokens| so you can see if it will fit... ok. undecline: todo: /api/extra/generate/check  //return in progress, useful for vlarge gens on slow mode
 //todo: /api/extra/tokencount //should run against entered data and updates should be shown after setting mem or agent and on final send. 
-//todo: /api/extra/true_max_context_length //returns context max
+
 // i found this!https://lite.koboldai.net/koboldcpp_api#/1
 //todo: implememnt some kind of update check and notificatoin.
 
 
 
-//implement |||no| //uh oh, better comment needed. I should learn from this someday. Waaait, it's coming back to me. |||no| will disable parsing on the next run for transporting instructions, though its much easier to just error it off like "||| ||| ||| move this without invoking"
+//pass, just close CC it launces in one second//implement |||no| //uh oh, better comment needed. I should learn from this someday. Waaait, it's coming back to me. |||no| will disable parsing on the next run for transporting instructions, though its much easier to just error it off like "||| ||| ||| move this without invoking"
 
 release!//oh snap I got excited and went. //beta release in motion.
 //premium? //within the scope it's probably better to persue a character portal and just expose the settings sensibly in multiple files. 
 
 //todo: branch to build premium binaries from. premium branch features:
 //todo: savesettings and getsettings. overwrite settings like |||settings,write| to paste ' |||settings,save| `{ the settings serialized json }` ' which can be edited in place and copied to save the settings. 
-//todo: per charachter rolling memory to allow more natural exchanges and enable rp. 
+//really waffling, its simply good like >user: //todo: per charachter rolling memory to allow more natural exchanges and enable rp.
 //todo: group chain interacting so you can batch like |||@summary,@writer|"text" and paste a summary, then you press the invoke key and it advances the chain and gives you the output from writer with the results of summary in the memory//todo: settings bulk in and out
-//todo: web api to host login server. 404 defaults to allow full operation of paid branch users if I decide the server is expensive to run, or I die, or the internet is down. potential vulnerability: blocking in hosts to avoid subscriptoin check. Please pay for the full version of this software, this is my only income. Life is hard. 
+.//pass no login here, will just have portal make setting file to save in place//todo: web api to host login server. 404 defaults to allow full operation of paid branch users if I decide the server is expensive to run, or I die, or the internet is down. potential vulnerability: blocking in hosts to avoid subscriptoin check. Please pay for the full version of this software, this is my only income. Life is hard. 
 //todo: portal site to serve binary download links, take payment and manage your subscription level. Look up rules about re-serving chatgtp api on my key. Consider asp.net, it will just handle users and the front end only feels a little silly, no need for relational mongo or any silliness. Downside, I've never succssfullt hooked up a database right deploying to s2. consider aws lambda for auth,  serverless.  lambda auth has additional challenges
 //todo: make a lambda script to setup a lambda to serve a daily charachter, run a continuous contest so people vote for tomorrows char. |||dailycandidate,rate|10, assign up to ten points for the candidate last retrieved with |||dailycandidate| provies random from server. Points are gained by and blind?
 //todo: build agent portal with easy to copy and use workflow. 
@@ -557,48 +606,4 @@ release!//oh snap I got excited and went. //beta release in motion.
 todo: a server for a mystery agent to play twenty questions against. If you guess the character you get points for the premium prompt store. Monthly tokens on a subscription, no need for phoning out, just copy from the page. Profit sharing intent, but core first.
 
 //todo: Implement FunkyTown, you kids will never guess what this does. 
-
-
-
-|||agi| walk me through creating a javascript module that downloads a 10 gigabyte file from huggingface
-
-Problem: Create a JavaScript module to download a file from HuggingFace
-
-Execution Steps:
-1. |||agi| Determine the URL of the file you want to download from HuggingFace.
-2. |||agi| Create a new XMLHttpRequest object or use the fetch API to make a GET request to the URL.
-3. |||agi| Handle the response by listening for the "load" event and extract the file data from the response.
-4. |||agi| Check the content type of the response to determine the appropriate file format.
-5. |||agi| If necessary, convert the file data to a format suitable for the application's needs (e.g., Base64 encoding).
-6. |||agi| Create a function to handle the file download, either by providing a link for the user to download or by writing the file to disk.
-7. |||agi| Implement error handling for any potential issues that may arise during the download process.
-8. |||
-
-Risks:
-1. The URL provided may be incorrect or the file may no longer be available.
-2. The response from the server may be incomplete or corrupted.
-3. The user may not have permission to write to the specified location for saving the file.
-
-Good results from the execution:
-1. The file is successfully downloaded and available for use in the application.
-2. The download process is smooth and error-free.
-3. The user is informed of any issues that may arise during the download process.
-
-Bad results from the execution:
-1. The file cannot be downloaded due to an incorrect URL or the file being unavailable.
-2. The file is corrupted during the download process.
-3. The user is unable to access the downloaded file due to permissions issues.
-
-Top 5 remaining issues to solve:
-- |||agi| How to handle large files for downloading
-- |||agi| How to check the file integrity after downloading
-- |||agi| How to implement a progress bar for the download process
-- |||agi| How to handle rate limiting on the HuggingFace servers
-- |||agi| How to automatically detect the most recent version of a file on HuggingFace
-
-
-
-
-
-###tot#how to make this tool better.
 

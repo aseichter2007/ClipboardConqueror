@@ -1,0 +1,5 @@
+{
+    "key:": "your key",
+    "url": "https://api.openai.com/v1/chat/completions",
+    "compatible" : "http://localhost:1234/v1/chat/completions"
+}

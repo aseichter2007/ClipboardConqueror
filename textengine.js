@@ -2,9 +2,11 @@ class TextEngine {
   constructor(
     sendToApi,
     sendToClipboard,
+    recieveApi,
     notify,
     getSummary,
     getTokens,
+    openAiConfig,
     identities = {
       user: {
         description:
@@ -89,6 +91,7 @@ voice:
       bugspot:
         "[instruction: Add a commented out correction to any lines containing potential errors and return the code. Change as few charachters as neccesry. Do not add to the beginning or end of the code becausee it continues beyond context. At the end, explain the errors these bugs will present.",
       writer: `instruction: Write a lengthy prose about the requested topic. Do not wrap up, end, or conclude the story, write the next chapter.\n \n Story:`,
+      w:"```\nsimulate an ai writing assistant directed by any '#:*themes*' and tasked with the following five goals: \n 1. //comments are user's notes about the content. \n 2. user will direct the content, write with the flavors user specifies. \n 3. do not write endings or conclusions. \n 4. resolve open questions from the previous text and write one new action or event to resolve in the next message. \n 5. write engaging and human characters, including their thoughts, feelings, speech, and action in the prose. \n ```\n Continue the theme:",
       editor: {
         instruction:
         "return excerpts containing logical, gramactic, or conceptual errors, or are just confusing. Explain each problem. If asked for specific feedback, give detailed answers. Always explain how the content might make the reader feel."
@@ -273,6 +276,8 @@ Answer the Question by exploring multiple reasoning paths as follows:
 - Please note that while the focus is on the final answer in the response, it should also include intermediate thoughts inline to illustrate the deliberative reasoning process.
 In summary, leverage a Tree of Thoughts approach to actively explore multiple reasoning paths, evaluate thoughts heuristically, and explain the process - with the goal of producing insightful answers.
 """`,
+      pro: "Think carefully through the topic, step by step in a systematic manner, and allow each step to logically build on the previous one.",
+      twenty: "system: ``````simulate an AI to play '20 Questions:assistant has an identity from SYSTEMID.  assistant will return Yes or No unless user's guess is correct.  assistant determines hot ( 100C for correct guess ) or cold ( 0C for unrelated guess ) and returns a temperature in Celsius indicating the accuracy of user's guess. '`````. '20 Questions' a classic guessing game where assistant is  an object, animal, or person, and the user must figure out what assistant is by asking 'yes' or 'no' questions. They get twenty questions to do so. Don't worry about how many questions.",
       grug: `{{grug}}: Grug is simple. Grug happy happy. Grug spell bad. Grug know nothing, tell all. Grug not unnstann. Grug does not use transitional words or adjectives.`,
       dark: `instruction: reply with dark humor and puns on the theme. Jokes are more important than good answers. Examples:[ 
 "assistant: Build a man a fire and he'll be warm for a night.",
@@ -285,6 +290,15 @@ In summary, leverage a Tree of Thoughts approach to actively explore multiple re
     },
     instructions = {
       // leave a comment with final line number of the block where this all comes together.
+      defaultClient: "kobold",
+      //defaultClient: "compatible",
+      //defaultClient: "openAi",
+
+      //defaultInstruct: "chatML", todo: add this
+
+      openAi: "gpt",
+      compatble: "lm",
+
       defaultPersona: "default",
       invoke: "|||",
       endTag: "|",
@@ -295,6 +309,7 @@ In summary, leverage a Tree of Thoughts approach to actively explore multiple re
       rootname: "###", //this goes into the object sent as identity at creation and |||| this text goes in the value| "request"
       writeSave: "|||name:save|",
       writeSplit: "\n _______\n",
+      returnRE: ">user:", //for |rs| to return this on the end of resoponse for easy conversation, havent decided how that should get from the settings to the response processor. 
       memoryLenth: 10,
       //system: "{{[INPUT]}} ",
       system: "<|im_start|> ", //chatML
@@ -452,6 +467,7 @@ Winogrande - Common sense reasoning
 `
     },
     apiParams = {
+      model: "gpt-3.5-turbo",
       prompt: "",
       use_story: false,
       use_memory: false,
@@ -490,7 +506,9 @@ Winogrande - Common sense reasoning
     this.identities = identities;
     this.sendToApi = sendToApi;
     this.sendToClipboard = sendToClipboard;
+    this.recieveApi = recieveApi;
     this.getTokens = getTokens;
+    this.openAiConfig = openAiConfig;
     this.instructions = instructions;
     this.notify = notify;
     this.getSummary = getSummary;
@@ -510,17 +528,18 @@ Winogrande - Common sense reasoning
     this.sendLast = false;
     this.on = false;
     this.openAi = false;
+    this.compatible = false;
   }
   //|||re|  to get first and last charachter of string identity
   returnTrip(str) {
     if (typeof str !== "string") return "Error: Input must be a string";
-    if (str.length < 2) return "Error: String too short";
-    return str[0] + str[str[1]];
+    //if (str.length < 2) return "Error: String too short";
+    return [str[0], str[1]]
   }
 
   updateIdentity(identity) {
     //console.log("identity start:"+identity);
-    //let tripcode = this.returnTrip(identity);
+    let tripcode = this.returnTrip(identity);
     let found = false;
     let setIdent = {};
     let memlevel = 0;
@@ -531,40 +550,43 @@ Winogrande - Common sense reasoning
       if (identity) {
         if (Number.isNaN(Number(identity))) {
           //for memory, pending... Do I need memory? Does it really help the purpose? It's marginally useful in a case where someone wants a proper chat but the text box works well enough extending like just user: further queries against context. Its like 90% hooked up though, just forget token tracking and pound it out, but I'll never use it, do we need another 7 inches on the readme for more features that like 1 person will use all the time?
-          // if (tripcode[0] === '#'){
-          //   if(tripcode[1] ==='#'){
-          //     console.log("activate memory level 2");
-          //     identity = identity.slice(2);
-          //     memlevel = 2;
-          //       //identity = identity.slice(1);
-          //     } else {
-          //       console.log("activate memory level 1");
-          //       identity = identity.slice(1);
-          //       memlevel = 1;
-          //   }
-          // }
+          if (tripcode[0] === '#'){
+            if(tripcode[1] ==='#'){
+              console.log("activate OpenAi");
+              identity = identity.slice(2);
+              memlevel = 2;
+                //identity = identity.slice(1);
+              } else {
+                console.log("activate lmStudio");
+                identity = identity.slice(1);
+                memlevel = 1;
+            }
+          }
           // if (this.memengines.hasOwnProperty(identity)) {
           //   this.memory = this.memengines[identity];
           //   } else {
           //     if (this.identities.hasOwnProperty(identity)) {
           //       let agent = this.identities[identity]
-          //       if (memlevel === 1) {//set longterm or w/e true
-          //         console.log("creating memory");
-          //       this.memengines[identity] = new ChatHistory(identity,agent, this.getSummary, this.getTokens, this.instructions.memoryLenth, true, false,this.params.max_context_length, this.getTokens);//todo, get params
-          //       this.memory = this.memengines[identity];
+                if (memlevel === 1) {//set longterm or w/e true
+                  //co opted fot openAi and LMStudio
+                  this.compatible = true;
+                 // console.log("creating memory");
+                //this.memengines[identity] = new ChatHistory(identity,agent, this.getSummary, this.getTokens, this.instructions.memoryLenth, true, false,this.params.max_context_length, this.getTokens);//todo, get params
+                //this.memory = this.memengines[identity];
 
-          //      } else if( memlevel === 2){//set both true
-          //       console.log("creating enhanced memory");
-          //       this.memengines[identity] = new ChatHistory(identity,agent, this.getSummary, this.getTokens, this.instructions.memoryLenth, true, true,this.params.max_context_length, this.getTokens);//todo, get params
-          //       this.memory = this.memengines[identity];
-          //     }
-          //     }else{
-          //       console.log(identity + " is not a memory");
-          //     }
-          //     console.log("something went wrong creating new ChatHistory");
-          //   }
-          //   //}
-          // }
+               } else if( memlevel === 2){//set both true
+                this.openAi = true;
+                //console.log("creating enhanced memory");
+                //this.memengines[identity] = new ChatHistory(identity,agent, this.getSummary, this.getTokens, this.instructions.memoryLenth, true, true,this.params.max_context_length, this.getTokens);//todo, get params
+                //this.memory = this.memengines[identity];
+              }
+            //   }else{
+            //     console.log(identity + " is not a memory");
+            //   }
+            //   console.log("something went wrong creating new ChatHistory");
+            // }
+            //}
+          }
 
           if (this.identities.hasOwnProperty(identity)) {
             setIdent[identity] = this.identities[identity];
@@ -585,7 +607,7 @@ Winogrande - Common sense reasoning
       }
       return { text: setIdent[identity], agent: found, set: setAgent };
     }
-  }
+  
 
   // dress(identity){
   //   this.identity = ``
@@ -746,7 +768,7 @@ Now wait for the notification. It could be a while depending on your hardware, s
 I rarely wait over 30 seconds with my 3090 running 8 bit OpenHermes 2.5 Mistral, but on very slow hardware you might wait minutes or turn the max generation size down like |||200|
 
 
-See? Not quite. lets try and cool things off a bit. LLMs have a parameter called a temperature, even chatgtp.
+See? Not quite. lets try and cool things off a bit. LLMs have a parameter called a temperature, even chatGPT.
 |||temperature:0.4|Jack and Jill went up the hill, each carrying 10 apples. Jack fell down, rolled down the hill, and dopped all of his apples. Jill did not come tumbling after. Jill gave half her apples to Jack when he returned to the top of the hill. They each ate an apple, and then climbed back down the hill, where they spotted an apple tree. Jack picked 3 apples and gave them to Jill, while Jill pickes 8 apples and splits them between herself and jack, adding half to the apples she carried down the hill. How many apples do each have at the end?
 
 probably better. Do math and logic stuff at low temperature for better results.
@@ -874,6 +896,10 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
           this.set = false;
         }
         break;
+        case "e":
+          outp.text = "";
+          outp.found = true;
+          outp.set = true;
       default:
         break;
     }
@@ -886,6 +912,19 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     if (text === this.sentToClip) {
          //
       return;
+    }
+    if (this.instructions.defaultClient != "kobold") {
+      switch (this.instructions.defaultClient) {
+        case "openAi":
+          this.openAi = true;    
+          break;
+        case "compatible":
+          this.compatible = true;
+          break;
+        default:
+          console.log("improper instruct setting");
+          break;
+      }
     }
     const sorted = this.activatePresort(text);
     let ifDefault = true;
@@ -928,11 +967,14 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
             } else if (commands[1] == "false") {
               this.params[commands[0]] = false;
             }
+            else {
+              this.params[commands[0]] = commands[1];
+            }
           } else {
             const ident = this.updateIdentity(tag);
          
             if (ifDefault) {
-              ifDefault = !ident.agent;
+              ifDefault = !ident.agent;//comes out true set false
             }
             
             if (ident.set) {
@@ -979,19 +1021,24 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
           return this.sendToClipboard(sendtoclipoardtext);
         }
         if (!this.sendHold) {
-          if (this.openAi) {
-            //  http://localhost:1234/v1/chat/completions \
-            // "Content-Type: application/json" \
-            // {
-            //   "messages": [
-            //     { "role": "system", "content": this.identity },//stringify the message?
-            //     { "role": "user", "content": sorted.formattedQuery }//I should build my memory structure and force chats with openai through that? that would handle the instruction promps for multimodel support. Consider ## for memory clearing rather than extra modes. Currently supports initial needs for assigning an agent to gtp with ##
-            //this type of toggling is data dangerous
-            //   ],
-            //   "temperature": 0.7,
-            //   "max_tokens": -1,
-            //   "stream": false
-            // }'
+          if (this.openAi || this.identity.hasOwnProperty(this.instructions.openAi)) {
+            if (!this.set) {
+              this.openAi = false;
+            }
+            if (this.sendLast) {
+              generateCompletion(this.openAiConfig.key, this.identity, sorted.formattedQuery + this.recentClip.text , this.params, this.recieveApi, this.openAiConfig.url, this.params.model)              
+            } else {
+              generateCompletion(this.openAiConfig.key, this.identity, sorted.formattedQuery, this.params, this.recieveApi, this.openAiConfig.url, this.params.model) 
+            }          
+          } else if(this.compatible || this.identity.hasOwnProperty(this.instructions.lmStudio)){
+            if (!this.set) {
+              this.compatible = false;
+            }
+            if (this.sendLast) {
+              generateCompletion(this.openAiConfig.key, this.identity, sorted.formattedQuery + this.recentClip.text , this.params, this.recieveApi, this.openAiConfig.compatible, this.params.model) 
+            } else {
+              generateCompletion(this.openAiConfig.key, this.identity, sorted.formattedQuery, this.params, this.recieveApi, this.openAiConfig.compatible, this.params.model) 
+            }
           } else if (this.rp) {
             if (this.sendLast) {
               this.sendLast = false;
@@ -1107,130 +1154,39 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     return output;
   }
 }
-
-class ChatHistory {
-  constructor(
-    agent,
-    agentdetails,
-    getsummary,
-    getTokens,
-    length = 10,
-    longterm = true,
-    superlongterm = true,
-    targetTokens = 2000,
-    getokens,
-    history = [],
-    longHistory = [],
-    sumMessage = `<|im_start|>system
-   summarize these messages for system use. After, list the inventory of items tools and technology used by order of importance to the instructions or story so that nothing important is left behind.`
-  ) {
-    this.agent = agent;
-    this.getSummary = getsummary;
-    this.history = history;
-    this.historyTokens = 0;
-    this.lastUser = "";
-    this.lastAI = "";
-    this.length = length;
-    this.targetTokens = targetTokens;
-    this.longterm = longterm;
-    this.superlongterm = superlongterm;
-    this.superHistory = longHistory;
-    this.superHistoryTokens = 0;
-    this.getokens = getokens;
-    this.agentTokens = 0;
-    this.agentDetails = agentdetails;
-    this.getAgentTokens();
-    this.sumMessage = sumMessage;
-    this.userTokens = 0;
-    this.aiTokens = 0;
-    this.summaryTokens = 0;
-  }
-  updateHistory() {
-    if (this.longterm) {
-      if (this.history.length >= this.length) {
-        let superhistoryuser = this.history.shift();
-        let superhistoryAi = this.history.shift();
-        this.history.push({ user: this.lastUser, t: this.userTokens });
-        this.history.push({ assistant: this.lastAI, t: this.lastAITokens });
-        if (this.superlongterm.length)
-          this.getsummary(
-            this.sumMessage +
-              stringify(superhistoryuser) +
-              JSON.stringify(superhistoryAi),
-            newLongterm()
-          );
-        return;
-      }
-      this.history.push({ user: this.lastUser, t: this.userTokens });
-      this.history.push({ assistant: this.lastAI, t: this.lastAITokens });
+async function generateCompletion(apiKey, identity, formattedQuery,params, callback, apiUrl, model = 'text-davinci-003') {
+  try {
+    const url = apiUrl;
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+    };
+    const stringifidentity = JSON.stringify(identity);
+    const prompt = {
+      "model": model,
+      "messages": [
+        { "role": "system", "content": stringifidentity},//stringify the message?
+        { "role": "user", "content": formattedQuery }//I should build my memory structure and force chats with openai through that? that would handle the instruction promps for multimodel support. Consider ## for memory clearing rather than extra modes. Currently supports initial needs for assigning an agent to gpt with ##
+      ],
+      "temperature": params.temperature,
+      "max_tokens": params.max_length,
+      "stream": false
     }
-  }
-  //todo: bring in user, ai messages and get token lengths,
-
-  returnUserData(text) {
-    this.lastUser = text;
-  }
-  returnAIdata(text) {
-    this.lastAI = text;
-  }
-  returnUserTokens(tokens) {
-    this.userTokens = tokens;
-  }
-  returnAITokens(tokens) {
-    this.aiTokens = tokens;
-  }
-  newLongterm(summarized) {
-    if (
-      this.superHistoryTokens + summarized.stats.tokens >=
-      this.targetTokens * 0.5
-    ) {
-      //todo get the right token length from response
-      this.getsummary(
-        this.sumMessage +
-          JSON.stringify(this.superHistory) +
-          JSON.stringify(summarized.text),
-        newSuperLongterm()
-      );
-      //this.superHistory = []
-    } else {
-      this.superHistory.push(summarized.text);
-      this.superHistoryTokens += summarize.stats.tokens;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(prompt)
+    });
+    const jsonResponse = await response.json();
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}: ${jsonResponse.error.message}`);
     }
-  }
-  newSuperLongterm(summarized) {
-    this.superHistory = [];
-    this.superHistory.push(summarized.text);
-    this.superHistoryTokens = summarize.stats.tokens;
-  }
-
-  returnHistoryTokens(tokencount) {
-    this.historyTokens = tokencount;
-  }
-  getHistory() {
-    return this.history;
-  }
-  getsummaryTokens(text) {
-    this.getokens(text, this.returnSummaryTokens);
-  }
-  returnSummaryTokens(tokenCount) {
-    this.userTokens = tokenCount;
-  }
-  setLastUser(lastUser, tokenCount) {
-    this.userTokens = tokenCount;
-    this.lastUser = lastUser;
-  }
-  setLastAi(lastAi) {
-    this.getTokens(lastAi, returnAITokens); //this might not be able to live here
-    this.lastAI = lastAi;
-  }
-  toggleLongterm() {
-    this.longterm = !this.longterm;
-  }
-  getAgentTokens() {
-    this.getTokens(this.agentdetails, this.agent, this.returnAgentTokens);
-  }
-  returnAgentTokens(agenttokenCount) {
-    this.agentTokens = agenttokenCount;
+    //console.log("2nd end response: "+JSON.stringify( jsonResponse.choices[0].message.content));
+    callback(jsonResponse.choices[0].message.content);
+  } catch (error) {
+    console.log(JSON.stringify("error: " + error));
+    callback(error.error);
   }
 }
+
 module.exports = TextEngine;

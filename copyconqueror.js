@@ -1,6 +1,6 @@
 let botresponse = false
 const path = require("path");
-//const myconfig = require("./defaultconfig.js");
+const openAiConfig = require("./openai.json");
 const {findSettings} = require("./setup.js");
 const clipboardListener = require('clipboard-event');
 const SendEngine = require('./textengine.js');
@@ -25,7 +25,7 @@ const KoboldClient = require('./koboldinterface.js');
     client = new KoboldClient( axios, recieveApiResponse, returnSummary, NotificationBell);//todo, this doesnt really belong like this, should be created directly into textengine constructor and eliminate all this mess running across the main program. Needed before adding openAI, untangling this will make that much easier. 
     
 }   
-const sendEngine = new SendEngine(recieveProcessedClip, ncp.copy, NotificationBell, getSummary, client.getTokenCount);
+const sendEngine = new SendEngine(recieveProcessedClip, ncp.copy, recieveApiResponse, NotificationBell, getSummary, client.getTokenCount, openAiConfig);
 function notify(title = "Paste Ready", text = "The response is ready"){
 // Define the notification
 const notification = {

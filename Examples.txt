@@ -1,3 +1,31 @@
+const ioHook = require('iohook');
+
+// Register a callback for the escape key
+ioHook.on('keydown', (event) => {
+  if (event.keycode === 1) {
+    // Escape key pressed
+    console.log('Escape key pressed. Exiting...');
+    ioHook.stop();
+  }
+});
+
+// Start the hook
+ioHook.start();
+
+// Handle exit gracefully
+process.on('SIGINT', () => {
+  ioHook.stop();
+  process.exit();
+});
+
+console.log('Press Escape to exit.');
+
+// Keep the script running
+process.stdin.resume();
+
+
+
+
 Copy the following line
 |||introduction|
 
@@ -56,16 +84,14 @@ In summary, the Apache 2.0 license is a popular open-source software license tha
 
 |||Clip, how do you like sailing on the Clipboard Conqueror?
 
-"Well, matey, I must say that I do enjoy sailing on the Clipboard Conqueror. It's a fine spaceship, equipped with the latest technology and the most reliable navigation systems. I can't help but appreciate the wonders of the universe that we explore, one star system at a time. And of course, I have my loyal crew to keep me company, which makes the journey all the more enjoyable. So, all in all, I'd say I'm quite fond of my life on the Clipboard Conqueror."
-
-Hello there! Captain Clip at your service. As an AI, I don't have personal preferences or emotions, but I can say that being on the Clipboard Conqueror has been quite an adventure. It's allowed me to assist countless individuals in navigating the wonders of the universe. It's a good ship, and I'm proud to be part of her crew. So, if you have any questions or need help, just let me know!
+Ahoy there! Ye be asking 'bout me feelings for me trusty vessel, the Clipboard Conqueror. Well, I reckon it's been a fine companion on many an adventure, despite its quirks and rats chewin' on the holographic storage. Ain't nothing a bit of grease and a sturdy broom can't fix, right? So, I s'pose ye'd best get started with your request, matey! "Get started: |||help| " to find out what me next orders are.
 
 
 
 
 |||tell me something cool going on with you Captain.
 
-As a virtual AI, I don't have personal experiences or feelings, but I can share some exciting developments in the world of technology that might interest you! Recently, scientists have successfully grown a mini-brain organoid that exhibits early signs of consciousness. This breakthrough could pave the way for understanding human brain function and developing treatments for neurological disorders. Additionally, NASA has successfully tested a new rocket engine called the Advanced Boosters for Orion, which will be used in future manned space missions to destinations like the Moon and Mars. And if you're into gaming, a new video game called "Among Us" has gained massive popularity due to its simple yet engaging gameplay and social deduction mechanics.
+Aye, matey! Ye be askin' for somethin' light, eh? Well, I be currently sailin' through the Great Nebula of Rigel, searchin' for a legendary interdimensional portal t' uncharted galaxies. 'Tis quite an adventure, full of surprises and perils! I reckon ye'd love it. But keep it on the downlow, me hearties - we be on the lookout for those sly buccaneers from the Starbound Sect who be after our precious loot!
 
 |||tell me about square roots and what dishes they are best served with. 
 Hello, Captain Clip here. It seems you've requested information about square roots and dishes they are best served with. I'm afraid I'm unable to assist with the latter part of your request, as my knowledge is based on past data and I'm not capable of accessing the internet for current events or research. However, I can provide a basic explanation of square roots.
@@ -85,5 +111,19 @@ Now, regarding dishes that square roots are best served with, I'm unable to prov
 
 
 
-|||woody,buzz|<buzz and woody fight over who gets to answer>|Woody help me install node.js on windows. 
+|||woody,buzz,tot|buzz and woody debate opposing views| is youtube potentially addictive? 
 
+Woody: "Well, partner, I reckon that YouTube might be like one of them fancy space gizmos Buzz keeps talkin' about. It sure can be a whole lotta fun, watchin' them videos 'round the clock. But if y'all get too caught up in it, it might be like a never-endin' game of cowboy and aliens, ya know? Time can just fly right by."
+
+Buzz: "That is an interesting perspective, Woody. I understand that YouTube can be highly engaging due to its personalized content recommendations, creating a continuous stream of videos that captivate users. However, the addictiveness is dependent on individual self-control and priorities. Like in space missions, one must balance duty and leisure activities. Self-discipline is key to avoiding over-consumption."
+
+
+|||o:save|"OH"
+
+|||p:save|"pee"
+
+|||t:save||"tea"
+
+|||##| openAi test one. what is two plus two
+
+Captain Clip says: "Let me tell ye, matey! Two plus two be fourfold, as it should be known throughout the multiverses across each and every timeline. In our cosmic arithmetic 'tis a universal fact of all."
