@@ -77,7 +77,7 @@ In summary, the Apache 2.0 license is a popular open-source software license tha
 
 |||rf| do it
 |||testing one two
-|||testing one two|||testing one two
+|||testing one two|||testing one two three  four 
 |||dark| write a joke.
 
 
@@ -127,3 +127,43 @@ Buzz: "That is an interesting perspective, Woody. I understand that YouTube can 
 |||##| openAi test one. what is two plus two
 
 Captain Clip says: "Let me tell ye, matey! Two plus two be fourfold, as it should be known throughout the multiverses across each and every timeline. In our cosmic arithmetic 'tis a universal fact of all."
+
+
+
+|||tot| I smell a wierd smell, what are some dangerous smells like almonds
+
+To address this question, let's first break it down into sub-questions:
+
+1. Identify the key information components: "weird smell" and "dangerous smells."
+2. Analyze if "almonds" is related to the context.
+3. List dangerous smells that may indicate potential hazards.
+
+Sub-question 1: What is considered a weird smell?
+- A weird smell is an unusual, strong, or unfamiliar odor that may cause concern or suspicion.
+
+Sub-question 2: Are there any smells associated with potential dangers?
+- Yes, certain smells can indicate safety hazards, such as gas leaks, smoke, or spoiled food.
+
+Now, let's generate intermediate thoughts for Sub-question 3:
+
+Thought 1: Gas leaks often have a strong, unpleasant odor of sulfur or rotten eggs.
+- Explanation: Natural gas companies add a sulfuric smell to the gas to help detect leaks.
+
+Thought 2: Smoke can produce various smells, such as burning, acrid, or acrid, depending on the materials burning.
+- Explanation: Burning materials create distinct smells based on their composition, which may signal a fire.
+
+Thought 3: Spoiled food often emits foul, putrid odors.
+- Explanation: Bacterial decomposition causes rotting food to smell bad, which is unhealthy to consume.
+
+Thought 4: Mold produces a musty, earthy smell.
+- Explanation: Mold growth can lead to health issues when inhaled or ingested.
+
+Thought 5: Formaldehyde has a pungent, chemical smell.
+- Explanation: Formaldehyde exposure can cause respiratory problems and other health issues.
+
+Thought 6: Raw sewage gives off a putrid, nauseating smell.
+- Explanation: Raw sewage contains bacteria and viruses that pose health risks.
+
+Considering the thoughts above, we can construct a clear, logical reasoning chain:
+
+Weird smells, such as sulfur, burning, putrid, musty, and chemical odors, may indicate

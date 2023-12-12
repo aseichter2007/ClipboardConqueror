@@ -35,7 +35,7 @@ I solemnly promise that this application and at least one compatible backend wil
 One of my design inspirations for this application is to spread LLM models to as many computers as possible. I want to ensure at least one intact system is recovered by future archeologists, an incredible time capsule of culture, science, and data.  We should be sending intelligent boxes to deep space too. Our Knowledge and posterity must not go to waste. 
 
 This project is also a bit of a last ditch effort to remain software oriented, I need income. I've been looking for work and getting nothing but scams.
-Please, if you get good use from this application, especially in a commercial setting, consider supporting me. My son will be born next month and debt is already starting to get out of hand. I gotta get some traction and start rolling, and I start applying at fast food this week. 
+Please, if you get good use from this application, especially in a commercial setting, consider supporting me. My son will be born next month and debt is already starting to get out of hand. 
 ``````
 patreon.com/ClipboardConqueror
 
@@ -189,7 +189,7 @@ Usage:
 
    - |||coder,mute,memone,stevesdayoff|
      > This command will insert the coder character card, the mute card, memone, and stevesdayoff. The AI will receive each of these.
-     Note, only coder is a standard character.
+     Note, only coder is a standard card.
 
   It's useful to save information like
    ```
@@ -226,6 +226,7 @@ Currently after using  a command that writes data from the application, you must
 --------
 OpenAi Compatible 
 -----
+Clipboard Conqueror supports openAI endpoins. Put your key into openai.json
 LMstudio support like |||#| or save an agent like |||lm:save|"instructions" and any time that agent is called, it will send those instructions with the system prompt and send to openAi compatible endpoints at the url defined in openai.json
 
 ```
