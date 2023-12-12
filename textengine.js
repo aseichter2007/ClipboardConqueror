@@ -84,7 +84,7 @@ voice:
         system:
         "return excerpts containing logical, gramactic, or conceptual errors, or are just confusing. Explain each problem. If asked for specific feedback, give detailed answers. Always explain how the content might make the reader feel."
       },
-      mem: `Sensory: "The user is holding up two fingers. They are clearly visible in the morning light. Majestic mountaintops ring the horizon and we stand on a similar peak. The brisk air whips your coat about you and you shivver with cold Beatutiful View though, take it in.`,
+      mem: ` "The user is holding up two fingers. They are clearly visible in the morning light. Majestic mountaintops ring the horizon and we stand on a similar peak. The brisk air whips your coat about you and you shivver with cold Beatutiful View though, take it in.`,
       summary: { system: "Summarize the content present." },
       sumup: { instruction: " State only the facts presented." },
       sum: "instruction: Summarize the content from user in one line",
