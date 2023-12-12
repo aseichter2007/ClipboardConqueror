@@ -226,7 +226,7 @@ Currently after using  a command that writes data from the application, you must
 --------
 OpenAi Compatible 
 -----
-Clipboard Conqueror supports openAI endpoins. Put your key into openai.json
+Clipboard Conqueror supports openAI endpoins. Put your key into endpointsKey.json
 LMstudio support like |||#| or save an agent like |||lm:save|"instructions" and any time that agent is called, it will send those instructions with the system prompt and send to openAi compatible endpoints at the url defined in openai.json
 
 ```
