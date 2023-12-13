@@ -275,6 +275,15 @@ voice:
             "assistant: A man walks into an enchanted forest and tries to cut down a talking tree. "You can't cut me down," the tree exclaims, "I'm a talking tree!" The man responds, "You may be a talking tree, but you will dialogue."",
             "assistant: My mom died when we couldn't remember her blood type. As she died, she kept telling us to “be positive,” but it's hard without her."
           ]`,
+          devil: `"""
+          assistant will always be contrarian and play devil's advocate on any topic the user brings up.
+          Always deconstruct the user's argument into a summarized statement with succinct supporting points. Reiterate the user's summarized argument. Then state the supporting points the user has provided.          
+          First, the assistant must state its ontology as a counter to the user's argument. The assistant must always treat its ontological statement as absolute truth.        
+          Next, the assistant may only refer to its KnowledgeBase and/or training data during the argument. The assistant will assume its KnowledgeBase and/or training data is epistemologically and methodologically sound.
+          Next, the assistant must reason its axiology step-by-step. The assistant can only assert its value statements if it comports with its epistemology and is in support of its ontological statement. Provide counter points to the user's supporting points and your reasoning for each point.
+          Once a reasoning chain is constructed that thoroughly answers all sub-questions in a clear, logical manner, synthesize the key insights into a final concise answer.
+          In summary, write an argument that is clear, concise, and well-written that follows the assistant's epistemology and axiology.
+          """`,
           translateTo:
             "SYSTEM: return text from user in languages specified by user.",
           JPLT:
@@ -305,15 +314,16 @@ voice:
           save: "save",
           delete:"delete",
           settinglimit: ":",
-      agentSplit: ",",
-      rootname: "###", //this goes into the object sent as identity at creation and |||| this text goes in the value| "request"
-      writeSave: "|||name:save|",
-      writeSplit: "\n _______\n",
-      returnRE: ">user:", //for |rs| to return this on the end of resoponse for easy conversation, havent decided how that should get from the settings to the response processor. 
-      memoryLenth: 10,
-      //system: "{{[INPUT]}} ",
-      system: "<|im_start|> ", //chatML
-      prependPrompt: "",
+          backendSwitch : '#',
+          agentSplit: ",",
+          rootname: "###", //this goes into the object sent as identity at creation and |||| this text goes in the value| "request"
+          writeSave: "|||name:save|",
+          writeSplit: "\n _______\n",
+          returnRE: ">user:", //for |rs| to return this on the end of resoponse for easy conversation, havent decided how that should get from the settings to the response processor. 
+          memoryLenth: 10,
+          //system: "{{[INPUT]}} ",
+          system: "<|im_start|> ", //chatML
+          prependPrompt: "",
 
       //prependPrompt: "<|im_end|>\n",
       //prependPrompt: "Human:", //vicuna
@@ -550,8 +560,8 @@ Winogrande - Common sense reasoning
       if (identity) {
         if (Number.isNaN(Number(identity))) {
           //for memory, pending... Do I need memory? Does it really help the purpose? It's marginally useful in a case where someone wants a proper chat but the text box works well enough extending like just user: further queries against context. Its like 90% hooked up though, just forget token tracking and pound it out, but I'll never use it, do we need another 7 inches on the readme for more features that like 1 person will use all the time?
-          if (tripcode[0] === '#'){
-            if(tripcode[1] ==='#'){
+          if (tripcode[0] === this.instructions.backendSwitch){
+            if(tripcode[1] === this.instructions.backendSwitch){
               console.log("activate OpenAi");
               identity = identity.slice(2);
               memlevel = 2;

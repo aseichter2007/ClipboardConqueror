@@ -431,6 +431,9 @@ Less than 8gb gfx cards(fast-medium, notable quality loss):
 32gb ram and not using graphicss card(slow): 
 
 [Q8_0 16k context](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-16k-GGUF/blob/main/openhermes-2.5-mistral-7b-16k.Q8_0.gguf)  RAM used: 9333.84 MB (model: 7205.84 MB, 8k context: 2128.01 MB) 11413.84 MB (model: 7205.84 MB, 16k context: 4208.01 MB)
+
+ psyonic-cetacean-20b.Q4_K_M.gguf total VRAM used: 22001.74 MiB (model: 11395.73 MiB, 8k context: 10606.00 MiB)
+ This model really slows down ingesting on a 3090 with large context ingestion with full offloads. Per use case, I reccommend 4k context, that's still a couple pages.  
 ``````           
 
   I thought about reccommending other models, but openhermes is simply decent and fast, even tested on a friend's old 1080, under one minute for complex queries and with no gfx acceleration on 16gb ram its painfully slow to ingest, a few minutes for a large query and response.  smaller batches help you be sure its not hung up. 

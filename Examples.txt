@@ -111,7 +111,22 @@ Now, regarding dishes that square roots are best served with, I'm unable to prov
 
 
 
-|||woody,buzz,tot|buzz and woody debate opposing views| is youtube potentially addictive? 
+|||devil| Youtube is good for kids. They can learn anything, and the content is safe. 
+
+```yaml
+Ontology: Youtube is not inherently good for kids.
+
+Summarized Argument: Youtube may have educational content, but it also has risks such as exposure to inappropriate or unsafe content and addiction.
+
+Supporting Points:
+1. Exposure to inappropriate content: Kids may accidentally stumble upon age-restricted or unsafe videos that can have negative effects on their mental health or understanding.
+2. Addiction potential: Overuse of Youtube can lead to excessive screen time, negatively impacting children's social skills and overall well-being.
+3. Parental control: It's difficult for parents to monitor and filter all content, leaving kids vulnerable to potential harm.
+
+Epistemology: Youtube's content is user-generated, which means there is no guarantee that all content is suitable for children.
+
+Axiology: Despite potential learning benefits, the risks outweigh the educational value for children.
+```
 
 Woody: "Well, partner, I reckon that YouTube might be like one of them fancy space gizmos Buzz keeps talkin' about. It sure can be a whole lotta fun, watchin' them videos 'round the clock. But if y'all get too caught up in it, it might be like a never-endin' game of cowboy and aliens, ya know? Time can just fly right by."
 
@@ -124,46 +139,8 @@ Buzz: "That is an interesting perspective, Woody. I understand that YouTube can 
 
 |||t:save||"tea"
 
-|||##| openAi test one. what is two plus two
+|||##,model:gpt-3.5-turbo| openAi test one. what is two plus two
 
 Captain Clip says: "Let me tell ye, matey! Two plus two be fourfold, as it should be known throughout the multiverses across each and every timeline. In our cosmic arithmetic 'tis a universal fact of all."
 
 
-
-|||tot| I smell a wierd smell, what are some dangerous smells like almonds
-
-To address this question, let's first break it down into sub-questions:
-
-1. Identify the key information components: "weird smell" and "dangerous smells."
-2. Analyze if "almonds" is related to the context.
-3. List dangerous smells that may indicate potential hazards.
-
-Sub-question 1: What is considered a weird smell?
-- A weird smell is an unusual, strong, or unfamiliar odor that may cause concern or suspicion.
-
-Sub-question 2: Are there any smells associated with potential dangers?
-- Yes, certain smells can indicate safety hazards, such as gas leaks, smoke, or spoiled food.
-
-Now, let's generate intermediate thoughts for Sub-question 3:
-
-Thought 1: Gas leaks often have a strong, unpleasant odor of sulfur or rotten eggs.
-- Explanation: Natural gas companies add a sulfuric smell to the gas to help detect leaks.
-
-Thought 2: Smoke can produce various smells, such as burning, acrid, or acrid, depending on the materials burning.
-- Explanation: Burning materials create distinct smells based on their composition, which may signal a fire.
-
-Thought 3: Spoiled food often emits foul, putrid odors.
-- Explanation: Bacterial decomposition causes rotting food to smell bad, which is unhealthy to consume.
-
-Thought 4: Mold produces a musty, earthy smell.
-- Explanation: Mold growth can lead to health issues when inhaled or ingested.
-
-Thought 5: Formaldehyde has a pungent, chemical smell.
-- Explanation: Formaldehyde exposure can cause respiratory problems and other health issues.
-
-Thought 6: Raw sewage gives off a putrid, nauseating smell.
-- Explanation: Raw sewage contains bacteria and viruses that pose health risks.
-
-Considering the thoughts above, we can construct a clear, logical reasoning chain:
-
-Weird smells, such as sulfur, burning, putrid, musty, and chemical odors, may indicate
