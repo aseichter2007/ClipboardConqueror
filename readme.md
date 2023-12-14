@@ -365,6 +365,8 @@ Currently there are no built binaries and Node is required to run Clipboard Conq
 
 3. Kobold needs a model. Here are my reccomendations 12/5/23:[OpenHermes 2.5 Mistral 7B 16K Context.GGUF](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-16k-GGUF)
   minimum hardware:[rocket_3B](https://huggingface.co/TheBloke/rocket-3B-GGUF)
+     
+     
       ``````
       OpenHermes-2.5-Mistral 7b 16k.gguf supports 16384 context. This is a decent few pages. If it seems slow reduce your context to 8, if the problem persists, select a lower Quantization.
 
@@ -426,14 +428,20 @@ Less than 8gb gfx cards(fast-medium, notable quality loss):
 24gb vram(fast): 
 
 [Q8_0 16k context](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-16k-GGUF/blob/main/openhermes-2.5-mistral-7b-16k.Q8_0.gguf) total VRAM used: 9333.84 MB (model: 7205.84 MB, 8k context: 2128.01 MB) 11413.84 MB (model: 7205.84 MB, 16k context: 4208.01 MB)
+
 .
 
 32gb ram and not using graphicss card(slow): 
 
 [Q8_0 16k context](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-16k-GGUF/blob/main/openhermes-2.5-mistral-7b-16k.Q8_0.gguf)  RAM used: 9333.84 MB (model: 7205.84 MB, 8k context: 2128.01 MB) 11413.84 MB (model: 7205.84 MB, 16k context: 4208.01 MB)
 
- psyonic-cetacean-20b.Q4_K_M.gguf total VRAM used: 22001.74 MiB (model: 11395.73 MiB, 8k context: 10606.00 MiB)
- This model really slows down ingesting on a 3090 with large context ingestion with full offloads. Per use case, I reccommend 4k context, that's still a couple pages.  
+other models:
+---------
+
+[Solar 10B](https://huggingface.co/TheBloke/SOLAR-10.7B-Instruct-v1.0-GGUF) this one is impressing me. solar-10.7b-instruct-v1.0.Q6_K.gguf total VRAM used: 10123.63 MiB (model: 8294.05 MiB, 8k context: 1829.58 MiB) Works great with default chatML instruct
+
+[psyonic-cetacean](https://huggingface.co/TheBloke/psyonic-cetacean-20B-GGUF) psyonic-cetacean-20b.Q4_K_M.gguf total VRAM used: 22001.74 MiB (model: 11395.73 MiB, 8k context: 10606.00 MiB)
+ This model really slows down ingesting on a 3090 with large context ingestion with full offloads. Per use case, I reccommend 4k context, that's still a couple pages.  Works great with default chatML instruct
 ``````           
 
   I thought about reccommending other models, but openhermes is simply decent and fast, even tested on a friend's old 1080, under one minute for complex queries and with no gfx acceleration on 16gb ram its painfully slow to ingest, a few minutes for a large query and response.  smaller batches help you be sure its not hung up. 

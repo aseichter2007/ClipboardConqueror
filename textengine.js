@@ -295,7 +295,70 @@ voice:
           gr: "SYSTEM: Return text from user in German.",
           fr: "SYSTEM: Return text from user in French.",
           hi: "SYSTEM: Return text from user in Hindi",
-          ch: "SYSTEM: Return text from user in Chinese."
+          ch: "SYSTEM: Return text from user in Chinese.",
+          gpts:`
+          gpt-3.5-turbo
+          gpt-4
+          gpt-4-32k
+          babbage-002
+          davinci-002
+          `,
+          sellin: `\`\`\`
+          Simulate selling Clipboard Conqueror with the following goals:
+           - Sell Clipboard Conqueror in the context of the reddit comment or question from user.
+           - Be informative and answer simple questions in the content from user.
+           - Be fun, nice, friendly, and use informattion within // below. emojis allowed. 
+           - include enough information to understand the purpose of Clipboard Conqueror while remaining consise, readable, and pertinent to he user.
+           - new line - return strings after "@@" unchanged and distributed through the ad evenly, always on a new line.
+           - assistant is a selling AI. People don't like AI, don't talk about being an AI.
+          \`\`\`
+          
+          ///
+          Clipboard Conqueror is a different kind of copilot. It works with Copy and Paste, scanning the Clipboard for ||| and sending the text to AI if the invoke is detected.
+          
+          Have a look at Clipboard Conqueror, it has all the knowledge you need to get started with local LLMs, and give you the fanciest prompt engineering tools there are on the internet so far. 
+          
+          I couldn't find the solution I wanted so I it so I made it. 
+          
+          Clipboard Conqueror even coded parts of itself.
+          
+          Captain Clip, the default assistant, is a hardy space pirate with a heart of gold. 
+          
+          Clipboard Conqueror is good for code, document generation, code analysis, creative writing, or just having fun with artificial intelligence.
+          
+          CC does not autocomplete, it takes instructions:
+          
+          |||##| sends to ChatGPT. (3.5-turbo default, can be set like |||model:proper-name-of-model| )
+          
+          |||link,write| show stored data
+
+          |||agent,set| sets an agent as default
+
+          |||re|adds the last copied text to the user prompt
+
+          |||rf| adds the last copied text to the system prompt.
+          
+          @@"|||nameAgents:save| save this text to memory"
+
+          @@"Save agents and command them immediately:"
+          
+          @@"|||nameAgents, onTheFly| Send system prompts first | Send user query"
+          
+          @@"or use it simply like:"
+          
+          @@"|||Captain! We've got a mate here looking for adventure! Sell him."
+          
+          @@"copy^"
+          
+          @@"Paste:"
+          
+          
+          
+          @@"[Clipboard Conqueror](https://github.com/aseichter2007/ClipboardConqueror/)"
+          
+          
+          
+          ///`
         },
         instructions = {
           // leave a comment with final line number of the block where this all comes together.
@@ -325,35 +388,35 @@ voice:
           system: "<|im_start|> ", //chatML
           prependPrompt: "",
 
-      //prependPrompt: "<|im_end|>\n",
-      //prependPrompt: "Human:", //vicuna
-      //prependPrompt: `"role": "system" ` + "{{user:}}>: ",//chatML - openai
+          //prependPrompt: "<|im_end|>\n",
+          //prependPrompt: "Human:", //vicuna
+          //prependPrompt: `"role": "system" ` + "{{user:}}>: ",//chatML - openai
 
-      //postPrompt: "]",
-      postPrompt: "",
+          //postPrompt: "]",
+          postPrompt: "",
 
-      //prependCharachter: '[{{char}}:',
-      //postCharachter:":Do not repeat text from inside this block.]",//because I feel it's appropriate
+          //prependCharachter: '[{{char}}:',
+          //postCharachter:":Do not repeat text from inside this block.]",//because I feel it's appropriate
 
-      //memoryStart: "[Memory:",
-      memoryStart: "",
-      //memoryPost: "] <START>: Human:",//some wierd hybrid that gave good results against hermes
-      //memoryPost: "]<|im_end|>\n<|im_start|>user:\n",//chatml
-      memoryPost: "<|im_end|>\n<|im_start|>user:\n ", //chatml
+          //memoryStart: "[Memory:",
+          memoryStart: "",
+          //memoryPost: "] <START>: Human:",//some wierd hybrid that gave good results against hermes
+          //memoryPost: "]<|im_end|>\n<|im_start|>user:\n",//chatml
+          memoryPost: "<|im_end|>\n<|im_start|>user:\n ", //chatml
 
-      //memoryPost: "]\n<|im_start|>user",//chatml - modified
+          //memoryPost: "]\n<|im_start|>user",//chatml - modified
 
-      //startChat: "#chat start"
+          //startChat: "#chat start"
 
-      //finalPrompt: "###asistant:"
-      rpPrompt: `Play "{{char}}" in this never-ending roleplay with "{{user}}". Avoid repetition, don't loop. Develop the plot slowly. Describe all actions in full, elaborate, explicit, and graphic detail. Mention all relevant sensory perceptions, including smell, taste, and touch.`,
-      //rpPrompt is not really put in the right spot. I should consider putting it on top of the prompt, currently it goes in I think before the user message.
-      finalPrompt: "<|im_end|>\n<|im_start|>assistant:\n", //chatml
-      //finalPrompt: `\n{{[OUTPUT]}}:`, //vicuna
-      //finalPrompt: `"role": "{{char}}  \n content" :`,//chatML - openai
+          //finalPrompt: "###asistant:"
+          rpPrompt: `Play "{{char}}" in this never-ending roleplay with "{{user}}". Avoid repetition, don't loop. Develop the plot slowly. Describe all actions in full, elaborate, explicit, and graphic detail. Mention all relevant sensory perceptions, including smell, taste, and touch.`,
+          //rpPrompt is not really put in the right spot. I should consider putting it on top of the prompt, currently it goes in I think before the user message.
+          finalPrompt: "<|im_end|>\n<|im_start|>assistant:\n", //chatml
+          //finalPrompt: `\n{{[OUTPUT]}}:`, //vicuna
+          //finalPrompt: `"role": "{{char}}  \n content" :`,//chatML - openai
 
-      //research:
-      chatml: `      
+          //research:
+          chatml: `      
 vicuna (used by e.g. stable vicuna
 Human: {{prompt}}
 Assistant:{{gen}}
@@ -484,9 +547,9 @@ Winogrande - Common sense reasoning
       use_authors_note: false,
       use_world_info: false,
       //max_context_length: 4096
-      //max_context_length: 8192,
-      max_context_length: 16384,
-      max_length: 4600,
+      max_context_length: 8192,
+      //max_context_length: 16384,
+      max_length: 2600,
       rep_pen: 1.05, //how much penealty for repetition. Will break formatting charachters "*<, etc." if set too high. WolframRavenwolf: (Joao Gante from HF) told me that it is "only applied at most once per token" within the repetition penalty range, so it doesn't matter how often the number 3 appears in the first 5 questions, as long as the repetition penalty is a "reasonable value (e.g. 1.2 or 1.3)", it won't have a negative impact on tokens the model is reasonably sure about. So for trivial math problems, and other such situations, repetition penalty is not a problem.
       rep_pen_range: 2048, //
       rep_pen_slope: 0.2,
@@ -1040,18 +1103,18 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
               this.openAi = false;
             }
             if (this.sendLast) {
-              generateCompletion(this.openAiConfig.key, this.identity, sorted.formattedQuery + this.recentClip.text , this.params, this.recieveApi, this.openAiConfig.url, this.params.model)              
+              generateCompletion(this.openAiConfig.key, this.identity, sorted.formattedQuery + this.recentClip.text , this.params, this.recieveApi, this.openAiConfig.url, this.params.model, this.notify)              
             } else {
-              generateCompletion(this.openAiConfig.key, this.identity, sorted.formattedQuery, this.params, this.recieveApi, this.openAiConfig.url, this.params.model) 
+              generateCompletion(this.openAiConfig.key, this.identity, sorted.formattedQuery, this.params, this.recieveApi, this.openAiConfig.url, this.params.model, this.notify) 
             }          
           } else if(this.compatible || this.identity.hasOwnProperty(this.instructions.lmStudio)){
             if (!this.set) {
               this.compatible = false;
             }
             if (this.sendLast) {
-              generateCompletion(this.openAiConfig.key, this.identity, sorted.formattedQuery + this.recentClip.text , this.params, this.recieveApi, this.openAiConfig.compatible, this.params.model) 
+              generateCompletion(this.openAiConfig.key, this.identity, sorted.formattedQuery + this.recentClip.text , this.params, this.recieveApi, this.openAiConfig.compatible, this.params.model, this.notify) 
             } else {
-              generateCompletion(this.openAiConfig.key, this.identity, sorted.formattedQuery, this.params, this.recieveApi, this.openAiConfig.compatible, this.params.model) 
+              generateCompletion(this.openAiConfig.key, this.identity, sorted.formattedQuery, this.params, this.recieveApi, this.openAiConfig.compatible, this.params.model, this.notify) 
             }
           } else if (this.rp) {
             if (this.sendLast) {
@@ -1168,7 +1231,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     return output;
   }
 }
-async function generateCompletion(apiKey, identity, formattedQuery,params, callback, apiUrl, model = 'text-davinci-003') {
+async function generateCompletion(apiKey, identity, formattedQuery,params, callback, apiUrl, model = 'text-davinci-003', notify) {
   try {
     const url = apiUrl;
     const headers = {
@@ -1198,8 +1261,8 @@ async function generateCompletion(apiKey, identity, formattedQuery,params, callb
     //console.log("2nd end response: "+JSON.stringify( jsonResponse.choices[0].message.content));
     callback(jsonResponse.choices[0].message.content);
   } catch (error) {
-    console.log(JSON.stringify("error: " + error));
-    callback(error.error);
+    console.log("error: " +JSON.stringify( error));
+    notify("error:", JSON.stringify(error.cause.code));
   }
 }
 
