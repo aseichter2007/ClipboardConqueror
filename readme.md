@@ -25,7 +25,7 @@ Download this repo.
 
 Run installCC.bat
 
-runClipboardConqueror.bat
+runClipboardConqueror.bat on windows or Mac_Linux_Start.bat otherwise
 
 --------
 Copy, Conquer, Paste.
@@ -165,12 +165,12 @@ Usage:
    ```
     |||re| what is this code doing? 
    ```
-   - return copy at end of prompt inserted like continued user question.
+   - return copy at end of prompt inserted after user prompt.
    - sends the thing you copied last,   after "what is this code doing? \n \n", at the end of the user prompt" and sends the Captian Clip assistant in the system prompt to help consider the instruction.
    ```
     |||rf| what is this code doing? 
    ```
-   - return last copied first in prompt inserted like an agent at the level rf is placed relative to other agents ex |frank,rf,tot| copied text comes after frank agent.
+   - return last copied first in prompt inserted like an agent at the level rf is placed relative to other agents ex |frank,rf,tot| copied text comes after frank agent in the system prompt.
    - sends the thing you copied last before the Captian Clip assistant prompt to help frame the output format and preconceptions.
 
    ```
@@ -393,7 +393,7 @@ Choosing A model:
 --------
 
 
-hardware("token speed")  [fast = 20+ tokens/sec, medium =  ~<10 tokens/sec. slow = <2tokens/sec]* Lower on this chart is smarter. Partial offloading is possible but costs speed. 
+hardware("token speed")  [fast = 20+ tokens/sec, medium =  ~<10 tokens/sec. slow = <2tokens/sec]* Lower on this chart is smarter. Partial offloading the video ram is possible but costs speed. 
 
 ```
 In the world of inference, some macs can be medium with even very large models. Metal. 
@@ -472,26 +472,23 @@ I get all mine from huggingface/thebloke. Not all models suport chatML format, a
 for ease of use and organization, consider keeping kobold and the model you chose inside Clipboard Conqueror application.  If koboldcpp.exe is placed here, Clipboard Commander will run it automatically.//ToDo: detect and run kobold with cc.kcpps
 ``````
 
+Base models vs Finetunes:
+----
+In the world of LLMs there are two kinds of models. 
 
-Finally run Clipboard Conqueror.  
+Base models - these models are completion models, they respond well to: "sure, here is a code block containing fizzbuzz in javascript:" it will complete the statement you start.
 
-run installCC.bat
+Finetuned models can, depending on how they have been tuned, make sense of more direct orders: "write Fizzbuzz javascript". Not all finetunes are instruct models, read model description to learn what a model is designed for. 
 
-run runClipboardConqueror.bat or Mac_Linux_Start.bat
+Base models are not fully cooked, they have some training room remaining to allow finetuning of the output. 
 
-or
+Finetunes are finished models that can't be further trained without detrimental effects. 
 
-//open terminal at folder and run
-npm i
-npm start
-
-
-
+The models I have reccommended are all finetunes, because you can speak to them more naturally and get good results. Base models take a little more thinking to interact with. 
 
 
-I provide sampleLaunchKoboldBat.bat and hermes16.kcpps to ease making quick launch shortcuts. They need to be changed to match your system, and the bat expects to be in the same folder  as both koboldcpp.exe and hermes16.kcpps.  hermes16.kcpps contains a full path that must match the model location, reccomend loading and saving the file to change the target. 
-
-
+Linux/Mac Notes
+----
 
   ![harrro](https://styles.redditmedia.com/t5_20v1i8/styles/profileIcon_snoo94b3e9ee-40b0-4d50-976b-f84339866e74-headshot-f.png?width=256&height=256&crop=256:256,smart&s=99c1f9c5ba8353614aca16055afd851209dba8ca)
   level 4
@@ -512,6 +509,23 @@ I provide sampleLaunchKoboldBat.bat and hermes16.kcpps to ease making quick laun
   The notification when generation finished also worked but there is no audible sound.
 
 
+Finally run Clipboard Conqueror.  
+----
+run installCC.bat
+
+run runClipboardConqueror.bat or Mac_Linux_Start.bat
+
+or
+
+//open terminal at folder and run
+npm i
+npm start
+
+
+
+
+
+I provide sampleLaunchKoboldBat.bat and hermes16.kcpps to ease making quick launch shortcuts. They need to be changed to match your system, and the bat expects to be in the same folder  as both koboldcpp.exe and hermes16.kcpps.  hermes16.kcpps contains a full path that must match the model location, reccomend loading and saving the file to change the target. 
 
 --------------------------------
 
@@ -543,7 +557,7 @@ If you encounter any issues while using Clipboard Conqueror or have suggestions 
 
 I'm chasing a bug where after |||list| the next copy is not parsed, but is stored, preventing the same thing being copied and invoking the AI.  Workaround: copy text without an invoke to clear the stored copy and allow a "fresh" copy that will activate the parsing engine. 
 
-Saving agents like |||re,name:save|"more details" is likely to mess you up, it will include both the copied text and any text surrounding the invoke that you copy with it. 
+Saving agents like |||re,name:save|"more details" is likely to mess you up, it will save the last text you copied into "name" rather than "more details"
 
 Please use Clipboard Conqueror responsibly and respect copyright and laws in your country while generating content. Misuse of this tool might lead to unintended consequences and breaches of privacy or intellectual property rights. I hold no reponsibility for the data that passes through this tool on any system.  
 //implementing this undercuts the mission. Distribute LLMs. 
@@ -561,7 +575,7 @@ Your understanding and respect for these terms are appreciated.
 
 Additional Resources:
 
-[LLMs, how do they work?](https://bbycroft.net/llm)
+[LLMs, how do they work?](https://bbycroft.net/llm) this is a cool visualization of how the machine does the magic.
 
 //todo: link assorted knowlege banks. 
 
@@ -589,7 +603,7 @@ dev:
 
 //todo: /api/extra/abort on esc and return 
 
-//todo text to speech agent that can interact with the clipboard contents. //waiting on upstream that runs on my hardware without dinkin around or enough generosity to set up a closet server or at least new harddrives, I'm too full to experimant with new envs. 
+//todo text to speech agent that can interact with the clipboard contents. //waiting on upstream that runs on my hardware without dinkin around or enough generosity to set up a closet server or at least new harddrives, I'm too full to experimant with a new OS. 
 
 //decline: use case? I guess return tokens like|||tokens| so you can see if it will fit... ok. undecline: todo: /api/extra/generate/check  //return in progress, useful for vlarge gens on slow mode
 //todo: /api/extra/tokencount //should run against entered data and updates should be shown after setting mem or agent and on final send. 
@@ -599,17 +613,21 @@ dev:
 
 
 
-//pass, just close CC it launces in one second//implement |||no| //uh oh, better comment needed. I should learn from this someday. Waaait, it's coming back to me. |||no| will disable parsing on the next run for transporting instructions, though its much easier to just error it off like "||| ||| ||| move this without invoking"
+//pass, just close CC it launces in one second//implement |||no| //uh oh, better comment needed. I should learn from this someday. Waaait, it's coming back to me. |||no| will disable parsing on the next run for transporting instructions, though its much easier to just error it off like "||| move this without invoking||| ||| " reccomend extra at the end.
 
 release!//oh snap I got excited and went. //beta release in motion.
-//premium? //within the scope it's probably better to persue a character portal and just expose the settings sensibly in multiple files. 
 
 //todo: branch to build premium binaries from. premium branch features:
-//todo: savesettings and getsettings. overwrite settings like |||settings,write| to paste ' |||settings,save| `{ the settings serialized json }` ' which can be edited in place and copied to save the settings. 
+//todo: savesettings and getsettings. overwrite settings like |||settings,write| to paste ' |||settings,save| `{ the settings serialized json }` ' which can be edited in place and copied to save the settings. //moving to settings application.
+
 //really waffling, its simply good like >user: //todo: per charachter rolling memory to allow more natural exchanges and enable rp.
 //todo: group chain interacting so you can batch like |||@summary,@writer|"text" and paste a summary, then you press the invoke key and it advances the chain and gives you the output from writer with the results of summary in the memory//todo: settings bulk in and out
 .//pass no login here, will just have portal make setting file to save in place//todo: web api to host login server. 404 defaults to allow full operation of paid branch users if I decide the server is expensive to run, or I die, or the internet is down. potential vulnerability: blocking in hosts to avoid subscriptoin check. Please pay for the full version of this software, this is my only income. Life is hard. 
-//todo: portal site to serve binary download links, take payment and manage your subscription level. Look up rules about re-serving chatgtp api on my key. Consider asp.net, it will just handle users and the front end only feels a little silly, no need for relational mongo or any silliness. Downside, I've never succssfullt hooked up a database right deploying to s2. consider aws lambda for auth,  serverless.  lambda auth has additional challenges
+
+//todo: portal site to serve binary download links, take payment and manage your subscription level. Look up rules about re-serving chatgtp api on my key. Consider asp.net, it will just handle users and the front end only feels a little silly, no need for relational mongo or any silliness. Downside, I've never succssfully hooked up a database right deploying to s2. consider aws lambda for auth,  serverless.  lambda auth has additional challenges
+
+//CC should not make outbound requests other than openAI, security is important. I'm thining about a branch without openAI just for data safety. 
+
 //todo: make a lambda script to setup a lambda to serve a daily charachter, run a continuous contest so people vote for tomorrows char. |||dailycandidate,rate|10, assign up to ten points for the candidate last retrieved with |||dailycandidate| provies random from server. Points are gained by and blind?
 //todo: build agent portal with easy to copy and use workflow. 
 //todo: mystery agent of the day. vulnerability: the description is visible in the kobold terminal

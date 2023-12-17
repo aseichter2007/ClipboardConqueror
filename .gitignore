@@ -129,4 +129,27 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# configs
 endpointsKey.json
+
+|||how to add to gitignore
+
+To add specific files or directories to a Git ignore list, you need to create or edit a file named `.gitignore` in the root directory of your repository. This file specifies patterns that Git should ignore during commits, checks out, and updates. Here's what you can do:
+
+1. Open or create a new text file in your repository's root directory with a filename `.gitignore`.
+2. Add the following line to this file:
+
+```
+endpointsKey.json
+```
+
+Make sure to keep the line starting with a leading backslash ("\") for Windows or a leading hash symbol ("#") for Unix systems to ensure Git ignores this file or directory.
+
+3. Save the changes and close the file.
+4. To have Git recognize these changes, run the following command in your terminal or command prompt:
+
+   - For Unix-based systems (macOS/Linux): `git add .gitignore`
+   - For Windows: `git add \.gitignore`
+5. The next time you commit or update your repository, Git will ignore the `endpointsKey.json` file.
+
+Keep in mind that adding sensitive files like API keys or credentials to a public Git repository might pose security risks. Consider alternative ways to manage these files if you are using a public repository.
