@@ -131,3 +131,8 @@ dist
 
 # configs
 endpointsKey.json
+openAiKey.json
+endpoints.json
+instructions.json
+identities.json
+generationSettings.json

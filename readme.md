@@ -307,7 +307,7 @@ frank\n\n<|im_end|>\n<|im_start|>assistant:\n
 
 ``````
 
-|||re,frank|this text is invisible to :save| //also, :save in there may have unpredictable results... 
+|||re,frank|this text is invisible to :save| 
 
 
 |||set|

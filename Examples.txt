@@ -55,8 +55,26 @@ When you hear the notification ding, the local language model's response will be
 
  _______
 
+|||code|node function to write an object to file as json
+Here's a simple Node.js function that can be used to write an object to a JSON file:
 
+```javascript
+const fs = require('fs');
 
+function writeObjectToFileAsJson(object, fileName) {
+  try {
+    const data = JSON.stringify(object, null, 2); // Convert the object to a pretty-printed JSON string
+    fs.writeFileSync(fileName, data, 'utf8'); // Write the JSON string to the specified file
+    console.log(`Successfully wrote object to ${fileName}`);
+  } catch (error) {
+    console.error(`Error writing to file: ${error.message}`);
+  }
+}
+
+module.exports = { writeObjectToFileAsJson };
+```
+
+You can use this function by requiring it in your code using `const myModule = require('./myModuleFile')`, then call `myModule.writeObjectToFileAsJson(yourObject, 'path/to/file.json')`. Make sure to replace `yourObject` with the actual object you want to save and `path/to/file.json` with the desired path to the file where you want to save the JSON data.
  _______
 
 |||tokens|The quick brown fox jumped over the lazy dog
@@ -140,7 +158,8 @@ Buzz: "That is an interesting perspective, Woody. I understand that YouTube can 
 |||t:save||"tea"
 
 |||##,model:gpt-3.5-turbo| openAi test one. what is two plus two
-
+|||##| tell me slow down
 Captain Clip says: "Let me tell ye, matey! Two plus two be fourfold, as it should be known throughout the multiverses across each and every timeline. In our cosmic arithmetic 'tis a universal fact of all."
 
 
+|||tell me a tale

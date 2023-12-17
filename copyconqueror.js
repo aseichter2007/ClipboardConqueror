@@ -1,16 +1,23 @@
-let botresponse = false
-const path = require("path");
-const endPointConfig = require("./endpointsKey.json");
-const {findSettings} = require("./setup.js");
 const clipboardListener = require('clipboard-event');
+const ncp = require('copy-paste');
+const notifier = require('node-notifier');
+const axios = require('axios');
 const SendEngine = require('./textengine.js');
 const RecieveEngine = require('./responsengine.js');
-const ncp = require('copy-paste');
-const recieveEngine = new RecieveEngine();
-const axios = require('axios');
 const fs = require('fs');
-const settings = findSettings();
-const notifier = require('node-notifier');
+let botresponse = false
+const path = require("path");
+
+//setup all settings//
+const openAIkey = {};
+const endPointConfig = {};
+const instructions  ={};
+const params = {}
+const identities = {};
+const {setup} = require('./setup.js');
+setup(openAIkey, endPointConfig, instructions, params,identities,fs);
+//end settings//
+const recieveEngine = new RecieveEngine();
 function testing(){//hooked into changehandler, copy to execute
     
 }
@@ -25,7 +32,7 @@ const KoboldClient = require('./koboldinterface.js');
     client = new KoboldClient( axios, recieveApiResponse, returnSummary, NotificationBell);//todo, this doesnt really belong like this, should be created directly into textengine constructor and eliminate all this mess running across the main program. Needed before adding openAI, untangling this will make that much easier. 
     
 }   
-const sendEngine = new SendEngine(recieveProcessedClip, ncp.copy, recieveApiResponse, NotificationBell, getSummary, client.getTokenCount, endPointConfig);
+const sendEngine = new SendEngine(recieveProcessedClip, ncp.copy, recieveApiResponse, NotificationBell, getSummary, client.getTokenCount, endPointConfig.routes, identities.identities, instructions.instructions,params.params, openAIkey.key);
 function notify(title = "Paste Ready", text = "The response is ready"){
 // Define the notification
 const notification = {
@@ -134,3 +141,4 @@ clipboardListener.startListening();
     process.exit(0);
   });
 }
+
