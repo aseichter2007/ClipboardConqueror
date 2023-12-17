@@ -130,9 +130,9 @@ dist
 .pnp.*
 
 # configs
-endpointsKey.json
-openAiKey.json
-endpoints.json
-instructions.json
-identities.json
-generationSettings.json
+0endpointsKey.json
+0openAiKey.json
+0endpoints.json
+0instructions.json
+0identities.json
+0generationSettings.json

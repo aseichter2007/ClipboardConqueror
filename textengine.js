@@ -43,7 +43,6 @@ class TextEngine {
   }
   //|||re|  to get first and last charachter of string identity
   returnTrip(str) {
-    console.log(JSON.stringify(this.openAiConfig));
     if (typeof str !== "string") return "Error: Input must be a string";
     //if (str.length < 2) return "Error: String too short";
     return [str[0], str[1]]
@@ -656,7 +655,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
 async function generateCompletion(apiKey, identity, formattedQuery,params, callback, apiUrl, model = 'text-davinci-003', notify) {
   try {
     const url = apiUrl;
-    console.log(apiKey, identity, formattedQuery, params, apiUrl, model);
+    //console.log(apiKey, identity, formattedQuery, params, apiUrl, model);
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${apiKey}`,
@@ -678,7 +677,7 @@ async function generateCompletion(apiKey, identity, formattedQuery,params, callb
       body: JSON.stringify(prompt)
     });
     const jsonResponse = await response.json();
-    console.log("response: "+JSON.stringify(jsonResponse));
+    //console.log("response: "+JSON.stringify(jsonResponse));
     if (!response.ok) {
       throw new Error(`Request failed with status ${response.status}: ${jsonResponse.error.message}`);
     }

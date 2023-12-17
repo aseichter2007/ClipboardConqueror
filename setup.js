@@ -1,31 +1,31 @@
  function setup(openAIkey, endPointConfig, instructions, params, identities,fs){ 
     try{
-    openAIkey.key = require("./openAiKey.json");
+    openAIkey.key = require("./0openAiKey.json");
 }catch{
     const open = {//left justified for consistency in settings definitions
 key: "ex-Your openAi Api Key here"
 }
     openAIkey.key = open;
-    writeObjectToFileAsJson(open, "openAiKey.json",fs);
+    writeObjectToFileAsJson(open, "0openAiKey.json",fs);
 }
 try{
-    endPointConfig.routes = require("./endpoints.json");
+    endPointConfig.routes = require("./0endpoints.json");
 }catch{
     const endpoints = {//left justified for consistency in settings definitions
 url: "https://api.openai.com/v1/chat/completions",
 compatible : "http://localhost:1234/v1/chat/completions",
 kobold: "http://127.0.0.1:5001/api/v1/generate/",
-defaultClient: "koboldcpp",
-defaultOptions: ["koboldcpp", "openAi", "compatible","select default: from previous items"],
+defaultClient: "kobold",
+defaultOptions: ["kobold", "openAi", "compatible","select default: from previous items"],
 instruct: "chatML",//todo: add this functionality
 instructOptions: ["chatML", "alpaca", "metharme", "select instruct: from previous items"],
 persona: "default",
 }
     endPointConfig.routes = endpoints;
-writeObjectToFileAsJson(endpoints, "endpoints.json",fs)
+writeObjectToFileAsJson(endpoints, "0endpoints.json",fs)
 }
 try{
-    instructions.instructions = require("./instructions.json");
+    instructions.instructions = require("./0instructions.json");
 }catch{
     const instruct = {//left justified for consistency in settings definitions
         //this needs to be more elegant. Maybe split up into multiple files with selection from endpointsKey.json
@@ -207,11 +207,11 @@ Winogrande - Common sense reasoning
 `
   }
   instructions.instructions = instruct;
- writeObjectToFileAsJson(instruct, 'instructions.json',fs);
+ writeObjectToFileAsJson(instruct, '0instructions.json',fs);
  
 }
 try{
-    identities.identities = require('./identities.json');
+    identities.identities = require('./0identities.json');
 }catch{
     let idents = {
         user: {//left justified for string formatting
@@ -570,10 +570,10 @@ CC does not autocomplete, it takes instructions:
 ///`
 }
   identities.identities = idents;
-  writeObjectToFileAsJson(idents, 'identities.json',fs);
+  writeObjectToFileAsJson(idents, '0identities.json',fs);
 }
 try {
-    params.params = require("./generationSettings.json");
+    params.params = require("./0generationSettings.json");
  
 } catch (error) {
     let apiParams = {
@@ -612,7 +612,7 @@ try {
         banned_tokens: `["   ", "</s>", "\n# ", "\n##", "\n*{{user}} ","### Human: ", "\n\n\n", "\n{{user}}:", '\"role\":', '\"system\"', '{{user:}}>:', "###"]` //again not reall sure this is actually on
       }
       params.params = apiParams;
-      writeObjectToFileAsJson(apiParams, 'generationSettings.json',fs);
+      writeObjectToFileAsJson(apiParams, '0generationSettings.json',fs);
 }
 }
 function writeObjectToFileAsJson(object, fileName,fs) {
