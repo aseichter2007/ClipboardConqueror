@@ -1,6 +1,0 @@
-{
-    "key:": "no stop uploading this what's going wrong this shoulf be trivial",
-    "url": "https://api.openai.com/v1/chat/completions",
-    "compatible" : "http://localhost:1234/v1/chat/completions",
-    "kobold": "http://127.0.0.1:5001/api/v1/generate/"
-}
