@@ -60,15 +60,13 @@ class TextEngine {
       //identity = identity.trim();
       if (identity) {
         if (Number.isNaN(Number(identity))) {
-          //for memory, pending... Do I need memory? Does it really help the purpose? It's marginally useful in a case where someone wants a proper chat but the text box works well enough extending like just user: further queries against context. Its like 90% hooked up though, just forget token tracking and pound it out, but I'll never use it, do we need another 7 inches on the readme for more features that like 1 person will use all the time?
           if (tripcode[0] === this.instructions.backendSwitch){
             if(tripcode[1] === this.instructions.backendSwitch){
-              console.log("activate OpenAi");
+              console.log("activate OpenAi - data will leave local system");
               identity = identity.slice(2);
               memlevel = 2;
-                //identity = identity.slice(1);
               } else {
-                console.log("activate lmStudio");
+                console.log("activate openAi Compatible- data may leave local system");
                 identity = identity.slice(1);
                 memlevel = 1;
             }
@@ -380,7 +378,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
 
         outp.text = this.getTokens(this.currentText);//nah fam, this will be async and need a callback to send to clipboard
         outp.found = true;//save a couple operations adding an agent 
-        console.log(outp.text);
+        //console.log(outp.text);
         break;
       case "set":
         if (!this.set) {
@@ -653,6 +651,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
   }
 }
 async function generateCompletion(apiKey, identity, formattedQuery,params, callback, apiUrl, model = 'text-davinci-003', notify) {
+  let errcatch = "";
   try {
     const url = apiUrl;
     //console.log(apiKey, identity, formattedQuery, params, apiUrl, model);
@@ -679,13 +678,14 @@ async function generateCompletion(apiKey, identity, formattedQuery,params, callb
     const jsonResponse = await response.json();
     //console.log("response: "+JSON.stringify(jsonResponse));
     if (!response.ok) {
-      throw new Error(`Request failed with status ${response.status}: ${jsonResponse.error.message}`);
+      errcatch = jsonResponse.error
+      console.log(object);(`Request failed with status ${response.status}: ${jsonResponse.error.message}`);
     }
     //console.log("2nd end response: "+JSON.stringify( jsonResponse.choices[0].message.content));
     callback(jsonResponse.choices[0].message.content);
   } catch (error) {
-    console.log("error : " +JSON.stringify( error));
-    notify("error:", JSON.stringify(error));
+    //console.log("error : " +JSON.stringify(error));
+    notify("error:", JSON.stringify(errcatch));
   }
 }
 

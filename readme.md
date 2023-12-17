@@ -385,7 +385,8 @@ If Clipboard Conqueror closes on launch in windows, ensure you have Node install
 
 I recommend fresh clones for updates, or you might overwrite settings you liked.
 
-currently the entire settings for my app are in the constructor of textengine.js, uncomment or add the correct instruction format to the keys required for non ChatML model support.
+currently the entire settings for my app are in setup.js, uncomment or add the correct instruction format to the keys required for non ChatML model support.
+setup.js writes files for each type of setting. If formatting errors are introduced in those files, they are overwritten with the defaults. 
 
 
 -----
@@ -467,7 +468,7 @@ other models:
 *Model bit depth is trade between output quality and output speed.  Generally, larger models are smarter and can follow more complex instructions.
 KoboldCPP uses GGUF format, which are quantized from 16 bit to between 2 bit and 8 bit depending on model. (I like 8 bit if it fits in vram with room for 8k context.)
 lower bits require less ram, but there is a drop in reasoning and writing quality, though even the q2 was following instructions well. 
-I get all mine from huggingface/thebloke. Not all models suport chatML format, and you will have to change some things around in the constructor of textengine.js.
+I get all mine from huggingface/thebloke. Not all models suport chatML format, and more wont perform optimally without their expected format.  to change things around toward the bottom of setup.js and delete 0instructions.json
 
 for ease of use and organization, consider keeping kobold and the model you chose inside Clipboard Conqueror application.  If koboldcpp.exe is placed here, Clipboard Commander will run it automatically.//ToDo: detect and run kobold with cc.kcpps
 ``````
