@@ -136,3 +136,6 @@ dist
 0instructions.json
 0identities.json
 0generationSettings.json
+
+#exclude settingsConqueror original source for now
+.SettingsConqueror/
