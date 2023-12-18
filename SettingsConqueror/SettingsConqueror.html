@@ -1,0 +1,32 @@
+html
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node/Express App with Data Interaction</title>
+</head>
+
+<body>
+    <form action="/getData" method="POST">
+        <label for="name">Enter Your Name:</label>
+        <input type="text" id="name" name="name"><br><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', e => {
+            e.preventDefault(); // Prevent page reload on form submit
+            fetch('/saveData', {
+                method: 'POST', // Send POST request
+                body: new URLSearchParams(new FormData(document.querySelector('form'))), // Convert form data into URLSearchParams object
+            })
+                .then(response => response.json()) // Parse response as JSON
+                .then(data => console.log(data)) // Log the response to the console
+        });
+    </script>
+</body>
+
+</html>

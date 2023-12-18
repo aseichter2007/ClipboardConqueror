@@ -19,11 +19,11 @@
 
  //Then we randomly choose with user configurable rules how to choose from the probable tokens. the chosen token gets added to the front of the vector and we go again to choose the next word until a stop token is chosen or the max length is reached.
 
- // You prompt a a hand of cards and each turn as you play your card. the magician sees your card, reaches in his desk and grabs a new hand placing it face down and never looking. Each card the magician might reveal at least ties your play.  One card is chosen randomly by the your rules. because if the magician always wins its not an interesting trick, priming one card is easy, a whole hand makes the game. 
+ // You prompt a a hand of cards and each turn as you play your card. the magician sees your card, reaches in his desk and grabs a new hand placing it face down and never looking. Each card the magician might reveal at least ties your play.  One card is chosen randomly by your rules. because if the magician always wins its not an interesting trick, priming one card is easy, a whole hand makes the game. 
 
  //similarly, the machine can get off track with words that satisfay being chosen but that lead it to return tokens that are not truthfully representative of the orignial data it was trained with. 
 
- //occasionally, magician reveals his trick, or doesnt have correct hands prepared inside his coat, but magician always does their best to fool. 
+ //occasionally, magician reveals his trick, or doesnt have correct hands prepared inside his coat, but the magician always does their best to fool. 
 
  //ok. so all that said, just about all of this stuff is just learning. I know joe is poor, but he is for exploring how stop starts and confusion keep to core ideas and hopefully his stutters would reveal informaiton uncertainty?  I dont think it's working as intended. I command woddy and buzz similarly, testing characters for dataset knowledge. You are responsible for your use of this tool. 
 
