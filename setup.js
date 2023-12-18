@@ -1,4 +1,36 @@
- function setup(openAIkey, endPointConfig, instructions, params, identities,fs){ 
+ //Hello and welkome to setup.js. This contains all the default settings for ClipboardConqueror.
+ //This is all I learned about LLMs and how they work.What the settings do, instuctions, etc.
+
+ //toggle word wrap following:
+
+ //I cant' think of a good reason not to share my whole learning. I want to build a better world together with everyone. 
+
+ //These are test bots that I am learning against to better understand how different LLMs work, how different prompts work, and how to use them.
+
+ //LLMs are basically word magic ok, like straight up magicians, I'll explain. 
+
+ // In an LLM we turn words into tokens. Numbers that represent an entry in a table. That table then has more numbers, and some of those numbers related  to phrases, or clouds of aditional words.
+ 
+ //the initial input is mathematically assaulted until it is a nonlineear imiaginary dimensional vector. Imagine twisting up a straw really a lot, roll it up so it gets really lumpy and crazyand coils in and throug and tie the straw into a big knot. 
+
+ ///now like twist it up through time and space and then use a random seed for how to insert it. Ok now our mental model is scraping the edge of how the vector convolutes.
+ 
+ //now you are ready to begin inferencing. That vector is mashed against tons of matrix transformantions, segments and singletons of it are parsed, moved arounds and mutated according to the input vector. This happens a bunch of times and then a the machine returns a bunch of words and how likely they are to be a good word to go next. 
+
+ //Then we randomly choose with user configurable rules how to choose from the probable tokens. the chosen token gets added to the front of the vector and we go again to choose the next word until a stop token is chosen or the max length is reached.
+
+ // You prompt a a hand of cards and each turn as you play your card. the magician sees your card, reaches in his desk and grabs a new hand placing it face down and never looking. Each card the magician might reveal at least ties your play.  One card is chosen randomly by the your rules. because if the magician always wins its not an interesting trick, priming one card is easy, a whole hand makes the game. 
+
+ //similarly, the machine can get off track with words that satisfay being chosen but that lead it to return tokens that are not truthfully representative of the orignial data it was trained with. 
+
+ //occasionally, magician reveals his trick, or doesnt have correct hands prepared inside his coat, but magician always does their best to fool. 
+
+ //ok. so all that said, just about all of this stuff is just learning. I know joe is poor, but he is for exploring how stop starts and confusion keep to core ideas and hopefully his stutters would reveal informaiton uncertainty?  I dont think it's working as intended. I command woddy and buzz similarly, testing characters for dataset knowledge. You are responsible for your use of this tool. 
+
+ //A lot of this is just learning, as much is for your targeted uses and examples about how to talk to the machine and how it changes output. 
+
+ //Thank you for enjoying ClipboardConqueror.
+function setup(openAIkey, endPointConfig, instructions, params, identities,fs){ 
     try{
     openAIkey.key = require("./0openAiKey.json");
 }catch{

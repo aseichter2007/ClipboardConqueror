@@ -138,4 +138,4 @@ dist
 0generationSettings.json
 
 #exclude settingsConqueror original source for now
-.SettingsConqueror/
+SettingsConqueror/
