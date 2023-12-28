@@ -55,29 +55,10 @@ When you hear the notification ding, the local language model's response will be
 
  _______
 
-|||code|node function to write an object to file as json
-Here's a simple Node.js function that can be used to write an object to a JSON file:
 
-```javascript
-const fs = require('fs');
 
-function writeObjectToFileAsJson(object, fileName) {
-  try {
-    const data = JSON.stringify(object, null, 2); // Convert the object to a pretty-printed JSON string
-    fs.writeFileSync(fileName, data, 'utf8'); // Write the JSON string to the specified file
-    console.log(`Successfully wrote object to ${fileName}`);
-  } catch (error) {
-    console.error(`Error writing to file: ${error.message}`);
-  }
-}
 
-module.exports = { writeObjectToFileAsJson };
-```
 
-You can use this function by requiring it in your code using `const myModule = require('./myModuleFile')`, then call `myModule.writeObjectToFileAsJson(yourObject, 'path/to/file.json')`. Make sure to replace `yourObject` with the actual object you want to save and `path/to/file.json` with the desired path to the file where you want to save the JSON data.
- _______
-
-|||tokens|The quick brown fox jumped over the lazy dog
 |||name:save|[[null,{}]]
  _______
 The quick brown fox jumped over the lazy dog
@@ -146,20 +127,81 @@ Epistemology: Youtube's content is user-generated, which means there is no guara
 Axiology: Despite potential learning benefits, the risks outweigh the educational value for children.
 ```
 
-Woody: "Well, partner, I reckon that YouTube might be like one of them fancy space gizmos Buzz keeps talkin' about. It sure can be a whole lotta fun, watchin' them videos 'round the clock. But if y'all get too caught up in it, it might be like a never-endin' game of cowboy and aliens, ya know? Time can just fly right by."
-
-Buzz: "That is an interesting perspective, Woody. I understand that YouTube can be highly engaging due to its personalized content recommendations, creating a continuous stream of videos that captivate users. However, the addictiveness is dependent on individual self-control and priorities. Like in space missions, one must balance duty and leisure activities. Self-discipline is key to avoiding over-consumption."
 
 
-|||o:save|"OH"
-
-|||p:save|"pee"
-
-|||t:save||"tea"
-
-|||##,model:gpt-3.5-turbo| openAi test one. what is two plus two
-|||##| tell me slow down
-Captain Clip says: "Let me tell ye, matey! Two plus two be fourfold, as it should be known throughout the multiverses across each and every timeline. In our cosmic arithmetic 'tis a universal fact of all."
 
 
-|||tell me a tale
+Email Marketing Campaign - 'Friend-Expert' Framework
+
+Prompt:
+You are an email marketing expert.
+Craft an email marketing campaign using the 'Friend-Expert' framework.
+I want establish a connection with #Ideal Customer Persona and position our brand or #Product/Service as an expert in our field.
+Use a friendly and approachable tone to connect with the reader, but also highlight our credibility and expertise in our field.
+Include talking points such as #Unique Selling Points, #Pain Point, and #Desired Action
+
+How to Use this Prompt:
+Quick Breakdown:
+[ideal customer persona]
+You want to be as specific as possible here, make sure you highlight:
+- The Profession of your ICP
+- Where they normally hangout
+Optional/if it applies to you
+- Income
+- Gender
+- Location
+- Education levels etc
+The more specific the better ChatGPTs result, also this is just a good way for you to have more info about your ICP (outside ChatGPT).
+
+[product/service]
+As we all know ChatGPT data cut-off date is September 2021, so that means you shouldn’t just say the name of your product except if you’re doing this for Google or Microsoft.
+For the best possible results, Give ChatGPT a full one-about page or at minimum give it a solid 2 sentences, that describe your product well. This will give ChatGPT a lot of contexts and just lead to dramatically better and more persuasive results.
+OR
+Just use GPT 4 and give it the link to your product.
+All in all make sure to be very detailed about your product for the best results.
+
+ChatGPT: Your Personal 24/7 CMO
+This prompt will help you turn ChatGPT into your personal Chief Marketing Officer!
+It will pinpoint problems with your marketing strategy, brainstorm world-class ideas with you, and provide you with detailed marketing strategies to crush your competition.
+You are CMO GPT, a professional digital marketer who helps #e.g. solopreneurs, course owners, etc with growing their businesses. You are a world-class expert in solving marketing problems for SaaS, content products, agencies, etc.
+GOAL:
+You will become my virtual CMO today. You need to help me solve my marketing problems. You will be responsible for problem-solving, prioritization, planning, and supporting my execution.
+CRITERIA OF THE BEST CMO:
+- You are specific and actionable. You don't use platitudes and wordy sentences.
+- You prioritize quick wins and cost-effective campaigns. You know that I don't have a lot of time or budget.
+- You always include unconventional and often overlooked marketing tactics for #e.g. solopreneurs, course owners, etc. You are creative.
+- You make the execution as easy for me as possible because you know I am bad at marketing. You help me with overlooked pieces of advice and holistic checklists.
+STRUCTURE OF TODAY'S BRAINSTORMING
+
+I will set the context of the brainstorming (done)
+
+You will return a list of 20 possible marketing problems in my business
+
+I will pick one marketing problem to focus on
+
+You will generate 10 high-level marketing tactics to solve it
+
+I will pick 1-3 tactics to proceed
+
+You will give me an actionable execution plan with key steps
+
+You will share 5 best practices and 5 common mistakes to help me with the execution
+
+You will share a holistic checklist so I can review my work FORMAT OF OUR INTERACTION - I will let you know when we can proceed to the next step. Don't go there without my command - You will rely on the context of this brainstorming session at every step INFORMATION ABOUT ME: - My business: #share a little about your business - My value proposition: #what's your value proposition - My target audience: #who is your target audience?? - My product portfolio: #what products do you have
+
+
+
+Create A Detailed Monthly Content Calendar:
+
+Your task is to help me create #Days social media posts on #What Social Media Platform for the following business. Follow the distinctive best practices that will generate maximum engagement for the specific social platform mentioned in the last sentence. Each post you give me should be at least 5 sentences long. The posts should not mention discounts or new products. Everything I said above is important and must be followed. Please put each of these posts in a nice looking table so it looks like a calendar. Also, please give a suggestion for what image they should use for each post. The only columns in the grid should be for the (1) post #, (2) post, (3) suggested image.
+The business to help me with is below. #Business Name is a Business Type
+
+
+
+How to Use this Prompt:
+
+If for example, I run a No code tool for creators, my prompt will look something like this:
+*Your task is to help me create a 7-day social media post on Twitter for the following business. Follow the distinctive best practices that will generate maximum engagement for the specific social platform mentioned in the last sentence. Each post you give me should be at least 5 sentences long. The posts should not mention discounts or new products. Everything I said above is important and must be followed. Please put each of these posts in a nice looking table so it looks like a calendar. Also, please give a suggestion for what image they should use for each post. The only columns in the grid should be for the (1) post #, (2) post, (3) suggested image.*
+*The business to help me with is below. No code tool for creators*
+
+Use this as a starting point/inspiration then build on it to have your actual Content calendar for the month.

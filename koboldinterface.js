@@ -11,15 +11,15 @@ class KoboldClient {
     this.currentRequest = "";
     this.notify = notify;
     this.tokencount= "extra/tokencount"
-    //this.setupRequest()
+   
     
   }
   getstats(datareturn ){
-    sendPostPerfRequest(this.baseURL + this.stats, datareturn, this.handler, this.notify)
+    sendPostPerfRequest(this.baseURL + this.stats, datareturn, this.handler, this.notify)//this is busted by sending in a full endpoint but never worked anyway
   }
   getTokenCount(text){
     const data = {prompt: text};
-    return sendPostPerfRequest(this.baseURL + this.tokencount, data, this.handler, this.notify)
+    return sendPostPerfRequest(this.baseURL + this.tokencount, data, this.handler, this.notify)//this is busted in favor of easy backend replacement. When the different backends standardize I will mess with this.
 
   }
 
@@ -29,14 +29,14 @@ class KoboldClient {
     //this.currentRequest = params
     this.sendKoboldRequest(params, agent);
   }
-  abort(){
+  abortGeneration(){
     sendPostTextRequest(this.baseURL + this.abort, ()=> {console.log("aborting");}, this.handler, this.notify, "none")
   }
   
   getSummary(params, agent){
     sendrequestsummaryRequest( this.baseURL + this.generate , params, this.returnSummary, this.handler, this.notify, agent);
   }
-  // setupRequest( ) {
+  // setupRequest( ) {//not sure which of these and the proper names are implemented in the backend.
   //   const example= {
   //     temp: 0.7,
   //     top_p: 0.5,
@@ -81,7 +81,7 @@ class KoboldClient {
   sendKoboldRequest(data, agent) {
      //this.notify("ready");
     //console.log("to API: "+data.prompt);
-    sendPostTextRequest(this.baseURL+this.generate , data, this.callback, this.handler, this.notify, agent);
+    sendPostTextRequest(this.baseURL, data, this.callback, this.handler, this.notify, agent);
   }
 }
 async function sendPostTextRequest(apiUrl, data, callback, handler, notify, agent) {

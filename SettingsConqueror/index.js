@@ -33,7 +33,7 @@ app.post('/save/:type', (req, res) => {
     // This route handles the submission of form data from the HTML page
     console.log([req.params.type]);
     console.log(req.body);
-    //let savedata = JSON.parse(req.body)
+    //let savedata = JSON.parse(req.body)//I think this is where my extra formatting is coming from. Maybe if else this.
     Object.entries(req.body).forEach(([key, value]) => {
         console.log(key);
         let deleteflag = false;
@@ -57,8 +57,8 @@ app.post('/save/:type', (req, res) => {
         }
         writeSettingsToFile(req.params.type);
     })
-    const name = req.body.name; // Get the data sent from the form input element with `name` attribute
-    res.status(200).send("ok"); // Send the response back as JSON
+    const name = req.body.name; 
+    res.status(200).send("ok"); 
 });
 
 app.listen(port, () => console.log(`Server running at http://localhost:${port}`));

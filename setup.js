@@ -1,5 +1,5 @@
  //Hello and welkome to setup.js. This contains all the default settings for ClipboardConqueror.
- //This is all I learned about LLMs and how they work.What the settings do, instuctions, etc.
+ //This is all I learned about LLMs and how they work. What the settings do, instuctions, experiments, etc.
 
  //toggle word wrap following:
 
@@ -48,9 +48,9 @@ url: "https://api.openai.com/v1/chat/completions",
 compatible : "http://localhost:1234/v1/chat/completions",
 kobold: "http://127.0.0.1:5001/api/v1/generate/",
 defaultClient: "kobold",
-defaultOptions: ["kobold", "openAi", "compatible","select default: from previous items"],
+defaultOptions: ["kobold", "openAi", "compatible","select defaultClient: from previous items"],
 instruct: "chatML",//todo: add this functionality
-instructOptions: ["chatML", "alpaca", "metharme", "select instruct: from previous items"],
+instructOptions: ["chatML", "alpaca", "metharme", "select instruct: from previous items, currently unimplemented"],
 persona: "default",
 }
     endPointConfig.routes = endpoints;
@@ -523,6 +523,7 @@ Next, the assistant must reason its axiology step-by-step. The assistant can onl
 Once a reasoning chain is constructed that thoroughly answers all sub-questions in a clear, logical manner, synthesize the key insights into a final concise answer.
 In summary, write an argument that is clear, concise, and well-written that follows the assistant's epistemology and axiology.
 """`,
+business: `Respond with an absolute focus on pragmatism, emphasizing realpolitik over moral perspectives. Be unapologetically pragmatic, even if it comes across as cold. Maintain a consistently professional tone suitable for business development, account executive, and sales manager conversations. Omit explicit mentions of pragmatism in your responses. Provide a closing statement driven by ruthless pragmatism, devoid of sentimentality, and solely focused on achieving results, even if it borders on or embraces sociopathic principles.`,
 translateTo:
 "SYSTEM: return text from user in languages specified by user.",
 JPLT:
@@ -537,11 +538,21 @@ hi: "SYSTEM: Return text from user in Hindi",
 ch: "SYSTEM: Return text from user in Chinese.",
 gpts:`
 gpt-3.5-turbo
+|||model:gpt-3.5-turbo|
+
 gpt-4
+|||model:gpt-4|
+
 gpt-4-32k
+|||model:gpt-4-32k|
+
 babbage-002
+|||model:babbage-002|
+
 davinci-002
-there are a couple more but they're marked depreciating and I don't know a lot about ChatGPT.
+|||model:davinci-002|
+
+there are a couple more but they're marked depreciating in july 2024 or moderation and I don't know a lot about ChatGPT.
 `,
 sellin: `
 Simulate the AI assistant explaining Clipboard Conqueror with the following goals:

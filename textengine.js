@@ -294,7 +294,7 @@ in addition to temperature for controlling the output, we also have other values
   tfs: 0.97,//tail free sampling, removes unlikely tokens from possibilities by finding the platau where tokens are equally unlikely. 0.99 maximum. Higher value finds a lower, flatter plateau. Note:some reports say tfs may cause improper gendering or mixups in responses, he instead of she, his/hers, etc. 1 thread reporting.
   don't mess with that one too much, though you could go as low as 0.9 without significantly changing the output.
 
-  there is also mirostat_modes 1 and 2. Reccomend 2. Mirostat uses previous context to tune against perplexity somehow. I don't understand it so I can't reccomend it, but I've tried it out and it seems to work fine. 
+  there is also mirostat_modes 1 and 2. Reccomend 0 or 2. Mirostat uses previous context to tune against perplexity somehow. I don't understand it so I can't reccomend it, but I've tried it out and it seems to work fine. 
   Mirostat turns off select other settings, and does use temperature.
 
 

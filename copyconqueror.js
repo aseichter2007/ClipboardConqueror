@@ -29,7 +29,7 @@ var memout = '';
 const KoboldClient = require('./koboldinterface.js');
 //if (configs.client== "kobold")
 {
-    client = new KoboldClient( axios, recieveApiResponse, returnSummary, NotificationBell);//todo, this doesnt really belong like this, should be created directly into textengine constructor and eliminate all this mess running across the main program. Needed before adding openAI, untangling this will make that much easier. 
+    client = new KoboldClient( axios, recieveApiResponse, returnSummary, NotificationBell, endPointConfig.routes.kobold);//todo, this doesnt really belong like this, should be created directly into textengine constructor and eliminate all this mess running across the main program. Needed before adding openAI, untangling this will make that much easier. 
     
 }   
 const sendEngine = new SendEngine(recieveProcessedClip, ncp.copy, recieveApiResponse, NotificationBell, getSummary, client.getTokenCount, endPointConfig.routes, identities.identities, instructions.instructions,params.params, openAIkey.key);
