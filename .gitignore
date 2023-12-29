@@ -137,6 +137,7 @@ dist
 0identities.json
 0generationSettings.json
 0formats.json
+charMemoryEngine.js
 
 #exclude soundtrack for now
 .Soundtrack/

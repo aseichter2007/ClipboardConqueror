@@ -405,7 +405,7 @@ Currently there are no built binaries and Node is required to run Clipboard Conq
 
 
 
-2. Clipboard Conqueror requires [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/releases/), a kobold compatible API, or an [openAI compatible APT](https://lmstudio.ai/) to function. Or both! or just an openAI key. Or all three!
+2. Clipboard Conqueror requires [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/releases/), a kobold compatible API, or an [openAI compatible API](https://lmstudio.ai/) to function. Or both! or just an openAI key. Or all three! I'd love to hear how you connect your choice of backend for a compatibility list.
 
 
     For macOS get KoboldAi or anything that hosts a kobold united compatible endpoint for tavern, etc. //Notes below for linux and mac, thank Herro.
@@ -415,7 +415,7 @@ Currently there are no built binaries and Node is required to run Clipboard Conq
     I will supply a sample batch file for loading a model with your settings file after you get kobold dialed in from the launcher. 
 
 3. Kobold needs a model. Here are my reccomendations 12/5/23:[OpenHermes 2.5 Mistral 7B 16K Context.GGUF](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-16k-GGUF)
-  minimum hardware:[rocket_3B](https://huggingface.co/TheBloke/rocket-3B-GGUF)
+
      
      
       ``````
@@ -493,6 +493,7 @@ Less than 8gb gfx cards(fast-medium, notable quality loss):
 
 other models:
 ---------
+minimum hardware:[rocket_3B](https://huggingface.co/TheBloke/rocket-3B-GGUF) should be chatML I havent messed with it much.
 
 [Solar 10B](https://huggingface.co/TheBloke/SOLAR-10.7B-Instruct-v1.0-GGUF) this one is impressing me. solar-10.7b-instruct-v1.0.Q6_K.gguf total VRAM used: 10123.63 MiB (model: 8294.05 MiB, 8k context: 1829.58 MiB) Works great with default chatML instruct
 
