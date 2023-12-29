@@ -348,6 +348,41 @@ frank\n\n<|im_end|>\n<|im_start|>assistant:\n
  - again note 4 pipes. 
 
 
+Prompt Formats:
+---
+Change the instruction format like :
+```
+|||FORMAT|chatML
+or
+|||FORMAT|alpaca
+etc.
+```
+Formats must exist in 0formats.json, the name must match the object key.
+
+Also supports setting all instructions like: 
+```
+|||FORMAT:save|//todo: find the bug, this isnt working
+{"system":"<|im_start|> ","prependPrompt":"assistant:","postPrompt":"after agents","memoryStart":"spot for universal memory","memoryPost":"<|im_end|>\n<|im_start|>user:\n ","finalprompt":"<|im_end|>\n<|im_start|>assistant:\n","responseStart":"start of the AI response"}
+```
+
+Or you can set individual prompt segments like:
+```
+|||PROMPT:system|<|im_start|> 
+
+|||PROMPT:prepend|assistant
+
+|||PROMPT:post|after agents
+
+|||PROMPT:memory|spot for universal memory
+
+|||PROMPT:memoryPost|<|im_end|>\n<|im_start|>user:\n 
+
+|||PROMPT:final|<|im_end|>\n<|im_start|>assistant:\n
+
+|||PROMPT:start|start of the AI response
+```
+ 
+
 note: current behavior removes chatml markup "<|any|>" from the ai return to ease use of non chatML models with default settings. For the most part monster merge models respond very well, but will markup character dialog in a way I find undesirable. Comment line 17 "text = this.removeChatML(text);" in responsengine.js to stop this behavior. Response engine is ready for function calls, let me know  what would be useful.
 
 ---------------------------------

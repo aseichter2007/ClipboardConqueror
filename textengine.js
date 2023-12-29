@@ -32,6 +32,7 @@ class TextEngine {
     //this.lastAgentTags = [];
     this.sendHold = false;
     this.write = false;
+    this.writeSettings = false;
     this.rp = false;
     this.sendLast = false;
     this.on = false;
@@ -401,39 +402,48 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
   setPrompt(command, formattedQuery) {
     switch (command) {
       case "system":
-        this.instructions.system = formattedQuery;
+        //this.instructions.system = formattedQuery;
+        this.koboldClient.setOnePromptFormat ("system", formattedQuery); 
         break;
       case "prepend":
-        this.instructions.prependPrompt = formattedQuery;
+        //this.instructions.prependPrompt = formattedQuery;
+        this.koboldClient.setOnePromptFormat ("prependPrompt", formattedQuery);
         break;
       case "post":
-        this.instructions.postPrompt = formattedQuery;
+        //this.instructions.postPrompt = formattedQuery;
+        this.koboldClient.setOnePromptFormat ("postPrompt", formattedQuery);
         break;
       case "memory":
-        this.instructions.memoryStart = formattedQuery;
+        // this.instructions.memoryStart = formattedQuery;
+        this.koboldClient.setOnePromptFormat ("memoryStart", formattedQuery);
         break;
       case "memorypost":
-        this.instructions.memoryPost = formattedQuery;
+      case "memoryPost":
+        // this.instructions.memoryPost = formattedQuery;
+        this.koboldClient.setOnePromptFormat ("memoryPost", formattedQuery);
         break;
       case "final":
-        this.instructions.finalprompt = formattedQuery;
+        //this.instructions.finalprompt = formattedQuery;
+        this.koboldClient.setOnePromptFormat ("finalprompt", formattedQuery);
         break;
       case "start":
-        this.instructions.responseStart = formattedQuery;
-
+        // this.instructions.responseStart = formattedQuery;
+        this.koboldClient.setOnePromptFormat ("responseStart", formattedQuery);
+        break;
       default:
        let notfound = "invalid prompt key: " + command + " Options: system, prepend, post, memory, memorypost, final, start \n \n you may edit and copy below: \n";
-        this.notify("invalid key: " ," Options: system, prepend, post, memory, memorypost, final, start");
+        this.notify("invalid key: " + command ," Options: system, prepend, post, memory, memorypost, final, start");
         let settings = {
-          system: this.instructions.system,
-          prependPrompt: this.instructions.prependPrompt,
-          postPrompt: this.instructions.postPrompt,
-          memoryStart: this.instructions.memoryStart,
-          memoryPost: this.instructions.memoryPost,
-          finalprompt: this.instructions.finalprompt,
-          responseStart: this.instructions.responseStart
+          system: this.koboldClient.instruct.system,
+          prependPrompt: this.koboldClient.instruct.prependPrompt,
+          postPrompt: this.koboldClient.instruct.postPrompt,
+          memoryStart: this.koboldClient.instruct.memoryStart,
+          memoryPost: this.koboldClient.instruct.memoryPost,
+          finalprompt: this.koboldClient.instruct.finalprompt,
+          responseStart: this.koboldClient.instruct.responseStart
         }
-        this.sendToClipboard(notfound+ this.instructions.writeSave + JSON.stringify(settings));
+        this.identity.settings = settings;
+        this.writeSettings = true
         break;
     }
   }
@@ -455,8 +465,10 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
   }
   
   pickupFormat(setting) {
+    console.log("hit pickup format: " + setting);
     try {
       let parsed = JSON.parse(setting);   //this will for sure mess up, probably don't count on this functionality until I manually build a parse for this. 
+      console.log(JSON.stringify(parsed));
       this.koboldClient.setPromptFormat(parsed);   
     } catch (error) {
       this.notify("invalid format: ", error);
@@ -517,11 +529,13 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
               //save like |||agent:delete|
               delete this.identities[commands[0]]; //
               tag = commands[0];
-            } else if (commands[1] == this.instructions.setInstruction) {
-              this.setPrompt(commands[1],sorted.formattedQuery);
             } else if (commands[0] == this.instructions.setPromptFormat && this.instructions.save == commands[1]) {
+              this.sendHold = true;
               this.pickupFormat(sorted.formattedQuery);
-            } else if (!isNaN(commands[1])) {
+            }  else if (commands[0] == this.instructions.setInstruction) {
+              this.sendHold = true;
+              this.setPrompt(commands[1],sorted.formattedQuery);
+            }else if (!isNaN(commands[1])) {
               this.params[commands[0]] = parseFloat(commands[1]);
               //console.log(commands[0] + commands[1] +" written> " + this.params[commands[0]]);//ill keep this one for now
             } else if (commands[1] == "true") {
@@ -560,7 +574,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
           //console.log("hit default");
           this.identity.CaptainClip = this.identities[this.instructions.defaultPersona];
         }
-
+        
         if (this.write) {
           this.write = false;
           delete this.identity[this.instructions.rootname];
@@ -568,8 +582,26 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
             this.instructions.writeSave + "\n" +
             JSON.stringify(this.identity) +
             this.instructions.writeSplit +
-            sorted.formattedQuery; //todo send the right thing to the clipboard
+            sorted.formattedQuery; 
           sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, "\n");
+          this.notify("Paste Response:", sendtoclipoardtext.slice(0, 150));
+          this.sentToClip = sendtoclipoardtext
+          return this.sendToClipboard(sendtoclipoardtext);
+        }
+        if (this.writeSettings) {
+          this.writeSettings = false;
+          // delete this.identity[this.instructions.rootname];
+          // try {
+          //   delete this.identity["CaptainClip"];
+          // } catch (error) {
+          //   //console.log(error);
+          // }
+          let sendtoclipoardtext =
+            this.instructions.writeSettings + "\n" +
+            JSON.stringify(this.identity.settings) +
+            this.instructions.writeSplit +
+            sorted.formattedQuery; 
+          //sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, "\n");
           this.notify("Paste Response:", sendtoclipoardtext.slice(0, 150));
           this.sentToClip = sendtoclipoardtext
           return this.sendToClipboard(sendtoclipoardtext);

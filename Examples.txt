@@ -223,27 +223,24 @@ Use this as a starting point/inspiration then build on it to have your actual Co
 
 |||write a paragraph on doodling. 
 
-I assume you want to create a JavaScript function that takes a text input and returns a specific line. Here's an example of a simple function that does that:
+|||PROMPT:T|
 
-```javascript
-function getLineAtIndex(text, lineNumber) {
-  const lines = text.split('
-');
-  if (lines.length <= lineNumber) {
-    throw new Error(`Line ${lineNumber} does not exist`);
-  }
-  return lines[lineNumber - 1];
-}
 
-const text = `Hello,
-world!
-This is a
-multi-line
-example.`;
+|||PROMPT:start| Sure here is fizzbuzz:
 
-console.log(getLineAtIndex(text, 3)); // Output: "multi-line"
-```
 
-Explanation:
-The function `getLineAtIndex` takes two parameters: `text` and `lineNumber`. It splits the `text` into an array of lines using the newline character as the separator (`
-`). Then, it checks if the line number exists within the array of lines. If the line number is less than or equal to the number of lines, it throws an error. Otherwise, it returns the line at the specified index minus one because arrays are zero-indexed. The provided example uses this function to print the third line from the `text` variable.
+|||FORMAT:save|
+{"system":"<|im_start|> ","prependPrompt":"","postPrompt":"","memoryStart":"","memoryPost":"<|im_end|>\n<|im_start|>user:\n ","finalprompt":"<|im_end|>\n<|im_start|>assistant:\n","responseStart":""}
+ _______
+
+
+
+
+
+
+
+
+
+
+undefined
+|||PROMPT:system| walawala

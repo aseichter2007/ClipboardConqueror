@@ -22,8 +22,11 @@ class KoboldClient {
     return sendPostPerfRequest(this.baseURL + this.tokencount, data, this.handler, this.notify)//this is busted in favor of easy backend replacement. When the different backends standardize I will mess with this.
 
   }
+setOnePromptFormat(setting, value) {
+  this.instruct[setting] = value;
+}
 setPromptFormat(setting) {
-  console.log("old format: " + JSON.stringify(this.instruct));
+  //console.log("old format: " + JSON.stringify(this.instruct));
   //console.log("set prompt format: " + JSON.stringify(setting));
 
   const { system, prependPrompt, postPrompt, memoryStart, memoryPost, finalprompt, responseStart } = setting;
