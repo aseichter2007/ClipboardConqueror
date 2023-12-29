@@ -11,7 +11,7 @@ class KoboldClient {
     this.currentRequest = "";
     this.notify = notify;
     this.tokencount= "extra/tokencount"
-   
+    this.instruct = {};
     
   }
   getstats(datareturn ){
@@ -22,12 +22,44 @@ class KoboldClient {
     return sendPostPerfRequest(this.baseURL + this.tokencount, data, this.handler, this.notify)//this is busted in favor of easy backend replacement. When the different backends standardize I will mess with this.
 
   }
+setPromptFormat(setting) {
+  console.log("old format: " + JSON.stringify(this.instruct));
+  //console.log("set prompt format: " + JSON.stringify(setting));
 
-  send(text, params, agent){
+  const { system, prependPrompt, postPrompt, memoryStart, memoryPost, finalprompt, responseStart } = setting;
+  this.instruct = {
+    system,
+    prependPrompt,
+    postPrompt,
+    memoryStart,
+    memoryPost,
+    finalprompt,
+    responseStart,
+  };
+
+  console.log("prompt format set: " + JSON.stringify(this.instruct));
+}
+  formatQueryAndSend(identity, formattedQuery, params) {
+    console.log("current instruct: " + JSON.stringify(this.instruct));
+    console.log("system out: " + this.instruct.system +"\n");
+    let finalPrompt = 
+      this.instruct.system +
+      this.instruct.prependPrompt +
+      JSON.stringify(identity) +
+      this.instruct.postPrompt +
+      this.instruct.memoryStart +
+      this.instruct.memoryPost +
+      formattedQuery +
+      this.instruct.finalprompt +
+      this.instruct.responseStart;
+      params.prompt = finalPrompt;
+      this.sendKoboldRequest(params);
+  }
+  send(text, params){
     params.prompt = text;
     //this.params = params;
     //this.currentRequest = params
-    this.sendKoboldRequest(params, agent);
+    this.sendKoboldRequest(params);
   }
   abortGeneration(){
     sendPostTextRequest(this.baseURL + this.abort, ()=> {console.log("aborting");}, this.handler, this.notify, "none")
@@ -78,22 +110,22 @@ class KoboldClient {
   //     //type: textgen_types.OOBA,
   // }
   // }
-  sendKoboldRequest(data, agent) {
+  sendKoboldRequest(data) {
      //this.notify("ready");
     //console.log("to API: "+data.prompt);
-    sendPostTextRequest(this.baseURL, data, this.callback, this.handler, this.notify, agent);
+    sendPostTextRequest(this.baseURL, data, this.callback, this.handler, this.notify);
   }
 }
-async function sendPostTextRequest(apiUrl, data, callback, handler, notify, agent) {
+async function sendPostTextRequest(apiUrl, data, callback, handler, notify) {
   try {
     console.log(JSON.stringify(data));
     const response = await handler.post(apiUrl, data);
     //console.log(`Response status: ${response.status}`);
     //var text = JSON.stringify(response.data.results[0].text)
     var text = response.data.results[0].text
-    var tokens = response;
+
     //console.log(`Response data: ${JSON.stringify(response.data)}`);//todo: get tokens  THERE IS NO STATS NOOO
-    callback(text, agent, tokens);
+    callback(text);
   } catch (error) {
     //notify("error");
     console.log(`Error sending request: ${error}`);

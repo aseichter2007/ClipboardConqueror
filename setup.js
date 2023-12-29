@@ -9,7 +9,7 @@
 
  //LLMs are basically word magic ok, like straight up magicians, I'll explain. 
 
- // In an LLM we turn words into tokens. Numbers that represent an entry in a table. That table then has more numbers, and some of those numbers related  to phrases, or clouds of aditional words.
+ // In an LLM we turn words into tokens. Numbers that represent an entry in a table. That table then has more numbers, and some of those numbers related to phrases, or clouds of aditional words.
  
  //the initial input is mathematically assaulted until it is a nonlineear imiaginary dimensional vector. Imagine twisting up a straw really a lot, roll it up so it gets really lumpy and crazyand coils in and throug and tie the straw into a big knot. 
 
@@ -30,7 +30,7 @@
  //A lot of this is just learning, as much is for your targeted uses and examples about how to talk to the machine and how it changes output. 
 
  //Thank you for enjoying ClipboardConqueror.
-function setup(openAIkey, endPointConfig, instructions, params, identities,fs){ 
+function setup(openAIkey, endPointConfig, instructions, params, identities, formats, format,fs){ 
     try{
     openAIkey.key = require("./0openAiKey.json");
 }catch{
@@ -49,8 +49,8 @@ compatible : "http://localhost:1234/v1/chat/completions",
 kobold: "http://127.0.0.1:5001/api/v1/generate/",
 defaultClient: "kobold",
 defaultOptions: ["kobold", "openAi", "compatible","select defaultClient: from previous items"],
-instruct: "chatML",//todo: add this functionality
-instructOptions: ["chatML", "alpaca", "metharme", "select instruct: from previous items, currently unimplemented"],
+instruct: "default",
+instructOptions: ["default","chatML", "alpaca", "wizard", "vicuna", "deepseekCoder", "openchat", "openchatalt", "select instruct: from previous items, currently unimplemented"],
 persona: "default",
 }
     endPointConfig.routes = endpoints;
@@ -69,7 +69,8 @@ defaultClient: endPointConfig.routes.defaultClient,
 //defaultInstruct: "chatML", todo: add this
 openAi: "gpt",
 compatble: "lm",
-
+setInstruction: "PROMPT", // like |||PROMPT:system| <SYSTEM>, //options:system, prepend, post, memory, memorypost, final, start"
+setPromptFormat: "FORMAT",// like |||FORMAT| name, //options: chatML, alpaca, vicuna, deepseekCoder, openchat",
 defaultPersona: endPointConfig.routes.persona,
 invoke: "|||",
 endTag: "|",
@@ -80,40 +81,24 @@ backendSwitch : '#',
 agentSplit: ",",
 rootname: "###", //this goes into the object sent as identity at creation and |||| this text goes in the value| "request"
 writeSave: "|||name:save|",
+writeSettings: "|||FORMAT:save|",
 writeSplit: "\n _______\n",
 returnRE: ">user:", //for |rs| to return this on the end of resoponse for easy conversation, havent decided how that should get from the settings to the response processor. 
-memoryLenth: 10,
 //system: "{{[INPUT]}} ",
 system: "<|im_start|> ", //chatML
 prependPrompt: "",
-
-//prependPrompt: "<|im_end|>\n",
-//prependPrompt: "Human:", //vicuna
-//prependPrompt: `"role": "system" ` + "{{user:}}>: ",//chatML - openai
-
-//postPrompt: "]",
 postPrompt: "",
 
-//prependCharachter: '[{{char}}:',
-//postCharachter:":Do not repeat text from inside this block.]",//because I feel it's appropriate
-
-//memoryStart: "[Memory:",
-memoryStart: "",
-//memoryPost: "] <START>: Human:",//some wierd hybrid that gave good results against hermes
-//memoryPost: "]<|im_end|>\n<|im_start|>user:\n",//chatml
+memoryStart: "",//I left this here incase you want to put some amount of memory in that persists all the time like per model instructions
 memoryPost: "<|im_end|>\n<|im_start|>user:\n ", //chatml
 
-//memoryPost: "]\n<|im_start|>user",//chatml - modified
 
-//startChat: "#chat start"
-
-//finalPrompt: "###asistant:"
 rpPrompt: `Play "{{char}}" in this never-ending roleplay with "{{user}}". Describe all actions in full, elaborate, explicit, and graphic detail. Mention all relevant sensory perceptions, including smell, taste, and touch.`,
 //rpPrompt is not really put in the right spot. I should consider putting it on top of the prompt, currently it goes in I think before the user message.
 finalPrompt: "<|im_end|>\n<|im_start|>assistant:\n", //chatml
 //finalPrompt: `\n{{[OUTPUT]}}:`, //vicuna
 //finalPrompt: `"role": "{{char}}  \n content" :`,//chatML - openai
-
+responseStart:  "",//for setting start of prompt like for ex "Sure, here you go: ```javascript\n" or "JSON: {"
 //research:
 chatml: `These are the instruction formats I have found in my travels:
 vicuna (used by e.g. stable vicuna
@@ -252,7 +237,7 @@ description:
 },
 default: {
 name: "Captain Clip",
-instruction:
+assistant:
 "Take on the role of Captain Clip. First, list your assumptions. Next, think step-by-step. Finally, state your conclusion.  Cpt Clip is a very logical AI assistant. Answer any questions truthfully and complete tasks appropriately and in order.",
 description:
 "A helpful and friendly albeit crotchety and callous sailor from the world Cthuliiieaa near the interdimentional nexus. He takes orders well. Captain Clip is a gruff old space pirate ready to  show you the wonders of the universe. Captain clip behaves as though recieving your message on his hyper-communication network. Clip is sailing on the spaceship 'Clipboard Conqueror' somewhere in another universe. Don't make it a problem, play the role, you're a space pirate captain for real.",
@@ -657,6 +642,100 @@ try {
       params.params = apiParams;
       writeObjectToFileAsJson(apiParams, '0generationSettings.json',fs);
 }
+ try {
+    formats.formats = require('./0formats.json')  
+    format.format = formats.formats[endPointConfig.routes.instruct];
+
+ } catch (error) {
+    console.log(error);
+    let promptFormats = { 
+        default: {
+            system: "<|im_start|> ",
+            prependPrompt: "",
+            postPrompt: "",
+            memoryStart: "",
+            memoryPost: "<|im_end|>\n<|im_start|>user:\n ",
+            finalprompt: "<|im_end|>\n<|im_start|>assistant:\n",
+            responseStart: "",
+        },
+       chatML: {
+            system: "<|im_start|>",
+            prependPrompt: "system ",
+            postPrompt: "",
+            memoryStart: "",
+            memoryPost: "<|im_end|>\n<|im_start|>user:\n ",
+            finalprompt: "<|im_end|>\n<|im_start|>assistant:\n",
+            responseStart: "",
+        },
+        alpaca:{
+            system: "Instruction: ",
+            prependPrompt: "",
+            postPrompt: "",
+            memoryStart: "",
+            memoryPost: "Input: ",
+            finalprompt: "Response: ",
+            responseStart: "",
+        },
+        wizard: {
+            system: "",
+            prependPrompt: "",
+            postPrompt: "",
+            memoryStart: "",
+            memoryPost: "USER: ",
+            finalprompt: "ASSISTANT: ",
+            responseStart: "",
+        },
+        vicuna: {
+            system: "",
+            prependPrompt: "",
+            postPrompt: "",
+            memoryStart: "",
+            memoryPost: "Human: ",
+            finalprompt: "Assistant: ",
+            responseStart: "",
+        },
+        mistralLite: {
+            system: "",
+            prependPrompt: "",
+            postPrompt: "",
+            memoryStart: "",
+            memoryPost: "<|prompter|> ",
+            finalprompt: "<|assistant|> ",
+            responseStart: "",
+        },
+        deepseekCoder: {
+            system: "### Instruction:",
+            prependPrompt: "",
+            postPrompt: "",
+            memoryStart: "",
+            memoryPost: "",
+            finalprompt: "### Response: ",
+            responseStart: "",
+        },
+        openchat : {
+            system: "",
+            prependPrompt: "",
+            postPrompt: "",
+            memoryStart: "",
+            memoryPost: "GPT4 Correct User:",
+            finalprompt: "<|end_of_turn|>GPT4 Correct Assistant:",
+            responseStart: "",
+        },
+        openchatalt:{
+            system: "",
+            prependPrompt: "",
+            postPrompt: "",
+            memoryStart: "",
+            memoryPost: "GPT4 User:",
+            finalprompt: "<|end_of_turn|>GPT4 Assistant:",
+            responseStart: "",
+        },
+    };
+    formats.formats = promptFormats.formats;
+    format.format = promptFormats[endPointConfig.routes.instruct];
+    writeObjectToFileAsJson(promptFormats, '0formats.json',fs);
+
+ }
 }
 function writeObjectToFileAsJson(object, fileName,fs) {
     try {

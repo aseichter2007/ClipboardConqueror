@@ -1,36 +1,33 @@
-class TextEngine {
+class TextEngine {    
   constructor(
-    sendToApi,
+    koboldClient,
     sendToClipboard,
     recieveApi,
     notify,
-    getSummary,
-    getTokens,
     openAiConfig,
     identities ,
     instructions ,
     apiParams,
-    openAikey
+    openAikey,
+    formats,
   ) {
     //todo settings
-    this.identities = identities;
-    this.sendToApi = sendToApi;
+    this.koboldClient = koboldClient;
     this.sendToClipboard = sendToClipboard;
     this.recieveApi = recieveApi;
-    this.getTokens = getTokens;
     this.openAiConfig = openAiConfig;
-    this.openAikey = openAikey;
+    this.identities = identities;
     this.instructions = instructions;
     this.notify = notify;
-    this.getSummary = getSummary;
     this.params = apiParams;
+    this.openAikey = openAikey;
+    this.formats = formats;
     this.identity = {};
     this.recentClip = { text: "" };
     this.sentToClip = ""
     this.set = false;
     this.setAgent = {};
     this.memory = "";
-    this.summary = "";
     this.memengines = {};
     //this.lastAgentTags = [];
     this.sendHold = false;
@@ -356,7 +353,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         outp.found = true;
         outp.set = true;
         break;
-      case "rp":
+      case "rf":
         this.rp = true;
         break;
       case "rf":
@@ -381,6 +378,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         //console.log(outp.text);
         break;
       case "set":
+      case "setDefault":
         if (!this.set) {
           this.set = true;
           this.setAgent = this.identity;
@@ -399,6 +397,72 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
   }
   updatePreviousCopy(copy) {
     this.recentClip.text = copy;
+  }
+  setPrompt(command, formattedQuery) {
+    switch (command) {
+      case "system":
+        this.instructions.system = formattedQuery;
+        break;
+      case "prepend":
+        this.instructions.prependPrompt = formattedQuery;
+        break;
+      case "post":
+        this.instructions.postPrompt = formattedQuery;
+        break;
+      case "memory":
+        this.instructions.memoryStart = formattedQuery;
+        break;
+      case "memorypost":
+        this.instructions.memoryPost = formattedQuery;
+        break;
+      case "final":
+        this.instructions.finalprompt = formattedQuery;
+        break;
+      case "start":
+        this.instructions.responseStart = formattedQuery;
+
+      default:
+       let notfound = "invalid prompt key: " + command + " Options: system, prepend, post, memory, memorypost, final, start \n \n you may edit and copy below: \n";
+        this.notify("invalid key: " ," Options: system, prepend, post, memory, memorypost, final, start");
+        let settings = {
+          system: this.instructions.system,
+          prependPrompt: this.instructions.prependPrompt,
+          postPrompt: this.instructions.postPrompt,
+          memoryStart: this.instructions.memoryStart,
+          memoryPost: this.instructions.memoryPost,
+          finalprompt: this.instructions.finalprompt,
+          responseStart: this.instructions.responseStart
+        }
+        this.sendToClipboard(notfound+ this.instructions.writeSave + JSON.stringify(settings));
+        break;
+    }
+  }
+  setKoboldFormat(setting) {
+    setting = setting.trim();
+    let names = [];
+    console.log(JSON.stringify(this.formats));
+    let set = {};
+    try {
+      set = this.formats[setting];
+      //console.log("\nset: " +JSON.stringify(set));
+    } catch (error) {
+      for (let key in this.formats) {
+        names.push(key);
+      }
+      console.log( setting + " : format not found, options: " + JSON.stringify(names) );
+    }
+    this.koboldClient.setPromptFormat(set);
+  }
+  
+  pickupFormat(setting) {
+    try {
+      let parsed = JSON.parse(setting);   //this will for sure mess up, probably don't count on this functionality until I manually build a parse for this. 
+      this.koboldClient.setPromptFormat(parsed);   
+    } catch (error) {
+      this.notify("invalid format: ", error);
+      console.log("invalid format: " +JSON.stringify(error));
+    }
+
   }
   setupforAi(text) {
     if (text === this.sentToClip) {
@@ -439,6 +503,8 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
           tag = tag.trim();
           let commands = tag.split(this.instructions.settinglimit);
           if (commands.length === 2) {
+            commands[0] = commands[0].trim();
+            commands[1] = commands[1].trim();
             if (commands[1] == this.instructions.save && this.sendLast) {
               //save like |||agent:save|
               this.identities[commands[0]] = this.recentClip; //
@@ -451,7 +517,11 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
               //save like |||agent:delete|
               delete this.identities[commands[0]]; //
               tag = commands[0];
-            }else if (!isNaN(commands[1])) {
+            } else if (commands[1] == this.instructions.setInstruction) {
+              this.setPrompt(commands[1],sorted.formattedQuery);
+            } else if (commands[0] == this.instructions.setPromptFormat && this.instructions.save == commands[1]) {
+              this.pickupFormat(sorted.formattedQuery);
+            } else if (!isNaN(commands[1])) {
               this.params[commands[0]] = parseFloat(commands[1]);
               //console.log(commands[0] + commands[1] +" written> " + this.params[commands[0]]);//ill keep this one for now
             } else if (commands[1] == "true") {
@@ -465,6 +535,9 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
           } else {
             if (!isNaN(tag)) {
               this.params.max_length = parseInt(commands[0]);
+            } else if (tag === this.instructions.setPromptFormat) {
+              this.sendHold = true;
+              this.setKoboldFormat(sorted.formattedQuery);
             } else {
             const ident = this.updateIdentity(tag);
             
@@ -487,21 +560,6 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
           //console.log("hit default");
           this.identity.CaptainClip = this.identities[this.instructions.defaultPersona];
         }
-        //response.memory = this.memory;
-
-        let request =
-          this.instructions.system +
-          this.instructions.prependPrompt +
-          //this.identity +
-          JSON.stringify(this.identity) +
-          this.instructions.postPrompt +
-          this.instructions.memoryStart +
-          //this.memory +
-          //JSON.stringify(this.memory) +//may be one undefined
-          this.instructions.memoryPost +
-          sorted.formattedQuery;
-        //this.instructions.chatStart+
-        //this.instructions.finalprompt goes on as it leaves this function, with lastclip and rp if needed.
 
         if (this.write) {
           this.write = false;
@@ -512,7 +570,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
             this.instructions.writeSplit +
             sorted.formattedQuery; //todo send the right thing to the clipboard
           sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, "\n");
-          this.notify("Paste Response:", sendtoclipoardtext.slice(0, 140));
+          this.notify("Paste Response:", sendtoclipoardtext.slice(0, 150));
           this.sentToClip = sendtoclipoardtext
           return this.sendToClipboard(sendtoclipoardtext);
         }
@@ -538,34 +596,19 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
           } else if (this.rp) {
             if (this.sendLast) {
               this.sendLast = false;
-              this.sendToApi(
-                request +
-                  this.recentClip.text +
-                  this.instructions.rpPrompt +
-                  this.instructions.finalPrompt,
-                this.params
-              );
+              this.koboldClient.formatQueryAndSend(this.identity, this.instructions.rpPrompt + sorted.formattedQuery +this.recentClip.text ,this.params);
               this.rp = false;
               //this.sendLast = false;
             } else {
-              this.sendToApi(
-                request + this.instructions.finalPrompt,
-                this.params
-              );
+              this.koboldClient.formatQueryAndSend( this.identity, sorted.formattedQuery, this.params);
               //this.sendLast = false;
             }
             //return;
           } else if (this.sendLast) {
-            this.sendToApi(
-              request + this.recentClip.text + this.instructions.finalPrompt,
-              this.params
-            );
+            this.koboldClient.formatQueryAndSend(  this.identity, sorted.formattedQuery + this.recentClip.text, this.params);
             this.sendLast = false;
           } else {
-            this.sendToApi(
-              request + this.instructions.finalPrompt,
-              this.params
-            );
+            this.koboldClient.formatQueryAndSend(this.identity,sorted.formattedQuery,this.params );
           }
         } else {
           this.sendHold = false;
@@ -578,9 +621,6 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     } else {
       this.recentClip.text = text;
     }
-  }
-  recievesummary(summary) {
-    this.summary = summary;
   }
   activatePresort(text) {
     let run = false;
@@ -650,7 +690,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     return output;
   }
 }
-async function generateCompletion(apiKey, identity, formattedQuery,params, callback, apiUrl, model = 'text-davinci-003', notify) {
+async function generateCompletion(apiKey, identity, formattedQuery, params, callback, apiUrl, model = 'text-davinci-003', notify) {
   let errcatch = "";
   try {
     const url = apiUrl;
@@ -663,8 +703,8 @@ async function generateCompletion(apiKey, identity, formattedQuery,params, callb
     const prompt = {
       "model": model,
       "messages": [
-        { "role": "system", "content": stringifidentity},//stringify the message?
-        { "role": "user", "content": formattedQuery }//I should build my memory structure and force chats with openai through that? that would handle the instruction promps for multimodel support. Consider ## for memory clearing rather than extra modes. Currently supports initial needs for assigning an agent to gpt with ##
+        { "role": "system", "content": stringifidentity},//does this order matter? do the roles matter in the back end? is that useful for naming the system or tracking multiple characters?
+        { "role": "user", "content": formattedQuery }//I should build my memory structure and force chats with openai through that? that would handle the instruction promps for multimodel support. Currently supports initial needs for assigning an agent to gpt with ##
       ],
       "temperature": params.temperature,
       "max_tokens": params.max_length,

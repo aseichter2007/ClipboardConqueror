@@ -136,6 +136,7 @@ dist
 0instructions.json
 0identities.json
 0generationSettings.json
+0formats.json
 
-#exclude settingsConqueror original source for now
+#exclude soundtrack for now
 .Soundtrack/

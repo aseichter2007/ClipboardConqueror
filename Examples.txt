@@ -205,3 +205,45 @@ If for example, I run a No code tool for creators, my prompt will look something
 *The business to help me with is below. No code tool for creators*
 
 Use this as a starting point/inspiration then build on it to have your actual Content calendar for the month.
+
+|||javascript to parse text and return the chosen line
+
+
+
+|||help me install node
+
+|||FORMAT|default
+
+
+|||FORMAT|alpaca
+
+|||howdy clip
+
+|||writer| write good| a paragraph on doodling. 
+
+|||write a paragraph on doodling. 
+
+I assume you want to create a JavaScript function that takes a text input and returns a specific line. Here's an example of a simple function that does that:
+
+```javascript
+function getLineAtIndex(text, lineNumber) {
+  const lines = text.split('
+');
+  if (lines.length <= lineNumber) {
+    throw new Error(`Line ${lineNumber} does not exist`);
+  }
+  return lines[lineNumber - 1];
+}
+
+const text = `Hello,
+world!
+This is a
+multi-line
+example.`;
+
+console.log(getLineAtIndex(text, 3)); // Output: "multi-line"
+```
+
+Explanation:
+The function `getLineAtIndex` takes two parameters: `text` and `lineNumber`. It splits the `text` into an array of lines using the newline character as the separator (`
+`). Then, it checks if the line number exists within the array of lines. If the line number is less than or equal to the number of lines, it throws an error. Otherwise, it returns the line at the specified index minus one because arrays are zero-indexed. The provided example uses this function to print the third line from the `text` variable.

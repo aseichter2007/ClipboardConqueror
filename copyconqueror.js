@@ -14,8 +14,10 @@ const endPointConfig = {};
 const instructions  ={};
 const params = {}
 const identities = {};
+const formats = {};
+const format = {};
 const {setup} = require('./setup.js');
-setup(openAIkey, endPointConfig, instructions, params,identities,fs);
+setup(openAIkey, endPointConfig, instructions, params,identities, formats, format, fs);
 //end settings//
 const recieveEngine = new RecieveEngine();
 function testing(){//hooked into changehandler, copy to execute
@@ -24,22 +26,22 @@ function testing(){//hooked into changehandler, copy to execute
 var client =  {};
 var lastClip = "";
 var lastResponse = "";
-var lastgen = "";
-var memout = '';
 const KoboldClient = require('./koboldinterface.js');
 //if (configs.client== "kobold")
 {
-    client = new KoboldClient( axios, recieveApiResponse, returnSummary, NotificationBell, endPointConfig.routes.kobold);//todo, this doesnt really belong like this, should be created directly into textengine constructor and eliminate all this mess running across the main program. Needed before adding openAI, untangling this will make that much easier. 
+    client = new KoboldClient( axios, recieveApiResponse, returnSummary, NotificationBell, endPointConfig.routes.kobold );//todo, this doesnt really belong like this, should be created directly into textengine constructor and eliminate all this mess running across the main program. Needed before adding openAI, untangling this will make that much easier. 
     
-}   
-const sendEngine = new SendEngine(recieveProcessedClip, ncp.copy, recieveApiResponse, NotificationBell, getSummary, client.getTokenCount, endPointConfig.routes, identities.identities, instructions.instructions,params.params, openAIkey.key);
-function notify(title = "Paste Ready", text = "The response is ready"){
+} 
+client.setPromptFormat(format.format);
+const sendEngine = new SendEngine(client, ncp.copy, recieveApiResponse, NotificationBell, endPointConfig.routes, identities.identities, instructions.instructions,params.params, openAIkey.key, formats.formats);
+function notify(title = "Paste Ready", text = "The response is ready."){
 // Define the notification
 const notification = {
     title: title,
     message: text,
     icon: './icon.jpg', // Optional
     sound: true, // Optional, plays a sound with the notification
+    //I have a hypothesis that on linux we need to specify a sound file.
 };
 // Display the notification
 notifier.notify(notification, function (err, response) {
@@ -48,18 +50,14 @@ notifier.notify(notification, function (err, response) {
   //console.log(response);
 });
 }
-function getSummary(text, params) {
-   // client.send(text, params)
-}
 function returnSummary(text){
     text = text.replace(/\\n/g, '\n');
     let Response = recieveEngine.recieveMessageFindTerminatorsAndTrim(text);
     sendEngine.recievesummary(Response);
     //client.getstats(sendData, "summary");
 }
-function recieveProcessedClip(text, params, lastTag) {
-    //console.log("clipback: " + text);
-    client.send(text, params, lastTag);
+function recieveProcessedClip(identity, query, params) {
+    client.formatQueryAndSend(identity, query, params);
 }
 function recieveApiResponse(text){
     text = text.replace(/\\n/g, '\n');
