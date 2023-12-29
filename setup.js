@@ -50,7 +50,7 @@ kobold: "http://127.0.0.1:5001/api/v1/generate/",
 defaultClient: "kobold",
 defaultOptions: ["kobold", "openAi", "compatible","select defaultClient: from previous items"],
 instruct: "default",
-instructOptions: ["default","chatML", "alpaca", "wizard", "vicuna", "deepseekCoder", "openchat", "openchatalt", "select instruct: from previous items, currently unimplemented"],
+instructOptions: ["default","chatML", "alpaca", "wizard", "vicuna", "deepseekCoder", "openchat", "openchatalt", "select instruct: from previous items or any you add to 0formats.json"],
 persona: "default",
 }
     endPointConfig.routes = endpoints;
@@ -100,7 +100,7 @@ finalPrompt: "<|im_end|>\n<|im_start|>assistant:\n", //chatml
 //finalPrompt: `"role": "{{char}}  \n content" :`,//chatML - openai
 responseStart:  "",//for setting start of prompt like for ex "Sure, here you go: ```javascript\n" or "JSON: {"
 //research:
-chatml: `These are the instruction formats I have found in my travels:
+chatml: `These are the instruction formats I have found in my travels, I havent put them all in at the bottom in promptFormats yet.:
 vicuna (used by e.g. stable vicuna
 Human: {{prompt}}
 Assistant:{{gen}}

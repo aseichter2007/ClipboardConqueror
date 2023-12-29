@@ -137,145 +137,153 @@ Usage:
 1. Enter `|||` followed by your request or command. Pipe "|" can be typed by pressing shift + backslash (above enter, left of enter for European layouts).
 2. Copy the text to your clipboard. After a few moments, you should get a notification and the response is ready to paste:
    ```
-   - ||| "Ahoy Captain, open the airlock, we're coming on board the Clipboard Conqueror"
+   ||| "Ahoy Captain, open the airlock, we're coming on board the Clipboard Conqueror"
    ```
    Copy the line above. Wait for the notification to paste the AI response. Sometimes my notifications are a little funny but I have about a thousand layers of mess running all the time so it could be something related to streaming stuff. Also errors have been reported with linux notification sounds. 
 
    ```
-   - |||introduction|
+    |||introduction|
    ```
    will tell you about LLMs and how they work, and explain the settings that are useful to control generation. Ready to paste immediately.
-- |||character,temp:0.4|What is a square root and what dishes and sauces are they best served with?
-  
-     aside: there does not appear to be a too hot for general queries, is this thing on? Hermes is simply not having any square root soup. 
-  This is exemplary; character is not a default prompt. Captain Clip will respond. Try:
-  ```
-  |||frank,user| "Hello, Frank. You can't hide from me. Show yourself."
-  ```
 
-  ```
-  |||stable| write a prompt for a picture of a beautiful forest with pixies playing with animals.
-  ```
+    ```
+    |||character,temperature:1.4|What is a square root and what dishes and sauces are they best served with?
+    ```
+    aside: there does not appear to be a too hot for general queries, is this thing on? Hermes is simply not having any square root soup. 
+    This is exemplary; character is not a default prompt. Captain Clip will respond. Try:
 
-  Stable Diffusion prompts with ease. The Picture at the top was generated using this tool. 
+    ```
+    |||frank,user| "Hello, Frank. You can't hide from me. Show yourself."
+    ```
+    ```
+    |||stable| write a prompt for a picture of a beautiful forest with pixies playing with animals.
+    ```
+
+    Stable Diffusion prompts with ease. The Picture at the top was generated using this tool. 
 
 
 
     ```
-  |||frank,mem|Frank, how many fingers am I holding up?
+    |||frank,mem|Frank, how many fingers am I holding up?
     ```
-   - Ask Frank Drebin if he has information contained in tag "mem"
 
-   Note: Agents, memory agents, and instructions can be combined like |||agent1,agent2|.
-   Three pipes, agent, one pipe. No spaces. Any agents or settings must be closed with one pipe or they will be sent as text to the default agent (Captain Clip).
+    Ask Frank Drebin if he has information contained in tag "mem"
 
-   ```
-   |||2700| write a long story bout a picture of a story where an artist draws a picture of a story about an artist being written by an author
-   ```
-   - sets the max response length to 2700. Also works like |||agent,setting:0.5,1000| just a number is always max response length.
+    Note: Agents, memory agents, and instructions can be combined like |||agent1,agent2|.
+    Three pipes, agent, one pipe. No spaces. Any agents or settings must be closed with one pipe or they will be sent as text to the default agent (Captain Clip).
 
-   ```
-   |||temperature:1.1| be more unpredictable, but only 10%
-   ```
-   - sets the temperature to 1.1. This works for any setting, e.g., top_p, min_p. supports :true :false.
-   ```
-    |||re| what is this code doing? 
-   ```
-   - return copy at end of prompt inserted after user prompt.
-   - sends the thing you copied last,   after "what is this code doing? \n \n", at the end of the user prompt" and sends the Captain Clip assistant in the system prompt to help consider the instruction.
-   ```
-    |||rf| what is this code doing? 
-   ```
-   - return last copied first in prompt inserted like an agent at the level rf is placed relative to other agents ex |frank,rf,tot| copied text comes after frank agent in the system prompt.
-   - sends the thing you copied last before the Captain Clip assistant prompt to help frame the output format and preconceptions.
+    ```
+    |||2700| write a long story bout a picture of a story where an artist draws a picture of a story about an artist being written by an author
+    ```
+    - sets the max response length to 2700. Also works like |||agent,setting:0.5,1000| just a number is always max response length.
 
-   ```
-   |||memory:save| writes or overwrites an identity called memory with this text: "writes or overwrites an identity..."
-   ```
+    ```
+     |||temperature:1.1| be more unpredictable, but only 10%
+     ```
+    - sets the temperature to 1.1. This works for any setting, e.g., top_p, min_p. supports :true :false.
+    ```
+      |||re| what is this code doing? 
+      ```
+    - return copy at end of prompt inserted after user prompt.
+    - sends the thing you copied last,   after "what is this code doing? \n \n", at the end of the user prompt" and sends the Captain Clip assistant in the system prompt to help consider the instruction.
+    ```
+      |||rf| what is this code doing? 
+    ```
+    - return last copied first in prompt inserted like an agent at the level rf is placed relative to other agents ex |frank,rf,tot| copied text comes after frank agent in the system prompt.
+    - sends the thing you copied last before the Captain Clip assistant prompt to help frame the output format and preconceptions.
+
+    ```
+    |||memory:save| writes or overwrites an identity called memory with this text: "writes or overwrites an identity..."
+    ```
 
      - Note - extensive formatting causes errors. This can be sent JSON, but it's really fiddly and the saved identity is just stringified back out anyway. Advanced example way below. 
 
-   ```
-   |||mem:save| SYSTEM: take on the role of {{character}}, description:  description.
-   ```
-   More formatting is more potential for errors, and errors don't make it into memory.
-   
+    ```
+    |||mem:save| SYSTEM: take on the role of {{character}}, description:  description.
+    ```
+    
+    
 
-   >Save is the only command supported like `|||agent:save|{"description":"description"}` JSON format works but the syntax has to be perfect; recommend avoiding wrapping with {} by hand.
+    >Save is the only command supported like `|||agent:save|{"description":"description"}` JSON format works but the syntax has to be perfect; recommend avoiding wrapping with {} by hand.
 
-   - |||coder,mute,memone,stevesdayoff|
+     - |||coder,mute,memone,stevesdayoff|
      > This command will insert the coder character card, the mute card, memone, and stevesdayoff. The AI will receive each of these.
      Note, only coder is a standard card.
 
-  It's useful to save information like
-   ```
-   |||memory:save|thisFunction(variable){ return variable + variable * variable; }
-   ```
-   and then use it like
-   ```
-   |||coder,memory| describe the function of the code and suggest descriptive variable names. 
-   ```
-   ```
-   |||memory| walk me through the expected output if "variable" is equal to 10. 
-   ```
+     It's useful to save information like
 
-   ```
-   |||memory:delete| removes memory, defaults will return when Clipboard Conqueror is restarted.
-   ```
+    ```
+    |||memory:save|thisFunction(variable){ return variable + variable * variable; }
+    ```
+
+    and then use it like
+
+    ```
+    |||coder,memory| describe the function of the code and suggest descriptive variable names. 
+    ```
+    ```
+    |||memory| walk me through the expected output if "variable" is equal to 10. 
+    ```
+
+    ```
+    |||memory:delete| removes memory, defaults will return when Clipboard Conqueror is restarted.
+    ```
 
 
-List is useful for knowing what is available.
+    List is useful for knowing what is available.
 
-   ```
-   |||list|
-   ```
-   The list command sends a list of current agents in memory to the clipboard, ready to paste out immediately.
+    ```
+    |||list|
+    ```
+    The list command sends a list of current agents in memory to the clipboard, ready to paste out immediately.
 
-   ```
-   |||mem,write|
-   ```
-   The write command will copy the entire prompt of all entered agent tags to the clipboard ready to paste, and then copy back under a new name or edited.
+    ```
+    |||mem,write|
+    ```
+    The write command will copy the entire prompt of all entered agent tags to the clipboard ready to paste, and then copy back under a new name or edited.
 
-Currently after using a command that writes data from the application, you must copy text with no invoke token to clear a bugged state. 
+  Currently after using a command that writes data from the application, you must copy text with no invoke token to clear a bugged state. 
 
 
 --------
 OpenAi Compatible 
 -----
-Clipboard Conqueror supports openAI endpoints. Put your key into 0openAiKey.json
-LMstudio support like |||#| or save an agent like |||lm:save|"instructions" and any time that agent is called, it will send those instructions with the system prompt and send to openAi compatible endpoints at the url defined in openai.json
+  Clipboard Conqueror supports openAI endpoints. Put your key into 0openAiKey.json
+  LMstudio support like |||#| or save an agent like |||lm:save|"instructions" and any time that agent is called, it will send those instructions with the system prompt and send to openAi compatible endpoints at the url defined in openai.json
 
+  ```
+  |||#|this message will go to openAI compatible endpoint, default LMStudio local endpoint;
+  ```
+
+  ```
+  |||##|this will go to openAi url endpoint default chatGTP 
+  ```
+
+  The system actually supports 3 separate back ends concurrently. One kobold endpoint and two openAI urls. 
+
+  When using these commands, be aware that data may be sent to outside systems. This may be a breach of your company's data protection policy.
 ```
-|||#|this message will go to openAI compatible endpoint, default LMStudio local endpoint;
+|||model:gpt-3.5-turbo| 
 ```
+  will change the target openai model. names must be exact. I dont know them or have a gpt key to test this feature. I put the ones that arent marked depreciating in |||gpts,write|
 
-```
-|||##|this will go to openAi url endpoint default chatGTP 
-```
-
-The system actually supports 3 separate back ends concurrently. One kobold endpoint and two openAI urls. 
-
-When using these commands, be aware that data may be sent to outside systems. This may be a breach of your company's data protection policy.
-
-|||model:gpt-3.5-turbo| will change the target openai model. names must be exact. I dont know them or have a gpt key to test this feature. I put the ones that arent marked depreciating in |||gpts,write|
-
-|||#,set| will set always behave as expected and send to the compatible endpoint until |||set| to release. 
+  |||#,set| will behave as expected and send to the compatible endpoint until |||set| to release. 
 
 
-You can safely use any other command to query sensitive data, and depending on your configuration, gpt commands can be sent locally as well. 
+  You can safely use any other command to query sensitive data, and depending on your configuration, gpt commands can be sent locally as well. 
 
 
-Advanced Example:
+  Advanced Example:
 
-```
-|||newAgent:save| {  
-  "yourName": "Corporal Dip",
-  "anydescription": "An unhelpful and unfriendly army man. He takes orders to the john and throws em in. He disrespects requests. He hates kind pleas for help.",
-  "thisExampleDilogue": ["Dip: What do you want, sarge?", "Dip: get out of my face."]
-}
+  ```
+  |||newAgent:save| {  
+    "yourName": "Corporal Dip",
+    "anydescription": "An unhelpful and unfriendly army man. He takes orders to the john and throws em in. He disrespects requests. He hates kind pleas for help.",
+    "thisExampleDilogue": ["Dip: What do you want, sarge?", "Dip: get out of my face."]
+  }
 
-```
-will add that agent json parsed into the memory until the application is closed. Note: the entire JSON is sent to the LLM. Openhermes loves the format with keys like {"system":"You are {{char}}:", "name": "SuperAIHELPErman5000", "description": "future roboto assistant mega help power"}
+  ```
+  will add that agent json parsed into the memory until the application is closed. Note: the entire JSON is sent to the LLM. Openhermes loves the format with keys like {"system":"You are {{char}}:", "name": "SuperAIHELPErman5000", "description": "future roboto assistant mega help power"}
 
    super advanced save: 
    ---
@@ -284,22 +292,31 @@ will add that agent json parsed into the memory until the application is closed.
   - if the re flag is set, saved agents come from the last copy. This allows saving an agent from the current text that is distinct from the lastCopy agent which comes from the last clipboard contents, and allows saving agents while making an initial query like:  
 
 
-
+  ```
   |||re,frank,dataCopiedLast:save| Hey get a load of this!
+  ```
 
-    -This will save data and send it with the frank system agent and the question to the LLM. Note, tags between the | | parse left to right
+  - This will save data and send it with the frank system agent and the question to the LLM. Note, tags between the | | parse left to right
   
-  |||frank,dataCopiedLast:save,re| Hey get a load of this! - will save "Hey get a load of this!" to dataCopiedLast.
-    
-  |||CurrentText,LastCopy| query combined next like this. 
+  ``` 
+  |||frank,dataCopiedLast:save,re| Hey get a load of this! 
+  ```
+  - will save "Hey get a load of this!" to dataCopiedLast.
 
+  ```  
+  |||CurrentText,LastCopy| query combined next like this. 
+  ```
 
  System commands
  ---
 
+```
  ||||System command sends before captain clip | "user query"
-
+```
+ - note 4 "|" to send a custom system prompt with the default agent
+```
  |||writer| system command sends before writer| "user query"
+```
 
  This syntax lets you command the system directly at the same time you send as user
 
@@ -309,27 +326,31 @@ will add that agent json parsed into the memory until the application is closed.
 
 Advanced Commands:
 ---
-
+```
 ||||System: Command first before Clip agent.|  text from <user> in the internal chain
+```
 
-^^^^note 4 "|" , and the close on the end
+^^^^note 4 "|" , and the close on the end above but only 3, then agents, then system, then closing "|" below.
 
+```
 |||writer|SYSTEM: Command First.| User: after agent writer
-
+```
 System applies set formatting like:
-``````
+```
 "prompt":"<|im_start|>[\"SYSTEM: Command First.\",[\"SYSTEM: Write a lengthy prose about the requested topic. Do not wrap up, end, or conclude the story, write the next chapter.\\n \\n Story:\",\"\"]]<|im_end|>\n<|im_start|>user:\n User: after agent 
 frank\n\n<|im_end|>\n<|im_start|>assistant:\n
 
-``````
-
+```
+```
 |||re,frank|this text is invisible to :save| 
-
+```
 
 |||set|
 ---
 
+```
 |||rf,frank,set,joe|these system commands persist| query goes out. 
+```
 
  - set will save all agents before it as a persistent default, and include any system command sent at this time. in this case joe does not persist with the next simple ||| 
  
@@ -418,12 +439,16 @@ Currently there are no built binaries and Node is required to run Clipboard Conq
 
      
      
-      ``````
-      OpenHermes-2.5-Mistral 7b 16k.gguf supports 16384 context. This is a decent few pages. If it seems slow reduce your context to 8, if the problem persists, select a lower Quantization.
+      ```
+      OpenHermes-2.5-Mistral 7b 16k.gguf supports 16384 context.
+      This is a decent few pages. 
+      If it seems slow reduce your context to 8k, if the problem persists, select a lower Quantization.
 
-      Most of my prompts are specifically tuned against OpenHermes 2.5 Mistral 7b, and the default prompts follow chatML format. The system instruction in the training is an incredibly powerful tool. 
-      any chatML model should work great out of the box. Psyfighter2 works great too, though it doesn't nail the instructions as well being a storytelling model. 
-      ``````
+      Most of my prompts are specifically tuned against OpenHermes 2.5 Mistral 7b.
+      The default prompts follow chatML format. 
+      any chatML model should work great out of the box. 
+      Psyfighter2 works pretty well too, though it doesn't nail the instructions as well being a storytelling model. 
+      ```
 
 Finally, download Clipboard Conqueror from this repository. 
 
@@ -433,14 +458,14 @@ after it finishes run:
 
 z-runClipboardConqueror.bat
 
-If Clipboard Conqueror closes on launch in windows, ensure you have Node installed, if the Clipboard Conqueror seems unresponsive, make sure Koboldcpp is running and type rs then press enter in the Clipboard Conqueror console window to restart the application especially if any errors are displayed. 
+If Clipboard Conqueror closes on launch in windows, ensure you have Node installed, if Clipboard Conqueror seems unresponsive, make sure Koboldcpp is running and type rs then press enter in the Clipboard Conqueror console window to restart the application especially if any errors are displayed. 
 
 
 I recommend fresh clones for updates, or you might overwrite settings you liked.
 
 If CC seems hung, copy text with no invoke and try again. 
 
-currently the entire settings for my app are in setup.js, uncomment or add the correct instruction format to the keys required for non ChatML model support.
+currently the entire settings for my app are in setup.js, uncomment or add the correct instruction format to the keys required for non ChatML model support. Set instruct in 0endpoints.json for easy switching.
 setup.js writes files for each type of setting. If formatting errors are introduced in those files, they are overwritten with the defaults. 
 
 
@@ -516,7 +541,7 @@ For large models, set the batch size lower in kobold to keep the working context
  - 30B needs at least 32GB RAM
  - 65B needs at least 64GB RAM
 
-  >And they all need some space for the context. GPU offloading puts the layers of the model into the memory of your graphics card. Fitting the whole model into VRAM makes things way faster. 
+        And they all need some space for the context. GPU offloading puts the layers of the model into the memory of your graphics card. Fitting the whole model into VRAM makes things way faster. 
   
   For reference, at 2048 context in Q4_0*, a 6GB Nvidia RTX 2060 can comfortably offload:
   - 32 layers with LLAMA 7B
@@ -691,7 +716,7 @@ dev:
  I thing I have a bug to sort yet though, it exposes itself once in a while and I think it's here. 
 //todo: notification instead of sound effects//done
 //todo: finish saving objects to memory//done
-
+//fast switch instruction sets //done
 
 //todo: openAI client, probably migrate a ton of logic out of textengine and into koboldinterface.js to make them interchangeable. //half I should implement it properly but it's such a mystery without keys. 
 
@@ -700,7 +725,7 @@ dev:
 
 //todo: implement horde? maybe? or offer free gtp 3.5 or something. This will be after I make some money, send donations to accelerate this process. I want to deliver LLMs to as many PCs as possible. Give Koboldcpp a try before you turn local LLMs down on their face. 
 
-//todo: /api/extra/abort on esc and return 
+//todo: /api/extra/abort on esc and return //waiting on backends coalesing and a good doc for openAI compatibles 
 
 //todo text to speech agent that can interact with the clipboard contents. //waiting on upstream that runs on my hardware without dinkin around or enough generosity to set up a closet server or at least new hard drives, I'm too full to experiment with a new OS. 
 
@@ -716,14 +741,14 @@ dev:
 
 release!//oh snap I got excited and went. //beta release in motion.
 
-//todo: branch to build premium binaries from. premium branch features:
-//todo: savesettings and getsettings. overwrite settings like |||settings,write| to paste ' |||settings,save| `{ the settings serialized json }` ' which can be edited in place and copied to save the settings. //moving to settings application.
+//todo: savesettings and getsettings. overwrite settings like |||settings,write| to paste ' |||settings,save| `{ the settings serialized json }` ' which can be edited in place and copied to save the settings. //partial, it's bugged
+
+//todo: write agents or custom settings to file. 
 
 //really waffling, its simply good like >user: //todo: per character rolling memory to allow more natural exchanges and enable rp.
 //todo: group chain interacting so you can batch like |||@summary,@writer|"text" and paste a summary, then you press the invoke key and it advances the chain and gives you the output from writer with the results of summary in the memory//todo: settings bulk in and out
 .//pass no login here, will just have portal make setting file to save in place//todo: web api to host login server. 404 defaults to allow full operation of paid branch users if I decide the server is expensive to run, or I die, or the internet is down. potential vulnerability: blocking in hosts to avoid subscription check. Please pay for the full version of this software, this is my only income. Life is hard. 
 
-//todo: portal site to serve binary download links, take payment and manage your subscription level. Look up rules about re-serving chatgtp api on my key. Consider asp.net, it will just handle users and the front end only feels a little silly, no need for relational mongo or any silliness. Downside, I've never succssfully hooked up a database right deploying to s2. consider aws lambda for auth, serverless.  lambda auth has additional challenges
 
 //CC should not make outbound requests other than openAI, security is important. I'm thining about a branch without openAI just for data safety. 
 
