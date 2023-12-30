@@ -246,6 +246,7 @@ Usage:
     |||agent:file|
     ```
     The file command saves that agent to the 0identities.json file. Currently only supports agents and will save settings values as agents if you tell it to. 
+    
   Currently after using a command that writes data from the application, "|||agent,write|", you must copy text with no invoke token to clear a bugged state. 
 
 
