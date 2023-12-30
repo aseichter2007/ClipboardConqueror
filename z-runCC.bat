@@ -1,5 +1,5 @@
 @echo off
 pushd %~dp0 
-npm win
+npm run win
 pause
 popd

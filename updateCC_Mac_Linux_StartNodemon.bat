@@ -12,6 +12,6 @@ if %errorlevel% neq 0 (
     )
 )
 call npm install
-npm linuxnomon
+npm run linuxnomon
 pause
 popd

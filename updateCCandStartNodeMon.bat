@@ -12,7 +12,7 @@ if %errorlevel% neq 0 (
     )
 )
 call npm install
-npm win
+npm start
 pause
 popd
 

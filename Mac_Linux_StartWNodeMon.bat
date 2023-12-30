@@ -1,5 +1,5 @@
 @echo off
 pushd %~dp0
-npm linux
+npm run linux
 pause
 popd
