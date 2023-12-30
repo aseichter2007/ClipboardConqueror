@@ -27,13 +27,14 @@ var client =  {};
 var lastClip = "";
 var lastResponse = "";
 const KoboldClient = require('./koboldinterface.js');
+const {saveSettings} = require('./settingSaver.js');
 //if (configs.client== "kobold")
 {
-    client = new KoboldClient( axios, recieveApiResponse, returnSummary, NotificationBell, endPointConfig.routes.kobold );//todo, this doesnt really belong like this, should be created directly into textengine constructor and eliminate all this mess running across the main program. Needed before adding openAI, untangling this will make that much easier. 
+    client = new KoboldClient( axios, recieveApiResponse, returnSummary, NotificationBell, endPointConfig.routes.kobold);//todo, this doesnt really belong like this, should be created directly into textengine constructor and eliminate all this mess running across the main program. Needed before adding openAI, untangling this will make that much easier. 
     
 } 
 client.setPromptFormat(format.format);
-const sendEngine = new SendEngine(client, ncp.copy, recieveApiResponse, NotificationBell, endPointConfig.routes, identities.identities, instructions.instructions,params.params, openAIkey.key, formats.formats);
+const sendEngine = new SendEngine(client, ncp.copy, recieveApiResponse, NotificationBell, endPointConfig.routes, identities.identities, instructions.instructions,params.params, openAIkey.key, formats.formats, saveSettings, fs);
 function notify(title = "Paste Ready", text = "The response is ready."){
 // Define the notification
 const notification = {

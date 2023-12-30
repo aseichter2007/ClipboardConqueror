@@ -208,7 +208,9 @@ Use this as a starting point/inspiration then build on it to have your actual Co
 
 |||javascript to parse text and return the chosen line
 
+|||default:save| Captain dip is a dumb, unhelpful asistant. 
 
+|||default:file|
 
 |||help me install node
 

@@ -1,3 +1,5 @@
+const saveSettings = require("./settingSaver");
+
 class TextEngine {    
   constructor(
     koboldClient,
@@ -10,11 +12,15 @@ class TextEngine {
     apiParams,
     openAikey,
     formats,
+    settingSaver,
+    fs
   ) {
     //todo settings
     this.koboldClient = koboldClient;
     this.sendToClipboard = sendToClipboard;
     this.recieveApi = recieveApi;
+    this.settingSaver = settingSaver;
+    this.fs = fs;
     this.openAiConfig = openAiConfig;
     this.identities = identities;
     this.instructions = instructions;
@@ -519,15 +525,24 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
             commands[1] = commands[1].trim();
             if (commands[1] == this.instructions.save && this.sendLast) {
               //save like |||agent:save|
-              this.identities[commands[0]] = this.recentClip; //
+              this.identities[commands[0]] = this.recentClip; 
               tag = commands[0];
             } else if (commands[1] == this.instructions.save) {
               //save like |||agent:save|
-              this.identities[commands[0]] = sorted.formattedQuery; //
+              this.sendHold = true;
+              this.identities[commands[0]] = sorted.formattedQuery; 
               tag = commands[0];
             } else if (commands[1] == this.instructions.delete) {
               //save like |||agent:delete|
-              delete this.identities[commands[0]]; //
+              this.sendHold = true;
+              delete this.identities[commands[0]];
+              tag = commands[0];
+            } else if (commands[1] == this.instructions.saveAgentToFile) {
+              //save like |||agent:file|
+              this.sendHold = true;
+              let setting  ={[commands[0]]:this.identities[commands[0]]}
+              //console.log(JSON.stringify(setting));
+              this.settingSaver(setting,"0identities.json", this.notify, this.fs) 
               tag = commands[0];
             } else if (commands[0] == this.instructions.setPromptFormat && this.instructions.save == commands[1]) {
               this.sendHold = true;
@@ -538,9 +553,9 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
             }else if (!isNaN(commands[1])) {
               this.params[commands[0]] = parseFloat(commands[1]);
               //console.log(commands[0] + commands[1] +" written> " + this.params[commands[0]]);//ill keep this one for now
-            } else if (commands[1] == "true") {
+            } else if (commands[1] == this.instructions.true) {
               this.params[commands[0]] = true;
-            } else if (commands[1] == "false") {
+            } else if (commands[1] == this.instructions.false) {
               this.params[commands[0]] = false;
             }
             else {
