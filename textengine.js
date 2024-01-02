@@ -681,6 +681,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       
         if (this.continue) {
           sorted.formattedQuery = this.batchContinue + this.instructions.batchLimiter+ "\n" + sorted.formattedQuery;
+          this.continue = false;
         }
         if (this.write) {
           this.write = false;
