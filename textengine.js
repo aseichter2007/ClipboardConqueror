@@ -30,12 +30,20 @@ class TextEngine {
     this.formats = formats;
     this.identity = {};
     this.recentClip = { text: "" };
+    this.text = "";
     this.sentToClip = ""
     this.set = false;
     this.setAgent = {};
     this.memory = "";
+    this.batchContinue = "";
+    this.batchDocument = "";
     this.memengines = {};
+    this.agentBatchKit = {};
+    this.batchLength = 0;
+    this.batch = "";
     //this.lastAgentTags = [];
+    this.continue = false;
+    this.document   = false;
     this.sendHold = false;
     this.write = false;
     this.writeSettings = false;
@@ -45,47 +53,105 @@ class TextEngine {
     this.openAi = false;
     this.compatible = false;
   }
-  //|||re|  to get first and last charachter of string identity
-  returnTrip(str) {
-    if (typeof str !== "string") return "Error: Input must be a string";
-    //if (str.length < 2) return "Error: String too short";
-    return [str[0], str[1]]
-  }
 
+  returnTrip(str) {
+    if (typeof str !== "string"){
+      return "Error: Input must be a string";
+    } 
+    //for over str
+    let trip ={api:0, batch:0, trip:""};
+    for (let i = 0; i < str.length; i++ ){
+      if (str[i] === this.instructions.backendSwitch )  {
+        trip.api++;
+        trip.trip = trip.trip + this.instructions.backendSwitch;
+        continue;
+      }
+      if (str[i] === this.instructions.batchSwitch) {
+        trip.batch++;
+        trip.trip = trip.trip + this.instructions.batchSwitch;
+        continue;
+      }
+      if(str[i] === this.instructions.batchMiss){
+        trip.batch++;
+        trip.trip = trip.trip + this.instructions.batchMiss;
+        continue;
+      }
+      break;
+    }
+    return trip
+  }
+  batchAgent(identity, trip){
+    this.batchContinue = "";
+    this.batchDocument = "";
+    //batchAgent builds up a an object of agents to be used in the batch
+    if (this.batchLength < trip.batch){
+      this.batchLength = trip.batch;
+    }
+    this.agentBatchKit[identity] =trip
+  }
+  batchProcessor(){
+    let setBatch = [];
+    console.log(this.batchLength);
+    if (this.batchLength > 0){
+      this.batchLength--;
+      for (let key in this.agentBatchKit) {
+        if (this.agentBatchKit.hasOwnProperty(key)) {
+       
+          console.log(key, this.agentBatchKit[key]);
+          if (this.agentBatchKit[key].trip[0]  === this.instructions.batchSwitch){
+            this.agentBatchKit[key].trip = this.agentBatchKit[key].trip.slice(1);
+            setBatch.push(key);
+          } else if (this.agentBatchKit[key].trip[0]  === this.instructions.batchMiss){
+            this.agentBatchKit[key].trip = this.agentBatchKit[key].trip.slice(1);
+          } else if (this.agentBatchKit[key].trip.length === 0){
+            delete this.agentBatchKit[key];
+          }
+        }
+      }  
+      this.batch = setBatch.join(this.instructions.agentSplit);
+    }else{
+      //this.continue = false;
+    }
+  }
   updateIdentity(identity) {
     //console.log("identity start:"+identity);
-    let tripcode = this.returnTrip(identity);
+    let trip = this.returnTrip(identity);
     let found = false;
     let setIdent = {};
-    let memlevel = 0;
+    let apiRoute = 0;
     let setAgent = false;
+    let batching = false;
 
     if (identity !== "" && identity !== null && identity !== undefined) {
-      //identity = identity.trim();
       if (identity) {
         if (Number.isNaN(Number(identity))) {
-          if (tripcode[0] === this.instructions.backendSwitch){
-            if(tripcode[1] === this.instructions.backendSwitch){
-              console.log("activate OpenAi - data will leave local system");
+          identity = identity.trim();
+          if (trip.api > 0) {
+            if(trip.api > 1){
+              console.log("activate OpenAi API- data will leave local system with default settings");
               identity = identity.slice(2);
-              memlevel = 2;
+              apiRoute = 2;
               } else {
-                console.log("activate openAi Compatible- data may leave local system");
+                console.log("activate openAi Compatible API- data may leave local system depending on configuration.");
                 identity = identity.slice(1);
-                memlevel = 1;
+                apiRoute = 1;
             }
           }
-                if (memlevel === 1) {//set longterm or w/e true
-                  //co opted fot openAi and LMStudio
-                  this.compatible = !this.compatible;//invert to swap with kobold if default changed or # set
+          if (trip.batch > 0){
+            identity = identity.slice(trip.batch);
+            this.batchAgent(identity, trip)
+            batching = true;
+          }
+          if (apiRoute === 1) {//set longterm or w/e true
+              //co opted fot openAi and LMStudio
+            this.compatible = !this.compatible;//invert to swap with kobold if default changed or # set
 
-               } else if( memlevel === 2){//set both true
-                this.openAi = !this.openAi; //invert to duck out when set
-
-              }
+          } else if( apiRoute === 2){//set both true
+            this.openAi = !this.openAi; //invert to duck out when set
+          }   
           }
 
-          if (this.identities.hasOwnProperty(identity)) {
+          if (this.identities.hasOwnProperty(identity)&& !batching) {
             setIdent[identity] = this.identities[identity];
             found = true;
             setAgent = true;
@@ -397,6 +463,23 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
           outp.text = "";
           outp.found = true;
           outp.set = true;
+        break;
+        case "c":
+        case "continue":
+          this.batchContinue += this.text;
+          break;
+        case "d":
+        case "debug":
+          this.batchDocument += this.text;
+        break;
+        case "dw":
+        case "debugWrite":
+        this.write = true;
+        this.sendHold = true;
+        outp.text = this.batchDocument;
+        outp.found = true;
+        outp.set = true;
+        break;
       default:
         break;
     }
@@ -439,16 +522,16 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       default:
        let notfound = "invalid prompt key: " + command + " Options: system, prepend, post, memory, memorypost, final, start \n \n you may edit and copy below: \n";
         this.notify("invalid key: " + command ," Options: system, prepend, post, memory, memorypost, final, start");
-        let settings = {
-          system: this.koboldClient.instruct.system,
-          prependPrompt: this.koboldClient.instruct.prependPrompt,
-          postPrompt: this.koboldClient.instruct.postPrompt,
-          memoryStart: this.koboldClient.instruct.memoryStart,
-          memoryPost: this.koboldClient.instruct.memoryPost,
-          finalprompt: this.koboldClient.instruct.finalprompt,
-          responseStart: this.koboldClient.instruct.responseStart
-        }
-        this.identity.settings = settings;
+        // let settings = {
+        //   system: this.koboldClient.instruct.system + "\n",
+        //   prependPrompt: this.koboldClient.instruct.prependPrompt + "\n",
+        //   postPrompt: this.koboldClient.instruct.postPrompt + "\n",
+        //   memoryStart: this.koboldClient.instruct.memoryStart + "\n",
+        //   memoryPost: this.koboldClient.instruct.memoryPost + "\n",
+        //   finalprompt: this.koboldClient.instruct.finalprompt + "\n",
+        //   responseStart: this.koboldClient.instruct.responseStart
+        // }
+        this.identity.settings = notfound;
         this.writeSettings = true
         break;
     }
@@ -483,26 +566,32 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
 
   }
   setupforAi(text) {
-    if (text === this.sentToClip) {
-         //
+    console.log(this.batchDocument);
+    if (text === this.sentToClip && this.batchLength === 0) {
+      //
       return;
+    }
+    if (this.batchLength > 0) {
+      this.batchProcessor();      
+      text = this.instructions.invoke + this.batch + this.instructions.endTag + text;      
     }
     if (this.instructions.defaultClient != "kobold") {
       switch (this.instructions.defaultClient) {
         case "openAi":
           this.openAi = true;    
           break;
-        case "compatible":
-          this.compatible = true;
-          break;
-        default:
-          console.log(" improper client setting, defaulting to kobold : "+ this.instructions.defaultClient);
-          break;
-      }
-    }
-    const sorted = this.activatePresort(text);
+          case "compatible":
+            this.compatible = true;
+            break;
+            default:
+              console.log(" improper client setting, defaulting to kobold : "+ this.instructions.defaultClient);
+              break;
+            }
+          }
+          const sorted = this.activatePresort(text);
     let ifDefault = true;
     if (sorted) {
+      this.text = sorted.formattedQuery;
       this.undress();
       this.identity[this.instructions.rootname] = sorted.tags.command;
       if(this.set){
@@ -584,12 +673,15 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       }
       if (sorted.run || this.on) {
         //const defaultIdentity = { [this.instructions.rootname]: "" };
-        console.log(ifDefault);
-        if (ifDefault) {
+        //console.log(ifDefault);
+        if (ifDefault && !this.set) {
           //console.log("hit default");
           this.identity.CaptainClip = this.identities[this.instructions.defaultPersona];
         }
-        
+      
+        if (this.continue) {
+          sorted.formattedQuery = this.batchContinue + this.instructions.batchLimiter+ "\n" + sorted.formattedQuery;
+        }
         if (this.write) {
           this.write = false;
           delete this.identity[this.instructions.rootname];
@@ -599,7 +691,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
             this.instructions.writeSplit +
             sorted.formattedQuery; 
           sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, "\n");
-          this.notify("Paste Response:", sendtoclipoardtext.slice(0, 150));
+          this.notify("Paste Ready:", sendtoclipoardtext.slice(0, 150));
           this.sentToClip = sendtoclipoardtext
           return this.sendToClipboard(sendtoclipoardtext);
         }
@@ -670,6 +762,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     }
   }
   activatePresort(text) {
+    
     let run = false;
     text = text.trim();
     var response = [];
@@ -721,6 +814,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     };
   }
   tagExtractor(text) {
+    text = text.trim();
     const tags = text.split(this.instructions.endTag);
     var output = {};
     if (tags.length === 1) {

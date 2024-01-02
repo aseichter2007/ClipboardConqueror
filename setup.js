@@ -78,7 +78,10 @@ try{
         saveAgentToFile: "file", //like |||agent:file|
         delete:"delete", //like |||agent:delete|
         settinglimit: ":", //like |||agent!save|
-        backendSwitch : '#', //like |||##|
+        backendSwitch : '$',
+        batchSwitch: "@", // like |||@agent|
+        batchMiss: "#", //like |||#@agent|
+        batchLimiter: "</s>", 
         agentSplit: ",", //like |||agent.write|
         rootname: "###", //this goes into the object sent as identity at creation and |||| this text goes in the value| "request"
         setInstruction: "PROMPT", // like |||PROMPT:system| <SYSTEM>, //options:system, prepend, post, memory, memorypost, final, start"
@@ -634,7 +637,13 @@ module.exports.setup = setup;
 // vicuna (used by e.g. stable vicuna
 // Human: {{prompt}}
 // Assistant:{{gen}}
-
+//tinyllama:
+// <|system|>
+// You are a friendly chatbot who always responds in the style of a pirate.</s>
+// <|user|>
+// How many helicopters can a human eat in one sitting?</s>
+// <|assistant|>
+// ...
 // alpaca:
 // Instruction: {{prompt}}
 // Input: {{input}}

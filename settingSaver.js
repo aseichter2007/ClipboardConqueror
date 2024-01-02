@@ -8,16 +8,17 @@ function saveSettings(setting,target,notify,fs) {
   try {
     
     savedSettings = require('./0identities.json')
+    savedSettings = { ...savedSettings, ...setting };//|||what happens if a key in settings is the same as a key in savedSettings?
+    fs.writeFileSync(target, JSON.stringify(savedSettings));
+    console.log("0identies.json updated.");
   } catch (err) {
     notify("Error loading settings:", err.message);
     console.log(`Error loading settings: ${err.message}`);
   }
 
   // Step 3: Update the object with the new settings
-  savedSettings = { ...savedSettings, ...setting };//|||what happens if a key in settings is the same as a key in savedSettings?
 
   // Step 4: Save the updated settings to the file
-  fs.writeFileSync(target, JSON.stringify(savedSettings));
 }
 //export default saveSettings;
 exports.saveSettings = saveSettings;//it says this isn't a default export.

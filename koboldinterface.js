@@ -43,8 +43,8 @@ setPromptFormat(setting) {
   console.log("prompt format set: " + JSON.stringify(this.instruct));
 }
   formatQueryAndSend(identity, formattedQuery, params) {
-    console.log("current instruct: " + JSON.stringify(this.instruct));
-    console.log("system out: " + this.instruct.system +"\n");
+    //console.log("current instruct: " + JSON.stringify(this.instruct));
+    //console.log("system out: " + this.instruct.system +"\n");
     let finalPrompt = 
       this.instruct.system +
       this.instruct.prependPrompt +

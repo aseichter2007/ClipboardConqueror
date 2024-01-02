@@ -238,11 +238,11 @@ Use this as a starting point/inspiration then build on it to have your actual Co
 
 
 
+|||brewella,@brewella,250,@c,@d|what is a juggalo?      
+
+|||name:save|
 
 
+|||abe,@trump,250,@c,@d|what is a juggalo?
 
-
-
-
-undefined
-|||PROMPT:system| walawala
+|||dw|

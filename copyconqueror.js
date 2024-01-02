@@ -24,7 +24,7 @@ function testing(){//hooked into changehandler, copy to execute
     
 }
 var client =  {};
-var lastClip = "";
+
 var lastResponse = "";
 const KoboldClient = require('./koboldinterface.js');
 const {saveSettings} = require('./settingSaver.js');
@@ -65,7 +65,7 @@ function recieveApiResponse(text){
     NotificationBell("Paste Response:", text);
     botresponse = true
     lastResponse = recieveEngine.recieveMessageFindTerminatorsAndTrim(text);//I don't think this ever activates but it will support function calling maybe.
-    lastClip = "";
+    
     ncp.copy(lastResponse);
     //client.getTokenCount(lastResponse, agent, sendData);
 }
@@ -107,15 +107,15 @@ function clipboardChangeHandler(err,text, debug = true){
         return console.log(err+text);
     }
     let out = text.trim();
-    if (lastClip !== out && lastResponse !== out&& !botresponse) {
+    //if (lastClip !== out && lastResponse !== out&& !botresponse) {
         sendEngine.setupforAi(out);
-        lastClip = out;
-        //console.log(JSON.stringify(out));//|||coder|
+        //lastClip = out;
+        //console.log(JSON.stringify(out));
         if(debug){
             //NotificationBell("text copied", lastClip);
             testing();
         }
-    }
+    //}
 
     botresponse = false;
 }

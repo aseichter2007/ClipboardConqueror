@@ -7,6 +7,7 @@ Provided you are using local AI, CC is a data secure alternative integration pro
 
 *Special thank you to the creators of KoboldAi, KoboldCPP, llamma, openAi, and the communities that made all this possible to figure out. 
 
+If you are unhappy with my syntax, almost everything is configurable. 
 
 With Clipboard Conqueror, you can leverage AI abilities, invoke it by copying `||| "request"` 
 
@@ -33,7 +34,7 @@ Run z-runClipbardConqueror.bat on windows or Mac_Linux_Start.bat otherwise
 For openAi access 
 --------
 
-put your key into 0openAiKey.json and invoke with |||##| or change the default in 0endpoints.json. Kobold and local AI are not required to use Clipboard Conqueror, but it requires paid openAi api credit to use their service. OpenAi access has been included to ensure anyone can master prompting with my tools, on a budget that fits their current hardware.  If CC really gets rolling and meets my needs, I will host a dedicated cluster of my own to ensure free access for anyone, on secure and transparent terms with the excess. AI will change everything at an incredible rate, everyone deserves the best tools we can get our hands on in these trying times. 
+put your key into 0openAiKey.json and invoke with |||$$| or change the default in 0endpoints.json. Kobold and local AI are not required to use Clipboard Conqueror, but it requires paid openAi api credit to use their service. OpenAi access has been included to ensure anyone can master prompting with my tools, on a budget that fits their current hardware.  If CC really gets rolling and meets my needs, I will host a dedicated cluster of my own to ensure free access for anyone, on secure and transparent terms with the excess. AI will change everything at an incredible rate, everyone deserves the best tools we can get our hands on in these trying times. 
 
 Please help me share clipboard conqueror with everyone. 
 
@@ -246,7 +247,7 @@ Usage:
     |||agent:file|
     ```
     The file command saves that agent to the 0identities.json file. Currently only supports agents and will save settings values as agents if you tell it to. 
-    
+
   Currently after using a command that writes data from the application, "|||agent,write|", you must copy text with no invoke token to clear a bugged state. 
 
 
@@ -254,14 +255,14 @@ Usage:
 OpenAi Compatible 
 -----
   Clipboard Conqueror supports openAI endpoints. Put your key into 0openAiKey.json
-  LMstudio support like |||#| or save an agent like |||lm:save|"instructions" and any time that agent is called, it will send those instructions with the system prompt and send to openAi compatible endpoints at the url defined in openai.json
+  LMstudio support like |||$| or save an agent like |||lm:save|"instructions" and any time that agent is called, it will send those instructions with the system prompt and send to openAi compatible endpoints at the url defined in openai.json
 
   ```
-  |||#|this message will go to openAI compatible endpoint, default LMStudio local endpoint;
+  |||$|this message will go to openAI compatible endpoint, default LMStudio local endpoint;
   ```
 
   ```
-  |||##|this will go to openAi url endpoint default chatGTP 
+  |||$$|this will go to openAi url endpoint default chatGTP 
   ```
 
   The system actually supports 3 separate back ends concurrently. One kobold endpoint and two openAI urls. 
@@ -272,7 +273,7 @@ OpenAi Compatible
 ```
   will change the target openai model. names must be exact. I dont know them or have a gpt key to test this feature. I put the ones that arent marked depreciating in |||gpts,write|
 
-  |||#,set| will behave as expected and send to the compatible endpoint until |||set| to release. 
+  |||$,set| will behave as expected and send to the compatible endpoint until |||set| to release. 
 
 
   You can safely use any other command to query sensitive data, and depending on your configuration, gpt commands can be sent locally as well. 
@@ -373,6 +374,34 @@ frank\n\n<|im_end|>\n<|im_start|>assistant:\n
  
  - again note 4 pipes. 
 
+
+Multi agent chaining and complex agent workflows. 
+---
+Clipboard Conqueror supports chaining agents sequentially like:
+
+```
+|||agentFirst,@agentSecond,#@agentThird,#@@anotherAgentThirdandFourth,##@agentFourth,@@@c,@@@d| and on. 
+``````
+ "@" executes, and it is reccommended to use specifically targeted chaining agents which I have not developed yet. I'm hoping someone has used superAGI and can point me a direction.
+
+ "#" Skips execution, or whatever you like, as everything else in Clipboard Conqueror it can be adjusted to your satisfaction in 0instructions.json.
+
+ I like to think of it like feeding a tape, so I can send in the manager every so often to keep track like ###@##@##@#@@@#manager, who knows what you will find with workflows like this that can be shifted and executed in moments and executed my small LLMs in minutes. 
+
+ If you're quick you can just paste out each step. 
+
+ "d" or "debug" like ,@@@@debug saves a growing output of each turn it is not skipped like ##@# returns only the third to final of the 6 response outputs.
+
+ 
+ return it by copying  |||dw| or |||debugWrite| and paste.  The first turn is the initial query followed by what this contains, and the final output is not contained with d.  "dw" returns the middle for debugging your bot interactions. 
+
+ "c" or "continue" works similarly to send the log internally to the LLM with minimal markup "</s>"  between messages to build more of a chatlog.  
+
+an agent saved like |||lm:save| or |||gpt:save| always go to the openAI compatible or openAI api endpoints, so you should be able to chain different backends like 
+```
+|||@lm,#@gpt|
+```
+in this case, Captain Clip will be sent first, to koboldAI, the output then goes to LMstudio,  and the out from there to ChatGPT api. This is not advisable cause Captain Clip likes to say "|||help|" and I have implemented this functionality in kind of a funky way so that will pile up and stop execution.  
 
 Prompt Formats:
 ---
@@ -722,6 +751,7 @@ dev:
 //todo: notification instead of sound effects//done
 //todo: finish saving objects to memory//done
 //fast switch instruction sets //done
+//todo: group chain interacting so you can batch like |||@summary,@writer|//done, way cooler than that.
 
 //todo: openAI client, probably migrate a ton of logic out of textengine and into koboldinterface.js to make them interchangeable. //half I should implement it properly but it's such a mystery without keys. 
 
@@ -751,7 +781,8 @@ release!//oh snap I got excited and went. //beta release in motion.
 //todo: write agents or custom settings to file. 
 
 //really waffling, its simply good like >user: //todo: per character rolling memory to allow more natural exchanges and enable rp.
-//todo: group chain interacting so you can batch like |||@summary,@writer|"text" and paste a summary, then you press the invoke key and it advances the chain and gives you the output from writer with the results of summary in the memory//todo: settings bulk in and out
+
+//todo: settings bulk in and out
 .//pass no login here, will just have portal make setting file to save in place//todo: web api to host login server. 404 defaults to allow full operation of paid branch users if I decide the server is expensive to run, or I die, or the internet is down. potential vulnerability: blocking in hosts to avoid subscription check. Please pay for the full version of this software, this is my only income. Life is hard. 
 
 
