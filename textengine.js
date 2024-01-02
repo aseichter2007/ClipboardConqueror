@@ -466,6 +466,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         break;
         case "c":
         case "continue":
+          this.continue = true;
           this.batchContinue += this.text;
           break;
         case "d":
