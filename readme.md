@@ -401,7 +401,10 @@ an agent saved like |||lm:save| or |||gpt:save| always go to the openAI compatib
 ```
 |||@lm,#@gpt|
 ```
-in this case, Captain Clip will be sent first, to koboldAI, the output then goes to LMstudio,  and the out from there to ChatGPT api. This is not advisable cause Captain Clip likes to say "|||help|" and I have implemented this functionality in kind of a funky way so that will pile up and stop execution.  
+in this case, Captain Clip will be sent first, to koboldAI, the output then goes to LMstudio,  and the out from there to ChatGPT api. This is not advisable cause Captain Clip likes to say "|||help|" and I have implemented this functionality in kind of a funky way so that will pile up and stop execution. 
+
+It seems this triggers the same bug as write. If Clipboard Connqueror seems stuck, copy a little text with no invoke, and try your query again. 
+
 
 Prompt Formats:
 ---
