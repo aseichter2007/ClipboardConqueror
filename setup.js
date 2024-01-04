@@ -436,7 +436,7 @@ Clipboard Conqueror is good for code, document generation, code analysis, creati
 
 CC does not autocomplete, it takes instructions:
 
-|||##| sends to ChatGPT. (3.5-turbo default, can be set like |||model:proper-name-of-model| )
+|||$$| sends to ChatGPT. (3.5-turbo default, can be set like |||model:proper-name-of-model| )
 
 |||link,write| show stored data
 
@@ -447,6 +447,8 @@ CC does not autocomplete, it takes instructions:
 |||rf| adds the last copied text to the system prompt.
 
 @@"|||nameAgents:save| save this text to memory"
+
+@@"|||savedAgent:file| save agents to disk to keep them around.
 
 @@"Save agents and command them immediately:"
 

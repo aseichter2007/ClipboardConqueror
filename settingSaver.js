@@ -27,3 +27,5 @@ exports.saveSettings = saveSettings;//it says this isn't a default export.
 
 //That is wizardly. So I can think of elipses like dumping the whole bucket of fish in consecutively like that, and same fish eat fish with the same name sequentially.
 
+//what would this return like : let result = argargs(...args) given funtion argargs(arg) {return arg.arg}
+  

@@ -26,10 +26,19 @@ Get a model that fits in your graphics card or system ram, more details in insta
 
 Download this repo. 
 
-
+Windows:
+---
 Run z-instalCC.bat
 
-Run z-runClipbardConqueror.bat on windows or Mac_Linux_Start.bat otherwise
+Run z-runCC.bat
+
+I like z-runCCnodeMon.bat in case it's hung funny you can type rs in the console to restart. 
+
+linux or Mac:
+---
+y-linux-mac-install.sh
+
+y-linux-mac-start-no-nodemon.sh
 
 For openAi access 
 --------
@@ -489,11 +498,34 @@ Currently there are no built binaries and Node is required to run Clipboard Conq
 
 Finally, download Clipboard Conqueror from this repository. 
 
-run z-installCC.bat.
+windows:
+---
+
+run z-instalCC.bat
 
 after it finishes run:
 
-z-runClipboardConqueror.bat
+z-runCC.bat
+
+Mac/Linux
+---
+
+y-linux-mac-install.sh
+y-linux-mac-start-no-nodemon.sh
+
+or just run from the folder:
+npm i
+
+npm start      
+(windows)
+
+
+or 
+
+npm run linux
+
+Troubleshooting:
+---
 
 If Clipboard Conqueror closes on launch in windows, ensure you have Node installed, if Clipboard Conqueror seems unresponsive, make sure Koboldcpp is running and type rs then press enter in the Clipboard Conqueror console window to restart the application especially if any errors are displayed. 
 
@@ -556,6 +588,8 @@ Less than 8gb gfx cards(fast-medium, notable quality loss):
 other models:
 ---------
 minimum hardware:[rocket_3B](https://huggingface.co/TheBloke/rocket-3B-GGUF) should be chatML I havent messed with it much.
+
+[Nous-Hermes-2-SOLAR](https://huggingface.co/TheBloke/Nous-Hermes-2-SOLAR-10.7B-GGUF) total VRAM used: 11652.35 MiB (model: 8294.06 MiB, 16k context: 3358.29 MiB) This might be my new favorite. 
 
 [Solar 10B](https://huggingface.co/TheBloke/SOLAR-10.7B-Instruct-v1.0-GGUF) this one is impressing me. solar-10.7b-instruct-v1.0.Q6_K.gguf total VRAM used: 10123.63 MiB (model: 8294.05 MiB, 8k context: 1829.58 MiB) Works great with default chatML instruct
 
