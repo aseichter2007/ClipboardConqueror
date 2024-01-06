@@ -246,3 +246,102 @@ Use this as a starting point/inspiration then build on it to have your actual Co
 |||abe,@trump,250,@c,@d|what is a juggalo?
 
 |||dw|
+
+
+|||list|
+
+|||name:save|
+{"list":"|||user,write|
+|||default,write|
+|||clip,write|
+|||link,write|
+|||agi,write|
+|||coder,write|
+|||code,write|
+|||cowboy,write|
+|||bugfix,write|
+|||bugspot,write|
+|||writer,write|
+|||w,write|
+|||editor,write|
+|||mem,write|
+|||summary,write|
+|||sumup,write|
+|||sum,write|
+|||explain,write|
+|||abe,write|
+|||trump,write|
+|||joe,write|
+|||brewella,write|
+|||frank,write|
+|||woody,write|
+|||buzz,write|
+|||shia,write|
+|||stable,write|
+|||tot,write|
+|||pro,write|
+|||twenty,write|
+|||grug,write|
+|||dark,write|
+|||devil,write|
+|||business,write|
+|||translateTo,write|
+|||JPLT,write|
+|||en,write|
+|||es,write|
+|||jp,write|
+|||gr,write|
+|||fr,write|
+|||hi,write|
+|||ch,write|
+|||gpts,write|
+|||sellin,write|
+|||story,write|
+|||novel,write|
+|||resume,write|
+|||name,write|
+|||frank2,write|
+"}
+ _______
+|||agi|instructions for installing linux
+Problem: Installing Linux on a computer.
+
+
+Execution Steps:
+1. Choose a Linux distribution (e.g., Ubuntu, Fedora, Mint) that best suits your needs and preferences.
+2. Download the latest ISO file for the chosen distribution from the official website.
+3. Create a bootable USB drive using software like Rufus or BalenaEtcher.
+4. Shut down the computer and connect the bootable USB drive.
+5. Power on the computer and enter the BIOS/UEFI settings to boot from the USB drive.
+6. Follow the installation wizard, choosing custom installation options to preserve existing data.
+7. Complete the installation process and reboot the computer.
+8. Configure user accounts, timezone, and other system settings during first boot.
+
+
+Risks:
+1. Damage to existing operating system if incorrect partitioning choices are made.
+2. Compatibility issues with hardware devices not supported by the chosen distribution.
+3. Incomplete installation due to improper booting or power outages.
+
+
+Good results from the execution:
+1. Successful installation of Linux on the computer.
+2. Functional system with necessary software installed.
+3. Smooth transition between operating systems if dual-booting.
+
+
+Bad results from the execution:
+1. Loss of important data during installation.
+2. Issues with hardware devices not supported by the chosen distribution.
+3. Installation errors or failures due to improper configuration.
+
+
+Top 5 remaining issues to solve:
+1. |||agi| Explain the difference between dual-booting and replacing the current operating system.
+2. |||agi| Detail the steps to check compatibility with existing hardware before installation.
+3. |||agi| Provide a list of recommended software for common tasks (web browsing, productivity tools, etc.).
+4. |||agi| Outline the steps to back up important data before installation.
+5. |||agi| Walk me through setting up Wi-Fi connections on Linux.
+|||hello?
+
+|||hello?

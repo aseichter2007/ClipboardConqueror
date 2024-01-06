@@ -52,6 +52,7 @@ class TextEngine {
     this.on = false;
     this.openAi = false;
     this.compatible = false;
+    this.noBatch = false;
   }
 
   returnTrip(str) {
@@ -306,6 +307,8 @@ Welcome to Clipboard Commander!\n
         //intro = JSON.parse(intro);
         this.write = true;
         this.sendHold = true;
+        this.noBatch = true;
+
         //this.writeout = intro;
         //this.nicereturn = true;
         outp.text = intro;
@@ -398,6 +401,8 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
 `;
         this.write = true;
         this.sendHold = true;
+        this.noBatch = true;
+
         //this.nicereturn = true;
         outp.text = identity;
         outp.found = true;
@@ -411,6 +416,8 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       case "list": //causing a bug where the next input is ignored.
         this.write = true;
         this.sendHold = true;
+        this.noBatch = true;
+
         var list = "";
         for (let key in this.identities) {
           list =
@@ -481,6 +488,9 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         outp.found = true;
         outp.set = true;
         break;
+        case "agi":
+          this.noBatch = true;//agi always writes |||
+          break;
       default:
         break;
     }
@@ -572,6 +582,10 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       //
       return;
     }
+    if (this.noBatch === true) {
+      this.noBatch = false;
+      return;
+    }
     if (this.batchLength > 0) {
       this.batchProcessor();      
       text = this.instructions.invoke + this.batch + this.instructions.endTag + text;      
@@ -594,7 +608,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     if (sorted) {
       this.text = sorted.formattedQuery;
       this.undress();
-      this.identity[this.instructions.rootname] = sorted.tags.command;
+      this.identity[this.instructions.rootname] = sorted.tags.command;//send ||||this text over if it exists|
       if(this.set){
         this.identity = this.setAgent;
         if (sorted.tags.command != "") {
@@ -678,6 +692,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         if (ifDefault && !this.set) {
           //console.log("hit default");
           this.identity.CaptainClip = this.identities[this.instructions.defaultPersona];
+          this.noBatch = true;
         }
       
         if (this.continue) {
@@ -686,6 +701,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         }
         if (this.write) {
           this.write = false;
+          this.noBatch = true;
           delete this.identity[this.instructions.rootname];
           let sendtoclipoardtext =
             this.instructions.writeSave + "\n" +
@@ -699,6 +715,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         }
         if (this.writeSettings) {
           this.writeSettings = false;
+          this.noBatch = true;
           // delete this.identity[this.instructions.rootname];
           // try {
           //   delete this.identity["CaptainClip"];
@@ -707,7 +724,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
           // }
           let sendtoclipoardtext =
             this.instructions.writeSettings + "\n" +
-            JSON.stringify(this.identity.settings) +
+            JSON.stringify(this.identity.settings) +//this is set up for PROMPT edit failures
             this.instructions.writeSplit +
             sorted.formattedQuery; 
           //sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, "\n");
@@ -776,11 +793,11 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         "too many " + this.instructions.invoke + ". max 2."
       );
       this.sendHold = true;
+      this.noBatch = true;
       //this.write = true;
       return {
         run: run,
-        formattedQuery:
-          "The user sent too many invoke tokens to the interface, |||query, |||identity|query,  context ||| query, context|||query|||context are the supported modes. ",
+        formattedQuery: text,
         tags: tags
       };
     }
