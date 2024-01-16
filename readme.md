@@ -43,7 +43,9 @@ y-linux-mac-start-no-nodemon.sh
 For openAi access 
 --------
 
-put your key into 0openAiKey.json and invoke with |||$$| or change the default in 0endpoints.json. Kobold and local AI are not required to use Clipboard Conqueror, but it requires paid openAi api credit to use their service. OpenAi access has been included to ensure anyone can master prompting with my tools, on a budget that fits their current hardware.  If CC really gets rolling and meets my needs, I will host a dedicated cluster of my own to ensure free access for anyone, on secure and transparent terms with the excess. AI will change everything at an incredible rate, everyone deserves the best tools we can get our hands on in these trying times. 
+put your key into 0openAiKey.json and invoke with |||$$| or change the default in 0endpoints.json. 
+
+Kobold or local AI are not required to use Clipboard Conqueror, but it requires paid openAi api credit to use their service. OpenAi access has been included to ensure anyone can master prompting with my tools, on a budget that fits their current hardware.  If CC really gets rolling and meets my needs, I will host a dedicated cluster of my own to ensure free access for anyone, on secure and transparent terms with the excess. AI will change everything at an incredible rate, everyone deserves the best tools we can get our hands on in these trying times. 
 
 Please help me share Clipboard Conqueror with everyone. 
 
@@ -54,7 +56,7 @@ I solemnly promise that this application and at least one compatible backend wil
 One of my design inspirations for this application is to spread LLM models to as many computers as possible. I want to ensure at least one intact system is recovered by future archaeologists, an incredible time capsule of culture, science, and data.  We should be sending intelligent boxes to deep space too. Our Knowledge and posterity must not go to waste. 
 
 This project is also a bit of a last ditch effort to remain software oriented, I need income. I've been looking for work and getting nothing but scams.
-Please, if you get good use from this application, especially in a commercial setting, consider supporting me, or hiring me. My son will be born next month and debt is already starting to get out of hand. 
+Please, if you get good use from this application, especially in a commercial setting, consider supporting me, or hiring me. I'm a new father and not having stable income is just frying my brain. 
 ``````
 patreon.com/ClipboardConqueror
 
@@ -481,7 +483,7 @@ Currently there are no built binaries and Node is required to run Clipboard Conq
 
 
 
-2. Clipboard Conqueror requires [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/releases/), a kobold compatible API, or an [openAI compatible API](https://lmstudio.ai/) to function. Or both! or just an openAI key. Or all three! I'd love to hear how you connect your choice of backend for a compatibility list.
+2. Clipboard Conqueror is most powerful with [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/releases/),or a kobold compatible API. [openAI compatible API](https://lmstudio.ai/) doesn't expose as many settings. CC works with either or both! or just an openAI key. Or all three! I'd love to hear how you connect your choice of backend for a compatibility list.
 
 
     For macOS get KoboldAi or anything that hosts a kobold united compatible endpoint for tavern, etc. //Notes below for linux and mac, thank Herro.
@@ -782,7 +784,10 @@ Your understanding and respect for these terms are appreciated.
 
 Additional Resources:
 
+[The HitchHiker's guide to LLMs](https://osanseviero.github.io/hackerllama/blog/posts/hitchhiker_guide/)
+
 [LLMs, how do they work?](https://bbycroft.net/llm) this is a cool visualization of how the machine does the magic.
+
 
 //todo: link assorted knowledge banks. 
 
