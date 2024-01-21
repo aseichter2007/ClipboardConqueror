@@ -52,6 +52,7 @@ defaultOptions: ["kobold", "openAi", "compatible","select defaultClient: from pr
 instruct: "default",
 instructOptions: ["default", "hermes", "monster", "chatML", "alpaca", "wizard", "wizardLM", "vicuna", "mistralLite", "metharme", "deepseek", "deepseekCoder", "deepseekCode", "openchat", "openchatalt", "openchatCode", "tinyLlama", "openLlama", "pirateLlama", "starCoder", "stableLm", "stablelm", "vicunaUncensored", "openAssistant", "openassistant", "vicuna13b", "vicunaFree", "vicunaCocktail", "stableVicuna", "select instruct: from previous items or any you add to 0formats.json"],
 persona: "defaultOpenerResolved",
+personaNote:"also change it it 0instructions.json", //todo: fix the logic to get this at runtime instead of at write time for 0instructions.json.
 }
 endPointConfig.routes = endpoints;
 writeObjectToFileAsJson(endpoints, "0endpoints.json",fs)
