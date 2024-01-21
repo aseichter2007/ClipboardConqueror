@@ -5,8 +5,7 @@ const axios = require('axios');
 const SendEngine = require('./textengine.js');
 const RecieveEngine = require('./responsengine.js');
 const fs = require('fs');
-let botresponse = false
-const path = require("path");
+//const path = require("path");
 
 //setup all settings//
 const openAIkey = {};
@@ -24,14 +23,11 @@ function testing(){//hooked into changehandler, copy to execute
     
 }
 var client =  {};
-
-var lastResponse = "";
 const KoboldClient = require('./koboldinterface.js');
 const {saveSettings} = require('./settingSaver.js');
 //if (configs.client== "kobold")
 {
-    client = new KoboldClient( axios, recieveApiResponse, returnSummary, NotificationBell, endPointConfig.routes.kobold);//todo, this doesnt really belong like this, should be created directly into textengine constructor and eliminate all this mess running across the main program. Needed before adding openAI, untangling this will make that much easier. 
-    
+    client = new KoboldClient( axios, recieveApiResponse, returnSummary, NotificationBell, endPointConfig.routes.kobold);//todo, this doesnt really belong like this.
 } 
 client.setPromptFormat(format.format);
 const sendEngine = new SendEngine(client, ncp.copy, recieveApiResponse, NotificationBell, endPointConfig.routes, identities.identities, instructions.instructions,params.params, openAIkey.key, formats.formats, saveSettings, fs);
@@ -62,66 +58,51 @@ function recieveProcessedClip(identity, query, params) {
 }
 function recieveApiResponse(text){
     text = text.replace(/\\n/g, '\n');
-    NotificationBell("Paste Response:", text);
-    botresponse = true
-    lastResponse = recieveEngine.recieveMessageFindTerminatorsAndTrim(text);//I don't think this ever activates but it will support function calling maybe.
-    
-    ncp.copy(lastResponse);
-    //client.getTokenCount(lastResponse, agent, sendData);
+    NotificationBell("Paste Response:", text);   
+    ncp.copy(recieveEngine.recieveMessageFindTerminatorsAndTrim(text));
 }
 // To start listening
-function sendData(data, destination) {
-    const flags = ['summary', 'user']; // Define your list of available destinations here
-    //console.log(JSON.stringify(data));
-    try {
-        switch (destination) {
-            case flags[0]:
-                console.log(`Sending data to summary`);
-                break;
-            case flags[1]:
-                console.log(`Sending data to ai memory`);
-                break;
-            default:
-                //return to agent memory
-                //throw new Error('Invalid destination');
-                break;
-        }
+// function sendData(data, destination) {
+//     const flags = ['summary', 'user']; // Define your list of available destinations here
+//     //console.log(JSON.stringify(data));
+//     try {
+//         switch (destination) {
+//             case flags[0]:
+//                 console.log(`Sending data to summary`);
+//                 break;
+//             case flags[1]:
+//                 console.log(`Sending data to ai memory`);
+//                 break;
+//             default:
+//                 //return to agent memory
+//                 //throw new Error('Invalid destination');
+//                 break;
+//         }
 
-        // Send data to the chosen destination
-        console.log(`Sent ${data} to ${destination}`);
-    } catch (error) {
-        console.error(`Error sending data: ${error.message}`);
-    }
-}
+//         // Send data to the chosen destination
+//         console.log(`Sent ${data} to ${destination}`);
+//     } catch (error) {
+//         console.error(`Error sending data: ${error.message}`);
+//     }
+// }
 
 
 clipboardListener.on('change', () => {
     ncp.paste(clipboardChangeHandler)
     //console.log('Clipboard changed');
 });
-function clipboardChangeHandler(err,text, debug = true){
+function clipboardChangeHandler(err,text){
     //console.log(JSON.stringify(text));
     console.log("ClipboardChangeHandler: " +text);
     if (err) {
         NotificationBell("error: ", err+text); 
         return console.log(err+text);
     }
-    let out = text.trim();
-    //if (lastClip !== out && lastResponse !== out&& !botresponse) {
-        sendEngine.setupforAi(out);
-        //lastClip = out;
-        //console.log(JSON.stringify(out));
-        if(debug){
-            //NotificationBell("text copied", lastClip);
-            testing();
-        }
-    //}
-
-    botresponse = false;
+    sendEngine.setupforAi(text);
 }
 //sounds spooky
 function NotificationBell(title, text) {
-            notify(title, text);        
+    notify(title, text);        
 }
 
 clipboardListener.startListening();
