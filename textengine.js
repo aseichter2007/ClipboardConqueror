@@ -31,7 +31,6 @@ class TextEngine {
     this.identity = {};
     this.recentClip = { text: "" };
     this.text = "";
-    this.sentToClip = ""
     this.set = false;
     this.setAgent = {};
     this.memory = "";
@@ -52,7 +51,7 @@ class TextEngine {
     this.on = false;
     this.openAi = false;
     this.compatible = false;
-    this.noBatch = false;
+    this.noBatch = true;
   }
 
   returnTrip(str) {
@@ -489,7 +488,9 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         outp.set = true;
         break;
         case "agi":
-          this.noBatch = true;//agi always writes |||
+        case "default":
+        case "defaultOpenerResolved":
+          this.noBatch = true;//agi always writes |||, clip often writes |||help|. it's confusing. 
           break;
       default:
         break;
@@ -563,7 +564,72 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     }
     this.koboldClient.setPromptFormat(set);
   }
-  
+  personaAtor(persona, sorted, ifDefault){
+  persona.forEach(tag => {
+    tag = tag.trim();
+    let commands = tag.split(this.instructions.settinglimit);
+    if (commands.length === 2) {
+      commands[0] = commands[0].trim();
+      commands[1] = commands[1].trim();
+      if (commands[1] == this.instructions.save && this.sendLast) {
+        //save like |||agent:save|
+        this.identities[commands[0]] = this.recentClip; 
+        tag = commands[0];
+      } else if (commands[1] == this.instructions.save) {
+        //save like |||agent:save|
+        this.sendHold = true;
+        this.identities[commands[0]] = sorted.formattedQuery; 
+        tag = commands[0];
+      } else if (commands[1] == this.instructions.delete) {
+        //save like |||agent:delete|
+        this.sendHold = true;
+        delete this.identities[commands[0]];
+        tag = commands[0];
+      } else if (commands[1] == this.instructions.saveAgentToFile) {
+        //save like |||agent:file|
+        this.sendHold = true;
+        let setting  ={[commands[0]]:this.identities[commands[0]]}
+        //console.log(JSON.stringify(setting));
+        this.settingSaver(setting, "0identities.json", this.notify, this.fs) //todo: fix this magic string.
+        tag = commands[0];
+      } else if (commands[0] == this.instructions.setPromptFormat && this.instructions.save == commands[1]) {
+        this.sendHold = true;
+        this.pickupFormat(sorted.formattedQuery);
+      }  else if (commands[0] == this.instructions.setInstruction) {
+        this.sendHold = true;
+        this.setPrompt(commands[1],sorted.formattedQuery);
+      }else if (!isNaN(commands[1])) {
+        this.params[commands[0]] = parseFloat(commands[1]);
+        //console.log(commands[0] + commands[1] +" written> " + this.params[commands[0]]);//ill keep this one for now
+      } else if (commands[1] == this.instructions.true) {
+        this.params[commands[0]] = true;
+      } else if (commands[1] == this.instructions.false) {
+        this.params[commands[0]] = false;
+      }
+      else {
+        this.params[commands[0]] = commands[1];
+      }
+    } else {
+      if (!isNaN(tag)) {
+        this.params.max_length = parseInt(commands[0]);
+      } else if (tag === this.instructions.setPromptFormat) {
+        this.sendHold = true;
+        this.setKoboldFormat(sorted.formattedQuery);
+      } else {
+      const ident = this.updateIdentity(tag);
+      
+      if (ifDefault) {
+        ifDefault = !ident.agent;//comes out true set false
+      }
+      
+      if (ident.set) {
+        this.identity[tag] = ident.text;
+      }
+    }
+  }
+  });
+  return ifDefault;
+}
   pickupFormat(setting) {
     console.log("hit pickup format: " + setting);
     try {
@@ -577,33 +643,33 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
 
   }
   setupforAi(text) {
-    console.log(this.batchDocument);
-    if (text === this.sentToClip && this.batchLength === 0) {
-      //
-      return;
-    }
-    if (this.noBatch === true) {
-      this.noBatch = false;
-      return;
-    }
+    //console.log(this.batchDocument); 
     if (this.batchLength > 0) {
+      this.noBatch = false;
       this.batchProcessor();      
       text = this.instructions.invoke + this.batch + this.instructions.endTag + text;      
+    }
+    else {
+      this.noBatch = true;
+    }
+    if (text === this.recentClip.text && this.noBatch) {
+      //text is same as outgoing and not a batch, so don't do anything.
+      return;
     }
     if (this.instructions.defaultClient != "kobold") {
       switch (this.instructions.defaultClient) {
         case "openAi":
           this.openAi = true;    
           break;
-          case "compatible":
-            this.compatible = true;
-            break;
-            default:
-              console.log(" improper client setting, defaulting to kobold : "+ this.instructions.defaultClient);
-              break;
-            }
-          }
-          const sorted = this.activatePresort(text);
+        case "compatible":
+          this.compatible = true;
+          break;
+        default:
+          console.log(" improper client setting, defaulting to kobold : "+ this.instructions.defaultClient);
+          break;
+        }
+      }
+    const sorted = this.activatePresort(text);
     let ifDefault = true;
     if (sorted) {
       this.text = sorted.formattedQuery;
@@ -621,69 +687,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         //console.log("persona tags: " + JSON.stringify(persona));
         //console.log("persona count: " + sorted.tags.length);
         let temPersona = {};
-        persona.forEach(tag => {
-          tag = tag.trim();
-          let commands = tag.split(this.instructions.settinglimit);
-          if (commands.length === 2) {
-            commands[0] = commands[0].trim();
-            commands[1] = commands[1].trim();
-            if (commands[1] == this.instructions.save && this.sendLast) {
-              //save like |||agent:save|
-              this.identities[commands[0]] = this.recentClip; 
-              tag = commands[0];
-            } else if (commands[1] == this.instructions.save) {
-              //save like |||agent:save|
-              this.sendHold = true;
-              this.identities[commands[0]] = sorted.formattedQuery; 
-              tag = commands[0];
-            } else if (commands[1] == this.instructions.delete) {
-              //save like |||agent:delete|
-              this.sendHold = true;
-              delete this.identities[commands[0]];
-              tag = commands[0];
-            } else if (commands[1] == this.instructions.saveAgentToFile) {
-              //save like |||agent:file|
-              this.sendHold = true;
-              let setting  ={[commands[0]]:this.identities[commands[0]]}
-              //console.log(JSON.stringify(setting));
-              this.settingSaver(setting,"0identities.json", this.notify, this.fs) //todo: fix this magic string.
-              tag = commands[0];
-            } else if (commands[0] == this.instructions.setPromptFormat && this.instructions.save == commands[1]) {
-              this.sendHold = true;
-              this.pickupFormat(sorted.formattedQuery);
-            }  else if (commands[0] == this.instructions.setInstruction) {
-              this.sendHold = true;
-              this.setPrompt(commands[1],sorted.formattedQuery);
-            }else if (!isNaN(commands[1])) {
-              this.params[commands[0]] = parseFloat(commands[1]);
-              //console.log(commands[0] + commands[1] +" written> " + this.params[commands[0]]);//ill keep this one for now
-            } else if (commands[1] == this.instructions.true) {
-              this.params[commands[0]] = true;
-            } else if (commands[1] == this.instructions.false) {
-              this.params[commands[0]] = false;
-            }
-            else {
-              this.params[commands[0]] = commands[1];
-            }
-          } else {
-            if (!isNaN(tag)) {
-              this.params.max_length = parseInt(commands[0]);
-            } else if (tag === this.instructions.setPromptFormat) {
-              this.sendHold = true;
-              this.setKoboldFormat(sorted.formattedQuery);
-            } else {
-            const ident = this.updateIdentity(tag);
-            
-            if (ifDefault) {
-              ifDefault = !ident.agent;//comes out true set false
-            }
-            
-            if (ident.set) {
-              this.identity[tag] = ident.text;
-            }
-          }
-        }
-        });
+        ifDefault =  this.personaAtor(persona, sorted);
         //console.log("identset: " + JSON.stringify(this.identity));
       }
       if (sorted.run || this.on) {
@@ -694,7 +698,9 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
           this.identity.CaptainClip = this.identities[this.instructions.defaultPersona];
           this.noBatch = true;
         }
-      
+        if (this.identity[this.instructions.rootname] === ""){
+          delete this.identity[this.instructions.rootname];
+        }
         if (this.continue) {
           sorted.formattedQuery = this.batchContinue + this.instructions.batchLimiter+ "\n" + sorted.formattedQuery;
           this.continue = false;
@@ -710,7 +716,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
             sorted.formattedQuery; 
           sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, "\n");
           this.notify("Paste Ready:", sendtoclipoardtext.slice(0, 150));
-          this.sentToClip = sendtoclipoardtext
+          this.recentClip.text = sendtoclipoardtext
           return this.sendToClipboard(sendtoclipoardtext);
         }
         if (this.writeSettings) {
@@ -729,7 +735,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
             sorted.formattedQuery; 
           //sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, "\n");
           this.notify("Paste Response:", sendtoclipoardtext.slice(0, 150));
-          this.sentToClip = sendtoclipoardtext
+          this.recentClip.text = sendtoclipoardtext
           return this.sendToClipboard(sendtoclipoardtext);
         }
         if (!this.sendHold) {
@@ -777,7 +783,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       this.recentClip.text = text; // + "\n" + this.recentClip.text);//todo: determine if this is dumb or not. Consider letting this run evey time and re toggles to allow building a big context to send with a question.
       this.sendlast = false;
     } else {
-      this.recentClip.text = text;
+      this.recentClip.text = text + " ";
     }
   }
   activatePresort(text) {
