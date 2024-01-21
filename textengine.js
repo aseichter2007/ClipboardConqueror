@@ -646,7 +646,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
               this.sendHold = true;
               let setting  ={[commands[0]]:this.identities[commands[0]]}
               //console.log(JSON.stringify(setting));
-              this.settingSaver(setting,"0identities.json", this.notify, this.fs) 
+              this.settingSaver(setting,"0identities.json", this.notify, this.fs) //todo: fix this magic string.
               tag = commands[0];
             } else if (commands[0] == this.instructions.setPromptFormat && this.instructions.save == commands[1]) {
               this.sendHold = true;
