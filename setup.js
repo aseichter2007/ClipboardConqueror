@@ -59,6 +59,7 @@ writeObjectToFileAsJson(endpoints, "0endpoints.json",fs)
 }
 try{
     instructions.instructions = require("./0instructions.json");
+    instructions.defaultClient = endPointConfig.routes.defaultClient;
 }catch{
     const instruct = {//left justified for consistency in settings definitions
         //this needs to be more elegant. Maybe split up into multiple files with selection from endpointsKey.json
