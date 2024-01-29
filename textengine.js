@@ -2,35 +2,36 @@ const saveSettings = require("./settingSaver");
 
 class TextEngine {    
   constructor(
-    koboldClient,
+    inferenceClient,
     sendToClipboard,
     recieveApi,
     notify,
-    openAiConfig,
+    endpoints,
     identities ,
     instructions ,
     apiParams,
-    openAikey,
     formats,
     settingSaver,
-    fs
+    fs,
   ) {
     //todo settings
-    this.koboldClient = koboldClient;
+    this.inferenceClient = inferenceClient;
     this.sendToClipboard = sendToClipboard;
     this.recieveApi = recieveApi;
     this.settingSaver = settingSaver;
     this.fs = fs;
-    this.openAiConfig = openAiConfig;
+    this.endpoints = endpoints;
+  
     this.identities = identities;
     this.instructions = instructions;
     this.notify = notify;
-    this.params = apiParams;
-    this.openAikey = openAikey;
+    this.params = apiParams.default;
+    this.apiParams = apiParams.params;
+    this.apiConfigSet = endpoints.defaultClient;
     this.formats = formats;
     this.identity = {};
     this.recentClip = { text: "" };
-    this.text = "";
+    this.text = "";//sorted
     this.set = false;
     this.setAgent = {};
     this.memory = "";
@@ -40,18 +41,17 @@ class TextEngine {
     this.agentBatchKit = {};
     this.batchLength = 0;
     this.batch = "";
+    this.api = endpoints.endpoints[endpoints.defaultClient];
     //this.lastAgentTags = [];
     this.continue = false;
     this.document   = false;
     this.sendHold = false;
     this.write = false;
     this.writeSettings = false;
-    this.rp = false;
     this.sendLast = false;
     this.on = false;
-    this.openAi = false;
-    this.compatible = false;
     this.noBatch = true;
+    this.blockPresort = false;
   }
 
   returnTrip(str) {
@@ -87,16 +87,14 @@ class TextEngine {
     if (this.batchLength < trip.batch){
       this.batchLength = trip.batch;
     }
-    this.agentBatchKit[identity] =trip
+    this.agentBatchKit[identity] = trip
   }
   batchProcessor(){
     let setBatch = [];
-    console.log(this.batchLength);
+    //console.log(this.batchLength);
     if (this.batchLength > 0){
       this.batchLength--;
-      for (let key in this.agentBatchKit) {
-        if (this.agentBatchKit.hasOwnProperty(key)) {
-       
+      for (let key in this.agentBatchKit) {       
           console.log(key, this.agentBatchKit[key]);
           if (this.agentBatchKit[key].trip[0]  === this.instructions.batchSwitch){
             this.agentBatchKit[key].trip = this.agentBatchKit[key].trip.slice(1);
@@ -106,7 +104,7 @@ class TextEngine {
           } else if (this.agentBatchKit[key].trip.length === 0){
             delete this.agentBatchKit[key];
           }
-        }
+        
       }  
       this.batch = setBatch.join(this.instructions.agentSplit);
     }else{
@@ -116,48 +114,56 @@ class TextEngine {
   updateIdentity(identity) {
     //console.log("identity start:"+identity);
     let trip = this.returnTrip(identity);
+    //console.log(identity);
+    //console.log(JSON.stringify(trip));
     let found = false;
     let setIdent = {};
     let apiRoute = 0;
     let setAgent = false;
     let batching = false;
-
+    
     if (identity !== "" && identity !== null && identity !== undefined) {
       if (identity) {
         if (Number.isNaN(Number(identity))) {
           identity = identity.trim();
-          if (trip.api > 0) {
-            if(trip.api > 1){
-              console.log("activate OpenAi API- data will leave local system with default settings");
-              identity = identity.slice(2);
-              apiRoute = 2;
-              } else {
-                console.log("activate openAi Compatible API- data may leave local system depending on configuration.");
-                identity = identity.slice(1);
-                apiRoute = 1;
-            }
+          if (this.checkEndpoints(identity)) {
+            this.api = this.endpoints.endpoints[identity];
+            console.log("setting api: " + JSON.stringify(this.api));
+
+            return { text: "", agent: false, set: false }
           }
           if (trip.batch > 0){
             identity = identity.slice(trip.batch);
             this.batchAgent(identity, trip)
             batching = true;
+          }  
+          
+          if (trip.api > 0 && !batching) {
+            let counter = 1;//start at one to let zero be the default
+            for (const key in this.endpoints.endpoints){
+              console.log(trip.api + " : " + counter);
+              if (counter === trip.api) {
+                this.api = this.endpoints.endpoints[key];
+                console.log("setting api: " + JSON.stringify(this.api));  
+                identity = identity.slice(trip.api); 
+                console.log(identity);
+                break;
+              }
+              counter++;
+            }
           }
-          if (apiRoute === 1) {//set longterm or w/e true
-              //co opted fot openAi and LMStudio
-            this.compatible = !this.compatible;//invert to swap with kobold if default changed or # set
-
-          } else if( apiRoute === 2){//set both true
-            this.openAi = !this.openAi; //invert to duck out when set
-          }   
+          }else {
+            this.api = this.endpoints.endpoints[this.endpoints.defaultClient];
+            console.log("setting api: " + JSON.stringify(this.api));
           }
-
+          
           if (this.identities.hasOwnProperty(identity)&& !batching) {
             setIdent[identity] = this.identities[identity];
             found = true;
             setAgent = true;
           } else {
             found = false;
-            const flags = this.funFlags(identity); //flags not coming out?
+            const flags = this.funFlags(identity); 
             setIdent[identity] = flags.text;
             found = flags.found;
             setAgent = flags.set;
@@ -169,17 +175,6 @@ class TextEngine {
       }
       return { text: setIdent[identity], agent: found, set: setAgent };
     }
-  
-
-  // dress(identity){
-  //   this.identity = ``
-  // }
-  // costumeStore(tag, text){
-  //   this.identities[tag]= text;
-  // }///make the if statement implement the costumeStore function. Currently they have equal functinality after the if check.
-  // remember(tag, text) {
-  //   thisidentity
-  // }
   forget() {
     this.memory = [];
   }
@@ -193,115 +188,115 @@ class TextEngine {
     var outp = { text: "", found: false, set: false };
     switch (flag) {
       case "help"://left justified for formatitng when printed
-        var intro = `delete the extra on this line before saving or sharing agents printed with write.
+        const intro = `delete the extra on this line before saving or sharing agents printed with write.
 Welcome to Clipboard Commander!\n
 
-  |||introduction| will explain the basics of LLMs, this help is more about this software.
+|||introduction| will explain the basics of LLMs, this help is more about this software.
 
-  Remember, LLMs predict the next word using all the words that come in and predict each next word one at a time.
-  Lanuage specifity is important for results, and the small models can stumble in strange ways on misspelled words, vague requests, or poor wording in instructions. For storytelling less can be more, but for specific results you must give specific input. 
-  They usually get things pretty right, but the quality of the output suffers.  Use specific language. I tend to spend the time waiting for the reponse refining my query so that if it's confused by any bad language the first time, I can ask it in a better way. 
-  Run on sentences for a given instruction work well, commas tent to bring forward the idea. Periods are good to start a new idea.
-  For instance, describing a class and a function, I would describe the class in one run on rather than multiple sentences, and the function in another run on. 
-  This will help the AI keep these ideas seperate rather than tying sentences together to continue them like "the class. the class. the class. The fucntion. the function." This will be much more likely to return a mess or near miss. 
-  Do it like: The class is, has, needs, whatever. The function is for, needs, does, etc.
+Remember, LLMs predict the next word using all the words that come in and predict each next word one at a time.
+Lanuage specifity is important for results, and the small models can stumble in strange ways on misspelled words, vague requests, or poor wording in instructions. For storytelling less can be more, but for specific results you must give specific input. 
+They usually get things pretty right, but the quality of the output suffers.  Use specific language. I tend to spend the time waiting for the reponse refining my query so that if it's confused by any bad language the first time, I can ask it in a better way. 
+Run on sentences for a given instruction work well, commas tent to bring forward the idea. Periods are good to start a new idea.
+For instance, describing a class and a function, I would describe the class in one run on rather than multiple sentences, and the function in another run on. 
+This will help the AI keep these ideas seperate rather than tying sentences together to continue them like "the class. the class. the class. The fucntion. the function." This will be much more likely to return a mess or near miss. 
+Do it like: The class is, has, needs, whatever. The function is for, needs, does, etc.
 
-  Either way can work, for very complex stuff you have to do both, and sometimes you gotta play around cause it doesnt get something, but as you learn how the model likes to be told, you will begin to get incredible results from these small models. 
-  I feel that voice is not specific enough, so I made this tool to bring your AI anywhere, and Clipboard Conqueror can interface the same backend and run side by side.
+Either way can work, for very complex stuff you have to do both, and sometimes you gotta play around cause it doesnt get something, but as you learn how the model likes to be told, you will begin to get incredible results from these small models. 
+I feel that voice is not specific enough, so I made this tool to bring your AI anywhere, and Clipboard Conqueror can interface the same backend and run side by side.
+
+||| invokes the default agent Captain Clip to respond to any text sent with the invoke token. Say Hi, Clip!
+
+the invoke token is clipped out, so it can be anywhere in the text you copy or at the end too|||
+
+|||writer| Write me a bedtime story about 11 little squirrels who talk to and help a little girl find shelter in a storm.
+
+|||writer,frank| Title: "Frank's Sauciest Case: Big pizza from little Tony."
+  Sends the frank derbin character and the writer along with any text you send to guide the story.  
+
+|||writer,write| will write the contents of the writer agent to the clipboard, ready to paste back instantly and see what is sent to the ai with |||writer|. 
+
+This message starts with |||name:save|. change 'name' to your choice of name(or leave it name), and any text you copy with this will be saved with that name
+
+:save| accepts json but incorrectly formatted json will fail to parse and not be saved.
+note the full colon. ,save tries to send data stored as save. |||save:save| will work just fine, saving anything copied along into |||save|. Without care, you could get confusing results. 
+currently no changes are written to the hard drive. Restarting this program will reset any changed agents and any custom will be lost. Luckily you can copy them right back in.
+//todo: build and link my own charachter library
+
+|||on| toggles activation on every copy even with no invoke until |||on| is called again.
+
+|||list| writes a list of all agents that are currently available.
+
+|||re| what is this code doing? 
+
+- return copy at end of prompt inserted like continued user question.
+- sends the thing you copied last,   after "what is this code doing? \n \n {{lastcopy}}", at the end of the user prompt" and sends the Captian Clip assistant in the system prompt to help consider the instruction.
   
-  ||| invokes the default agent Captain Clip to respond to any text sent with the invoke token. Say Hi, Clip!
+|||rf| what is this code doing? 
 
-  the invoke token is clipped out, so it can be anywhere in the text you copy or at the end too|||
-  
-  |||writer| Write me a bedtime story about 11 little squirrels who talk to and help a little girl find shelter in a storm.
-  
-  |||writer,frank| Title: "Frank's Sauciest Case: Big pizza from little Tony."
-    Sends the frank derbin character and the writer along with any text you send to guide the story.  
+- return last copied first in prompt inserted like an agent at the level rf is placed relative to other agents ex |frank,rf,tot| copied text comes after frank agent.
+- sends the thing you copied last before the Captian Clip assistant prompt to help frame the output format and preconceptions.
 
-  |||writer,write| will write the contents of the writer agent to the clipboard, ready to paste back instantly and see what is sent to the ai with |||writer|. 
-  
-  This message starts with |||name:save|. change 'name' to your choice of name(or leave it name), and any text you copy with this will be saved with that name
-  
-  :save| accepts json but incorrectly formatted json will fail to parse and not be saved.
-  note the full colon. ,save tries to send data stored as save. |||save:save| will work just fine, saving anything copied along into |||save|. Without care, you could get confusing results. 
-  currently no changes are written to the hard drive. Restarting this program will reset any changed agents and any custom will be lost. Luckily you can copy them right back in.
-  //todo: build and link my own charachter library
+|||1200| sets the max response length to 1200. Also works like |||agent,setting:0.5,1000| just a number is always max response length.  
 
-  |||on| toggles activation on every copy even with no invoke until |||on| is called again.
+|||temperature:1.1| sets the temperature to 1.1. This works for any setting ex: top_p, min_p. Use 1 and 0 to set true/false //true/false untested.
+again, full colon on settings, which go directly to the backend api. 
 
-  |||list| writes a list of all agents that are currently available.
-  
-  |||re| what is this code doing? 
+Troubleshooting:
+  Occasionally kobold or this app hangs. You can type rs in the console and press enter to restart this application.
 
-  - return copy at end of prompt inserted like continued user question.
-  - sends the thing you copied last,   after "what is this code doing? \n \n {{lastcopy}}", at the end of the user prompt" and sends the Captian Clip assistant in the system prompt to help consider the instruction.
-   
-  |||rf| what is this code doing? 
-  
-  - return last copied first in prompt inserted like an agent at the level rf is placed relative to other agents ex |frank,rf,tot| copied text comes after frank agent.
-  - sends the thing you copied last before the Captian Clip assistant prompt to help frame the output format and preconceptions.
+  Occasionally the last copy is the same as what you're copying again. To clear momentary troubles copy text with no invoke to clear the system.
 
-  |||1200| sets the max response length to 1200. Also works like |||agent,setting:0.5,1000| just a number is always max response length.  
+Copy the following block to exchange the Captain Clip persona for a more professional AI:
 
-  |||temperature:1.1| sets the temperature to 1.1. This works for any setting ex: top_p, min_p. Use 1 and 0 to set true/false //true/false untested.
-  again, full colon on settings, which go directly to the backend api. 
-  
-  Troubleshooting:
-    Occasionally kobold or this app hangs. You can type rs in the console and press enter to restart this application.
-  
-    Occasionally the last copy is the same as what you're copying again. To clear momentary troubles copy text with no invoke to clear the system.
+|||default:save|[[{"SYSTEM":"Simulate an AI described by DIP - Do It Professionally. First, list your assumptions. Next, think step-by-step. Finally, state your conclusion.  DIP is a very logical AI assistant. Answer any questions truthfully and complete tasks appropriately and in order.]","description":"DIP will Do It Professionally","confused":"If not given a different instruction, summarize and explain any content provided. DIP will explain he can not learn, is based on past data, and can not access the internet if he is asked for current events or research.","voice":"Sure Boss. Here you go. \"Get started: \"."},""],[null,""]]
 
-  Copy the following block to exchange the Captain Clip persona for a more professional AI:
-  
-  |||default:save|[[{"SYSTEM":"Simulate an AI described by DIP - Do It Professionally. First, list your assumptions. Next, think step-by-step. Finally, state your conclusion.  DIP is a very logical AI assistant. Answer any questions truthfully and complete tasks appropriately and in order.]","description":"DIP will Do It Professionally","confused":"If not given a different instruction, summarize and explain any content provided. DIP will explain he can not learn, is based on past data, and can not access the internet if he is asked for current events or research.","voice":"Sure Boss. Here you go. \"Get started: \"."},""],[null,""]]
- 
-  Advanced Command:
+Advanced Command:
 
-  ||||System: Command first before Clip agent.|  text from <user> in the internal chain
+||||System: Command first before Clip agent.|  text from <user> in the internal chain
 
-  ^^^^note 4 "|" , and the close on the end
+^^^^note 4 "|" , and the close on the end
 
-  |||writer|SYSTEM: Command First.| User: after agent writer
+|||writer|SYSTEM: Command First.| User: after agent writer
 
-  System applies set formatting like:
-  ---
-  "prompt":"<|im_start|>[\"SYSTEM: Command First.\",[\"SYSTEM: Write a lengthy prose about the requested topic. Do not wrap up, end, or conclude the story, write the next chapter.\\n \\n Story:\",\"\"]]<|im_end|>\n<|im_start|>user:\n User: after agent 
-  frank\n\n<|im_end|>\n<|im_start|>assistant:\n
+System applies set formatting like:
+---
+"prompt":"<|im_start|>[\"SYSTEM: Command First.\",[\"SYSTEM: Write a lengthy prose about the requested topic. Do not wrap up, end, or conclude the story, write the next chapter.\\n \\n Story:\",\"\"]]<|im_end|>\n<|im_start|>user:\n User: after agent 
+frank\n\n<|im_end|>\n<|im_start|>assistant:\n
 
-  ---
+---
 
-  |||re,frank|this text is invisible to :save| //also, :save in there may have unpredictable results...
-  
-  ||set|:
+|||re,frank|this text is invisible to :save| //also, :save in there may have unpredictable results...
 
-  |||rf,frank,set,joe|these system commands persist| query goes out. 
+||set|:
 
-  - set will save all agents before it as a persistent default, and include any system command sent at this time. in this case joe does not persist with the next simple ||| 
-  
-  once set "|||"{query} will behave as 
-  
-  "|||(that last copy saved with rf),frank|these system commands persist|"{query}
-  
-  until |||set| is copied again, clearing the set agents. 
+|||rf,frank,set,joe|these system commands persist| query goes out. 
 
-  While set, |||any,additional,agents| can be sent and add after the set agents.
+- set will save all agents before it as a persistent default, and include any system command sent at this time. in this case joe does not persist with the next simple ||| 
 
-  |||rf,set| is extremely useful for repeated queries against the same copied data. 
+once set "|||"{query} will behave as 
 
-  while set |||any|this instruction replaces the old system instruction before agents this time only| {query}
+"|||(that last copy saved with rf),frank|these system commands persist|"{query}
+
+until |||set| is copied again, clearing the set agents. 
+
+While set, |||any,additional,agents| can be sent and add after the set agents.
+
+|||rf,set| is extremely useful for repeated queries against the same copied data. 
+
+while set |||any|this instruction replaces the old system instruction before agents this time only| {query}
 
 
-  Remember: this is a large language model AI, and a small one at that. You should always check its work. It will make stuff up sometimes. It is not current, and has no internet connectivity. It may reccomand outdated software, imaginary modules, or misunderstand a key component and return nonsense altogther. 
-  If you ask for smut, you are likely to get it. We're heading into a future of AI everywhere, and a day will come that you have an AI respond to an email. You owe it to yourself, whoever you sent it to, and just general decency, at least read what the AI says on your behalf, every single time.  
-  The AI can tell you a lot of real info about many things. It can debug, rubber duck, respond in charachter, tell new and original stories, or summarize text, all with great success. 
-  Expecially with smaller models, your words matter, how you ask is everything. Bigger models do better inferring intent, but the best results always come from specific language, and the AI won't always do what you expect. 
-  
-  Speaking of help, I've been struggling to find work and my son will be born any day now. I built this tool to hopefully make some money, though the paid features are still in the works.
-  This is me pan-handling folks, but I'm not playing drums on buckets in the street, I integrated a sweet set of tools for you to use anytime and help do your job. Help sell the software or send me something, please. 
-  If you get good use from this software, or are using it in a commercial environment, please send what it's worth to you.. I need it to support my family. Thank you for using Clipboard Conqueror.
+Remember: this is a large language model AI, and a small one at that. You should always check its work. It will make stuff up sometimes. It is not current, and has no internet connectivity. It may reccomand outdated software, imaginary modules, or misunderstand a key component and return nonsense altogther. 
+If you ask for smut, you are likely to get it. We're heading into a future of AI everywhere, and a day will come that you have an AI respond to an email. You owe it to yourself, whoever you sent it to, and just general decency, at least read what the AI says on your behalf, every single time.  
+The AI can tell you a lot of real info about many things. It can debug, rubber duck, respond in charachter, tell new and original stories, or summarize text, all with great success. 
+Expecially with smaller models, your words matter, how you ask is everything. Bigger models do better inferring intent, but the best results always come from specific language, and the AI won't always do what you expect. 
 
-  https://patreon.com/ClipboardConqueror
-  https://ko-fi.com/aseichter2007
+Speaking of help, I've been struggling to find work and my son will be born any day now. I built this tool to hopefully make some money, though the paid features are still in the works.
+This is me pan-handling folks, but I'm not playing drums on buckets in the street, I integrated a sweet set of tools for you to use anytime and help do your job. Help sell the software or send me something, please. 
+If you get good use from this software, or are using it in a commercial environment, please send what it's worth to you.. I need it to support my family. Thank you for using Clipboard Conqueror.
+
+https://patreon.com/ClipboardConqueror
+https://ko-fi.com/aseichter2007
 `;
         //intro = JSON.parse(intro);
         this.write = true;
@@ -433,9 +428,6 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         outp.set = true;
         break;
       case "rf":
-        this.rp = true;
-        break;
-      case "rf":
         outp.text = this.recentClip.text; //send lastclip like any other agent prompt.
         outp.found = false;
         outp.set = true;
@@ -466,6 +458,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         }
         break;
         case "e":
+        case "empty":
           outp.text = "";
           outp.found = true;
           outp.set = true;
@@ -473,8 +466,8 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         case "c":
         case "continue":
           this.continue = true;
-          this.batchContinue += this.text;
-          break;
+          this.batchContinue += this.text + "\n";
+        break;
         case "d":
         case "debug":
           this.batchDocument += this.text;
@@ -491,7 +484,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         case "default":
         case "defaultOpenerResolved":
           this.noBatch = true;//agi always writes |||, clip often writes |||help|. it's confusing. 
-          break;
+        break;
       default:
         break;
     }
@@ -500,58 +493,73 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
   updatePreviousCopy(copy) {
     this.recentClip.text = copy;
   }
+  checkEndpoints(identity) {
+    //check if keys in this.endpoints match identity
+    const endpointKeys = Object.keys(this.endpoints.endpoints);
+    //console.log(endpointKeys);
+    if (endpointKeys.includes(identity)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
   setPrompt(command, formattedQuery) {
     switch (command) {
       case "system":
         //this.instructions.system = formattedQuery;
-        this.koboldClient.setOnePromptFormat ("system", formattedQuery); 
+        this.inferenceClient.setOnePromptFormat ("system", formattedQuery); 
         break;
       case "prepend":
+      case "prependPrompt":
         //this.instructions.prependPrompt = formattedQuery;
-        this.koboldClient.setOnePromptFormat ("prependPrompt", formattedQuery);
+        this.inferenceClient.setOnePromptFormat ("prependPrompt", formattedQuery);
         break;
       case "post":
+      case "postPrompt":
         //this.instructions.postPrompt = formattedQuery;
-        this.koboldClient.setOnePromptFormat ("postPrompt", formattedQuery);
+        this.inferenceClient.setOnePromptFormat ("postPrompt", formattedQuery);
         break;
       case "memory":
+      case "memorystart":
         // this.instructions.memoryStart = formattedQuery;
-        this.koboldClient.setOnePromptFormat ("memoryStart", formattedQuery);
+        this.inferenceClient.setOnePromptFormat ("memoryStart", formattedQuery);
         break;
       case "memorypost":
       case "memoryPost":
         // this.instructions.memoryPost = formattedQuery;
-        this.koboldClient.setOnePromptFormat ("memoryPost", formattedQuery);
+        this.inferenceClient.setOnePromptFormat ("memoryPost", formattedQuery);
         break;
       case "final":
+      case "finalprompt":
         //this.instructions.finalprompt = formattedQuery;
-        this.koboldClient.setOnePromptFormat ("finalprompt", formattedQuery);
+        this.inferenceClient.setOnePromptFormat ("finalprompt", formattedQuery);
         break;
       case "start":
+      case "responseStart":
         // this.instructions.responseStart = formattedQuery;
-        this.koboldClient.setOnePromptFormat ("responseStart", formattedQuery);
+        this.inferenceClient.setOnePromptFormat ("responseStart", formattedQuery);
         break;
       default:
        let notfound = "invalid prompt key: " + command + " Options: system, prepend, post, memory, memorypost, final, start \n \n you may edit and copy below: \n";
         this.notify("invalid key: " + command ," Options: system, prepend, post, memory, memorypost, final, start");
         // let settings = {
-        //   system: this.koboldClient.instruct.system + "\n",
-        //   prependPrompt: this.koboldClient.instruct.prependPrompt + "\n",
-        //   postPrompt: this.koboldClient.instruct.postPrompt + "\n",
-        //   memoryStart: this.koboldClient.instruct.memoryStart + "\n",
-        //   memoryPost: this.koboldClient.instruct.memoryPost + "\n",
-        //   finalprompt: this.koboldClient.instruct.finalprompt + "\n",
-        //   responseStart: this.koboldClient.instruct.responseStart
+        //   system: this.inferenceClient.instruct.system + "\n",
+        //   prependPrompt: this.inferenceClient.instruct.prependPrompt + "\n",
+        //   postPrompt: this.inferenceClient.instruct.postPrompt + "\n",
+        //   memoryStart: this.inferenceClient.instruct.memoryStart + "\n",
+        //   memoryPost: this.inferenceClient.instruct.memoryPost + "\n",
+        //   finalprompt: this.inferenceClient.instruct.finalprompt + "\n",
+        //   responseStart: this.inferenceClient.instruct.responseStart
         // }
         this.identity.settings = notfound;
         this.writeSettings = true
         break;
     }
   }
-  setKoboldFormat(setting) {
+  setInferenceFormat(setting) {
     setting = setting.trim();
     let names = [];
-    console.log(JSON.stringify(this.formats));
+    //console.log(JSON.stringify(this.formats));
     let set = {};
     try {
       set = this.formats[setting];
@@ -562,7 +570,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       }
       console.log( setting + " : format not found, options: " + JSON.stringify(names) );
     }
-    this.koboldClient.setPromptFormat(set);
+    this.inferenceClient.setPromptFormat(set);
   }
   personaAtor(persona, sorted, ifDefault){
   persona.forEach(tag => {
@@ -611,10 +619,10 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       }
     } else {
       if (!isNaN(tag)) {
-        this.params.max_length = parseInt(commands[0]);
+        this.params.max_length = parseInt(commands[0]);//todo: eliminate magic numbers like max_length to fully support any completion backend.
       } else if (tag === this.instructions.setPromptFormat) {
         this.sendHold = true;
-        this.setKoboldFormat(sorted.formattedQuery);
+        this.setInferenceFormat(sorted.formattedQuery);
       } else {
       const ident = this.updateIdentity(tag);
       
@@ -635,7 +643,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     try {
       let parsed = JSON.parse(setting);   //this will for sure mess up, probably don't count on this functionality until I manually build a parse for this. 
       console.log(JSON.stringify(parsed));
-      this.koboldClient.setPromptFormat(parsed);   
+      this.inferenceClient.setPromptFormat(parsed);   
     } catch (error) {
       this.notify("invalid format: ", error);
       console.log("invalid format: " +JSON.stringify(error));
@@ -644,7 +652,9 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
   }
   setupforAi(text) {
     //console.log(this.batchDocument); 
+  
     if (this.batchLength > 0) {
+      this.blockPresort = false;
       this.noBatch = false;
       this.batchProcessor();      
       text = this.instructions.invoke + this.batch + this.instructions.endTag + text;      
@@ -652,29 +662,19 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     else {
       this.noBatch = true;
     }
-    if (text === this.recentClip.text && this.noBatch) {
-      //text is same as outgoing and not a batch, so don't do anything.
-      return;
+    if (this.blockPresort) {
+      this.blockPresort = false;
+      return
     }
-    if (this.instructions.defaultClient != "kobold") {
-      switch (this.instructions.defaultClient) {
-        case "openAi":
-          this.openAi = true;    
-          break;
-        case "compatible":
-          this.compatible = true;
-          break;
-        default:
-          console.log(" improper client setting, defaulting to kobold : "+ this.instructions.defaultClient);
-          break;
-        }
-      }
-    const sorted = this.activatePresort(text);
+    let sorted = this.activatePresort(text);
+    
     let ifDefault = true;
     if (sorted) {
       this.text = sorted.formattedQuery;
       this.undress();
-      this.identity[this.instructions.rootname] = sorted.tags.command;//send ||||this text over if it exists|
+      //if(sorted.tags.command != ""){ //commented for consistent placing of ### to initialize alpaca
+        this.identity[this.instructions.rootname] = sorted.tags.command;//send ||||this text over if it exists|
+      //}
       if(this.set){
         this.identity = this.setAgent;
         if (sorted.tags.command != "") {
@@ -698,16 +698,28 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
           this.identity.CaptainClip = this.identities[this.instructions.defaultPersona];
           this.noBatch = true;
         }
-        if (this.identity[this.instructions.rootname] === ""){
+        if (this.identity[this.instructions.rootname] === "" && this.instructions.clean){
           delete this.identity[this.instructions.rootname];
+        }
+          //if this.identity contains a key called "e" remove it.
+        if(this.identity.hasOwnProperty(this.instructions.emptyquick)) {
+          delete this.identity[this.instructions.emptyquick];
+        }
+        if (this.identity.hasOwnProperty(this.instructions.empty)) {
+          delete this.identity[this.instructions.empty];
         }
         if (this.continue) {
           sorted.formattedQuery = this.batchContinue + this.instructions.batchLimiter+ "\n" + sorted.formattedQuery;
           this.continue = false;
         }
+        if (this.sendLast) {
+          this.sendLast = false;
+          sorted.formattedQuery = sorted.formattedQuery + "\n" + this.recentClip.text;
+        }
         if (this.write) {
           this.write = false;
           this.noBatch = true;
+          this.blockPresort = true;
           delete this.identity[this.instructions.rootname];
           let sendtoclipoardtext =
             this.instructions.writeSave + "\n" +
@@ -722,12 +734,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         if (this.writeSettings) {
           this.writeSettings = false;
           this.noBatch = true;
-          // delete this.identity[this.instructions.rootname];
-          // try {
-          //   delete this.identity["CaptainClip"];
-          // } catch (error) {
-          //   //console.log(error);
-          // }
+          this.blockPresort = true;
           let sendtoclipoardtext =
             this.instructions.writeSettings + "\n" +
             JSON.stringify(this.identity.settings) +//this is set up for PROMPT edit failures
@@ -739,52 +746,18 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
           return this.sendToClipboard(sendtoclipoardtext);
         }
         if (!this.sendHold) {
-          if (this.openAi || this.identity.hasOwnProperty(this.instructions.openAi)) {
-            if (!this.set) {
-              this.openAi = false;
-            }
-            if (this.sendLast) {
-              generateCompletion(this.openAikey.key, this.identity, sorted.formattedQuery + this.recentClip.text , this.params, this.recieveApi, this.openAiConfig.url, this.params.model, this.notify)              
-            } else {
-              generateCompletion(this.openAikey.key, this.identity, sorted.formattedQuery, this.params, this.recieveApi, this.openAiConfig.url, this.params.model, this.notify) 
-            }          
-          } else if(this.compatible || this.identity.hasOwnProperty(this.instructions.lmStudio)){
-            if (!this.set) {
-              this.compatible = false;
-            }
-            if (this.sendLast) {
-              generateCompletion(this.openAikey.key, this.identity, sorted.formattedQuery + this.recentClip.text , this.params, this.recieveApi, this.openAiConfig.compatible, this.params.model, this.notify) 
-            } else {
-              generateCompletion(this.openAikey.key, this.identity, sorted.formattedQuery, this.params, this.recieveApi, this.openAiConfig.compatible, this.params.model, this.notify) 
-            }
-          } else if (this.rp) {
-            if (this.sendLast) {
-              this.sendLast = false;
-              this.koboldClient.formatQueryAndSend(this.identity, this.instructions.rpPrompt + sorted.formattedQuery +this.recentClip.text ,this.params);
-              this.rp = false;
-              //this.sendLast = false;
-            } else {
-              this.koboldClient.formatQueryAndSend( this.identity, sorted.formattedQuery, this.params);
-              //this.sendLast = false;
-            }
-            //return;
-          } else if (this.sendLast) {
-            this.koboldClient.formatQueryAndSend(  this.identity, sorted.formattedQuery + this.recentClip.text, this.params);
-            this.sendLast = false;
-          } else {
-            this.koboldClient.formatQueryAndSend(this.identity,sorted.formattedQuery,this.params );
+          //set params for outgoing
+          let outParams = this.params;
+          if (this.api.config && this.apiConfigSet !== this.api.config) {
+            outParams = this.apiParams[this.api.config];
           }
+          this.inferenceClient.send(this.identity, sorted.formattedQuery, outParams, this.api);
         } else {
           this.sendHold = false;
         }
       }
-    }
-    if (this.sendLast === true) {
-      this.recentClip.text = text; // + "\n" + this.recentClip.text);//todo: determine if this is dumb or not. Consider letting this run evey time and re toggles to allow building a big context to send with a question.
-      this.sendlast = false;
-    } else {
-      this.recentClip.text = text + " ";
-    }
+    } 
+    this.recentClip.text = text;// + " ";    
   }
   activatePresort(text) {
     
@@ -793,17 +766,17 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     var response = [];
     const parsedData = text.split(this.instructions.invoke);
     let tags = "";
-    if (parsedData.length > 3) {
+    if (parsedData.length > 3) {//todo: fix this so it works better
       this.notify(
         "Warning:",
         "too many " + this.instructions.invoke + ". max 2."
       );
       this.sendHold = true;
-      this.noBatch = true;
+      //this.noBatch = true;
       //this.write = true;
       return {
         run: run,
-        formattedQuery: text,
+        formattedQuery: parsedData.join(""),
         tags: tags
       };
     }
@@ -856,43 +829,4 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     return output;
   }
 }
-async function generateCompletion(apiKey, identity, formattedQuery, params, callback, apiUrl, model = 'text-davinci-003', notify) {
-  let errcatch = "";
-  try {
-    const url = apiUrl;
-    //console.log(apiKey, identity, formattedQuery, params, apiUrl, model);
-    const headers = {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`,
-    };
-    const stringifidentity = JSON.stringify(identity);
-    const prompt = {
-      "model": model,
-      "messages": [
-        { "role": "system", "content": stringifidentity},//does this order matter? do the roles matter in the back end? is that useful for naming the system or tracking multiple characters?
-        { "role": "user", "content": formattedQuery }//I should build my memory structure and force chats with openai through that? that would handle the instruction promps for multimodel support. Currently supports initial needs for assigning an agent to gpt with ##
-      ],
-      "temperature": params.temperature,
-      "max_tokens": params.max_length,
-      "stream": false
-    }
-    const response = await fetch(url, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(prompt)
-    });
-    const jsonResponse = await response.json();
-    //console.log("response: "+JSON.stringify(jsonResponse));
-    if (!response.ok) {
-      errcatch = jsonResponse.error
-      console.log(object);(`Request failed with status ${response.status}: ${jsonResponse.error.message}`);
-    }
-    //console.log("2nd end response: "+JSON.stringify( jsonResponse.choices[0].message.content));
-    callback(jsonResponse.choices[0].message.content);
-  } catch (error) {
-    //console.log("error : " +JSON.stringify(error));
-    notify("error:", JSON.stringify(errcatch));
-  }
-}
-
 module.exports = TextEngine;

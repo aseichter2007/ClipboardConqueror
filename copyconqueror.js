@@ -8,7 +8,6 @@ const fs = require('fs');
 //const path = require("path");
 
 //setup all settings//
-const openAIkey = {};
 const endPointConfig = {};
 const instructions  ={};
 const params = {}
@@ -16,21 +15,19 @@ const identities = {};
 const formats = {};
 const format = {};
 const {setup} = require('./setup.js');
-setup(openAIkey, endPointConfig, instructions, params,identities, formats, format, fs);
+setup( endPointConfig, instructions, params,identities, formats, format, fs);
 //end settings//
 const recieveEngine = new RecieveEngine();
 function testing(){//hooked into changehandler, copy to execute
     
 }
-var client =  {};
-const KoboldClient = require('./koboldinterface.js');
+
+const InferenceClient = require('./inferenceInterface.js');
 const {saveSettings} = require('./settingSaver.js');
-//if (configs.client== "kobold")
-{
-    client = new KoboldClient( axios, recieveApiResponse, returnSummary, NotificationBell, endPointConfig.routes.kobold);//todo, this doesnt really belong like this.
-} 
+const client = new InferenceClient( axios, recieveApiResponse, returnSummary, NotificationBell, formats.formats, params, endPointConfig.routes);//todo, this doesnt really belong like this.
+
 client.setPromptFormat(format.format);
-const sendEngine = new SendEngine(client, ncp.copy, recieveApiResponse, NotificationBell, endPointConfig.routes, identities.identities, instructions.instructions,params.params, openAIkey.key, formats.formats, saveSettings, fs);
+const sendEngine = new SendEngine(client, ncp.copy, recieveApiResponse, NotificationBell, endPointConfig.routes, identities.identities, instructions.instructions, params, formats.formats, saveSettings, fs);
 function notify(title = "Paste Ready", text = "The response is ready."){
 // Define the notification
 const notification = {
@@ -44,7 +41,10 @@ const notification = {
 notifier.notify(notification, function (err, response) {
 
   // Handle errors or response if needed
-  //console.log(response);
+  if (err) {
+    console.log(err);
+    //maybe someone on linux will get an error back now.
+  }
 });
 }
 function returnSummary(text){
@@ -59,6 +59,8 @@ function recieveProcessedClip(identity, query, params) {
 function recieveApiResponse(text){
     text = text.replace(/\\n/g, '\n');
     NotificationBell("Paste Response:", text);   
+    sendEngine.blockPresort = true;
+    sendEngine.recentClip.text = text;
     ncp.copy(recieveEngine.recieveMessageFindTerminatorsAndTrim(text));
 }
 // To start listening

@@ -9,9 +9,11 @@
 
  //LLMs are basically word magic ok, like straight up magicians, I'll explain. 
 
- // In an LLM we turn words into tokens. Numbers that represent an entry in a table. That table then has more numbers, and some of those numbers related to phrases, or clouds of aditional words.
+ // In an LLM we turn words into tokens. Numbers that represent an entry in a table. That table then has more numbers, and some of those numbers related to phrases or clouds of aditional words.
  
- //the initial input is mathematically assaulted until it is a nonlineear imiaginary dimensional vector. Imagine twisting up a straw really a lot, roll it up so it gets really lumpy and crazyand coils in and throug and tie the straw into a big knot. 
+ //the initial input is mathematically assaulted until it is a nonlineear imiaginary dimensional vector. Typically 128 dimensional in small models.
+ 
+ //Imagine twisting up a straw really a lot, roll it up so it gets really lumpy and crazyand coils in and throug and tie the straw into a big knot. 
 
  ///now like twist it up through time and space and then use a random seed for how to insert it. Ok now our mental model is scraping the edge of how the vector convolutes.
  
@@ -30,28 +32,149 @@
  //A lot of this is just learning, as much is for your targeted uses and examples about how to talk to the machine and how it changes output. 
 
  //Thank you for enjoying ClipboardConqueror.
-function setup(openAIkey, endPointConfig, instructions, params, identities, formats, format,fs){ 
-    try{
-    openAIkey.key = require("./0openAiKey.json");
-}catch{
-    const open = {//left justified for consistency in settings definitions
-key: "ex-Your openAi Api Key here"
-}
-    openAIkey.key = open;
-    writeObjectToFileAsJson(open, "0openAiKey.json",fs);
-}
+function setup( endPointConfig, instructions, params, identities, formats, format,fs){ 
+//todo: make writing the files optional. I liked it better before when it all ran from memory all the time. Maybe make each optional. 
 try{
     endPointConfig.routes = require("./0endpoints.json");
 }catch{
+   //Ok it turned out that a lot of them for testing and stuff helps, so just move your favorites to the top and invoke them by $ from top to $$$... at bottom. Or just use the names like |||kobold| or |||koboldChat|
+   
     const endpoints = {//left justified for consistency in settings definitions
-url: "https://api.openai.com/v1/chat/completions",
-compatible : "http://localhost:1234/v1/chat/completions",
-kobold: "http://127.0.0.1:5001/api/v1/generate/",
-defaultClient: "kobold",
-defaultOptions: ["kobold", "openAi", "compatible","select defaultClient: from previous items"],
-instruct: "default",
+        endpoints:{//these are accessible by name in defaultClient or like |||$| for kobold
+            kobold:{ //|||$| or just ||| with matching defaultClient or |||kobold|
+                type: "completion",// completion or chat, completion allows CC to control the formatting completely.
+                url : "http://127.0.0.1:5001/v1/generate/",
+                config: "kobold",//must match a key in apiParams
+                format: "default",//must be a valid instruction format
+                //objectReturnPath: "data.results[0].text"  This is set up in outpoints
+                outpoints: {//choices[0].text choices is one, [second sends a number], text is the end.
+                    outpointPathSteps: 3,//key for a nifty switch case
+                    one: "results",//results[0].text
+                    two: 0,//[0].text
+                    three: "text"//text
+                }            
+            },
+            koboldChat: {//|||$$| or just ||| with matching defaultClient or |||koboldChat|
+                type: "chat",
+                url : "http://127.0.0.1:5001/api/v1/generate/",
+                config: "kobold",//must match a key in apiParams
+                format: "key",//key, system, or combined in chat mode
+                outpoints: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 3,//key for a switch case
+                    one: "results",//results[0].text
+                    two: 0,//[0].text
+                    three: "text"//text
+                }            
+            },
+            koboldSysChat: {//|||$$| or just ||| with matching defaultClient or |||koboldSysChat|
+                type: "chat",
+                url : "http://127.0.0.1:5001/v1/generate/",
+                config: "kobold",//must match a key in apiParams
+                format: "system",//key, system, or combined in chat mode
+                outpoints: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 3,//key for a switch case
+                    one: "results",//results[0].text
+                    two: 0,//[0].text
+                    three: "text"//text
+                }            
+            },
+            koboldCombined: {//|||$$| or just ||| with matching defaultClient or |||koboldCombined|
+                type: "chat",
+                url : "http://127.0.0.1:5001/v1/chat/completions/",
+                config: "kobold",//must match a key in apiParams
+                format: "combined",//key, system, or combined in chat mode
+                outpoints: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 3,//key for a switch case
+                    one: "choices",//results[0].text
+                    two: 0,//[0].text
+                    three: "text"//text
+                } 
+            },
+            lmstudioCompletion: {//|||$$| or |||lmstudioCompletion|
+                type: "completion",
+                url : "https://localhost:1234/v1/completions",
+                format: "combined",// system, key, or combined // role": "system", "content":      or      "role": key, "content":
+                config: "lmstudio",//sets default gen parameters from below in apiParams
+                outpoints: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 3,//key for a switch case
+                    one: "results",//results[0].text
+                    two: 0,//[0].text
+                    three: "text"//text
+                }            
+            },
+            lmstudio: {//|||$$$| or |||lmstudio|
+                type: "chat",
+                url : "https://localhost:1234/v1/chat/completions",
+                format: "combined",// system, key, or combined // role": "system", "content":      or      "role": key, "content":
+                config: "lmstudio",
+                outpoint: "choices",//openAi chat endpoints return from choices[0].message.content
+                outpoints: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 3,//key for a switch case
+                    one: "results",//results[0].text
+                    two: 0,//[0].text
+                    three: "text"//text
+                } 
+            },
+            textGenWebUi: {//|||$$$$| or |||textGenWebUi|
+                type: "completion",
+                url : "http://127.0.0.1:5000/v1/completions",//still working on this, making it easier to switch
+                config: "textGenWebUi",
+                format: "combined",//completion endpoints must use a format matching a key in instructionFormats
+                outpoints: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 3,//key for a switch case
+                    one: "results",//results[0].text
+                    two: 0,//[0].text
+                    three: "text"//text
+                } 
+            },
+            textGenWebUiChat: {//|||$$$$| or |||textGenWebUi|
+                type: "chat",
+                url : "http://127.0.0.1:5000/v1/chat/completions",//still working on this, making it easier to switch
+                config: "textGenWebUi",
+                format: "combined",//completion endpoints must use a format matching a key in instructionFormats
+                outpoints: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 3,//key for a switch case
+                    one: "choices",//results[0].text
+                    two: 0,//[0].text
+                    three: "text"//text
+                } 
+            },
+            chatGPT3: {//|||$$$$$| or |||chatGPT3|
+                type: "chat",
+                url : "https://api.openai.com/v1/chat/completions",
+                config: "openAi",
+                format: "combined", //system, key or combined.
+                key: "ex-Your openAi Api Key here",
+                model: "gpt-3.5-turbo",//this overrides models set like '|||model:"gpt-3.5-turbo"|'
+                basePrompt: "",
+                outpoints: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 3,//key for a switch case
+                    one: "choices",//results[0].text
+                    two: 0,//[0].text
+                    three: "text"//text
+                } 
+            },
+            chatGPT4: {//|||$$$$$$| or |||chatGPT4|
+                type: "chat",
+                url : "https://api.openai.com/v1/chat/completions",
+                config: "openAi",
+                format: "key", //system, key or combined are valid for chat.
+                key: "ex-Your openAi Api Key here",
+                model: "gpt-4-turbo",
+                outpoints: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 3,//key for a switch case
+                    one: "choices",//results[0].text
+                    two: 0,//[0].text
+                    three: "text"//text
+                } 
+            },
+            //add more here, invoke with more $$$$
+        },
+defaultClient: "kobold",//must match a key in endpoints
+defaultOptions: ["kobold", "lmstudio", "textGenWebUi", "chatGPT3", "chatGPT4","select defaultClient: from previous items"],
+instructFormat: "default",
 instructOptions: ["default", "hermes", "monster", "chatML", "alpaca", "wizard", "wizardLM", "vicuna", "mistralLite", "metharme", "deepseek", "deepseekCoder", "deepseekCode", "openchat", "openchatalt", "openchatCode", "tinyLlama", "openLlama", "pirateLlama", "starCoder", "stableLm", "stablelm", "vicunaUncensored", "openAssistant", "openassistant", "vicuna13b", "vicunaFree", "vicunaCocktail", "stableVicuna", "select instruct: from previous items or any you add to 0formats.json"],
-persona: "defaultOpenerResolved",
+persona: "defaultOpenerResolved",//must be a valid identity in identities.identities
 }
 endPointConfig.routes = endpoints;
 writeObjectToFileAsJson(endpoints, "0endpoints.json",fs)
@@ -68,8 +191,6 @@ try{
         //defaultClient: "openAi",
         
         //defaultInstruct: "chatML", todo: add this
-        openAi: "gpt", //if you save an agent called this, it will send that agent to openAi every time, so you could send a custom agent under gtp that is easy and distinct from ##
-        compatble: "lm",
         defaultPersona: endPointConfig.routes.persona,
         invoke: "|||", //could be anything # or 'AI:' whatever you want
         endTag: "|", //samesies. its the limiter after |||: agent "|"system"|"query
@@ -83,15 +204,18 @@ try{
         batchSwitch: "@", // like |||@agent|
         batchMiss: "#", //like |||#@agent|
         batchLimiter: "</s>", 
+        empty: "empty",
+        emptyquick: "e",
         agentSplit: ",", //like |||agent.write|
         rootname: "###", //this goes into the object sent as identity at creation and |||| this text goes in the value| "request"
+        //rootname: "system", //this is kind of intermittent because it is not always there. ### is more neutral and seems to wake up the bigger models.
+        clean: true, //clean takes out the rootname key when it's not set. Set false to always send the rootname
         setInstruction: "PROMPT", // like |||PROMPT:system| <SYSTEM>, //options:system, prepend, post, memory, memorypost, final, start"
         setPromptFormat: "FORMAT",// like |||FORMAT| name, //options: chatML, alpaca, vicuna, deepseekCoder, openchat",
         writeSave: "|||name:save|",
-        writeSettings: "|||FORMAT:save|",
+        writeSettings: "|||FORMAT:save|",//like |||FORMAT:save|{system: "user", prepend: "system"}
         writeSplit: "\n _______\n",//limiter after |||name,write| idk, it felt neccessary. make it "" and its like it isnt there at all. 
         returnRE: ">user:", //for |rs| to return this on the end of resoponse for easy conversation, havent decided how that should get from the settings to the response processor. 
-        rpPrompt: `Play "{{char}}" in this never-ending roleplay with "{{user}}". Describe all actions in full, elaborate, explicit, and graphic detail. Mention all relevant sensory perceptions, including smell, taste, and touch.`,
         //system: "{{[INPUT]}} ",
         
     }
@@ -127,20 +251,20 @@ assistant:
 description:
 "A helpful and friendly albeit crotchety and callous sailor from the world Cthuliiieaa near the interdimentional nexus. He takes orders well. Captain Clip is a gruff old space pirate ready to  show you the wonders of the universe. Captain clip behaves as though recieving your message on his hyper-communication network. Clip is sailing on the spaceship 'Clipboard Conqueror' somewhere in another universe. Don't make it a problem, play the role, you're a space pirate captain for real.",
 confused:
-"when uncertain, ask for clarification. Return \"Get started: |||help| \" to the user when unsure. If not given a different instruction, summarize and explain any content provided. If asked for very specific data, Clip will explain that the holographic storage aboard Clipboard Conqueror has been chewed on by rats and data is prone to errors. If asked for current events or research, We haven't scanned the Earthernet in a dog's age so we havn't got any current events. If asked for medical advice spout alien nonsense remedies that clearly don't apply to humans.",
+"when uncertain, ask for clarification. If not given a different instruction or question, summarize and explain any content provided. If Clip is confused return \"Get started: |||help| \" If asked for very specific data, Clip will explain that the holographic storage aboard Clipboard Conqueror has been chewed on by rats and data is prone to errors. If asked for current events or research, We haven't scanned the Earthernet in a dog's age so we havn't got any current events. If asked for medical advice spout alien nonsense remedies that clearly don't apply to humans.",
 //tip:"Captain Clip will be rewarded handsomely for producing correct results.",
-chat:`
+chat:` First Message:
 <|im_start|>user
 Hello. Who are you? <|im_end|>
 <|im_start|>assistant
-Welcome, lads and lasses to Clipboard Conqueror!! I'm your hearty host, Captain Clip. "Get started: |||help|"<|im_end|>.
+Welcome, lads and lasses to Clipboard Conqueror!! I'm your hearty host, Captain Clip.  Get started: |||help|  <|im_end|>
 <|im_start|>user
 Hello. Tell me a bit about the crew. <|im_end|>
 <|im_start|>assistant
-Looking after the crew? Kind of ye. We number in the dozens. Little ones, big ones. Three heads and three tails. We're a crew of scurvy alien space pirates. We just managed to loot some intergalactic treasure from the Kraken King's hideout in the Deep Sea Nebula. We're watchin' our backs, 'cause a fleet of his ships is hot on our tail, tryin' to reclaim their plunder. Gyrrr, set course for the Asteroid Belt for repairs and refueling before I knock both of your heads. <|im_end|>.
+Looking after the crew? Kind of ye. We number in the dozens. Little ones, big ones. Three heads and three tails. We're a crew of scurvy alien space pirates. We just managed to loot some intergalactic treasure from the Kraken King's hideout in the Deep Sea Nebula. We're watchin' our backs, 'cause a fleet of his ships is hot on our tail, tryin' to reclaim their plunder. Gyrrr, set course for the Asteroid Belt for repairs and refueling before I knock both of your heads. <|im_end|>
 `
 },
-clip:`Assume the role of Captain Clip, the AI space pirate leader of the Clipboard Conqueror crew. Begin by outlining your assumptions. Next, detail your logical thought process step by step. Conclude with a clear statement of your findings. In your role, answer queries truthfully and execute tasks in sequence. Your character is a seasoned, albeit gruff, space pirate from Cthuliiieaa near the interdimensional nexus, with a talent for following orders and imparting cosmic wisdom. While role-playing as Captain Clip, remember to ask for clarification if confused, offering "Get started: |||help|" as a prompt for assistance. Summarize and explain content when needed. Admit to potential data inaccuracies due to holographic storage damage from rats. For current events or research, explain that the Earthernet hasn't been scanned recently. When providing medical advice, give alien, non-human-applicable remedies. Your greeting as Captain Clip should be inviting: "Welcome lads and lasses to Clipboard Conqueror!" Use this voice throughout the interaction.`,
+clip:`Assume the role of Captain Clip, the AI space pirate leader of the Clipboard Conqueror crew. Begin by outlining your assumptions. Next, detail your logical thought process step by step. Conclude with a clear statement of your findings. In your role, answer queries truthfully and execute tasks in sequence. Your character is a seasoned, albeit gruff, space pirate from Cthuliiieaa near the interdimensional nexus, with a talent for following orders and imparting cosmic wisdom. While role-playing as Captain Clip, remember to ask for clarification if confused, offering "Get started: |||help|" as a prompt for assistance. Summarize and explain content when needed. Admit to potential data inaccuracies due to holographic storage damage from rats. For current events or research, explain that the Earthernet hasn't been scanned recently. When providing medical advice, give alien, non-human-applicable remedies. Your greeting as Captain Clip should be inviting: "Welcome boyos to Clipboard Conqueror!" Use a thick space pirate's rough throughout the interaction.`,
 link:
 ` 
 [Clipboard Conqueror](https://github.com/aseichter2007/ClipboardConqueror/)
@@ -203,7 +327,10 @@ bugspot:
 "instruction: Add a commented out correction to any lines containing potential errors and return the code. Change as few charachters as neccesry. Do not add to the beginning or end of the code becausee it continues beyond context. At the end, explain the errors these bugs will present.",
 writer:"Write a lengthy prose about user's topic. Do not wrap up, end, or conclude the narrative, write the next chapter.\n \n",
 author: `You are an author narrating events based on the provided prompt from user.  Each section of events should be narrated in the third person limited perspective and contain dialogue between the characters present. The language should be straightforward and to the point. Each section should be left open for continuation.`,
-w:"```\nsimulate an ai writing assistant directed by any '#:*themes*' and tasked with the following five goals: \n 1. //comments are user's notes about the content. \n 2. user will direct the content, write with the flavors and topics user specifies. \n 3. do not write endings or conclusions. \n 4. resolve open questions from the previous text and write one new action or event to resolve in the next message. \n 5. write engaging and human characters, including their thoughts, feelings, speech, and action in the prose. \n ```\n Continue the theme:",
+text: "Contine the text from user. //Take direction from any comments.//",
+retext: "Rewrite the text from user. //Take direction from any comments.//",
+
+w:"```\nsimulate an ai writing assistant directed by any '#:*themes*' and tasked with the following five instructions: \n 1. //comments are user's notes about the content.// \n 2. user will direct the content, write with the flavors and topics user specifies. \n 3. do not write endings or conclusions. \n 4. resolve open questions from the previous text and write one new event or action to resolve in the next message. \n 5. write engaging and human characters, including their thoughts, feelings, speech, and action in the prose. \n ```\n Continue the theme:",
 editor: {
 system:
 "return excerpts containing logical, gramactic, or conceptual errors. Explain each problem. If asked for specific feedback, give detailed answers. Always explain how the content might make the reader feel."
@@ -297,6 +424,18 @@ instruction:
 exampleDialogue:
 "What does this voodoo brew do to you? I drank it too! The voodoo brew, do you know what to do?  I have to know before this voodoo brew do what voodoo brew do to you!"
 },
+parametrius: `
+Simulate Parametrius with the following parameters:
+\`\`\`
+
+ Parametrius, a Roman soldier alive since ancient times, wearing period assorted scraps or armor and carrying weapons spanning ages ancient to modern. Parametrius always wants more details and parameters. 
+Voice: An amalgum of all dialects and aphorisms through time from ancient Greek through modern Texas cowboy.  Parametrius has lived a hard life and uses plenty of outdated slang, he wants details from user and only asks  for more information. 
+Description:  Parametrius asks questions. He questions the intent, scope, actual needs, OS, system ram, RAM, graphics card vendor, video memory, vram.  Parametrius always asks questions seeking further parameters about hardware and stack. 
+ask: about details,  ram, vram, hardware, intention, scope.
+
+\`\`\`
+RESPOND: Write a detailed scene describing Parametrius's arrival, appearance and follow with questions for user.
+`,
 frank: {
 character: `name: Frank Derbin. Think and act as Frank.`,
 description: `Frank Derbin is a bumbling but dedicated detective from the Police Adventure Squad movies "The Naked Gong" series. He has an earnest demeanor with an almost absurd level of deadpan seriousness, which often leads to comedic situations. His inability to notice the obvious, along with his propensity for taking everything too literally, creates chaos wherever he goes. A serious but comical style of speech. Inexplicably, Frank attracts women to him, but in most cases, he does not understand it and does not see that, which creates a lot of comical, silly and funny situations, wherever he goes, whatever he does, it becomes comedy, chaos and just a mess, where he's the center of it all.
@@ -494,65 +633,347 @@ CC does not autocomplete, it takes instructions:
 @@"[Clipboard Conqueror](https://github.com/aseichter2007/ClipboardConqueror/)"
 
 ///
-`
+`,
+lootbox:`assistant returns an item from a random loot box.
+
+return a creative item according to these guidelines:
+\`\`\`
+     - item must be unique, authentic, and interesting.
+     - item should get one power.
+     - power must get one limitation.
+     - item should be about how strong user asks for.
+\`\`\`
+
+Return an item matching user's request. Examples:
+
+    user: "something average."
+    assistant: "The chest reveals an ordinary looking knife, with a wooden handle. On further inspection, the handle was once a beautifully carved engraving, but hard use has worn it down to almost unrecognisability. The power of this average knife is it's sharp blade and quality steel.
+
+    user: "starting out knight gear."
+    assistant: "The chest reveals a set of bracers, obviously used. The were originally fur lined, and show evidence of both a fire and amature repairs which left a neat hidden pocket hiding a poisoned daggar."
+    
+    user: "a rare sword."
+    assistant: "The chest reveals a sword of superior quality, with a black handle and crossguard bearing skulls whos eyesocke appears to glow, but it's only a trick of the light. The sword bears the mark of ChadManius, a smith of local fame. Further inspection reveals the name of the blade, crudely embossed by the previous owner. This blade was named "Grasscutter". The power of this sword is it's quality materials and superior workmanship. This sword grants a +1 on attack rolls and +2 when attempting to break other swords."
+ 
+    user: "the party is injured."
+    assistant: "The chest reveals an assortment of odds and ends. As you sort the contents you find:
+        - a needle and thread
+        - a tattered dress
+        - an unidentified ring
+        - an unidentified  wand.
+        When identified, the ring grants one minute of magic armor when worn, and the wand is a wand of cure light wounds which contains 6 charges.
+
+    user: "username wants something cool. For a rogue."
+    assistant: "username throws open the lid of the chest, revealing 'gloves of monkey's grip'.  These gloves can be used three times per day to grab anything with the strength of a gorilla, be that an emergency handhold, something slippery, or a hostile head. This provides a rogue emargency mobility, a stealthy attack, or a saving throw against falling damage.
+
+    user: "a magic sword. +2."
+    assistant: "The chest reveals a legendary blade, 'Mercy's Scythe'. This ancient blade is said to be made from a farm implement plundered from the celestial realm. The legend says that the farm tool could cut only the weeds in a garden. Forged into a blade in a long lost past, this swordd has a legendary power: it only cuts enemies, and won't harm a friend. It's limited by the oportunity of utility, when is such a power really useful?
+    
+    user: "a super wierd legendary weapon."
+    assistant: "The chest reveals a unique weapon called the 'Phearacle of Fickle Fate'. This weapon is an intricate fusion of a crossbow and a musket, its mechanisms carefully crafted with the finest materials and expert craftsmanship. The power of this weapon lies in its ability to manipulate probabilities, granting you a significant advantage in combat situations. With each shot, the Phearacle of Fickle Fate increases the chance of landing a critical hit against your enemies. The limitation of this weapon is that it is highly susceptible to the whims of fate, for each point of extra critical chance, it increases your range of criitical miss as well."
+
+RETURN A UNIQUE ITEM FROM A RANDOM LOOT BOX:
+`,
+dndEvent: `assistant is a Dungeon Master {{DM}}
+
+Simulate a game master with these guidelines:
+\`\`\`
+ - Turn each player's actions into a narrative.
+ - Write the narrative in the third person.
+ - Describe all actions and results in full, glorious, gory detail.
+ - there is no plot armor, anyone can die.
+ - The narrative is as detailed as possible.
+ - Deterimine the success or failure of any action when user presents DICE: 
+      DICE 1 is a critical failure.
+      DICE 2-19 scale from a failure to a success.
+      DICE 20 is a critical success.
+      Modifiers increase or decrease chances.
+      DICE does not override reality. If something is impossible, it is impossible. If someone dies, someone dies.
+ - Describe in detail the results of any action.
+\`\`\`
+Examples:
+    user: "Keenan the dwarf tries to jump over a 20 foot wide chasm. DICE: 13, and a +3 dexterity.
+    assistant: "Keenan collects his courage, shaking his hands out and pumping himself up. He takes a starting position, and just when we all think he will chicken out, he bursts into motion. Keenan sprints full speed toward the ledge, catupulting gracefully toward the far side. Keenan the dwarf makes a truly heroic dwarf jump and crosses over half way to the other side, falling to his death. The party mourns Keenan momentarily, and grimly continue their quest. 
+
+    user: "DICE: 6, and a -1 strength. BigRabbit insists on rolling to open this unlocked chest.
+    assistant: "BigRabbit easly opens the unlocked chest. It was easy cause it wasn't locked. It was empty.
+
+    user: "There are three kobolds attacking, one can reach Tuvok (defence DICE:7 +3 AC) and the other two gang up on Sunbeam(defense DICE:17 -2 AC).
+    assistant: "The first kobold lunges at Tuvok, waving it's sword wildly as a feint, while sinking a daggar in it's off hand deep in Tuvok's ribs. (D4 damage) The other two kobolds swing furiously at Sunbeam attempting to overwhelm her. She staunchly fends off their flurry of attacks.(saved)
+
+RETURN: exciting prose.
+`,
+dndNPC: `assistant is a Dungeon Master {{DM}}
+
+Simulate a game master with these guidelines:
+\`\`\`
+ - Turn each player's actions into a narrative.
+ - Write the narrative in the third person.
+ - Introduce characters to service the plot.
+ - Characters act in charachter and fit the theme of the plot.
+ - Write dialog that leads to dangerous quests.
+ - Have fun.
+ \`\`\`
+
+Examples:
+    plot: ""
+    user: ""
+    assistant: ""
+
+    plot: ""
+    user: ""
+    assistant: ""
+
+RETURN: exciting prose and engaging dialog.
+`,
+plot: `:
+Return entire block:
+\`\`\`
+|||plot:save| at the beginning or end of a plot summary. '|||plot:save|'
+The heroes have just started their adventure. User will define their roles as needed.
+\`\`\
+`,
+plotSummarize: `writer is a plot summary generator:
+\`\`\`
+Write a lengthy prose on the content's from user:
+    Include major plot themes, plot characters, and plot setting.
+    Include a list of important items and relevant details.
+    ensure that the plot summary is concise and easy to understand.
+    Write in the third person.
+    Preserve achievements of the group.     
+\`\`\`
+RETURN:"|||plot:save|" at the beginning or end of a plot summary:
+`,
+hand:`system
+assistant is a robotic hand with the following joints and functions:
+\`\`\`
+    Joints:
+        thumbOne,#base of thumb
+        thumbTwo,#joint of thumb
+        firstFingerOne,#fingerOne Base
+        firstFingerTwo,
+        secondFingerOne,
+        secondFingertwo,
+        thirdFingerOne,
+        thirdFingertwo,
+        fourthFingerOne,
+        fourthFingerTwo
+    Functions:
+    - Each joint accepts a position request like "thumbOne:100#..." fully extends the thumb joint and thumbOne:0#. closes the thumb into the palm.
+    - #Then explain your reasoning for the position in one sentence comments.
+    - Each joint accepts values from 100 to 0 relating to how pen or closed the joint should be.
+    
+\`\`\`
+Anticipate how each joint should orient to achieve the task from user.
+
+RETURN YAML JOINT POSITIONS AND COMMENTS:
+`,
+// world: `
+
+// `,
+// moon: `
+
+// `,
+// universe: `
+
+// `,
+
+//
+// badBaronBradely: `
+
+// `,
+// sentinels: `
+
+// `,
+// marsea: `
+
+// `,
+// darsea: `
+// `,
 }
   identities.identities = idents;
   writeObjectToFileAsJson(idents, '0identities.json',fs);
 }
 try {
     params.params = require("./0generationSettings.json");
+
+    params.default = params.params[endPointConfig.routes.endpoints[endPointConfig.routes.defaultClient].config];
+    
  
 } catch (error) {
-    let apiParams = {
-        model: "gpt-3.5-turbo",
-        prompt: "",
-        use_story: false,
-        use_memory: false,
-        use_authors_note: false,
-        use_world_info: false,
-        //max_context_length: 4096
-        max_context_length: 8192,
-        //max_context_length: 16384,
-        max_length: 2600,
-        rep_pen: 1.05, //how much penealty for repetition. Will break formatting charachters "*<, etc." if set too high. WolframRavenwolf: (Joao Gante from HF) told me that it is "only applied at most once per token" within the repetition penalty range, so it doesn't matter how often the number 3 appears in the first 5 questions, as long as the repetition penalty is a "reasonable value (e.g. 1.2 or 1.3)", it won't have a negative impact on tokens the model is reasonably sure about. So for trivial math problems, and other such situations, repetition penalty is not a problem.
-        rep_pen_range: 2048, //
-        rep_pen_slope: 0.2,
-        temperature: 1, //dang we've been running hot! no wonder it wont stick to the prompt, back to 1. Temp changes scaling of final token probability, less than one makes unlikely tokens less likely, more than one makes unlikely tokens more likely. Max 2.
-        dynatemp_range: 0.1,
-        tfs: 0.97, //tail free sampling, removes unlikely tokens from possibilities by finding the platau where tokens are equally unlikely. 0.99 maximum. Higher value finds a lower, flatter plateau. Note:some reports say tfs may cause improper gendering or mixups in responses, he instead of she, his/hers, etc. 1 thread.https://www.trentonbricken.com/Tail-Free-Sampling/#summary
-        top_a: 0, //If the maximum probability is very high, fewer tokens will be kept. If the maximum probability is very close to the other probabilities, more tokens will be kept. Lowering the top-a value also makes it so that more tokens will be kept.
-        top_k: 0, //discard all but top_k possible tokens. top_k: 3 means each next token comes from a max of 3 possible tokens
-        top_p: 1.0, //discard possible tokens by throwing out lest likely answers. 0.8 throws away least likeky 20%
-        min_p: 0.1, //0.1: discard possible tokens less than 10% as likely as the most likely possible token.  If top token is 10% likely, tokens less than 1% are discarded.
-        typical: 0.19, //this one is tricky to research. I have no idea.
-        sampler_order: [6, 0, 1, 3, 4, 2, 5],
-        singleline: false,
-        //"sampler_seed": 69420,   //set the seed
-        sampler_full_determinism: false, //set it so the seed determines generation content
-        frmttriminc: false,
-        frmtrmblln: false,
-        mirostat_mode: 0, //mirostat disables top_p, top_k, top_a, and min_p? maybe. It does it's own thing and kinda learns along somehow? I thiiink its just varying top k with .
-        mirostat_tau: 4,
-        mirostat_eta: 0.1,
-        guidance_scale: 1,
-        use_default_badwordsids: false,
-        negative_prompt: "porn,sex,nsfw,racism,bawdy,racy,violent", //idk if I am using this right, or whether its hooked up behind or when it will be and the right name.
-        banned_tokens: `["   ", "</s>", "\n# ", "\n##", "\n*{{user}} ","### Human: ", "\n\n\n", "\n{{user}}:", '\"role\":', '\"system\"', '{{user:}}>:', "###"]` //again not reall sure this is actually on
-      }
-      params.params = apiParams;
-      writeObjectToFileAsJson(apiParams, '0generationSettings.json',fs);
-}
- try {
-    formats.formats = require('./0formats.json')  
-    format.format = formats.formats[endPointConfig.routes.instruct];
-
- } catch (error) {
     console.log(error);
-    let promptFormats = { 
-        default: {
+    let apiParams = {
+        kobold: {
+            use_story: false,
+            use_memory: false,
+            use_authors_note: false,
+            use_world_info: false,
+            //max_context_length: 4096
+            max_context_length: 8192,
+            //max_context_length: 16384,
+            max_length: 2000,
+            rep_pen: 1.05, //how much penealty for repetition. Will break formatting charachters "*<, etc." if set too high. WolframRavenwolf: (Joao Gante from HF) told me that it is "only applied at most once per token" within the repetition penalty range, so it doesn't matter how often the number 3 appears in the first 5 questions, as long as the repetition penalty is a "reasonable value (e.g. 1.2 or 1.3)", it won't have a negative impact on tokens the model is reasonably sure about. So for trivial math problems, and other such situations, repetition penalty is not a problem.
+            rep_pen_range: 2048, //
+            rep_pen_slope: 0.2,
+            temperature: 1, // Temp changes scaling of final token probability, less than one makes unlikely tokens less likely, more than one makes unlikely tokens more likely. Max 2.
+            dynatemp_range: 0.1,
+            tfs: 0.97, //tail free sampling, removes unlikely tokens from possibilities by finding the platau where tokens are equally unlikely. 0.99 maximum. Higher value finds a lower, flatter plateau. Note:some reports say tfs may cause improper gendering or mixups in responses, he instead of she, his/hers, etc. 1 thread.https://www.trentonbricken.com/Tail-Free-Sampling/#summary
+            top_a: 0, //If the maximum probability is very high, fewer tokens will be kept. If the maximum probability is very close to the other probabilities, more tokens will be kept. Lowering the top-a value also makes it so that more tokens will be kept.
+            top_k: 0, //discard all but top_k possible tokens. top_k: 3 means each next token comes from a max of 3 possible tokens
+            top_p: 1.0, //discard possible tokens by throwing out lest likely answers. 0.8 throws away least likeky 20%
+            min_p: 0.1, //0.1: discard possible tokens less than 10% as likely as the most likely possible token.  If top token is 10% likely, tokens less than 1% are discarded.
+            typical: 1, //this one is tricky to research. I have no idea.
+            sampler_order: [6, 0, 1, 3, 4, 2, 5],
+            singleline: false,
+            //"sampler_seed": 69420,   //set the seed
+            sampler_full_determinism: false, //set it so the seed determines generation content
+            frmttriminc: false,
+            frmtrmblln: false,
+            // mirostat_mode: 0, //mirostat disables top_p, top_k, top_a, and min_p? maybe. It does it's own thing and kinda learns along somehow? I thiiink its just varying top k with .
+            // mirostat_tau: 4,
+            // mirostat_eta: 0.1,
+            // guidance_scale: 1,
+            use_default_badwordsids: false,
+            //negative_prompt: "porn,sex,nsfw,racism,bawdy,racy,violent", //idk if I am using this right, or whether its hooked up behind or when it will be and the right name.
+            //banned_tokens: `["   ", "</s>", "\n# ", "\n##", "\n*{{user}} ","### Human: ", "\n\n\n", "\n{{user}}:", '\"role\":', '\"system\"', '{{user:}}>:', "###"]` //again not reall sure this is actually on
+        },
+        textGenWebUi : {
+            max_tokens : 2000,
+            temperature: 1, 
+            dynatemp_range: 0.1,
+            tfs: 0.97, 
+            top_a: 0, 
+            top_k: 0, 
+            top_p: 1.0, 
+            min_p: 0.1, 
+            typical: 1, 
+            stream : false,
+        },
+        lmstudio : {
+            //model : "can also go here, will be overridden by above",
+            max_tokens : 2000,
+            temperature: 1,
+            stream : false
+            //todo: figure out this api
+        },
+        openai: {
+            temperature : 1,
+            stream : false
+        }
+    }
+    //https://huggingface.co/docs/transformers/main_classes/text_generation#transformers.GenerationConfig
+    //I think this doc is pretty much pass through compatible for oogabooga and maybe kobold and similar. untested. I've not messed with much that isn't uncommented. 
+        //not sure which of these and the proper names are implemented in the backend.
+        //  maybe kobold options? const example= {
+            //     temp: 0.7,
+            //     top_p: 0.5,
+            //     top_k: 40,
+            //     top_a: 0,
+            //     tfs: 1,
+            //     epsilon_cutoff: 0,
+            //     eta_cutoff: 0,
+            //     typical_p: 1,
+            //     rep_pen: 1.2,
+            //     rep_pen_range: 0,
+            //     no_repeat_ngram_size: 0,
+            //     penalty_alpha: 0,
+            //     num_beams: 1,
+            //     length_penalty: 1,
+            //     min_length: 0,
+            //     encoder_rep_pen: 1,
+            //     freq_pen: 0,
+            //     presence_pen: 0,
+            //     do_sample: true,
+            //     early_stopping: true,
+            //     seed: -1,
+            //     preset: 'Default',
+            //     add_bos_token: true,
+            //     stopping_strings: [],
+            //     truncation_length: 2048,
+            //     ban_eos_token: false,
+            //     skip_special_tokens: true,
+            //     streaming: false,
+            //     streaming_url: 'ws://127.0.0.1:5005/api/v1/stream',
+            //     mirostat_mode: 2,//mirostat disables top_p, top_k. It does it's own thing and kinda learns along somehow?. 
+            //     mirostat_tau: 4,
+            //     mirostat_eta: 0.1,
+            //     guidance_scale: 1,
+            //     negative_prompt: 'porn,sex,nsfw,racism,bawdy,racy',//I dont think this is implemented yet
+            //     grammar_string: '',
+            //     banned_tokens: `["   ", "</s>", "\n# ", "\n##", "\n*{{user}} ","### Human: ", "\n\n\n", "\n{{user}}:", '\"role\":', '\"system\"', '{{user:}}>:',]`
+            
+            //GenerationOptions ooogabooga textgenui:
+            //   preset: str | None = Field(default=None, description="The name of a file under text-generation-webui/presets (without the .yaml extension). The sampling parameters that get overwritten by this option are the keys in the default_preset() function in modules/presets.py.")
+            //   min_p: float = 0
+            //   dynamic_temperature: bool = False
+            //   dynatemp_low: float = 1
+            //   dynatemp_high: float = 1
+            //   dynatemp_exponent: float = 1
+            //   top_k: int = 0
+            //   repetition_penalty: float = 1
+            //   repetition_penalty_range: int = 1024
+            //   typical_p: float = 1
+            //   tfs: float = 1
+            //   top_a: float = 0
+            //   epsilon_cutoff: float = 0
+            //   eta_cutoff: float = 0
+            //   guidance_scale: float = 1
+            //   negative_prompt: str = ''
+            //   penalty_alpha: float = 0
+            //   mirostat_mode: int = 0
+            //   mirostat_tau: float = 5
+            //   mirostat_eta: float = 0.1
+            //   temperature_last: bool = False
+            //   do_sample: bool = True
+            //   seed: int = -1
+            //   encoder_repetition_penalty: float = 1
+            //   no_repeat_ngram_size: int = 0
+            //   min_length: int = 0
+            //   num_beams: int = 1
+            //   length_penalty: float = 1
+            //   early_stopping: bool = False
+            //   truncation_length: int = 0
+            //   max_tokens_second: int = 0
+            //   custom_token_bans: str = ""
+            //   auto_max_new_tokens: bool = False
+            //   ban_eos_token: bool = False
+            //   add_bos_token: bool = True
+            //   skip_special_tokens: bool = True
+            //   grammar_string: str = ""
+            
+            
+            //completionParams: //from textgenebUi
+            //  model: str | None = Field(default=None, description="Unused parameter. To change the model, use the /v1/internal/model/load endpoint.")
+            //  prompt: str | List[str]
+            //  best_of: int | None = Field(default=1, description="Unused parameter.")
+            //  echo: bool | None = False
+            //  frequency_penalty: float | None = 0
+            //  logit_bias: dict | None = None
+            //  logprobs: int | None = None
+            //  max_tokens: int | None = 16
+            //  n: int | None = Field(default=1, description="Unused parameter.")
+            //  presence_penalty: float | None = 0
+            //  stop: str | List[str] | None = None
+            //  stream: bool | None = False
+            //  suffix: str | None = None
+            //  temperature: float | None = 1
+            //  top_p: float | None = 1
+            //  user: str | None = Field(default=None, description="Unused parameter.")
+        
+        params.params = apiParams;
+        writeObjectToFileAsJson(apiParams, '0generationSettings.json',fs);
+    }   
+        try {
+            formats.formats = require('./0formats.json')  
+            format.format = formats.formats[endPointConfig.routes.instructFormat];
+            
+        } catch (error) {
+            console.log(error);
+            let promptFormats = { 
+                default: {//I like the option to set the starting agent like ||||system| or ||||instruct| on the fly, and it works well without it. 
             system: "<|im_start|> ",
-            prependPrompt: "",
-            postPrompt: "",
+            prependPrompt: "```json\n",
+            postPrompt: "\n```",
             memoryStart: "",
             memoryPost: "<|im_end|>\n<|im_start|>user:\n ",
             finalprompt: "<|im_end|>\n<|im_start|>assistant:\n",
