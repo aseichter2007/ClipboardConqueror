@@ -1,1 +1,3 @@
-Settings Conqueror is a companion applcation for clipboard Conqueror to assist in creating new agents and managing settings within a framework. 
+Settings Conqueror is a webserver to host a settings app that allows users to change their settings. It is a part of the [Clipboard Conqueror](https://github.com/aseichter2007/ClipboardConqueror) project.
+
+Settings conqueror is currently researching solutions for inserting user defined functions for bot calling, and waiting for finalization of the parent project settings formats which have been rapidly changing. 
