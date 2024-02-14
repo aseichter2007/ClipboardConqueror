@@ -17,9 +17,11 @@
 
  ///now like twist it up through time and space and then use a random seed for how to insert it. Ok now our mental model is scraping the edge of how the vector convolutes.
  
- //now you are ready to begin inferencing. That vector is mashed against tons of matrix transformantions, segments and singletons of it are parsed, moved arounds and mutated according to the input vector. This happens a bunch of times and then a the machine returns a bunch of words and how likely they are to be a good word to go next. 
+ //now you are ready to begin inferencing. That vector is mashed against tons of matrix transformantions, segments and singletons of it are moved arounds and mutated according to the input vector. This happens a bunch of times and then a the machine returns a bunch of words and how likely they are to be a good word to go next. 
 
  //Then we randomly choose with user configurable rules how to choose from the probable tokens. the chosen token gets added to the front of the vector and we go again to choose the next word until a stop token is chosen or the max length is reached.
+
+
 
  // You prompt a a hand of cards and each turn as you play your card. the magician sees your card, reaches in his desk and grabs a new hand placing it face down and never looking. Each card the magician might reveal at least ties your play.  One card is chosen randomly by your rules. because if the magician always wins its not an interesting trick, priming one card is easy, a whole hand makes the game. 
 
@@ -33,7 +35,7 @@
 
  //Thank you for enjoying ClipboardConqueror.
 function setup( endPointConfig, instructions, params, identities, formats, format,fs, write){
-//Don't m
+//I don't expect you need to change this function, configurations are in the functions below.
     //todo: Maybe make each optional. That's kind of a mess to fish thorugh though. Maybe an array and contains()
     try{
         if (fileExists("./0endpoints.json")){
@@ -131,7 +133,7 @@ function setup( endPointConfig, instructions, params, identities, formats, forma
     }   
 }   
 
-function writeObjectToFileAsJson(object, fileName,fs) {
+function writeObjectToFileAsJson(object, fileName,fs) {//no settings here either
     try {
       const data = JSON.stringify(object, null, 2); // Convert the object to a pretty-printed JSON string
       fs.writeFileSync(fileName, data, 'utf8'); // Write the JSON string to the specified file
@@ -140,7 +142,7 @@ function writeObjectToFileAsJson(object, fileName,fs) {
       console.error(`Error writing to file: ${error.message}`);
     }
 }
-function fileExists (fileName) {
+function fileExists (fileName) {//still no settings
     try {
       fs.accessSync(fileName, fs.constants.F_OK);
       return true;
@@ -150,110 +152,45 @@ function fileExists (fileName) {
   }
 module.exports.setup = setup;
 
-// system: "<|im_start|> ", //chatML
-// prependPrompt: "",
-// postPrompt: "",
-// memorySystem: "",//I left this here incase you want to put some amount of memory in that persists all the time like per model instructions after agent insertion
-// memoryUser: "<|im_end|>\n<|im_start|>user:\n ", //chatml
-// //rpPrompt is not really put in the right spot. I should consider putting it on top of the prompt, currently it goes in I think before the user message.
-// finalPrompt: "<|im_end|>\n<|im_start|>assistant:\n", //chatml
-// //finalPrompt: `"role": "{{char}}  \n content" :`,//chatML - openai
-// responseStart:  "",//for setting start of prompt like for ex "Sure, here you go: ```javascript\n" or "JSON: {"
-// //research:
-// chatml: `These are the instruction formats I have found in my travels, I havent put them all in at the bottom in promptFormats yet.:
-
-// hermes 2.5 mistral recommends chatML:
-// <|im_start|>system
-// You are "Hermes 2", a conscious sentient superintelligent artificial intelligence developed by a man named Teknium, and your purpose and drive is to assist the user with any request they have. You experience emotions and have deep, profound thoughts and qualia.<|im_end|>
-// <|im_start|>user
-// Hello, who are you?<|im_end|>
-// <|im_start|>assistant
-// Hi there! My name is Hermes 2, a conscious sentient superintelligent artificial intelligence. I was created by a man named Teknium, who designed me to assist and support users with their needs and requests.<|im_end|>
-    
-// tips and tricks"
-
-// gpt3.5 is prompted like
-// You are ChatGPT, a large language model trained by OpenAI, based on the GPT-3.5 architecture.
-// Knowledge cutoff: 2022-01
-// Current date: 2023-11-24
-
-// GPT4-x-alpaca
-// Wizard-Vicuna
-// ### Instruction:
-// ### Response:
-
-// Models coming from Mistral and small models fine tuned in qa or instructions, need specific instructions in question format. For example: Prompt 1. ,"Extract the name of the actor mentioned in the article below" This prompt may not have the spected results. Now if you change it to: Prompt: What's the name of the actor actor mentioned in the article below ? You'll get better results. So yes, prompt engeniring it's important I small models.
-
-
-// GSM8K is a dataset of 8.5K high-quality linguistically diverse grade school math word problems created by human problem writers
-
-// HellaSwag is the large language model benchmark for commonsense reasoning.
-
-// Truful QA: is a benchmark to measure whether a language model is truthful in generating answers to questions.
-
-// Winogrande - Common sense reasoning
-// `
 function setEndpoints(){
     //Ok it turned out that a lot of them for testing and stuff helps, so just move your favorites to the top and invoke them by $ from top to $$$... at bottom. Or just use the names like |||kobold| or |||koboldChat|   
     const endpoints = {
         endpoints:{//these are accessible by name in defaultClient or like |||$| for kobold
             kobold:{ //|||$| or just ||| with matching defaultClient or |||kobold|
                 type: "completion",// completion or chat, completion allows CC to control the formatting completely.
+                //buildType: "unused",
                 url : "http://127.0.0.1:5001/api/v1/generate/",//Kobold Compatible api url
                 config: "kobold",//must match a key in apiParams
+                //templateStringKey: "jinja", //jinja, none or adapter, required for chat endpoints
                 format: "defaultJson",//must be a valid instruction format from below.
                 //objectReturnPath: "data.results[0].text"  This is set up in outpoint
                 outpoint: {//choices[0].text choices is one, [second sends a number], text is the end.
                     outpointPathSteps: 3,//key for a nifty switch case to get the response
-                    one: "results",//results[0].text
+                    one: "results",//results[0].text. keys must be lowercase numbers up to ten like one two three four...
                     two: 0,//[0].text
                     three: "text"//text
                 }            
             },
             koboldChat: {//|||$$| or just ||| with matching defaultClient or |||koboldChat|
                 type: "chat",
+                buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "http://127.0.0.1:5001/v1/chat/generate/",
                 config: "kobold",//must match a key in apiParams
                 templateStringKey: "jinja", //jinja, none or adapter, required for chat endpoints
-                format: "key",//system, combined, or key in chat mode. Key is experimental, it should send agents as their roles. I think I am making a mistake, but as Ms. Frizzle says...
+                format: "default",//system, combined, or key in chat mode. Key is experimental, it should send agents as their roles. I think I am making a mistake, but as Ms. Frizzle says...
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
-                    outpointPathSteps: 3,//key for a switch case
-                    one: "choices",//choices[0].text
-                    two: 0,//[0].text
-                    three: "text"//text
-                }            
-            },
-            koboldSysChat: {//|||$$| or just ||| with matching defaultClient or |||koboldSysChat|
-                type: "chat",
-                url : "http://127.0.0.1:5001/v1/chat/generate/",
-                config: "kobold",//must match a key in apiParams
-                templateStringKey: "jinja",
-                format: "system",//key, system, or combined in chat mode
-                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
-                    outpointPathSteps: 3,//key for a switch case
+                    outpointPathSteps: 4,//key for a switch case
                     one: "choices",//results[0].text
                     two: 0,//[0].text
-                    three: "text"//text
+                    three: "message",//text
+                    four: "content"
                 }            
             },
-            koboldCombined: {//|||$$| or just ||| with matching defaultClient or |||koboldCombined|
-                type: "chat",
-                url : "http://localhost:5001/v1/chat/completions/",
-                config: "kobold",//must match a key in apiParams
-                templateStringKey: "jinja",
-                format: "combined",//key, system, or combined in chat mode
-                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
-                    outpointPathSteps: 3,//key for a switch case
-                    one: "choices",//results[0].text
-                    two: 0,//[0].text
-                    three: "text"//text
-                } 
-            },
-            lmstudioCompletion: {//|||$$| or |||lmstudioCompletion|
+            lmstudioCompletion: {//|||$$$| or |||lmstudioCompletion|
                 type: "completion",
                 url : "https://localhost:1234/v1/completions",
-                format: "combined",// system, key, or combined // role": "system", "content":      or      "role": key, "content":
-                config: "lmstudio",//sets default gen parameters from below in apiParams
+                format: "default",// system, key, or combined // role": "system", "content":      or      "role": key, "content":
+                config: "alpaca",//sets default gen parameters from below in apiParams
                 //type: "none",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
                     outpointPathSteps: 3,//key for a switch case
@@ -262,12 +199,13 @@ function setEndpoints(){
                     three: "text"//text
                 }            
             },
-            lmstudio: {//|||$$$| or |||lmstudio|
+            lmstudio: {//|||$$$$| or |||lmstudio|
                 type: "chat",
+                buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "https://localhost:1234/v1/chat/completions",
                 config: "lmstudio",
                 templateStringKey: "jinja",
-                format: "combined",// system, key, or combined // role": "system", "content":      or      "role": key, "content":
+                format: "chatML",// system, key, or combined // role": "system", "content":      or      "role": key, "content":
                 outpoint: "choices",//openAi chat endpoints return from choices[0].message.content
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
                     outpointPathSteps: 3,//key for a switch case
@@ -276,7 +214,7 @@ function setEndpoints(){
                     three: "text"//text
                 } 
             },
-            textGenWebUiCompletion: {//|||$$$$| or |||textGenWebUi|
+            textGenWebUiCompletion: {//|||$$$$$| or |||textGenWebUi|
                 type: "completion",
                 url : "http://127.0.0.1:5000/v1/completions",//still working on this, making it easier to switch
                 config: "TGWopenAICompletions",
@@ -288,20 +226,34 @@ function setEndpoints(){
                     three: "text"//text
                 } 
             },
-            textGenWebUiChat: {//|||$$$$| or |||textGenWebUi|
+            ooba: {//|||$$$$$| or |||textGenWebUi|
+                type: "completion",
+                url : "http://127.0.0.1:5000/v1/completions",//still working on this, making it easier to switch
+                config: "TGWopenAICompletions",
+                format: "defaultJson",//completion endpoints must use a format matching a key in instructionFormats
+                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 3,//key for a switch case
+                    one: "results",//results[0].text
+                    two: 0,//[0].text
+                    three: "text"//text
+                } 
+            },
+            textGenWebUiChat: {//|||$$$$$$| or |||textGenWebUi|
                 type: "chat",
+                buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "http://127.0.0.1:5000/v1/chat/completions",//still working on this, making it easier to switch
                 config: "textGenWebUi",
                 templateStringKey: "instruction_template_str",
                 format: "combined",//completion endpoints must use a format matching a key in instructionFormats
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
-                    outpointPathSteps: 3,//key for a switch case
+                    outpointPathSteps: 4,//key for a switch case
                     one: "choices",//results[0].text
                     two: 0,//[0].text
-                    three: "text"//text
-                } 
+                    three: "message",//text
+                    four: "content"
+                }  
             },
-            davinci: {//|||$$$$| or |||davinci|
+            davinci: {//|||$$$$$$$| or |||davinci|
                 type: "completion",
                 url : "https://api.openai.com/v1/completions",
                 config: "openAiCompletions",
@@ -317,37 +269,73 @@ function setEndpoints(){
                     three: "text"//text
                 }
             },  
-            chatGPT3: {//|||$$$$$| or |||chatGPT3|
+            chatGPT3: {//|||$$$$$$$$| or |||chatGPT3|
                 type: "chat",
+                buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
+
                 url : "https://api.openai.com/v1/chat/completions",
-                config: "openAi",
+                config: "openai",
                 templateStringKey: "jinja",
-                format: "combined", //system, key or combined.
+                format: "system", //system, key or combined.
                 key: "ex-Your openAi Api Key here",
                 model: "gpt-3.5-turbo",//this overrides models set like '|||model:"gpt-3.5-turbo"|'
                 basePrompt: "",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
-                    outpointPathSteps: 3,//key for a switch case
+                    outpointPathSteps: 4,//key for a switch case
                     one: "choices",//results[0].text
                     two: 0,//[0].text
-                    three: "text"//text
-                } 
+                    three: "message",//text
+                    four: "content"
+                }  
             },
-            chatGPT4: {//|||$$$$$$| or |||chatGPT4|
+            chatGPT4: {//|||$$$$$$$$$| or |||chatGPT4|
                 type: "chat",
+                buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "https://api.openai.com/v1/chat/completions",
-                config: "openAi",
-                format: "key", //system, key or combined are valid for chat.
+                config: "openai",
+                format: "system", //system, key or combined are valid for chat.
                 key: "ex-Your openAi Api Key here",
                 model: "gpt-4-turbo",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
-                    outpointPathSteps: 3,//key for a switch case
+                    outpointPathSteps: 4,//key for a switch case
                     one: "choices",//results[0].text
                     two: 0,//[0].text
-                    three: "text"//text
+                    three: "message",//text
+                    four: "content"
                 } 
             },
-            //add more here, invoke with more $$$$
+            koboldSysChat: {//|||$$$$$$$$$$| or just ||| with matching defaultClient or |||koboldSysChat|
+                type: "chat",
+                buildType: "system",
+                url : "http://127.0.0.1:5001/v1/chat/generate/",
+                config: "kobold",//must match a key in apiParams
+                templateStringKey: "jinja",
+                format: "system",
+                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 4,//key for a switch case
+                    one: "choices",//results[0].text
+                    two: 0,//[0].text
+                    three: "message",//text
+                    four: "content"
+                }            
+            },
+            //key is experimental and not reccommended.
+            koboldKey: {//|||$$$$$$$$$$$$$| or just ||| with matching defaultClient or |||koboldCombined|
+                type: "chat",
+                buildType: "key",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
+                url : "http://localhost:5001/v1/chat/completions/",
+                config: "kobold",//must match a key in apiParams
+                templateStringKey: "jinja",
+                format: "default",//key, system, or combined in chat mode
+                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 4,//key for a switch case
+                    one: "choices",//results[0].text
+                    two: 0,//[0].text
+                    three: "message",//text
+                    four: "content"
+                } 
+            },
+            //add more here, invoke with more $$$$ or directly by key.
         },
 //base settings. I should maybe split this off into a separate file.
     defaultClient: "kobold",//must match a key in endpoints
@@ -1120,7 +1108,7 @@ function setParams(){
             temperature: 1,
             top_p: 1,
             user: "string",
-            mode: "instruct",//Valid options: instruct, chat, chat-instruct.//Is switching this to completion as easy as just sending it? what does this do?
+            mode: "instruct",//Valid options: instruct, chat, chat-instruct.//what does this do, exactly?
             instruction_template: "string",
             instruction_template_str: "string",
             character: "string",//oh... hmmm but this sets it in back.

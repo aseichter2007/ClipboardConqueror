@@ -1,18 +1,27 @@
 class ResponseEngine {
-    constructor(invoke =  "|/",  terminators = ["asdfghjkl"], remove= /<\|[^|]*\|>/g){
+    constructor(invoke =  "<|call|>", invokeTerminator = "<|/call|>",  terminators = ["asdfghjkl"], remove= /<\|[^|]*\|>/g){
         this.Invoke= invoke;
         this.terminators = terminators;
         this.remove = remove;
     }
 
-  removeChatML(text) {
+    removeChatML(text) {
 
       return text.replace(this.remove, '');
-    }
+    }   
+    callFuncion(text){
+        //Check if the message contains the invoke token
+        if (text.includes(this.Invoke)) {
+            // Do something
+        } else {
+            // Do something else
+        }
+    }        
     
-    recieveMessageFindTerminatorsAndTrim(text){
-        text = this.removeChatML(text);
+    
+    recieveMessageFindTerminatorsAndTrim(text) {
         let totals = []
+        text = this.removeChatML(text);
         this.terminators.forEach(element => {
             
             const limited = text.split(element);

@@ -8,6 +8,8 @@ const fs = require('fs');
 //const path = require("path");
 
 //setup all settings//
+//const write = true;
+const write = false; // this value controls whether the files are written to disk.
 const endPointConfig = {};
 const instructions  ={};
 const params = {}
@@ -15,7 +17,7 @@ const identities = {};
 const formats = {};
 const format = {};
 const {setup} = require('./setup.js');
-setup( endPointConfig, instructions, params,identities, formats, format, fs);
+setup( endPointConfig, instructions, params,identities, formats, format, fs, write);
 //end settings//
 const recieveEngine = new RecieveEngine();
 function testing(){//hooked into changehandler, copy to execute
@@ -34,8 +36,11 @@ const notification = {
     title: title,
     message: text,
     icon: './icon.jpg', // Optional
-    sound: true, // Optional, plays a sound with the notification
+    sound: true,// Optional, plays a sound with the notification
+    //looping: false, 
     //I have a hypothesis that on linux we need to specify a sound file.
+    //audio_src: 'ms-winsoundevent:Notification.sms', //I think this is only for windows phone, also, I think my access is one layer out, I may have to dig into my dependancy.
+    
 };
 // Display the notification
 notifier.notify(notification, function (err, response) {

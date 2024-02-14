@@ -267,18 +267,19 @@ Usage:
 --------
 OpenAi Compatible 
 -----
-  Clipboard Conqueror supports openAI endpoints. Put your key into 0openAiKey.json
-  LMstudio support like |||$| or save an agent like |||lm:save|"instructions" and any time that agent is called, it will send those instructions with the system prompt and send to openAi compatible endpoints at the url defined in openai.json
+  Clipboard Conqueror supports infinite configurable endpoints. 
+
+  Move your favorites to the top and invoke them by $ from top to $$$... at bottom. Or just use the names like |||kobold| or |||koboldChat|  LMstudio support like |||$| or save an agent like |||lm:save|"instructions" and any time that agent is called, it will send those instructions with the system prompt and send to openAi compatible endpoints at the url defined in openai.json
 
   ```
-  |||$|this message will go to openAI compatible endpoint, default LMStudio local endpoint;
+  |||$|this message will go to the first configured endpoint;
   ```
 
   ```
-  |||$$|this will go to openAi url endpoint default chatGTP 
+  |||$$|this will go to the second configured endpoint
   ```
 
-  The system actually supports 3 separate back ends concurrently. One kobold endpoint and two openAI urls. 
+  Add endpoints and parameters in settings.js or the written files if enabled.
 
   When using these commands, be aware that data may be sent to outside systems. This may be a breach of your company's data protection policy.
 ```
@@ -788,6 +789,7 @@ Additional Resources:
 
 [LLMs, how do they work?](https://bbycroft.net/llm) this is a cool visualization of how the machine does the magic.
 
+[OpenHermes 2.5 Mistral prompting ideas](https://www.reddit.com/r/LocalLLaMA/comments/18j59g1/you_are_a_helpful_ai_assistant/)]
 
 //todo: link assorted knowledge banks. 
 
@@ -854,3 +856,13 @@ todo: a server for a mystery agent to play twenty questions against. If you gues
 
 //todo: Implement FunkyTown, you kids will never guess what this does. 
 
+
+This info belongs here somewhere.
+// GSM8K is a dataset of 8.5K high-quality linguistically diverse grade school math word problems created by human problem writers
+
+// HellaSwag is the large language model benchmark for commonsense reasoning.
+
+// Truful QA: is a benchmark to measure whether a language model is truthful in generating answers to questions.
+
+// Winogrande - Common sense reasoning
+// `

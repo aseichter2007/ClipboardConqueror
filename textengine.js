@@ -485,6 +485,13 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         case "defaultOpenerResolved":
           this.noBatch = true;//agi always writes |||, clip often writes |||help|. it's confusing. 
         break;
+        case "dateTime":
+          outp.text = new Date();
+          console.log(outp.text);
+          outp.found = true;
+          outp.set = true;
+        break;
+        
       default:
         break;
     }
@@ -504,50 +511,86 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     }
   }
   setPrompt(command, formattedQuery) {
-    switch (command) {
+    switch (command.toLowerCase()) {
+      case "systemdefault":
       case "system":
-        //this.instructions.system = formattedQuery;
-        this.inferenceClient.setOnePromptFormat ("system", formattedQuery); 
+        this.inferenceClient.setOnePromptFormat ("systemDefault", formattedQuery); 
+        break;
+      case "systemrole":
+      case "systemname":
+        this.inferenceClient.setOnePromptFormat ("systemRole", formattedQuery);
         break;
       case "prepend":
-      case "prependPrompt":
-        //this.instructions.prependPrompt = formattedQuery;
+      case "prependprompt":     
         this.inferenceClient.setOnePromptFormat ("prependPrompt", formattedQuery);
         break;
+      case "systemafterprepend":
+      case "systemafter":
+      case "system2":
+        this.inferenceClient.setOnePromptFormat ("systemAfterPrepend", formattedQuery);
+        break;
       case "post":
-      case "postPrompt":
-        //this.instructions.postPrompt = formattedQuery;
+      case "postprompt":      
         this.inferenceClient.setOnePromptFormat ("postPrompt", formattedQuery);
         break;
-      case "memory":
-      case "memorystart":
-        // this.instructions.memoryStart = formattedQuery;
-        this.inferenceClient.setOnePromptFormat ("memoryStart", formattedQuery);
+      case "systemmemory":
+      case "memorySystem":
+        this.inferenceClient.setOnePromptFormat ("memorySystem", formattedQuery);
         break;
-      case "memorypost":
-      case "memoryPost":
-        // this.instructions.memoryPost = formattedQuery;
-        this.inferenceClient.setOnePromptFormat ("memoryPost", formattedQuery);
+      case "endsystem":
+      case "endsystemturn":
+      case "seos":
+        this.inferenceClient.setOnePromptFormat ("endSystemTurn", formattedQuery);
         break;
-      case "final":
-      case "finalprompt":
-        //this.instructions.finalprompt = formattedQuery;
-        this.inferenceClient.setOnePromptFormat ("finalprompt", formattedQuery);
+      case "startturn":
+      case "systeminstruction":
+      case "bos":
+        this.inferenceClient.setOnePromptFormat ("startTurn", formattedQuery);
+        break;
+      case "userrole":
+      case "user":
+      case "username":
+      case "name":
+        this.inferenceClient.setOnePromptFormat ("userRole", formattedQuery);
+        break;
+      case "memoryUser": 
+      case "usermemory":
+        this.inferenceClient.setOnePromptFormat ("memoryUser", formattedQuery);
+        break;
+      case "enduserturn":
+      case "enduser":
+      case "ueos":
+        this.inferenceClient.setOnePromptFormat ("endUserTurn", formattedQuery);
+        break;
+      case "assistantrole":
+      case "assistant":
+      case "assistantname":
+        this.inferenceClient.setOnePromptFormat ("assistantRole", formattedQuery);
+        break;
+      case "endturn":
+      case "end":
+      case "eos":
+      case "aeos":
+        this.inferenceClient.setOnePromptFormat ("endTurn", formattedQuery);
         break;
       case "start":
-      case "responseStart":
+      case "responsestart":
         // this.instructions.responseStart = formattedQuery;
         this.inferenceClient.setOnePromptFormat ("responseStart", formattedQuery);
         break;
+      case "special":
+      case "specialInstructions":
+        this.inferenceClient.setOnePromptFormat ("specialInstructions", formattedQuery);
       default:
-       let notfound = "invalid prompt key: " + command + " Options: system, prepend, post, memory, memorypost, final, start \n \n you may edit and copy below: \n";
-        this.notify("invalid key: " + command ," Options: system, prepend, post, memory, memorypost, final, start");
+       let notfound = "invalid prompt key: " + command + " Options: systemDefault, systemRole, prepend, postPrompt, systemAfterPost, memorySystem, memoryUser, endSystemTurn, startTurn, userRole, memoryUser, endUserTurn, assistantRole, endTurn, responseStart \n \n you may edit and copy below: \n";
+        this.notify("invalid key: " + command ," Options: systemDefault, systemRole, prepend, postPrompt, systemAfterPost, memorySystem, memoryUser, endSystemTurn, startTurn, userRole, memoryUser, endUserTurn, assistantRole, endTurn, responseStart");
         // let settings = {
+          
         //   system: this.inferenceClient.instruct.system + "\n",
         //   prependPrompt: this.inferenceClient.instruct.prependPrompt + "\n",
         //   postPrompt: this.inferenceClient.instruct.postPrompt + "\n",
-        //   memoryStart: this.inferenceClient.instruct.memoryStart + "\n",
-        //   memoryPost: this.inferenceClient.instruct.memoryPost + "\n",
+        //   memorySystem: this.inferenceClient.instruct.memorySystem + "\n",
+        //   memoryUser: this.inferenceClient.instruct.memoryUser + "\n",
         //   finalprompt: this.inferenceClient.instruct.finalprompt + "\n",
         //   responseStart: this.inferenceClient.instruct.responseStart
         // }
