@@ -267,9 +267,11 @@ Usage:
 --------
 OpenAi Compatible 
 -----
-  Clipboard Conqueror supports infinite configurable endpoints. 
+  Clipboard Conqueror supports infinite configurable endpoints. You can add as many as you like. 
+  CC supports multiple parameter sets to ease multiple backend configurations.
+  I think it can support anything that takes either a string or chat messages style input.
 
-  Move your favorites to the top and invoke them by $ from top to $$$... at bottom. Or just use the names like |||kobold| or |||koboldChat|  LMstudio support like |||$| or save an agent like |||lm:save|"instructions" and any time that agent is called, it will send those instructions with the system prompt and send to openAi compatible endpoints at the url defined in openai.json
+  Move your favorites to the top and invoke them by |||$| from top to |||$$$... at bottom. Or just use the key names like |||kobold| or |||koboldChat|  
 
   ```
   |||$|this message will go to the first configured endpoint;
@@ -278,16 +280,18 @@ OpenAi Compatible
   ```
   |||$$|this will go to the second configured endpoint
   ```
-
-  Add endpoints and parameters in settings.js or the written files if enabled.
+  ```
+  |||ooba|this will go to the TextGenerationWebUi endpoint because I called it ooba for quick access.
+  ```
+  Add endpoints and parameters in settings.js or 0endpoints.json if settings files are enabled. File writing is off by default, the settings files are more for use with binaries.
 
   When using these commands, be aware that data may be sent to outside systems. This may be a breach of your company's data protection policy.
 ```
 |||model:gpt-3.5-turbo| 
 ```
-  will change the target openai model. names must be exact. I dont know them or have a gpt key to test this feature. I put the ones that arent marked depreciating in |||gpts,write|
+  will change the target openai model. names must be exact. I dont know them or have a gpt key to test this feature. I put the ones that arent marked depreciating in |||gpts,write|  This is curently superceded by models set on the endpoint configuration. I think this can still be used if you don't specify a model in the endpoint configuration.
 
-  |||$,set| will behave as expected and send to the compatible endpoint until |||set| to release. 
+  |||$,set| will behave as expected and send to the compatible endpoint until |||set| to release. //todo: determine if this is broken.
 
 
   You can safely use any other command to query sensitive data, and depending on your configuration, gpt commands can be sent locally as well. 
@@ -420,7 +424,7 @@ an agent saved like |||lm:save| or |||gpt:save| always go to the openAI compatib
 ```
 in this case, Captain Clip will be sent first, to koboldAI, the output then goes to LMstudio,  and the out from there to ChatGPT api. 
 
-Chaining Captain clip or AGI is not advisable cause Captain Clip likes to say "|||help|" and I have implemented this functionality in kind of a funky way so extra invokes will pile up and stop execution. 
+Chaining Captain Clip or AGI is not advisable cause Captain Clip likes to say "|||help|" and I have implemented this functionality in kind of a funky way so extra invokes will pile up and stop execution, or rather, Clip will pull the help to the clipboard if he sends the help suggestion. 
 
 It seems this triggers the same bug as write. If Clipboard Connqueror seems stuck, copy a little text with no invoke, and try your query again. 
 
@@ -439,30 +443,55 @@ etc.
 Formats must exist in 0formats.json, the name must match the object key.
 
 
-Or you can set individual prompt segments like:
+Or you can set individual prompt segments one at a time like:
 ```
-|||PROMPT:system|<|im_start|> 
+|||PROMPT:startTurn|<|im_start|>
 
-|||PROMPT:prepend|assistant
+|||PROMPT:endSystem|<|im_end|>\n 
 
-|||PROMPT:post|after agents
+|||PROMPT:endUser|<|im_end|>\n
 
-|||PROMPT:memory|spot for universal memory
+|||PROMPT:endTurn|<|im_end|>\n
 
-|||PROMPT:memoryPost|<|im_end|>\n<|im_start|>user:\n 
+|||PROMPT:systemRole|system\n
 
-|||PROMPT:final|<|im_end|>\n<|im_start|>assistant:\n
+|||PROMPT:userRole|user\n 
+
+|||PROMPT:assistantRole|assistant\n
+
+//this example sets up basic ChatML formatting. For alpaca I reccommend setting the format strings in the role positions. StartTurn starts all turns; system, user, and assistant.  StartTurn is a bad place for "### Instruction:"
+
+|||PROMPT:prepend|You are a helpfull assistant\n\n
+
+|||PROMPT:systemAfterPrepend| still before agents
+
+|||PROMPT:post| after agents
+
+|||PROMPT:systemMemory| spot for persistent system context after agents
+
+//These set system prompt segments.
+
+|||PROMPT:userMemory| spot for persistent user context before user query
 
 |||PROMPT:start|start of the AI response
+
+```
+and special for jinja formatter only:
+
+```
+|||PROMPT:special|.rstrip() //Probably not needed for typical use.
+
 ```
  
+None of these are case sensitive. |||SySTEMmemOrY| is the same as |||systemmemory|||. There are a few options to hit these as well, such as username or name, endturn or end, etc. I've hopefully reached easy to remember without adding confusion.
+
 //todo: fix this: Also supports setting all instructions like: 
 ```
-|||FORMAT:save|//todo: find the bug, this isnt working
+|||FORMAT:save|//todo: find the bug, this isnt working, you have to pick them up one at a time like above.
 {"system":"<|im_start|> ","prependPrompt":"assistant:","postPrompt":"after agents","memoryStart":"spot for universal memory","memoryPost":"<|im_end|>\n<|im_start|>user:\n ","finalprompt":"<|im_end|>\n<|im_start|>assistant:\n","responseStart":"start of the AI response"}
 ```
 
-note: current behavior removes chatml markup "<|any|>" from the ai response to ease use of non chatML models with default settings. For the most part monster merge models respond very well, but will markup character dialog in a way I find undesirable. Comment line 17 "text = this.removeChatML(text);" in responsengine.js to stop this behavior. Response engine is ready for function calls, let me know what would be useful.
+note: current behavior removes chatml markup "<|any|>" from the ai response to ease use of non chatML models with default settings. For the most part monster merge models respond very well, but will markup character dialog in a way I find undesirable. Comment line 24 "text = this.removeChatML(text);" in responsengine.js to stop this behavior. Response engine is ready for function calls, let me know what would be useful.
 
 ---
 Installation:
@@ -550,7 +579,7 @@ setup.js writes files for each type of setting. If formatting errors are introdu
 
 
 -----
-Choosing A model:
+Choosing A Model:
 --------
 
 
@@ -784,7 +813,7 @@ Your understanding and respect for these terms are appreciated.
 
 
 Additional Resources:
-
+[AMD GPU resources](https://llm-tracker.info/howto/AMD-GPUs)
 [The HitchHiker's guide to LLMs](https://osanseviero.github.io/hackerllama/blog/posts/hitchhiker_guide/)
 
 [LLMs, how do they work?](https://bbycroft.net/llm) this is a cool visualization of how the machine does the magic.

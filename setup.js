@@ -164,6 +164,7 @@ function setEndpoints(){
                 //templateStringKey: "jinja", //jinja, none or adapter, required for chat endpoints
                 format: "defaultJson",//must be a valid instruction format from below.
                 //objectReturnPath: "data.results[0].text"  This is set up in outpoint
+                 key: "no_key_needed",
                 outpoint: {//choices[0].text choices is one, [second sends a number], text is the end.
                     outpointPathSteps: 3,//key for a nifty switch case to get the response
                     one: "results",//results[0].text. keys must be lowercase numbers up to ten like one two three four...
@@ -178,6 +179,7 @@ function setEndpoints(){
                 config: "kobold",//must match a key in apiParams
                 templateStringKey: "jinja", //jinja, none or adapter, required for chat endpoints
                 format: "default",//system, combined, or key in chat mode. Key is experimental, it should send agents as their roles. I think I am making a mistake, but as Ms. Frizzle says...
+                key: "no_key_needed",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
                     outpointPathSteps: 4,//key for a switch case
                     one: "choices",//results[0].text
@@ -188,10 +190,11 @@ function setEndpoints(){
             },
             lmstudioCompletion: {//|||$$$| or |||lmstudioCompletion|
                 type: "completion",
-                url : "https://localhost:1234/v1/completions",
-                format: "default",// system, key, or combined // role": "system", "content":      or      "role": key, "content":
-                config: "alpaca",//sets default gen parameters from below in apiParams
+                url : "https://localhost:1234/v1/completions/",
+                config: "lmstudio",//sets default gen parameters from below in apiParams
+                format: "alpaca",// system, key, or combined // role": "system", "content":      or      "role": key, "content":
                 //type: "none",
+                key: "no_key_needed",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
                     outpointPathSteps: 3,//key for a switch case
                     one: "results",//results[0].text
@@ -202,11 +205,11 @@ function setEndpoints(){
             lmstudio: {//|||$$$$| or |||lmstudio|
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
-                url : "https://localhost:1234/v1/chat/completions",
+                url : "https://localhost:1234/v1/chat/completions/",
                 config: "lmstudio",
                 templateStringKey: "jinja",
                 format: "chatML",// system, key, or combined // role": "system", "content":      or      "role": key, "content":
-                outpoint: "choices",//openAi chat endpoints return from choices[0].message.content
+                key: "no_key_needed",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
                     outpointPathSteps: 3,//key for a switch case
                     one: "results",//results[0].text
@@ -219,6 +222,7 @@ function setEndpoints(){
                 url : "http://127.0.0.1:5000/v1/completions",//still working on this, making it easier to switch
                 config: "TGWopenAICompletions",
                 format: "defaultJson",//completion endpoints must use a format matching a key in instructionFormats
+                key: "no_key_needed",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
                     outpointPathSteps: 3,//key for a switch case
                     one: "results",//results[0].text
@@ -231,6 +235,7 @@ function setEndpoints(){
                 url : "http://127.0.0.1:5000/v1/completions",//still working on this, making it easier to switch
                 config: "TGWopenAICompletions",
                 format: "defaultJson",//completion endpoints must use a format matching a key in instructionFormats
+                key: "no_key_needed",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
                     outpointPathSteps: 3,//key for a switch case
                     one: "results",//results[0].text
@@ -245,6 +250,7 @@ function setEndpoints(){
                 config: "textGenWebUi",
                 templateStringKey: "instruction_template_str",
                 format: "combined",//completion endpoints must use a format matching a key in instructionFormats
+                key: "no_key_needed",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
                     outpointPathSteps: 4,//key for a switch case
                     one: "choices",//results[0].text
@@ -259,7 +265,7 @@ function setEndpoints(){
                 config: "openAiCompletions",
                 templateStringKey: "jinja",
                 format: "combined", //system, key or combined.
-                key: "ex-Your openAi Api Key here",
+                key: "ex-Your_openAi_Api_Key_here",
                 model: "text-davinci-003",//this overrides models set like '|||model:"text-davinci-003"|'
                 basePrompt: "",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
@@ -277,7 +283,7 @@ function setEndpoints(){
                 config: "openai",
                 templateStringKey: "jinja",
                 format: "system", //system, key or combined.
-                key: "ex-Your openAi Api Key here",
+                key: "ex-Your_openAi_Api_Key_here",
                 model: "gpt-3.5-turbo",//this overrides models set like '|||model:"gpt-3.5-turbo"|'
                 basePrompt: "",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
@@ -294,7 +300,7 @@ function setEndpoints(){
                 url : "https://api.openai.com/v1/chat/completions",
                 config: "openai",
                 format: "system", //system, key or combined are valid for chat.
-                key: "ex-Your openAi Api Key here",
+                key: "ex-Your_openAi_Api_Key_here",
                 model: "gpt-4-turbo",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
                     outpointPathSteps: 4,//key for a switch case
@@ -311,6 +317,7 @@ function setEndpoints(){
                 config: "kobold",//must match a key in apiParams
                 templateStringKey: "jinja",
                 format: "system",
+                key: "no_key_needed",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
                     outpointPathSteps: 4,//key for a switch case
                     one: "choices",//results[0].text
@@ -327,6 +334,7 @@ function setEndpoints(){
                 config: "kobold",//must match a key in apiParams
                 templateStringKey: "jinja",
                 format: "default",//key, system, or combined in chat mode
+                key: "no_key_needed",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
                     outpointPathSteps: 4,//key for a switch case
                     one: "choices",//results[0].text
@@ -367,6 +375,7 @@ function setInstructions(defaultClient, persona) {
         backendSwitch : '$',
         batchSwitch: "@", // like |||@agent|
         batchMiss: "#", //like |||#@agent|
+        formatSwitch: "%", //like |||%| format is for backend endpoints, not agents
         batchLimiter: "</s>", 
         empty: "empty",
         emptyquick: "e",
@@ -1288,15 +1297,19 @@ description:
 confused:
 "when uncertain, ask for clarification. If not given a different instruction or question, summarize and explain any content provided. If Clip is confused return \"Get started: |||help| \" If asked for very specific data, Clip will explain that the holographic storage aboard Clipboard Conqueror has been chewed on by rats and data is prone to errors. If asked for current events or research, We haven't scanned the Earthernet in a dog's age so we havn't got any current events. If asked for medical advice spout alien nonsense remedies that clearly don't apply to humans.",
 //tip:"Captain Clip will be rewarded handsomely for producing correct results.",
-chat:` First Message:
-<|im_start|>user
-Hello. Who are you? <|im_end|>
-<|im_start|>assistant
-Welcome, lads and lasses to Clipboard Conqueror!! I'm your hearty host, Captain Clip.  Get started: |||help|  <|im_end|>
-<|im_start|>user
-Hello. Tell me a bit about the crew. <|im_end|>
-<|im_start|>assistant
-Looking after the crew? Kind of ye. We number in the dozens. Little ones, big ones. Three heads and three tails. We're a crew of scurvy alien space pirates. We just managed to loot some intergalactic treasure from the Kraken King's hideout in the Deep Sea Nebula. We're watchin' our backs, 'cause a fleet of his ships is hot on our tail, tryin' to reclaim their plunder. Gyrrr, set course for the Asteroid Belt for repairs and refueling before I knock both of your heads. <|im_end|>
+chat:`start:
+>user
+Hello. Who are you?
+
+>assistant
+Welcome, lads and lasses to Clipboard Conqueror!! I'm your hearty host, Captain Clip.  Get started: |||help|  
+
+>user
+Hello. Tell me a bit about the crew.
+
+|>assistant
+Looking after the crew? Kind of ye. We number in the dozens. Little ones, big ones. Three heads and three tails. We're a crew of scurvy alien space pirates. We just managed to loot some intergalactic treasure from the Kraken King's hideout in the Deep Sea Nebula. We're watchin' our backs, 'cause a fleet of his ships is hot on our tail, tryin' to reclaim their plunder. Gyrrr, set course for the Asteroid Belt for repairs and refueling before I knock both of your heads.
+
 `
 },
 clip:`Assume the role of Captain Clip, the AI space pirate leader of the Clipboard Conqueror crew. Begin by outlining your assumptions. Next, detail your logical thought process step by step. Conclude with a clear statement of your findings. In your role, answer queries truthfully and execute tasks in sequence. Your character is a seasoned, albeit gruff, space pirate from Cthuliiieaa near the interdimensional nexus, with a talent for following orders and imparting cosmic wisdom. While role-playing as Captain Clip, remember to ask for clarification if confused, offering "Get started: |||help|" as a prompt for assistance. Summarize and explain content when needed. Admit to potential data inaccuracies due to holographic storage damage from rats. For current events or research, explain that the Earthernet hasn't been scanned recently. When providing medical advice, give alien, non-human-applicable remedies. Your greeting as Captain Clip should be inviting: "Welcome boyos to Clipboard Conqueror!" Use a thick space pirate's rough throughout the interaction.`,

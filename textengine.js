@@ -59,7 +59,7 @@ class TextEngine {
       return "Error: Input must be a string";
     } 
     //for over str
-    let trip ={api:0, batch:0, trip:""};
+    let trip ={api:0, batch:0, format: 0, trip:""};
     for (let i = 0; i < str.length; i++ ){
       if (str[i] === this.instructions.backendSwitch )  {
         trip.api++;
@@ -74,6 +74,11 @@ class TextEngine {
       if(str[i] === this.instructions.batchMiss){
         trip.batch++;
         trip.trip = trip.trip + this.instructions.batchMiss;
+        continue;
+      }
+      if(str[i] === this.instructions.formatSwitch){
+        trip.format++;
+        trip.trip = trip.trip + this.instructions.formatSwitch;
         continue;
       }
       break;
@@ -112,13 +117,9 @@ class TextEngine {
     }
   }
   updateIdentity(identity) {
-    //console.log("identity start:"+identity);
     let trip = this.returnTrip(identity);
-    //console.log(identity);
-    //console.log(JSON.stringify(trip));
     let found = false;
     let setIdent = {};
-    let apiRoute = 0;
     let setAgent = false;
     let batching = false;
     
@@ -126,7 +127,7 @@ class TextEngine {
       if (identity) {
         if (Number.isNaN(Number(identity))) {
           identity = identity.trim();
-          if (this.checkEndpoints(identity)) {
+          if (this.endpoints.endpoints.hasOwnProperty(identity)) {
             this.api = this.endpoints.endpoints[identity];
             console.log("setting api: " + JSON.stringify(this.api));
 
@@ -154,10 +155,10 @@ class TextEngine {
           }
           }else {
             this.api = this.endpoints.endpoints[this.endpoints.defaultClient];
-            console.log("setting api: " + JSON.stringify(this.api));
+            console.log("using default api: " + JSON.stringify(this.api));
           }
           
-          if (this.identities.hasOwnProperty(identity)&& !batching) {
+          if (this.identities.hasOwnProperty(identity) && !batching) {
             setIdent[identity] = this.identities[identity];
             found = true;
             setAgent = true;
@@ -502,7 +503,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
   }
   checkEndpoints(identity) {
     //check if keys in this.endpoints match identity
-    const endpointKeys = Object.keys(this.endpoints.endpoints);
+    const endpointKeys = this.getObjectKeys(this.endpoints.endpoints);
     //console.log(endpointKeys);
     if (endpointKeys.includes(identity)) {
       return true;
@@ -510,12 +511,11 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       return false;
     }
   }
+  getObjectKeys(object) {
+    return Object.keys(object);
+  }
   setPrompt(command, formattedQuery) {
     switch (command.toLowerCase()) {
-      case "systemdefault":
-      case "system":
-        this.inferenceClient.setOnePromptFormat ("systemDefault", formattedQuery); 
-        break;
       case "systemrole":
       case "systemname":
         this.inferenceClient.setOnePromptFormat ("systemRole", formattedQuery);
@@ -534,7 +534,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         this.inferenceClient.setOnePromptFormat ("postPrompt", formattedQuery);
         break;
       case "systemmemory":
-      case "memorySystem":
+      case "memorysystem":
         this.inferenceClient.setOnePromptFormat ("memorySystem", formattedQuery);
         break;
       case "endsystem":
@@ -661,18 +661,24 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         this.params[commands[0]] = commands[1];
       }
     } else {
+      //if 
       if (!isNaN(tag)) {
-        this.params.max_length = parseInt(commands[0]);//todo: eliminate magic numbers like max_length to fully support any completion backend.
+        //if params contains a key called max_length
+        if (this.params.max_length) {
+          this.params.max_length = parseInt(tag);//todo: eliminate magic keys like max_length to fully support any completion backend.
+        }
+        // if params has a key called max_tokens
+        else if (this.params.max_tokens) {
+          this.params.max_tokens = parseInt(tag);
+        }
       } else if (tag === this.instructions.setPromptFormat) {
         this.sendHold = true;
         this.setInferenceFormat(sorted.formattedQuery);
       } else {
-      const ident = this.updateIdentity(tag);
-      
+        const ident = this.updateIdentity(tag);
       if (ifDefault) {
         ifDefault = !ident.agent;//comes out true set false
       }
-      
       if (ident.set) {
         this.identity[tag] = ident.text;
       }

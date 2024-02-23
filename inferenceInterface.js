@@ -20,50 +20,44 @@ setOnePromptFormat(setting, value) {
   this.custom = true;
 }
 setPromptFormat(setting) {
-  //console.log("old format: " + JSON.stringify(this.instruct));
-  //console.log("set prompt format: " + JSON.stringify(setting));
- this.custom =  true;
- try{
-    const { 
-      startTurn, 
-      endSystemTurn, 
-      endUserTurn, 
-      endTurn, 
-      systemRole, 
-      userRole, 
-      assistantRole, 
-      prependPrompt, 
-      systemAfterPrepend, 
-      postPrompt, 
-      memorySystem, 
-      memoryUser, 
-      responseStart, 
-      specialInstructions
-    } = setting;
+  this.custom =  true;
+  try{
+      const { 
+        startTurn, 
+        endSystemTurn, 
+        endUserTurn, 
+        endTurn, 
+        systemRole, 
+        userRole, 
+        assistantRole, 
+        prependPrompt, 
+        systemAfterPrepend, 
+        postPrompt, 
+        memorySystem, 
+        memoryUser, 
+        responseStart, 
+        specialInstructions
+      } = setting;
 
-    this.instructSet = {
-      startTurn : startTurn,
-      endSystemTurn : endSystemTurn,
-      endUserTurn : endUserTurn,
-      endTurn : endTurn,
-      systemRole : systemRole,
-      userRole : userRole,
-      assistantRole : assistantRole,
-      prependPrompt : prependPrompt,
-      systemAfterPrepend : systemAfterPrepend,
-      postPrompt : postPrompt,
-      memorySystem : memorySystem,
-      memoryUser : memoryUser,
-      responseStart : responseStart,
-      specialInstructions : specialInstructions
-    };
-  } catch (error) {
-  console.log("setPromptFormat error: " + error);
-}
-
-  
-  
-  
+      this.instructSet = {
+        startTurn : startTurn,
+        endSystemTurn : endSystemTurn,
+        endUserTurn : endUserTurn,
+        endTurn : endTurn,
+        systemRole : systemRole,
+        userRole : userRole,
+        assistantRole : assistantRole,
+        prependPrompt : prependPrompt,
+        systemAfterPrepend : systemAfterPrepend,
+        postPrompt : postPrompt,
+        memorySystem : memorySystem,
+        memoryUser : memoryUser,
+        responseStart : responseStart,
+        specialInstructions : specialInstructions
+      };
+    } catch (error) {
+    console.log("setPromptFormat error: " + error);
+  }  
   console.log("prompt format set: " + JSON.stringify(this.instructSet));
 }
 
@@ -76,7 +70,7 @@ setFormat(format){
 }
 completionMessageBuilder(identity, formattedQuery, params, api ) {
   const instruct = this.instructSet;
-  console.log(JSON.stringify(this.instructSet));
+  //console.log(JSON.stringify(this.instructSet));
   if (api.model) {
     params.model = api.model;
   }
@@ -100,17 +94,21 @@ completionMessageBuilder(identity, formattedQuery, params, api ) {
   instruct.responseStart;
   
   params.prompt = finalPrompt;
-  completion(api, params, this.callback, this.notify);
+  completion(api, params, this.callback, this.notify, this.handler);
 }
 
   send(identity, text, params, api) {
-    console.log("send: " + JSON.stringify(api));
-    console.log("params: " + JSON.stringify(params));
+    //console.log("send: " + JSON.stringify(api));
+    //console.log("params: " + JSON.stringify(params));
    
-    if ( api.type === "completion") {
+    if (this.lastOutpoint !== api.config) {
+      this.lastOutpoint = api.config;
+      this.parameters = this.parameterFormats[api.config];
       if (!this.custom) {
         this.instructSet = this.instructionFormats[api.format];
       }
+    }
+    if ( api.type === "completion") {
       this.completionMessageBuilder(identity, text, params, api);   
    } 
     else if (api.type === "chat") {
@@ -122,6 +120,10 @@ completionMessageBuilder(identity, formattedQuery, params, api ) {
       }
       else if (api.buildType === "combined") {
         this.messageOneSystemBuilder(identity, text , params, api);
+        //this.basicMessageBuilder(identity, text, params, api);
+      }
+      else {
+        this.basicMessageBuilder(identity, text, params, api);
       }
     }
   } 
@@ -144,7 +146,7 @@ completionMessageBuilder(identity, formattedQuery, params, api ) {
         "content": user        
     });
     //messaged = JSON.stringify(messaged);
-    chat(api, messaged, this.instructSet, params, this.callback, this.notify);
+    chat(api, messaged, this.instructSet, params, this.callback, this.notify, this.handler);
   }
   messageSystemBuilder(identity, message, params, api) {    
     if (api.model) {
@@ -155,7 +157,7 @@ completionMessageBuilder(identity, formattedQuery, params, api ) {
         let ident = identity[key]//identity[key];
         messages.push ({
             "role": 'system',
-            "content": ident
+            "content": JSON.stringify(ident)
         });
     }
     messages.push ({
@@ -163,7 +165,7 @@ completionMessageBuilder(identity, formattedQuery, params, api ) {
         "content": message
     })
     //messages = JSON.stringify(messages);
-    chat(api, messages, this.instructSet, params, this.callback, this.notify);
+    chat(api, messages, this.instructSet, params, this.callback, this.notify, this.handler);
   }
   messageOneSystemBuilder(identity, message, params, api) {
     if (api.model !== undefined) {
@@ -181,77 +183,116 @@ completionMessageBuilder(identity, formattedQuery, params, api ) {
         "content": message
     })
     //messages = JSON.stringify(messages);
-    chat(api, messages, this.instructSet, params, this.callback, this.notify)
+    chat(api, messages, this.instructSet, params, this.callback, this.notify, this.handler)
+  }
+  basicMessageBuilder(identity, message, params, api) {
+    if (api.model !== undefined) {
+      params.model = api.model;
+    }
+    //for key in identity
+    let messages = [
+      {"role": 'system', "content": JSON.stringify(identity)},
+      { "role": 'user',"content": message }
+    ];
+    //messages = JSON.stringify(messages);
+    chat(api, messages, this.instructSet, params, this.callback, this.notify, this.handler)
   }
 }
-async function chat(api, messages, instructions, params, callback,  notify) {
-  params[api.templateStringKey] =  JinjaFormatter(instructions);
-  params.adapter = returnKoboldAdapter(instructions);
-  //messages = JSON.stringify(messages)
-  console.log("messages: " +messages);
-  let errcatch = "";
-  //try {
-    //console.log(apiKey, identity, formattedQuery, params, apiUrl, model);
-    const headers = {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${api.key}`,
-    };
-    const prompt = {
-      model: api.model,
-      messages: messages,
-      max_tokens: params.max_length,
-      stream: false
-    }
-    const outprompt = JSON.stringify({...params,...prompt})
-    console.log("outprompt: "+ outprompt);
-    const response = await fetch(api.url, {//maybe put back axios
+async function chat(api, messages, instructions, params, callback,  notify, handler) {
+  try {
+    params[api.templateStringKey] =  JinjaFormatter(instructions);
+    params.adapter = returnKoboldAdapter(instructions);
+    //messages = JSON.stringify(messages)
+    //console.log("messages: " + messages);
+    const config = {
       method: 'POST',
-      headers,
-      body: outprompt,
-    });
-    console.log(JSON.stringify(response));
-    let jsonResponse = await response.json();
-    //console.log("response: "+JSON.stringify(jsonResponse));
-    if (!jsonResponse.ok) {
-      errcatch = jsonResponse.error
-      console.log(`Request failed with status ${response.status}: ${jsonResponse.error}`);
-    }
-    console.log("response: "+JSON.stringify(jsonResponse));
-    const text = outPointer(api.outpoint, jsonResponse); //now it's the user's problem after I sort out defaults.
-    if (text === "") {
-      callback("blank response");
-    }
-    callback(text);//could make programatical in a switch off a number
+      url: api.url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${api.key}`,
+      },
+      data: {
+        ...params,
+        messages: messages,
+        stream: false
+      },
+    };
+    
+      //const outprompt = JSON.stringify({...params,...prompt})
+      //const outprompt = {...params,...prompt}
+      //console.log("outprompt: "+ outprompt);
+      handler.request(config).then(response => {
+        if (!response.ok ==="OK") {
+          notify("api error: ", response.statusText);
+          console.log("completion api error: " + response.statusText);
+        }
+        //console.log(response.data);
+        const output = outPointer(api.outpoint, response.data);// response.json();
+        callback(output);
+      }).catch(error => {
+        console.log(error);
+      });;
+      // let jsonResponse = {results:[{text:"undefined response"}]};
+      // if (response !== undefined && response.ok) {
+      //   //console.log("response: "+response);
+      //   jsonResponse = await response.json();
+      // }
+      // //console.log("response: "+JSON.stringify(jsonResponse));
+      // if (!jsonResponse.ok) {
+      //   console.log(`Request failed with status ${response.status}: ${jsonResponse.error}`);
+      //   return;
+      // }
+      // //console.log("response: "+JSON.stringify(jsonResponse));
+      // const text = outPointer(api.outpoint, jsonResponse); //now it's the user's problem after I sort out defaults.
+      // if (text === "") {
+      //   callback("blank response");
+      // }
+      // callback(text);//could make programatical in a switch off a number
+  } catch (error) {
+    console.log(error);
+  }
   //
 }
-async function completion(api, params, callback, notify) {
+async function completion(api, params, callback, notify, handler) {
   try {
-    console.log("sending to api: " + api.url);
-    const response = await fetch(api.url, {
+    console.log("sending to completion api: " + api.url);
+    const response = await handler.request(api.url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': `Bearer ${api.key}`,
       },
-      body: JSON.stringify(params)
+      data: JSON.stringify(params)
+    }).then(response => {
+      if (!response.ok ==="OK") {
+        notify("api error: ", response.statusText);
+        console.log("completion api error: " + response.statusText);
+      }
+      //console.log(response.data);
+      const output = outPointer(api.outpoint, response.data);// response.json();
+      callback(output);
+    }).catch(error => {
+      console.log(error);
     });
    
-    // show contents of response
-    if (!response.ok) {
-      notify("api error: ", response.statusText);
-      console.log("completion api error: " + response.statusText);
-    }
-    let jsonResponse = await response.json();
-    console.log("response: "+JSON.stringify(jsonResponse));
+    // // show contents of response
+    // if (!response.ok) {
+    //   notify("api error: ", response.statusText);
+    //   console.log("completion api error: " + response.statusText);
+    // }
+    // //let jsonResponse = await response.json();
+    // let jsonResponse = response;
+    // console.log(jsonResponse.data);
+    // //console.log("response: "+JSON.stringify(jsonResponse));
     
-    //const data = await response.json();
-    //console.log(JSON.stringify(response));
-    const text = outPointer(api.outpoint, jsonResponse); //now it's the user's problem after I sort out defaults.
-    //const text = data[api.outpoint][0].text;
-    //callback(JSON.stringify(text));
-    //console.log(text);
-    callback(text); 
+    // //const data = await response.json();
+    // //console.log(JSON.stringify(response));
+    // const text = outPointer(api.outpoint, jsonResponse); //now it's the user's problem after I sort out defaults.
+    // //const text = data[api.outpoint][0].text;
+    // //callback(JSON.stringify(text));
+    // //console.log(text);
+    // callback(text); 
   } catch (error) {
     console.error("Error in completion API:", error);
     notify("Error in completion API:", error);
