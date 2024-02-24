@@ -43,7 +43,7 @@ y-linux-mac-start-no-nodemon.sh
 For openAi access 
 --------
 
-put your key into 0openAiKey.json and invoke with |||$$| or change the default in 0endpoints.json. 
+put your key into the apropriate endpoints in setup.js and invoke with |||chatGPT3| or change the default in 0endpoints.json. |||chatGPT4| will hit turbo with defaults, change the target model in 0endpoints.json or setup.js.  For now, default behavior does not write the config files.
 
 Kobold or local AI are not required to use Clipboard Conqueror, but it requires paid openAi api credit to use their service. OpenAi access has been included to ensure anyone can master prompting with my tools, on a budget that fits their current hardware.  If CC really gets rolling and meets my needs, I will host a dedicated cluster of my own to ensure free access for anyone, on secure and transparent terms with the excess. AI will change everything at an incredible rate, everyone deserves the best tools we can get our hands on in these trying times. 
 
@@ -69,7 +69,7 @@ Captain Clip: Here are the links formatted as Markdown for a .md file:
 1. [Patreon](https://patreon.com/ClipboardConqueror)
 2. [Ko-fi](https://ko-fi.com/aseichter2007)
 
-I have provided the tools to supply your own custom always ready assitant on your terms. You tip your delivery guy, consider my contribution to your workflow, it will really help my family.
+I have provided the tools to supply your own custom always ready assitant on your terms. You tip your delivery guy, consider my contribution to your workflow, it will really help my family. Please drop a coin for your coder.
 
 
 Quick Start Jam, Reccomended:
