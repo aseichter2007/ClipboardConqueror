@@ -100,14 +100,14 @@ completionMessageBuilder(identity, formattedQuery, params, api ) {
   send(identity, text, params, api) {
     //console.log("send: " + JSON.stringify(api));
     //console.log("params: " + JSON.stringify(params));
-   
-    if (this.lastOutpoint !== api.config) {
+      
+if (this.lastOutpoint !== api.config) {
       this.lastOutpoint = api.config;
       this.parameters = this.parameterFormats[api.config];
       if (!this.custom) {
         this.instructSet = this.instructionFormats[api.format];
       }
-    }
+}
     if ( api.type === "completion") {
       this.completionMessageBuilder(identity, text, params, api);   
    } 
@@ -204,6 +204,7 @@ async function chat(api, messages, instructions, params, callback,  notify, hand
     params.adapter = returnKoboldAdapter(instructions);
     //messages = JSON.stringify(messages)
     //console.log("messages: " + messages);
+    params.messages = messages;
     const config = {
       method: 'POST',
       url: api.url,
@@ -211,11 +212,7 @@ async function chat(api, messages, instructions, params, callback,  notify, hand
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${api.key}`,
       },
-      data: {
-        ...params,
-        messages: messages,
-        stream: false
-      },
+      data: params,
     };
     
       //const outprompt = JSON.stringify({...params,...prompt})
@@ -223,7 +220,7 @@ async function chat(api, messages, instructions, params, callback,  notify, hand
       //console.log("outprompt: "+ outprompt);
       handler.request(config).then(response => {
         if (!response.ok ==="OK") {
-          notify("api error: ", response.statusText);
+          //notify("api error: ", response.statusText);
           console.log("completion api error: " + response.statusText);
         }
         //console.log(response.data);
@@ -266,10 +263,10 @@ async function completion(api, params, callback, notify, handler) {
       data: JSON.stringify(params)
     }).then(response => {
       if (!response.ok ==="OK") {
-        notify("api error: ", response.statusText);
+        //notify("api error: ", response.statusText);
         console.log("completion api error: " + response.statusText);
       }
-      //console.log(response.data);
+      console.log(response.data);
       const output = outPointer(api.outpoint, response.data);// response.json();
       callback(output);
     }).catch(error => {
@@ -295,8 +292,8 @@ async function completion(api, params, callback, notify, handler) {
     // callback(text); 
   } catch (error) {
     console.error("Error in completion API:", error);
-    notify("Error in completion API:", error);
-    throw error;
+    //notify("Error in completion API:", error);
+    //throw error;
   }
 }
 function outPointer(outpoint, data) {
@@ -400,5 +397,42 @@ function returnKoboldAdapter(instructionSet){//should be recieved into params.ad
     assistant_end: assistantEnd
   };
 }
-
+async function generateCompletion(api, messages, instructions, params, callback, notify, handler) {
+  let errcatch = "";
+  params[api.templateStringKey] =  JinjaFormatter(instructions);
+  params.adapter = returnKoboldAdapter(instructions);
+  try {
+    const url = api.url;
+    //console.log(apiKey, identity, formattedQuery, params, apiUrl, model);
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${api.key}`,
+    };
+    // const stringifidentity = JSON.stringify(identity);
+    // const prompt = {
+    //   "model": model,
+    //   "messages": [
+    //     { "role": "system", "content": stringifidentity},//does this order matter? do the roles matter in the back end? is that useful for naming the system or tracking multiple characters?
+    //     { "role": "user", "content": formattedQuery }
+    //   ],
+    //   "stream": false
+    // }
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(prompt)
+    });
+    const jsonResponse = await response.json();
+    //console.log("response: "+JSON.stringify(jsonResponse));
+    if (!response.ok) {
+      errcatch = jsonResponse.error
+      console.log(`Request failed with status ${response.status}: ${jsonResponse.error.message}`);
+    }
+    //console.log("2nd end response: "+JSON.stringify( jsonResponse.choices[0].message.content));
+    callback(jsonResponse.choices[0].message.content);
+  } catch (error) {
+    //console.log("error : " +JSON.stringify(error));
+    notify("error:", JSON.stringify(errcatch));
+  }
+}
 module.exports = InferenceClient;

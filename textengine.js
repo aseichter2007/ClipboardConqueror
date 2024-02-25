@@ -796,11 +796,14 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         }
         if (!this.sendHold) {
           //set params for outgoing
-          let outParams = this.params;
-          if (this.api.config && this.apiConfigSet !== this.api.config) {
-            outParams = this.apiParams[this.api.config];
-          }
-          this.inferenceClient.send(this.identity, sorted.formattedQuery, outParams, this.api);
+          //console.log("params: " + JSON.stringify(this.params));
+          // let outParams = this.params;
+          // if (this.api.config && this.apiConfigSet !== this.api.config) {
+          //   outParams = this.apiParams[this.api.config];
+          //   //todo: build whole engine to transport settings across multiple apis
+          // }
+          // console.log("outParams: " + JSON.stringify(outParams));
+          this.inferenceClient.send(this.identity, sorted.formattedQuery, this.params, this.api);
         } else {
           this.sendHold = false;
         }

@@ -32,6 +32,14 @@ client.setPromptFormat(format.format);
 const sendEngine = new SendEngine(client, ncp.copy, recieveApiResponse, NotificationBell, endPointConfig.routes, identities.identities, instructions.instructions, params, formats.formats, saveSettings, fs);
 function notify(title = "Paste Ready", text = "The response is ready."){
 // Define the notification
+if (title == ''){
+    title = "empty response";
+}
+if (text == ''){
+    text = "The response was blank.";
+}{
+    
+}
 const notification = {
     title: title,
     message: text,
