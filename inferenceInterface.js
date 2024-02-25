@@ -122,6 +122,9 @@ if (this.lastOutpoint !== api.config) {
         this.messageOneSystemBuilder(identity, text , params, api);
         //this.basicMessageBuilder(identity, text, params, api);
       }
+      else if (api.buildType === "compatible") {
+        generateCompletion(api, identity, text, this.instructSet, params, this.callback, this.notify, this.handler)
+      }
       else {
         this.basicMessageBuilder(identity, text, params, api);
       }
@@ -189,7 +192,6 @@ if (this.lastOutpoint !== api.config) {
     if (api.model !== undefined) {
       params.model = api.model;
     }
-    //for key in identity
     let messages = [
       {"role": 'system', "content": JSON.stringify(identity)},
       { "role": 'user',"content": message }
@@ -214,7 +216,6 @@ async function chat(api, messages, instructions, params, callback,  notify, hand
       },
       data: params,
     };
-    
       //const outprompt = JSON.stringify({...params,...prompt})
       //const outprompt = {...params,...prompt}
       //console.log("outprompt: "+ outprompt);
@@ -229,26 +230,10 @@ async function chat(api, messages, instructions, params, callback,  notify, hand
       }).catch(error => {
         console.log(error);
       });;
-      // let jsonResponse = {results:[{text:"undefined response"}]};
-      // if (response !== undefined && response.ok) {
-      //   //console.log("response: "+response);
-      //   jsonResponse = await response.json();
-      // }
-      // //console.log("response: "+JSON.stringify(jsonResponse));
-      // if (!jsonResponse.ok) {
-      //   console.log(`Request failed with status ${response.status}: ${jsonResponse.error}`);
-      //   return;
-      // }
-      // //console.log("response: "+JSON.stringify(jsonResponse));
-      // const text = outPointer(api.outpoint, jsonResponse); //now it's the user's problem after I sort out defaults.
-      // if (text === "") {
-      //   callback("blank response");
-      // }
-      // callback(text);//could make programatical in a switch off a number
   } catch (error) {
     console.log(error);
   }
-  //
+
 }
 async function completion(api, params, callback, notify, handler) {
   try {
@@ -263,41 +248,23 @@ async function completion(api, params, callback, notify, handler) {
       data: JSON.stringify(params)
     }).then(response => {
       if (!response.ok ==="OK") {
-        //notify("api error: ", response.statusText);
         console.log("completion api error: " + response.statusText);
       }
       console.log(response.data);
-      const output = outPointer(api.outpoint, response.data);// response.json();
+      const output = outPointer(api.outpoint, response.data);
       callback(output);
     }).catch(error => {
       console.log(error);
     });
    
-    // // show contents of response
-    // if (!response.ok) {
-    //   notify("api error: ", response.statusText);
-    //   console.log("completion api error: " + response.statusText);
-    // }
-    // //let jsonResponse = await response.json();
-    // let jsonResponse = response;
-    // console.log(jsonResponse.data);
-    // //console.log("response: "+JSON.stringify(jsonResponse));
     
-    // //const data = await response.json();
-    // //console.log(JSON.stringify(response));
-    // const text = outPointer(api.outpoint, jsonResponse); //now it's the user's problem after I sort out defaults.
-    // //const text = data[api.outpoint][0].text;
-    // //callback(JSON.stringify(text));
-    // //console.log(text);
-    // callback(text); 
   } catch (error) {
     console.error("Error in completion API:", error);
-    //notify("Error in completion API:", error);
-    //throw error;
+
   }
 }
 function outPointer(outpoint, data) {
-  //try {
+  try {
     switch (outpoint.outpointPathSteps) {
       case 1:
         console.log(data[outpoint.one]);
@@ -326,9 +293,9 @@ function outPointer(outpoint, data) {
         console.log("Expected a number between 1 and 10, but got: " + outpoint.outpointPathSteps, );
       break;   
     }
-  // } catch (error) {
-  //   console.log("Expected " + outpoint.outpointPathSteps + "{ outpointPathSteps: 3, one : 'variable', two..., but got: " + JSON.stringify(outpoint) + "\n error: " + error);
-  // }
+  } catch (error) {
+    console.log("Expected " + outpoint.outpointPathSteps + "{ outpointPathSteps: 3, one : 'variable', two..., but got: " + JSON.stringify(outpoint) + "\n error: " + error);
+  }
 }
 function JinjaFormatter(instructionSet) {
  return `|-
@@ -397,8 +364,7 @@ function returnKoboldAdapter(instructionSet){//should be recieved into params.ad
     assistant_end: assistantEnd
   };
 }
-async function generateCompletion(api, messages, instructions, params, callback, notify, handler) {
-  let errcatch = "";
+async function generateCompletion(api, identity, text, instructions, params, callback, notify, handler) {
   params[api.templateStringKey] =  JinjaFormatter(instructions);
   params.adapter = returnKoboldAdapter(instructions);
   try {
@@ -408,31 +374,31 @@ async function generateCompletion(api, messages, instructions, params, callback,
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${api.key}`,
     };
-    // const stringifidentity = JSON.stringify(identity);
-    // const prompt = {
-    //   "model": model,
-    //   "messages": [
-    //     { "role": "system", "content": stringifidentity},//does this order matter? do the roles matter in the back end? is that useful for naming the system or tracking multiple characters?
-    //     { "role": "user", "content": formattedQuery }
-    //   ],
-    //   "stream": false
-    // }
+    const stringifidentity = JSON.stringify(identity);
+    const prompt = {
+      "model": model,
+      "messages": [
+        { "role": "system", "content": stringifidentity},//does this order matter? do the roles matter in the back end? is that useful for naming the system or tracking multiple characters?
+        { "role": "user", "content": text }
+      ],
+      "stream": false
+    }
+    const outprompt = {...params,...prompt}
     const response = await fetch(url, {
       method: 'POST',
       headers,
-      body: JSON.stringify(prompt)
+      body: JSON.stringify(outprompt)
     });
     const jsonResponse = await response.json();
     //console.log("response: "+JSON.stringify(jsonResponse));
     if (!response.ok) {
-      errcatch = jsonResponse.error
       console.log(`Request failed with status ${response.status}: ${jsonResponse.error.message}`);
     }
     //console.log("2nd end response: "+JSON.stringify( jsonResponse.choices[0].message.content));
     callback(jsonResponse.choices[0].message.content);
   } catch (error) {
     //console.log("error : " +JSON.stringify(error));
-    notify("error:", JSON.stringify(errcatch));
+    notify("error:", JSON.stringify(error));
   }
 }
 module.exports = InferenceClient;

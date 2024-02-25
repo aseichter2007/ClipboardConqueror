@@ -64,7 +64,7 @@ function returnSummary(text){
     text = text.replace(/\\n/g, '\n');
     let Response = recieveEngine.recieveMessageFindTerminatorsAndTrim(text);
     sendEngine.recievesummary(Response);
-    //client.getstats(sendData, "summary");
+  
 }
 function recieveProcessedClip(identity, query, params) {
     client.formatQueryAndSend(identity, query, params);
@@ -76,32 +76,6 @@ function recieveApiResponse(text){
     sendEngine.recentClip.text = text;
     ncp.copy(recieveEngine.recieveMessageFindTerminatorsAndTrim(text));
 }
-// To start listening
-// function sendData(data, destination) {
-//     const flags = ['summary', 'user']; // Define your list of available destinations here
-//     //console.log(JSON.stringify(data));
-//     try {
-//         switch (destination) {
-//             case flags[0]:
-//                 console.log(`Sending data to summary`);
-//                 break;
-//             case flags[1]:
-//                 console.log(`Sending data to ai memory`);
-//                 break;
-//             default:
-//                 //return to agent memory
-//                 //throw new Error('Invalid destination');
-//                 break;
-//         }
-
-//         // Send data to the chosen destination
-//         console.log(`Sent ${data} to ${destination}`);
-//     } catch (error) {
-//         console.error(`Error sending data: ${error.message}`);
-//     }
-// }
-
-
 clipboardListener.on('change', () => {
     ncp.paste(clipboardChangeHandler)
     //console.log('Clipboard changed');

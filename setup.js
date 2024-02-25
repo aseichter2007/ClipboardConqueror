@@ -38,7 +38,8 @@
  function setEndpoints(){
     //Ok it turned out that a lot of them for testing and stuff helps, so just move your favorites to the top and invoke them by $ from top to $$$... at bottom. Or just use the names like |||kobold| or |||koboldChat|   
     const endpoints = { 
-        defaultClient: "ooba",//must match a key in endpoints
+        writeFiles: false,//true to write 0formats.json and 0identities.json etc. Required for |||agent:file| 
+        defaultClient: "ooba",//must match a key in endpoints. Recommend using kobold or ooba. textGenWebUiChat also seems to be working.
         defaultOptions: ["kobold", "lmstudio", "textGenWebUi", "chatGPT3", "chatGPT4","select defaultClient: from previous items"],
         instructFormat: "defaultJson",
         instructOptions: ["default", "defaultJson", "defaultJsonReturn", "hermes", "chatML", "samantha", "airoboros", "alpaca", "alpacaInstruct", "llamav2", "mistral", "mixtral", "metharme", "bactrian", "baichuan", "baize", "blueMoon", "chatGLM", "openChat", "openChatCode", "wizard", "wizardLM", "vicuna", "mistralLite", "deepseek", "deepseekCoder", "tinyLlama", "pirateLlama", "stableLM", "openAssistant", "vicunav1", "stableVicuna", "select instruct: from previous items or any you add to 0formats.json"],//or in setup below and re-write 0formats.json
@@ -62,7 +63,7 @@
             },
             koboldChat: {//|||$$| or just ||| with matching defaultClient or |||koboldChat|
                 type: "chat",
-                buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
+                buildType: "compatible",//combined, compatible, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "http://127.0.0.1:5001/v1/chat/generate/",
                 config: "kobold",//must match a key in apiParams
                 templateStringKey: "jinja", //jinja, none or adapter, required for chat endpoints
@@ -92,7 +93,7 @@
             },
             lmstudio: {//|||$$$$| or |||lmstudio|
                 type: "chat",
-                buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
+                buildType: "compatible",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "https://localhost:1234/v1/chat/completions/",
                 config: "lmstudio",
                 templateStringKey: "jinja",
@@ -887,8 +888,8 @@ function setParams(){
             use_authors_note: false,
             use_world_info: false,
             //max_context_length: 4096
-            //max_context_length: 8192,
-            max_context_length: 16384,
+            max_context_length: 8192,
+            //max_context_length: 16384,
             max_length: 2000,
             rep_pen: 1.05, //how much penealty for repetition. Will break formatting charachters "*<, etc." if set too high. WolframRavenwolf: (Joao Gante from HF) told me that it is "only applied at most once per token" within the repetition penalty range, so it doesn't matter how often the number 3 appears in the first 5 questions, as long as the repetition penalty is a "reasonable value (e.g. 1.2 or 1.3)", it won't have a negative impact on tokens the model is reasonably sure about. So for trivial math problems, and other such situations, repetition penalty is not a problem.
             rep_pen_range: 4092, //
@@ -918,12 +919,13 @@ function setParams(){
         },
         lmstudio : {
             //model : "can also go here, will be overridden by above",
-            max_tokens : 600,
+            max_tokens : 2000,
             temperature: 1,
             stream : false
             //todo: figure out this api
         },
         openai: {
+            max_tokens : 2000,
             temperature : 1,
             stream : false
         },
@@ -945,7 +947,7 @@ function setParams(){
             top_p: 1,
             //user: "string",
             //preset: "string",
-            min_p: 0,
+            min_p: 0.17,
             dynamic_temperature: false,
             dynatemp_low: 1,
             dynatemp_high: 1,
@@ -1785,6 +1787,7 @@ function setup( endPointConfig, instructions, params, identities, formats, forma
             endPointConfig = require("./0endpoints.json");
         }else{
             endPointConfig.routes = setEndpoints();
+            write = endPointConfig.routes.writeFiles;
             if (write) {
                 writeObjectToFileAsJson(endPointConfig.routes, "0endpoints.json",fs)
             }
