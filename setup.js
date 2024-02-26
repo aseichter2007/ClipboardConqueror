@@ -42,7 +42,7 @@
         defaultClient: "ooba",//must match a key in endpoints. Recommend using kobold or ooba. textGenWebUiChat also seems to be working.
         defaultOptions: ["kobold", "lmstudio", "textGenWebUi", "chatGPT3", "chatGPT4","select defaultClient: from previous items"],
         instructFormat: "defaultJson",
-        instructOptions: ["default", "defaultJson", "defaultJsonReturn", "hermes", "chatML", "samantha", "airoboros", "alpaca", "alpacaInstruct", "llamav2", "mistral", "mixtral", "metharme", "bactrian", "baichuan", "baize", "blueMoon", "chatGLM", "openChat", "openChatCode", "wizard", "wizardLM", "vicuna", "mistralLite", "deepseek", "deepseekCoder", "tinyLlama", "pirateLlama", "stableLM", "openAssistant", "vicunav1", "stableVicuna", "select instruct: from previous items or any you add to 0formats.json"],//or in setup below and re-write 0formats.json
+        instructOptions: ["default", "defaultJson", "defaultJsonReturn", "hermes", "chatML", "samantha", "airoboros", "alpaca", "alpacaInstruct", "llamav2", "mistral", "mixtral", "metharme", "bactrian", "baichuan", "baize", "blueMoon", "chatGLM", "openChat", "openChatCode", "wizard", "wizardLM", "vicuna", "mistralLite", "deepseek", "deepseekCoder", "tinyLlama", "pirateLlama", "stableLM", "openAssistant", "vicunav1", "stableVicuna", "select instruct: from previous items or any you add to 0formats.json"],//or in setup below and re-write 0formats.json I think this one might be deprecated.
         persona: "defaultOpenerResolved",//must be a valid identity in identities.identities
         endpoints:{//these are accessible by name in defaultClient or like |||$| for kobold
             kobold:{ //|||$| or just ||| with matching defaultClient or |||kobold|
@@ -108,7 +108,7 @@
             },
             textGenWebUiCompletion: {//|||$$$$$| or |||textGenWebUi|
                 type: "completion",
-                url : "http://127.0.0.1:5000/v1/completions",//still working on this, making it easier to switch
+                url : "http://127.0.0.1:5000/v1/completions",
                 config: "TGWopenAICompletions",
                 format: "defaultJson",//completion endpoints must use a format matching a key in instructionFormats
                 key: "no_key_needed",
@@ -121,7 +121,7 @@
             },
             ooba: {//|||$$$$$| or |||textGenWebUi|
                 type: "completion",
-                url : "http://127.0.0.1:5000/v1/completions",//still working on this, making it easier to switch
+                url : "http://127.0.0.1:5000/v1/completions",
                 config: "TGWopenAICompletions",
                 templateStringKey: "instruction_template_str",
                 format: "defaultJson",//completion endpoints must use a format matching a key in instructionFormats
@@ -136,8 +136,8 @@
             textGenWebUiChat: {//|||$$$$$$| or |||textGenWebUi|
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
-                url : "http://127.0.0.1:5000/v1/chat/completions",//still working on this, making it easier to switch
-                config: "textGenWebUi",
+                url : "http://127.0.0.1:5000/v1/chat/completions",
+                config: "TGWopenAICompletions",
                 templateStringKey: "instruction_template_str",
                 format: "combined",//completion endpoints must use a format matching a key in instructionFormats
                 key: "no_key_needed",
