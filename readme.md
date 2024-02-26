@@ -7,14 +7,16 @@ Provided you are using local AI, CC is a data secure alternative integration pro
 
 *Special thank you to the creators of KoboldAi, KoboldCPP, llamma, openAi, and the communities that made all this possible to figure out. 
 
-If you are unhappy with my syntax, almost everything is configurable. 
+If you are unhappy with my syntax, almost everything is configurable in setup.js. 
 
-With Clipboard Conqueror, you can leverage AI abilities, invoke it by copying `||| "request"` 
+With Clipboard Conqueror, you can leverage AI abilities, invoke it by copying `||| "your request"` 
 
 Local AI responds after copying commands or requests for information.
 
 There is a wealth of information below and in this repo.
 All you really need to know is copying ||| with Clipboard Conqueror and Koboldcpp running will send any text you copy with that ||| to local AI.
+
+It will actually mess up funny picking up || after a simple invoke.  Reccomend |||code|| query for copying code blocks containing ||. Or change the default invoke setting.
 
 [Install Node](https://nodejs.org/) Clipboard Conqueror requires Node and NPM to run. 
 
