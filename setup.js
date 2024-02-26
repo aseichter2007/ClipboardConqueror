@@ -39,7 +39,7 @@
     //Ok it turned out that a lot of them for testing and stuff helps, so just move your favorites to the top and invoke them by $ from top to $$$... at bottom. Or just use the names like |||kobold| or |||koboldChat|   
     const endpoints = { 
         writeFiles: false,//true to write 0formats.json and 0identities.json etc. Required for |||agent:file| 
-        defaultClient: "ooba",//must match a key in endpoints. Recommend using kobold or ooba. textGenWebUiChat also seems to be working.
+        defaultClient: "kobold",//must match a key in endpoints. Recommend using kobold or ooba. textGenWebUiChat also seems to be working.
         defaultOptions: ["kobold", "lmstudio", "textGenWebUi", "chatGPT3", "chatGPT4","select defaultClient: from previous items"],
         instructFormat: "defaultJson",
         instructOptions: ["default", "defaultJson", "defaultJsonReturn", "hermes", "chatML", "samantha", "airoboros", "alpaca", "alpacaInstruct", "llamav2", "mistral", "mixtral", "metharme", "bactrian", "baichuan", "baize", "blueMoon", "chatGLM", "openChat", "openChatCode", "wizard", "wizardLM", "vicuna", "mistralLite", "deepseek", "deepseekCoder", "tinyLlama", "pirateLlama", "stableLM", "openAssistant", "vicunav1", "stableVicuna", "select instruct: from previous items or any you add to 0formats.json"],//or in setup below and re-write 0formats.json I think this one might be deprecated.
