@@ -418,17 +418,22 @@ CC supports chaining agents sequentially like:
 
  "c" or "continue" works similarly to send the log internally to the LLM with minimal markup "</s>"  between messages to build more of a chatlog.  
 
-an agent saved like |||lm:save| or |||gpt:save| always go to the openAI compatible or openAI api endpoints, so you should be able to chain different backends like 
+endpoints defined in setup.js or 0endpoints.json. can be used and chained by name like |||@textGenWebUiChat|
 ```
-|||@lm,#@gpt|
+|||@ooba,#@chatGPT3|initial query
 ```
-in this case, Captain Clip will be sent first, to koboldAI, the output then goes to LMstudio,  and the out from there to ChatGPT api. 
+In this case, Captain Clip will be sent first to kobold with the initial query. The output from kobold then goes to TextGenWebUi completions, and the out from there to ChatGPT 3.5 turbo though the openAI api. Herethere are no agents defined for the second and third queries. Add them like |||@ooba,#@chatGPT3,@writer| will send the writer agent to TextGenWebUi completions. 
 
 Chaining Captain Clip or AGI is not advisable cause Captain Clip likes to say "|||help|" and I have implemented this functionality in kind of a funky way so extra invokes will pile up and stop execution, or rather, Clip will pull the help to the clipboard if he sends the help suggestion. 
 
-It seems this triggers the same bug as write. If Clipboard Connqueror seems stuck, copy a little text with no invoke, and try your query again. 
+```
+|||frank,@abe,#@frank,#@kobold,ooba,#@ooba,c,@@c,d,@@d|
+```
+This query will build a multiturn conversation, frank's response to the query is sent to abe, abe's response to the query is sent to frank, and the middle conversation is held in |||dw| if you copy it, you will get back the middle. Or it's in the clipboard history as well, I never used that really, sorry clipboard history champs. This app absolutely pollutes it. I gotta rebuild in c# to fix that.
 
-It might be that I was using dw though, and that is a writing command so it causes the hang where you have to copy text with no invoke. I gotta figure this bug out...
+It seems this triggers the same bug as write. If Clipboard Conqueror seems stuck, copy a little text with no invoke, and try your query again. 
+
+It might be that I was using dw though, and that is a writing command so it causes the hang where you have to copy text with no invoke. I gotta figure this bug out... //Many moons later, this is still only minimized, you should be able to copy text with the invoke and it will reset but it still fails to send initially. 
 
 
 Prompt Formats:
@@ -440,10 +445,10 @@ or
 |||FORMAT|alpaca
 etc.
 ```
-Formats must exist in 0formats.json, the name must match the object key.
+Formats must exist in setup.js or 0formats.json, the name must match the object key. Files override setup.js when enabled, so if you use settings files, you have to delete or rename them to reflect changes in setup.js.
 
 
-Or you can set individual prompt segments one at a time like:
+Or you can set individual prompt segments like this, one at a time:
 ```
 |||PROMPT:startTurn|<|im_start|>
 
@@ -459,7 +464,8 @@ Or you can set individual prompt segments one at a time like:
 
 |||PROMPT:assistantRole|assistant\n
 
-//this example sets up basic ChatML formatting. For alpaca I reccommend setting the format strings in the role positions. StartTurn starts all turns; system, user, and assistant.  StartTurn is a bad place for "### Instruction:"
+//this example sets up basic ChatML formatting. For alpaca I reccommend setting the format strings in the role positions. StartTurn starts all turns; system, user, and assistant.  
+//StartTurn is a bad place for "### Instruction:" as it goes before user and assistant as well.
 
 |||PROMPT:prepend|You are a helpfull assistant\n\n
 
@@ -479,11 +485,11 @@ Or you can set individual prompt segments one at a time like:
 and special for jinja formatter only:
 
 ```
-|||PROMPT:special|.rstrip() //Probably not needed for typical use.
+|||PROMPT:special|.rstrip() //Probably not needed for typical use. Not sure what .rstrip() does. I think it removes whitespace at the end of the string, really I hate this behavior for CC. I want to know exactly what the machine sees. 
 
 ```
  
-None of these are case sensitive. |||SySTEMmemOrY| is the same as |||systemmemory|||. There are a few options to hit these as well, such as username or name, endturn or end, etc. I've hopefully reached easy to remember without adding confusion.
+None of these are case sensitive. |||PROMPT:SySTEMmemOrY| is the same as |||PPROMPT:systemmemory|||. There are a few options to hit these as well, such as username or name, endturn or end, etc. I've hopefully reached easy to remember without adding confusion.
 
 //todo: fix this: Also supports setting all instructions like: 
 ```
@@ -513,16 +519,17 @@ Currently there are no built binaries and Node is required to run Clipboard Conq
 
 
 
-2. Clipboard Conqueror is most powerful with [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/releases/),or a kobold compatible API. [openAI compatible API](https://lmstudio.ai/) doesn't expose as many settings. CC works with either or both! or just an openAI key. Or all three! I'd love to hear how you connect your choice of backend for a compatibility list.
+2. Clipboard Conqueror is most powerful with [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/releases/),or a kobold compatible API. [openAI compatible API](https://github.com/oobabooga/text-generation-webui) CC works with either or both! or just an openAI key. Or even more! I'd love to hear how you connect your choice of backend for a compatibility list and maybe adding your settings to the defaults.
 
 
-    For macOS get KoboldAi or anything that hosts a kobold united compatible endpoint for tavern, etc. //Notes below for linux and mac, thank Herro.
+    For macOS get KoboldAi, TextGenerationWebUi or anything that hosts a completion or chat api. //Notes below for linux and mac, thank Herro.
 
 
     a kobold or openAI compatible api must be running to use Clipboard Conqueror for free.
     I supply a sample batch file for loading a model with your settings file after you get kobold dialed in from the launcher. 
 
-3. Kobold needs a model. Here are my reccomendations 12/5/23:[OpenHermes 2.5 Mistral 7B 16K Context.GGUF](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-16k-GGUF)
+3. Kobold needs a model. I like GGUF because it is one file rather than a folder of mess.
+   Here are my reccomendations 2/25/24:[OpenHermes 2.5 Mistral 7B 16K Context.GGUF](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-16k-GGUF) 
 
      
      
@@ -695,7 +702,7 @@ Base models - these models are completion models, they respond well to: "sure, h
 
 Finetuned models can, depending on how they have been tuned, make sense of more direct orders: "write Fizzbuzz in javascript". Not all finetunes are instruct models, read model descriptions to learn what a model is designed for.
 
-Finetuning is creating a lora, but often the entire model is shipped rather than the lora, I expect because loras will be model specific or wildly unpredictable when applied to different bases.
+Finetuning typically means creating a lora, but often the entire model is merged with the lora for distribution rather than distributing the lora alone, I expect because loras will be model specific or wildly unpredictable when applied to different bases.
 
 Base models are not fully cooked, they have some training room remaining to allow finetuning of the output. 
 
@@ -714,6 +721,9 @@ Then there is distillation, which I have yet to dig into.
 
 Model merges often result in odd sizes, so not all models fit the typical 3/7/13/30/65 progression. 
 
+M-O-E
+---
+Mixture of Experts models have many layers and gate which layers are used for each token. Each layer contains different combinations of "experts" tuned on different tasks. I believe Mixtral 8x7b has 256 layers or something and to save on compute at inference time many layers are skipped, different ones each token. This strategy should help specific accuracy by breaking the model into smaller pieces and training each for different knowledge sets. I think this also possibly reduces training memory requirements or could.
 
 Linux/Mac Notes. 
 ----
@@ -775,14 +785,14 @@ Have fun and remember you can always ask for
 
 
 //I'll just leave this here https://www.reddit.com/r/bookmarklets/comments/d8pqe2/toggle_design_mode/
+---
 
 Settings Conqueror is poor and should be avoided. It will mess your settings up.
 ---------------------------------
-This application will get binaries when I am happy with it, for now it's a very basic GUI for changing the settings, except for your openAI key which goes in 0openAiKey.json and isn't touched. No need to expose keys to the browser, one line in one file with one option can't be done wrong.
+This application will get binaries when I am happy with it, for now it's a very basic GUI for changing the settings. 
 
 Settings Conqueror is currently delayed while I think hard about how to make user definable function calling and how to make that a neat package that is easy to use. 
 
-Settings Conqueror should work fine for instructions and endpoints, but is adding extra formatting in the agents page that generally seems ignored by most models but I am very unhappy that it's not coming out predictably. My expectation is I am double stringifying somewhere, or bad formatting in the default agents is frying me. Or both. It pretty much works though. 
 
 It also needs node, and can be run with the install and run batch files in the folder.
 
@@ -843,7 +853,7 @@ dev:
 
 //todo: keyboard binding to activate ai on last clip without prompt. //maybe paid, I don't want to make it too easy to do all the linkedin tests, and a ready line to copy is the same.//done, |||on| //multiplatform esc key reading is tricker than I expected. 
 
-//todo: /api/extra/abort on esc and return //waiting on backends coalesing and a good doc for openAI compatibles 
+//todo: /api/extra/abort on esc and return //waiting on backends coalesing and a good doc for openAI compatibles. also reading esc key is tricker than I expected, gotta find the right thing.
 
 //todo: implement insertion after cursor and response streaming. //this would be easy in windows if I wasnt hung up on multiplatform support. 
 
