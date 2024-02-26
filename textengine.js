@@ -865,18 +865,28 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
   }
   tagExtractor(text) {
     text = text.trim();
-    const tags = text.split(this.instructions.endTag);
+    const tags = text.split(this.instructions.endTag);//todo: I think currently if you pick up a code block like ||| If ( a || b) its gonna get wierd.
     var output = {};
     if (tags.length === 1) {
       output = { persona: "", command: "", text: text };
     } else if (tags.length === 2) {
       output = { persona: tags[0], command: "", text: tags[tags.length - 1] };
-    } else if (tags.length === 3) {
-      output = {
-        persona: tags[0],
-        command: tags[1],
-        text: tags[tags.length - 1]
-      };
+    } else if (tags.length >= 3) {
+      let text = tags.slice(2)
+      if (text.length > 1) {
+        text = text.join(this.instructions.endTag);
+        output = {
+          persona: tags[0],
+          command: tags[1],
+          text: text
+        };
+      } else {
+        output = {
+          persona: tags[0],
+          command: tags[1],
+          text: text[0]
+        };
+      }
     }
     return output;
   }
