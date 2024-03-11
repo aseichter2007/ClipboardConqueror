@@ -18,7 +18,7 @@ All you really need to know is copying ||| with Clipboard Conqueror and Koboldcp
 
 It will actually mess up funny picking up || after a simple invoke.  Reccomend |||code|| query for copying code blocks containing ||. Or change the default invoke setting.
 
-[Install Node](https://nodejs.org/) Clipboard Conqueror requires Node and NPM to run. 
+[Install Node](https://nodejs.org/) Clipboard Conqueror requires Node to run. If nothing happens when you click the scripts, you likely need node.
 
 Clipboard Conqueror reccomends [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/releases/) for Windows users. Kobold does the actual AI LLM processing, Clipboard Conqueror bridges kobold with the clipboard for use anywhere. 
 
@@ -26,7 +26,7 @@ Clipboard Conqueror reccomends [KoboldCPP](http://www.github.com/LostRuins/kobol
 
 Get a model that fits in your graphics card or system ram, more details in installation, faaar below. 
 
-Download this repo. 
+Download [this repo](https://github.com/aseichter2007/ClipboardConqueror/archive/refs/heads/main.zip).
 
 Windows:
 ---
@@ -34,7 +34,7 @@ Run z-instalCC.bat
 
 Run z-runCC.bat
 
-I like z-runCCnodeMon.bat in case it's hung funny you can type rs in the console to restart. 
+I like z-runCCnodeMon.bat because it automatically restarts and loads changes in setup.js, unless settings files are enabled, that gets clunky. 
 
 linux or Mac:
 ---
@@ -283,7 +283,7 @@ OpenAi Compatible
   |||$$|this will go to the second configured endpoint
   ```
   ```
-  |||ooba|this will go to the TextGenerationWebUi endpoint because I called it ooba for quick access.
+  |||tgwchat|this will go to the TextGenerationWebUi openAI endpoint.  (|||ooba| for standard completion isn't working as expected, it only sends back 16 tokens.)
   ```
   Add endpoints and parameters in settings.js or 0endpoints.json if settings files are enabled. File writing is off by default, the settings files are more for use with binaries.
 
@@ -422,14 +422,14 @@ CC supports chaining agents sequentially like:
 
 endpoints defined in setup.js or 0endpoints.json. can be used and chained by name like |||@textGenWebUiChat|
 ```
-|||@ooba,#@chatGPT3|initial query
+|||@tgwchat,#@chatGPT3|initial query
 ```
-In this case, Captain Clip will be sent first to kobold with the initial query. The output from kobold then goes to TextGenWebUi completions, and the out from there to ChatGPT 3.5 turbo though the openAI api. Herethere are no agents defined for the second and third queries. Add them like |||@ooba,#@chatGPT3,@writer| will send the writer agent to TextGenWebUi completions. 
+In this case, Captain Clip will be sent first to kobold with the initial query. The output from kobold then goes to TextGenWebUi completions, and the out from there to ChatGPT 3.5 turbo though the openAI api. Here, there are no agents defined for the second and third queries. Add them like |||@tgwchat,#@chatGPT3,@writer| will send the writer agent to TextGenWebUi completions. If we added c,@@c then c is built up like a chatlog and sent in the system prompt.
 
 Chaining Captain Clip or AGI is not advisable cause Captain Clip likes to say "|||help|" and I have implemented this functionality in kind of a funky way so extra invokes will pile up and stop execution, or rather, Clip will pull the help to the clipboard if he sends the help suggestion. 
 
 ```
-|||frank,@abe,#@frank,#@kobold,ooba,#@ooba,c,@@c,d,@@d|
+|||frank,@abe,#@frank,#@kobold,tgwchat,#@tgwchat,c,@@c,d,@@d|
 ```
 This query will build a multiturn conversation, frank's response to the query is sent to abe, abe's response to the query is sent to frank, and the middle conversation is held in |||dw| if you copy it, you will get back the middle. Or it's in the clipboard history as well, I never used that really, sorry clipboard history champs. This app absolutely pollutes it. I gotta rebuild in c# to fix that.
 
@@ -879,16 +879,16 @@ release!//oh snap I got excited and went. //beta release in motion.
 
 //todo: savesettings and getsettings. overwrite settings like |||settings,write| to paste ' |||settings,save| `{ the settings serialized json }` ' which can be edited in place and copied to save the settings. //partial, it's bugged
 
-//todo: write agents or custom settings to file. 
+//todo: write agents or custom settings to file. //partial, agents, no settings writing yet.
 
 //really waffling, its simply good like >user: //todo: per character rolling memory to allow more natural exchanges and enable rp.//decline for now. I should do a proper conversation builder.
 
-//todo: settings bulk in and out //partial, prompt format swithcing is in, needs instructions switching to support more completion backends. 
+//todo: settings bulk in and out //partial, prompt format switching is in, needs instructions switching to support more completion backends. 
 
 
 //CC should not make outbound requests other than openAI, security is important. I'm thining about a branch without openAI just for data safety but until someone asks I won't split main. 
 
-//todo: make a lambda script to setup a lambda to serve a daily charachter, run a continuous contest so people vote for tomorrows char. |||dailycandidate,rate|10, assign up to ten points for the candidate last retrieved with |||dailycandidate| provies random from server. Points are gained by and blind?
+//todo: make a lambda script to setup a aws lambda to serve a daily charachter, run a continuous contest so people vote for tomorrows char. |||dailycandidate,rate|10, assign up to ten points for the candidate last retrieved with |||dailycandidate| provies random from server. Points are gained by and blind?
 //todo: build agent portal with easy to copy and use workflow. 
 //todo: mystery agent of the day. vulnerability: the description is visible in the kobold terminal
 //does anyone really want this?
