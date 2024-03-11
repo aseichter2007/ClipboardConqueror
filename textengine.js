@@ -245,7 +245,7 @@ again, full colon on settings, which go directly to the backend api.
 Troubleshooting:
   Occasionally kobold or this app hangs. You can type rs in the console and press enter to restart this application.
 
-  Occasionally the last copy is the same as what you're copying again. To clear momentary troubles copy text with no invoke to clear the system.
+ To clear momentary troubles simply try again. 
 
 Copy the following block to exchange the Captain Clip persona for a more professional AI:
 
@@ -266,7 +266,7 @@ frank\n\n<|im_end|>\n<|im_start|>assistant:\n
 
 ---
 
-|||re,frank|this text is invisible to :save| //also, :save in there may have unpredictable results...
+|||re,frank|this text is invisible to :save| query.
 
 ||set|:
 
@@ -671,6 +671,9 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         else if (this.params.max_tokens) {
           this.params.max_tokens = parseInt(tag);
         }
+        else{
+          console.log("no matching max_length or max_tokens in params: " +JSON.stringify(this.params));
+        }
       } else if (tag === this.instructions.setPromptFormat) {
         this.sendHold = true;
         this.setInferenceFormat(sorted.formattedQuery);
@@ -820,7 +823,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     let tags = "";
     if (parsedData.length > 3) {//todo: fix this so it works better
       this.notify(
-        "Warning:",
+        "Not Sent:",
         "too many " + this.instructions.invoke + ". max 2."
       );
       this.sendHold = true;
