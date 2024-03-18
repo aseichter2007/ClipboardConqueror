@@ -748,24 +748,7 @@ Mixture of Experts models have many layers and gate which layers are used for ea
 
 Linux/Mac Notes. 
 ----
-
-  ![harrro](https://styles.redditmedia.com/t5_20v1i8/styles/profileIcon_snoo94b3e9ee-40b0-4d50-976b-f84339866e74-headshot-f.png?width=256&height=256&crop=256:256,smart&s=99c1f9c5ba8353614aca16055afd851209dba8ca)
-  level 4
-  harrro:
-
-  Ok, got it working after some debugging on my Ubuntu Linux system.
-
-  The npm start was exiting immediately without output (I added a setInterval at the end to keep the app alive to debug) but noticed that no clipboard events were firing.
-
-  Turns out there is a problem with the clipboard-event library on Linux: https://github.com/sudhakar3697/node-clipboard-event/issues/20
-
-  For some reason, that issue was closed without a fix but to fix it, I ran this command from the root folder of this app as people suggested in that Github issue (the command sets the clipboard-listener binary to be executable): chmod +x node_modules/clipboard-event/platform/clipboard-event-handler-linux
-
-  In that issue, people suggest adding that command before your app starts in your npm start entry in package.json (but you'd only do this on Linux and possibly Mac).
-
-  After that, it worked well. Copy started generating with kobold and paste had the contents of the result as expected.
-
-  The notification when generation finished workes but there is no audible sound. Consider investigating how to define one in the toast config object in copyconqueror.js.
+  The notification when generation finished workes but there is no audible sound. Consider investigating how to define one in the toast notification config object in copyconqueror.js line 43.
 
 
 Quick launch shortcuts:
