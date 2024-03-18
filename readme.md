@@ -26,7 +26,7 @@ Clipboard Conqueror reccomends [KoboldCPP](http://www.github.com/LostRuins/kobol
 
 Get a model that fits in your graphics card or system ram, more details in installation, faaar below. 
 
-Download [this repo](https://github.com/aseichter2007/ClipboardConqueror/archive/refs/heads/main.zip). Unzip it.
+[Download Clipboard Conqueror](https://github.com/aseichter2007/ClipboardConqueror/archive/refs/heads/main.zip). Unzip it.
 
 Windows:
 ---
