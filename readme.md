@@ -26,7 +26,7 @@ Clipboard Conqueror reccomends [KoboldCPP](http://www.github.com/LostRuins/kobol
 
 Get a model that fits in your graphics card or system ram, more details in installation, faaar below. 
 
-Download [this repo](https://github.com/aseichter2007/ClipboardConqueror/archive/refs/heads/main.zip).
+Download [this repo](https://github.com/aseichter2007/ClipboardConqueror/archive/refs/heads/main.zip). Unzip it.
 
 Windows:
 ---
@@ -47,7 +47,7 @@ For openAi access
 
 put your key into the apropriate endpoints in setup.js and invoke with |||chatGPT3| or change the default in 0endpoints.json. |||chatGPT4| will hit turbo with defaults, change the target model in 0endpoints.json or setup.js.  For now, default behavior does not write the config files.
 
-Kobold or local AI are not required to use Clipboard Conqueror, but it requires paid openAi api credit to use their service. OpenAi access has been included to ensure anyone can master prompting with my tools, on a budget that fits their current hardware.  If CC really gets rolling and meets my needs, I will host a dedicated cluster of my own to ensure free access for anyone, on secure and transparent terms with the excess. AI will change everything at an incredible rate, everyone deserves the best tools we can get our hands on in these trying times. 
+Kobold or other local inference engines are not required to use Clipboard Conqueror, but it requires paid openAi api credit to access their service. OpenAi access has been included to ensure anyone can master prompting with my tools, on any hardware.  If CC really gets rolling and meets my needs, I will host a dedicated cluster of my own to ensure free access for anyone, on secure and transparent terms with the excess. AI will change everything at an incredible rate, everyone deserves the best tools we can get our hands on in these trying times. 
 
 Please help me share Clipboard Conqueror with everyone. 
 
@@ -57,8 +57,8 @@ Copy, Conquer, Paste.
 I solemnly promise that this application and at least one compatible backend will function in the absence of internet connectivity.
 One of my design inspirations for this application is to spread LLM models to as many computers as possible. I want to ensure at least one intact system is recovered by future archaeologists, an incredible time capsule of culture, science, and data.  We should be sending intelligent boxes to deep space too. Our Knowledge and posterity must not go to waste. 
 
-This project is also a bit of a last ditch effort to remain software oriented, I need income. I've been looking for work and getting nothing but scams.
-Please, if you get good use from this application, especially in a commercial setting, consider supporting me, or hiring me. I'm a new father and not having stable income is just frying my brain. 
+I need income. I've been looking for work all year and getting nothing but scams and my hopes up.
+Please, if you get good use from this application, especially in a commercial setting, consider subscribing to my kofi, or hiring me. I'm a new father and not having stable income is just frying my brain. 
 ``````
 patreon.com/ClipboardConqueror
 
@@ -71,10 +71,16 @@ Captain Clip: Here are the links formatted as Markdown for a .md file:
 1. [Patreon](https://patreon.com/ClipboardConqueror)
 2. [Ko-fi](https://ko-fi.com/aseichter2007)
 
-I have provided the tools to supply your own custom always ready assitant on your terms. You tip your delivery guy, consider my contribution to your workflow, it will really help my family. Please drop a coin for your coder.
+I have provided the tools to supply your own custom always ready assitant in any application on your terms. You tip your delivery guy, please drop a coin for your coder, it will really help my family.
+
+BTC: 0x92cB00214fd137E73Fa85eE80e04232D8b14Ea5a
+
+DOGE: bc1qu0zp2y8gwmqelmq5radscdltjxy23t4u0rfx6s
+
 
 
 Quick Start Jam, Reccomended:
+---
 
 [![YouTube Video](https://i.ytimg.com/vi/fcM8dDtVTYQ/hqdefault.jpg)](https://youtu.be/fcM8dDtVTYQ)
 
@@ -91,23 +97,6 @@ Using Clipboard Conqueror to mutate content, and Installation:
 
 
  - *note in this video I mention context leaking with Context Shift, that was my mistake, for a bit I had a bug where re was persisting unexpectedly. 
-
-Large Language Models:
----
-
-LLMs are powerful tools but it's important to understand how they work. The input text is vectorized and put through matrix transformations and a big complex vector is built, and then each word is added to that vector as it is chosen in turn one at a time, with some randomity to get better speech flavor, until the next probable token is a stop token or max length is exceeded.
-
-In an LLM every word is a cloud of numbers that represent how that token relates to every other and some phrase structures or collections of tokens. By turning words into numbers, we can then beat them with math and determine which tokens probably are appropriate to go next.
-
-It doesn't really reason, it doesn't really think, it amplifies patterns and guesses using probabilities and random, each next word chosen with such accuracy and literate complexity that kind of functionally it simulates having thought.  An important note: LLMs return a list of probable tokens and their probability, and after the LLM has done the math, one word is selected by user set rules from the returned set.  
-
-LLM models don't make the choice, sampling happens after and then the machine is asked for the next tokens to choose from, ev-ery -to-ke-n - however the words are sliced.
-
-It's weird, but they have no state, it's data-crunch-out every word in turn, no real consideration. 
-
-Use them effectively within their limits to succeed in 2024.
-
-You can go find the right data and paste the text at an LLM and it can use that data, but no LLM should be trusted implicitly, just as a first resort, right here aboard the Clipboard Conqueror.
 
 
 Productivity:
@@ -184,7 +173,7 @@ Usage:
     Ask Frank Drebin if he has information contained in tag "mem"
 
     Note: Agents, memory agents, and instructions can be combined like |||agent1,agent2|.
-    Three pipes, agent, one pipe. No spaces. Any agents or settings must be closed with one pipe or they will be sent as text to the default agent (Captain Clip).
+    Three pipes, agent, one pipe. No spaces. Any agents or settings must be closed with one pipe or the names will be sent as text to the default agent (Captain Clip).
 
     ```
     |||2700| write a long story bout a picture of a story where an artist draws a picture of a story about an artist being written by an author
@@ -192,22 +181,23 @@ Usage:
     - sets the max response length to 2700. Also works like |||agent,setting:0.5,1000| just a number is always max response length.
 
     ```
-     |||temperature:1.1| be more unpredictable, but only 10%
+     |||temperature:1.1| be more unpredictable, normalize probabilities by 10% after other samplers.
      ```
-    - sets the temperature to 1.1. This works for any setting, e.g., top_p, min_p. supports :true :false. Currently temperature and max length are the only settings used for openAi compatible endpoints. 
+    - sets the temperature to 1.1. This works for any setting, e.g., top_p, min_p. supports :true :false. Overrides the params in setup.js.
+    - Only persists in memory and used for the defaultClient set in setup.js. |||settings:set| are not used for secondary endpoints used like |||tgwchat|.
     ```
       |||re| what is this code doing? 
       ```
     - return copy at end of prompt inserted after user prompt.
     - sends the thing you copied last after "what is this code doing? \n \n", copied text here at the end of the user prompt" and sends the Captain Clip assistant in the system prompt.
     ```
-      |||rf| what is this code doing? 
+      |||rf| what is in the rf agent? 
     ```
     - return last copied first in prompt inserted like an agent at the level rf is placed relative to other agents ex |frank,rf,tot| copied text comes after frank agent in the system prompt. Clip will go after in this case because of how he is added, but you can do |||default,rf| if you want Clip's prompt first.
    
 
     ```
-    |||memory:save| writes or overwrites an identity called memory with this text: "writes or overwrites an identity..."
+    |||memory:save| writes or overwrites an identity called memory with this text: " writes or overwrites an identity..."
     ```
 
      - Note - I reccomend editing the json directly for complex agents, especially if you are testing prompts to use in production. 
@@ -215,12 +205,6 @@ Usage:
     ```
     |||mem:save| SYSTEM: take on the role of {{character}}, description:  description.
     ```
-    
-    
-
-    >Save is the only command supported like `|||agent:save|{"description":"description"}` JSON format works but the syntax has to be perfect; recommend avoiding wrapping with {} by hand.
-    
-    //depreciated, no longer parsing input. 
 
      - |||coder,mute,memone,stevesdayoff|
      > This command will insert the coder character card, the mute card, memone, and stevesdayoff. The AI will receive each of these.
@@ -263,27 +247,34 @@ Usage:
     ```
     The file command saves that agent to the 0identities.json file. Currently only supports agents and will save settings values as agents if you tell it to.  Currently the only way to delete filed agents is to delete them from 0identites.json or delete the json entirely to restore defaults next run.
 
-  Currently after using a command that writes data from the application, "|||agent,write|", "|||help|", "|||introduction|" you must copy text with no invoke token to clear a bugged state. 
+    ```
+    |||code|| 
+    ```
+    By sending a second pipe "|" on the end, you avoid collisionss with "||" OR operators. 
 
+  Currently after using a command that writes data from the application,"|||list|", "|||agent,write|", "|||help|", "|||introduction|", or "|||dw|" you must copy your next query twice.
 
 --------
 OpenAi Compatible 
 -----
   Clipboard Conqueror supports infinite configurable endpoints. You can add as many as you like. 
   CC supports multiple parameter sets to ease multiple backend configurations.
-  I think it can support anything that takes either a string or chat messages style input.
 
-  Move your favorites to the top and invoke them by |||$| from top to |||$$$... at bottom. Or just use the key names like |||kobold| or |||koboldChat|  
+  It can support anything that takes either a string or "messages" openAI api style input, but currently doesn not support SSL properly. LMstudio and Koboldcpp's openai api endpoints return cryptic errors. Something about SSLv3 and a generic bad request refusal. Debugging things I didn't make is hard with the baby interrupting, I can't just think it out and put in the changes, I gotta dig. Any insights would be appreciated.
+
+  TextGenerationWebUi does not need to launch with --API. Or I might have the openAI add on enabled and saved settings. The verbosity of TGWUI leaves something to be desired. Prefer KoboldCpp because there is better indication that the query is being processed, and how much longer that might take. Feedback and issues about compatibility are appreciated.
+
+  Move your favorites to the top and invoke them by |||$| from top to |||$$$...| at bottom. Or just use the key names like |||kobold| or |||tgwchat|  
 
   ```
-  |||$|this message will go to the first configured endpoint;
+  |||$|this message will go to the first configured endpoint in setup.js or 0endpoints.json if settings files are enabled
   ```
 
   ```
   |||$$|this will go to the second configured endpoint
   ```
   ```
-  |||tgwchat|this will go to the TextGenerationWebUi openAI endpoint.  (|||ooba| for standard completion isn't working as expected, it only sends back 16 tokens.)
+  |||tgwchat|this will go to the TextGenerationWebUi openAI endpoint.  (|||ooba| for standard completion isn't working as expected, it only sends back 16 tokens despite asking for more.)
   ```
   Add endpoints and parameters in settings.js or 0endpoints.json if settings files are enabled. File writing is off by default, the settings files are more for use with binaries.
 
@@ -291,7 +282,7 @@ OpenAi Compatible
 ```
 |||model:gpt-3.5-turbo| 
 ```
-  will change the target openai model. names must be exact. I dont know them or have a gpt key to test this feature. I put the ones that arent marked depreciating in |||gpts,write|  This is curently superceded by models set on the endpoint configuration. I think this can still be used if you don't specify a model in the endpoint configuration.
+  will change the target openai model. names must be exact. I dont know them or have a gpt key to test this feature. I put the ones that arent marked depreciating in |||gpts,write|  This is curently superceded by models set on the endpoint configuration. I think this can still be used if you don't specify a model in the endpoint configuration. 
 
   |||$,set| will behave as expected and send to the compatible endpoint until |||set| to release. //todo: determine if this is broken.
 
@@ -299,22 +290,11 @@ OpenAi Compatible
   You can safely use any other command to query sensitive data, and depending on your configuration, gpt commands can be sent locally as well. 
 
 
-  Advanced Example:
-
-  ```
-  |||newAgent:save| {  
-    "yourName": "Corporal Dip",
-    "anydescription": "An unhelpful and unfriendly army man. He takes orders to the john and throws em in. He disrespects requests. He hates kind pleas for help.",
-    "thisExampleDilogue": ["Dip: What do you want, sarge?", "Dip: get out of my face."]
-  }
-
-  ```
-  will add that agent json parsed into the memory until the application is closed. Note: the entire JSON is sent to the LLM. Openhermes loves the format with keys like {"system":"You are {{char}}:", "name": "SuperAIHELPErman5000", "description": "future roboto assistant mega help power"}
-
    super advanced save: 
    ---
-   
-      |||CurrentText:save,re,LastCopy:save|CurrentText
+  ``` 
+  |||CurrentText:save,re,LastCopy:save|CurrentText
+  ``````
   - if the re flag is set, saved agents come from the last copy. This allows saving an agent from the current text that is distinct from the lastCopy agent which comes from the last clipboard contents, and allows saving agents while making an initial query like:  
 
 
@@ -349,28 +329,30 @@ OpenAi Compatible
  ```
  |||| assistant gives really weird bogus advice: | how can I become as pretty as OPs mom?
  ```
+ - not the advice I was expecting, I wasnt expecting "stalk her down and become her". WOW!
 
-Advanced Commands:
----
 ```
-||||System: Command first before Clip agent.|  text from <user> in the internal chain
+||||System: Command first before Clip agent.|  query from user
 ```
 
-^^^^note 4 "|" , and the close on the end above but only 3, then agents|, then system, then closing "|" below.
+^^^^note 4 "|" , and the close on the end above but only 3, then agents|, then system, then closing "|" below.  
 
 ```
 |||writer| Command First.| User: after agent writer
 ```
-System applies set formatting like:
+
+
+Clipboard Conqueror applies formatting like:
 ```
 "prompt":"<|im_start|>[\"###": Command First.\",[\"SYSTEM: Write a lengthy prose about the requested topic. Do not wrap up, end, or conclude the story, write the next chapter.\\n \\n Story:\",\"\"]]<|im_end|>\n<|im_start|>user:\n User: after agent writer\n\n<|im_end|>\n<|im_start|>assistant:\n
 ```
 
-"###" is a configurable key, and seems to ease the use of alpaca models and doesnt seem to upset anything as it comes first. 
+"###" is a configurable key and should only be present when a quick prompt is specified and removed if it is empty.
 
 ```
-|||re,frank|this text is invisible to :save| 
+|||re,frank|this text is invisible to :save| user query
 ```
+instant system prompts like |||e ( *for empty prompt* )| off the cuff system prompt.| are preserved with |||set|.
 
 |||set|
 ---
@@ -382,12 +364,14 @@ System applies set formatting like:
  - set will save all agents before it as a persistent default, and include any system command sent at this time. in this case joe does not persist with the next simple ||| 
  
  once set "|||"{query} will behave as 
+ ```
+ |||(that last copy saved with rf),frank|these system commands persist|{query} 
+ ```
  
- "|||(that last copy saved with rf),frank|these system commands persist|"{query}
  
  until |||set| is copied again, clearing the set agents. 
 
- While set, |||any,additional,agents| can be sent and add after the set agents.
+ While set, |||any,additional,agents| can be sent and add after the set agents, and will go along after the set agents.
 
  |||rf,set| is extremely useful for repeated queries against the same copied data. 
 
@@ -398,7 +382,7 @@ System applies set formatting like:
 
 Multi agent chaining and complex agent workflows. 
 ---
-Clipboard Conqueror is a no code multi-agent framework ready to operate on or in any context. 
+Clipboard Conqueror is a no code and non code testing, basic multi-agent chat framework ready to operate on or in any context. 
 
 CC supports chaining agents sequentially like:
 
@@ -424,9 +408,9 @@ endpoints defined in setup.js or 0endpoints.json. can be used and chained by nam
 ```
 |||@tgwchat,#@chatGPT3|initial query
 ```
-In this case, Captain Clip will be sent first to kobold with the initial query. The output from kobold then goes to TextGenWebUi completions, and the out from there to ChatGPT 3.5 turbo though the openAI api. Here, there are no agents defined for the second and third queries. Add them like |||@tgwchat,#@chatGPT3,@writer| will send the writer agent to TextGenWebUi completions. If we added c,@@c then c is built up like a chatlog and sent in the system prompt.
+In this case, Captain Clip will be sent first to Kobold with the initial query. The output from Kobold then goes to TextGenWebUi completions, and the out from there to ChatGPT 3.5 turbo though the openAI api. Here, there are no agents defined for the second and third queries. Add them like |||@tgwchat,#@chatGPT3,@writer| will send the writer agent to TextGenWebUi completions. If we added c,@@c then c is built up like a chatlog and sent in the system prompt.
 
-Chaining Captain Clip or AGI is not advisable cause Captain Clip likes to say "|||help|" and I have implemented this functionality in kind of a funky way so extra invokes will pile up and stop execution, or rather, Clip will pull the help to the clipboard if he sends the help suggestion. 
+Chaining Captain Clip or AGI will stop the chain of execution. (agents with instructions to write invokes cause the chain to stop)
 
 ```
 |||frank,@abe,#@frank,#@kobold,tgwchat,#@tgwchat,c,@@c,d,@@d|
@@ -448,42 +432,61 @@ or
 etc.
 ```
 Formats must exist in setup.js or 0formats.json, the name must match the object key. Files override setup.js when enabled, so if you use settings files, you have to delete or rename them to reflect changes in setup.js.
+I added some extra complexity, I apologise for the bit of extra noise, but there are use cases.
+
+When the format is changed, it persists across backends. This is to ease testing of multiple models with different formats. To sidestep this limit, edit the format in setup.js or 0formats.json and assign the correct one in the endpoint definition or 0endpoints.json.
 
 
-Or you can set individual prompt segments like this, one at a time:
+Or you can set individual prompt segments like this:
 ```
 |||PROMPT:startTurn|<|im_start|>
-
+```
+```
 |||PROMPT:endSystem|<|im_end|>\n 
-
+```
+```
 |||PROMPT:endUser|<|im_end|>\n
-
+```
+```
 |||PROMPT:endTurn|<|im_end|>\n
-
+```
+```
 |||PROMPT:systemRole|system\n
-
+```
+```
 |||PROMPT:userRole|user\n 
-
+```
+```
 |||PROMPT:assistantRole|assistant\n
-
-//this example sets up basic ChatML formatting. For alpaca I reccommend setting the format strings in the role positions. StartTurn starts all turns; system, user, and assistant.  
-//StartTurn is a bad place for "### Instruction:" as it goes before user and assistant as well.
-
-|||PROMPT:prepend|You are a helpfull assistant\n\n
-
-|||PROMPT:systemAfterPrepend| still before agents
-
-|||PROMPT:post| after agents
-
-|||PROMPT:systemMemory| spot for persistent system context after agents
-
-//These set system prompt segments.
-
-|||PROMPT:userMemory| spot for persistent user context before user query
-
-|||PROMPT:start|start of the AI response
+```
+these set up basic ChatML formatting, the rest are kind of extra. For alpaca I reccommend setting the format strings in the role positions. StartTurn starts all turns; system, user, and assistant.  
+StartTurn is a bad place for "### Instruction:" as it goes before user and assistant as well.
+```
+|||PROMPT:prepend|You are a helpfull assistant\n\n 
+```
+- persistent context before agents
+```
+|||PROMPT:systemAfterPrepend| still before agents. 
+```
+- This is here for double system prompts, you can close the first and open the second here where prepend contains the meat of the hidden persistent system prompt. 
+```
+|||PROMPT:post| after agents. 
+```
+- I use this to close an open codeblock on on the system prompt. 
 
 ```
+|||PROMPT:systemMemory| spot for persistent system context after agents
+```
+- Above set system prompt segments, below set user and asssistant prompt segments.
+```
+|||PROMPT:userMemory| 
+```
+- spot for persistent user context before user query
+```
+|||PROMPT:start|start of the AI response
+```
+- This defines the start of the AI response. If you desire pure text completion, save this in here and use empty prompts like "|||e|" Or steer it by sending agents and a user query.
+
 and special for jinja formatter only:
 
 ```
@@ -493,13 +496,8 @@ and special for jinja formatter only:
  
 None of these are case sensitive. |||PROMPT:SySTEMmemOrY| is the same as |||PPROMPT:systemmemory|||. There are a few options to hit these as well, such as username or name, endturn or end, etc. I've hopefully reached easy to remember without adding confusion.
 
-//todo: fix this: Also supports setting all instructions like: 
-```
-|||FORMAT:save|//todo: find the bug, this isnt working, you have to pick them up one at a time like above.
-{"system":"<|im_start|> ","prependPrompt":"assistant:","postPrompt":"after agents","memoryStart":"spot for universal memory","memoryPost":"<|im_end|>\n<|im_start|>user:\n ","finalprompt":"<|im_end|>\n<|im_start|>assistant:\n","responseStart":"start of the AI response"}
-```
 
-note: current behavior removes chatml markup "<|any|>" from the ai response to ease use of non chatML models with default settings. For the most part monster merge models respond very well, but will markup character dialog in a way I find undesirable. Comment line 24 "text = this.removeChatML(text);" in responsengine.js to stop this behavior. Response engine is ready for function calls, let me know what would be useful.
+note: current behavior removes chatml markup "<|" any "|>" from the ai response to ease use of non chatML models with default settings. For the most part monster merge models respond very well, but will markup character dialog in a way I find undesirable. Comment line 24 "text = this.removeChatML(text);" in responsengine.js to stop this behavior. Response engine is ready for function calls, let me know what would be useful.
 
 ---
 Installation:
@@ -533,20 +531,16 @@ Currently there are no built binaries and Node is required to run Clipboard Conq
 3. Kobold needs a model. I like GGUF because it is one file rather than a folder of mess.
    Here are my reccomendations 2/25/24:[OpenHermes 2.5 Mistral 7B 16K Context.GGUF](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-16k-GGUF) 
 
-     
-     
-      ```
-      OpenHermes-2.5-Mistral 7b 16k.gguf supports 16384 context.
-      This is a decent few pages. 
-      If it seems slow reduce your context to 8k, if the problem persists, select a lower Quantization.
+    OpenHermes-2.5-Mistral 7b 16k.gguf supports 16384 context.
+    This is a decent few pages. 
+    If it seems slow reduce your context to 8k, if the problem persists, select a lower Quantization.
 
-      Most of my prompts are specifically tuned against OpenHermes 2.5 Mistral 7b.
-      The default prompts follow chatML format. 
-      any chatML model should work great out of the box. 
-      Psyfighter2 works pretty well too, though it doesn't nail the instructions as well being a storytelling model. 
-      ```
+    Most of my prompts are tuned against OpenHermes 2.5 Mistral 7b with chatML.
+    any chatML model should work great out of the box. 
+    Psyfighter2 works pretty well too, though it doesn't nail the instructions as well being a storytelling model. 
+  
 
-Finally, download Clipboard Conqueror from this repository. 
+Finally, [download](https://github.com/aseichter2007/ClipboardConqueror/archive/refs/heads/main.zip) Clipboard Conqueror from this repository. 
 
 windows:
 ---
@@ -571,19 +565,24 @@ npm start
 
 or 
 
-npm run linux
+npm run linux for both linux and mac
 
 Troubleshooting:
 ---
 
-If Clipboard Conqueror closes on launch, ensure you have Node installed and have run an install.bat or sh.
+If Clipboard Conqueror closes on launch, ensure you have Node installed and have run an install.bat or .sh.
 
-If Clipboard Conqueror seems unresponsive, make sure Koboldcpp is running and type rs then press enter in the Clipboard Conqueror console window to restart the application especially if any errors are displayed. 
+The most common issue with setup is people who expect they have node but do not. 
+
+If Clipboard Conqueror seems unresponsive, close and open the console.  If you are running with nodemon, type rs in the console and hit enter to restart the app.
+
+For API errors make sure Koboldcpp or your choice of backend is running, and that it is set as the defaultClient in setup.js. I always get impatient and beat the API to the ready mark. I should finish squasing the API error problems so it doesn't hang, but I gotta figure out why I can't hit LMstudio first.
 
 
-If CC seems hung, copy text with no invoke and try again. 
+If CC seems hung, copy text with no invoke and try again. When using Text Generation Webui, it's can be hard to tell if it's working. Consider asking for fewer tokens until you know it's working. 
+Sometimes models take up to a few minutes to respond. If it is taking longer, make sure you aren't running out of memory. There is a setting in the nvidia control panel that controls how memory overflows are handled. The default setting starts offloading a before memory is all the way full, so I disable this, in favor of crashes over very slow generation. 
 
-currently the entire settings for my app are in setup.js, uncomment or add the correct instruction format to the keys required for non ChatML model support. Set instruct in 0endpoints.json for easy switching.
+currently the entire settings for my app are in setup.js.
 setup.js writes files for each type of setting. If formatting errors are introduced in those files, they are overwritten with the defaults. 
 
 
@@ -654,26 +653,46 @@ For large models, set the batch size lower in kobold to keep the working context
 
   >Info for model selection. Preferred format chatML, but you can change the instructions in the settings.
   
-  Model sizes:
+  Model sizes(unquantized):
+  ---
  - 3B needs at least 4GB RAM total ram + vram (gfx card must support cuda or the amd one so super old stuff isn't that useful)
  - 7B needs at least 8GB RAM
  - 13B needs at least 16GB RAM
  - 30B needs at least 32GB RAM
  - 65B needs at least 64GB RAM
 
-        And they all need some space for the context. GPU offloading puts the layers of the model into the memory of your graphics card. Fitting the whole model into VRAM makes things way faster. 
+  And they all need some space for the context. GPU offloading puts the layers of the model into the memory of your graphics card. Fitting the whole model into VRAM makes things way faster. 
   
   For reference, at 2048 context in Q4_0*, a 6GB Nvidia RTX 2060 can comfortably offload:
   - 32 layers with LLAMA 7B
   - 18 layers with LLAMA 13B
   - 8 layers with LLAMA 30B
 
-  >OpenHermes 2.5 is 35 layers. with a Q_3 you should be able to just fit it all with at least 2k context in 6gb of VRAM I think(untested).   You can load the model in memory, see how much your final model memory cost is in the console, and get a rough estimate of the size of each layer by dividing the size in memory by the number of layers. Remember to leave room for the context, which can get big fast. At 8k context I think use over 5gb of memory with the Q8, just for the context alone.
+ You can load the model in memory, see how much your final model memory cost is in the console, and get a rough estimate of the size of each layer by dividing the size in memory by the number of layers. Remember to leave room for the context, which can get big fast. At 8k context I think use over 5gb of memory with the Q8, just for the context alone.
 
->*Model bit depth is trade between output quality and output speed.  Generally, larger models are smarter and can follow more complex instructions.
+>*Model bit depth is trade between output quality and output speed.  Generally, larger parameter number models are smarter and can follow more complex instructions.
 KoboldCPP uses GGUF format, which are quantized from 16 bit to between 2 bit and 8 bit depending on model. (I like 8 bit if it fits in vram with room for 8k context.)
-lower bits require less ram, but there is a drop in reasoning and writing quality, though even the q2 was following instructions well. 
-I get all mine from huggingface/thebloke. Not all models support chatML format, and more wont perform optimally without their expected format.  To change things around look toward the bottom of setup.js and delete 0instructions.json, I packaged the settings there to enable comments, if there are .json comments, someone should tell me.
+lower bits require less ram, but there is a drop in reasoning and writing quality, though even the Q2 was following instructions well. 
+
+Not all models support chatML format, and most wont perform optimally without their expected format.
+
+Large Language Models:
+---
+
+LLMs are powerful tools but it's important to understand how they work. The input text is vectorized and put through matrix transformations and a big complex vector is built, and then each word is added to that vector as it is chosen in turn one at a time, with some randomity to get better speech flavor, until the next probable token is a stop token or max length is exceeded.
+
+In an LLM every word is a cloud of numbers that represent how that token relates to every other and some phrase structures or collections of tokens. By turning words into numbers, we can then beat them with math and determine which tokens probably are appropriate to go next.
+
+It doesn't really reason, it doesn't really think, it amplifies patterns and guesses using probabilities and random, each next word chosen with such accuracy and literate complexity that kind of functionally it simulates having thought.  An important note: LLMs return a list of probable tokens and their probability, and after the LLM has done the math, one word is selected by user set rules from the returned set.  
+
+LLM models don't make the choice, sampling happens after and then the machine is asked for the next tokens to choose from, ev-ery -to-ke-n - however the words are sliced.
+
+It's weird, but they have no state, it's data-crunch-out every word in turn, no real consideration. 
+
+Use them effectively within their limits to succeed in 2024.
+
+You can go find the right data and paste the text at an LLM and it can use that data, but no LLM should be trusted implicitly, just as a first resort, right here aboard the Clipboard Conqueror.
+
 
 Quantization:
 -----
@@ -746,22 +765,11 @@ Linux/Mac Notes.
 
   After that, it worked well. Copy started generating with kobold and paste had the contents of the result as expected.
 
-  The notification when generation finished also worked but there is no audible sound.
+  The notification when generation finished workes but there is no audible sound. Consider investigating how to define one in the toast config object in copyconqueror.js.
 
 
-Finally run Clipboard Conqueror.  
-----
-run z-installCC.bat
-
-run z-runClipboardConqueror.bat or Mac_Linux_Start.bat
-
-or
-
-//open terminal at folder and run
-npm i
-npm start or npm run linux for mac/linux
-
-
+Quick launch shortcuts:
+---
 
 
 I provide sampleLaunchKoboldBat.bat and hermes16.kcpps to ease making quick launch shortcuts. They need to be changed to match your system, and the bat expects to be in the same folder as both koboldcpp.exe and hermes16.kcpps.  hermes16.kcpps contains a full path that must match the model location, I recommend loading and saving the file to change the target. Also, lately I have found smaller batch sizes is better when I am pushing my memory limits, 512 and higher end up putting context on the hard drive at large contexts.
@@ -789,7 +797,10 @@ Have fun and remember you can always ask for
 //I'll just leave this here https://www.reddit.com/r/bookmarklets/comments/d8pqe2/toggle_design_mode/
 ---
 
-Settings Conqueror is poor and should be avoided. It will mess your settings up.
+Settings Conqueror is poor and should be avoided.
+---
+ It will mess your settings up. Current defaults avoid writing files because my use case is hampered by the development impact of said files. Settings files and Settings Conqueror are more for use with binaries that I haven't got around to yet. 
+
 ---------------------------------
 This application will get binaries when I am happy with it, for now it's a very basic GUI for changing the settings. 
 
@@ -850,8 +861,7 @@ dev:
 //fast switch instruction sets //done
 //todo: group chain interacting so you can batch like |||@summary,@writer|//done, way cooler than that.
 
-//todo: openAI client, probably migrate a ton of logic out of textengine and into koboldinterface.js to make them interchangeable. //half I should implement it properly but it's such a mystery without keys. 
-
+//todo: openAI client, probably migrate a ton of logic out of textengine and into koboldinterface.js to make them interchangeable. //half bugged SSL and I havent found the right answer to inform me what I am missing. 
 
 //todo: keyboard binding to activate ai on last clip without prompt. //maybe paid, I don't want to make it too easy to do all the linkedin tests, and a ready line to copy is the same.//done, |||on| //multiplatform esc key reading is tricker than I expected. 
 
@@ -859,25 +869,18 @@ dev:
 
 //todo: implement insertion after cursor and response streaming. //this would be easy in windows if I wasnt hung up on multiplatform support. 
 
-//todo text to speech agent that can interact with the clipboard contents. //waiting on upstream that runs on my hardware without dinkin around or enough generosity to set up a closet server or at least new hard drives, I'm too full to experiment with a new OS. 
+//todo text to speech agent that can interact with the clipboard contents. //waiting on upstream that runs on my hardware without dinkin around or enough generosity to set up a closet server or at least new hard drives, I'm too full to experiment with a new OS. //kobold now supports whisper and SD. I gotta find enough peace to rewrite this entire app in c# to support audio and images.
 
 //decline: use case? I guess return tokens like|||tokens| so you can see if it will fit... ok. undecline: todo: /api/extra/generate/check  //return in progress, useful for vlarge gens on slow mode
 //todo: /api/extra/tokencount //should run against entered data and updates should be shown after setting mem or agent and on final send. //I'm gonna wait and do this after I figure out more completion backends and make it work for oogabooga and others.
 
-// i found this! https://lite.koboldai.net/koboldcpp_api#/1
-
 
 //todo: implement some kind of update check and notification.//half, update bat.
-
-
 
 //pass, just close CC it launches in one second//implement |||no| //uh oh, better comment needed. I should learn from this someday. Waaait, it's coming back to me. |||no| will disable parsing on the next run for transporting instructions, though its much easier to just error it off like "||| move this without invoking||| ||| " recommend extra at the end.
 //this needs reworking. its setting off that write bug too.
 
-
-release!//oh snap I got excited and went. //beta release in motion.
-
-//todo: savesettings and getsettings. overwrite settings like |||settings,write| to paste ' |||settings,save| `{ the settings serialized json }` ' which can be edited in place and copied to save the settings. //partial, it's bugged
+//todo: savesettings and getsettings. overwrite settings like |||settings,write| to paste ' |||settings,save| `{ the settings serialized json }` ' which can be edited in place and copied to save the settings. //partial, agent save is pretty ready to pass in the right stuff, I just need to do the bits to make it go.
 
 //todo: write agents or custom settings to file. //partial, agents, no settings writing yet.
 
@@ -888,7 +891,6 @@ release!//oh snap I got excited and went. //beta release in motion.
 
 //CC should not make outbound requests other than openAI, security is important. I'm thining about a branch without openAI just for data safety but until someone asks I won't split main. 
 
-//todo: make a lambda script to setup a aws lambda to serve a daily charachter, run a continuous contest so people vote for tomorrows char. |||dailycandidate,rate|10, assign up to ten points for the candidate last retrieved with |||dailycandidate| provies random from server. Points are gained by and blind?
 //todo: build agent portal with easy to copy and use workflow. 
 //todo: mystery agent of the day. vulnerability: the description is visible in the kobold terminal
 //does anyone really want this?
