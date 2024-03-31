@@ -32,7 +32,6 @@ class TextEngine {
     this.identity = {};
     this.recentClip = { text: "" };
     this.text = "";//sorted
-    this.set = false;
     this.setAgent = {};
     this.memory = "";
     this.batchContinue = "";
@@ -41,8 +40,10 @@ class TextEngine {
     this.agentBatchKit = {};
     this.batchLength = 0;
     this.batch = "";
+    this.duplicateCheck = "";
     this.api = endpoints.endpoints[endpoints.defaultClient];
     //this.lastAgentTags = [];
+    this.set = false;
     this.continue = false;
     this.document   = false;
     this.sendHold = false;
@@ -52,6 +53,7 @@ class TextEngine {
     this.on = false;
     this.noBatch = true;
     this.blockPresort = false;
+    this.preserveLastCopy = false;
   }
 
   returnTrip(str) {
@@ -704,7 +706,12 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
   }
   setupforAi(text) {
     //console.log(this.batchDocument); 
-  
+    if (this.endpoints.duplicateCheck) {
+      if (this.duplicateCheck == text){
+        this.sendHold = true;
+        this.preserveLastCopy = true;
+      }
+    }
     if (this.batchLength > 0) {
       this.blockPresort = false;
       this.noBatch = false;
@@ -812,7 +819,11 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         }
       }
     } 
-    this.recentClip.text = text;// + " ";    
+    if (!this.preserveLastCopy) {
+      this.recentClip.text = text;// + " ";    
+      this.preserveLastCopy = false;
+      this.duplicateCheck = false;
+    }
   }
   activatePresort(text) {
     

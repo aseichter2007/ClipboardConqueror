@@ -130,7 +130,6 @@ if (this.lastOutpoint !== api.config) {
       }
     }
   } 
-    //sendPostTextRequest(this.baseURL, params, this.callback, this.handler, this.notify);
   
   messageBuilder(identity, user, params, api) {
     if (api.model) {
@@ -229,6 +228,9 @@ async function chat(api, messages, instructions, params, callback,  notify, hand
         callback(output);
       }).catch(error => {
         console.log(error);
+        //parse the error message
+        const message = error.response.data
+        console.log(message);
       });;
   } catch (error) {
     console.log(error);
@@ -376,7 +378,7 @@ async function generateCompletion(api, identity, text, instructions, params, cal
     };
     const stringifidentity = JSON.stringify(identity);
     const prompt = {
-      "model": model,
+      "model": api.model,
       "messages": [
         { "role": "system", "content": stringifidentity},//does this order matter? do the roles matter in the back end? is that useful for naming the system or tracking multiple characters?
         { "role": "user", "content": text }
@@ -397,8 +399,8 @@ async function generateCompletion(api, identity, text, instructions, params, cal
     //console.log("2nd end response: "+JSON.stringify( jsonResponse.choices[0].message.content));
     callback(jsonResponse.choices[0].message.content);
   } catch (error) {
-    //console.log("error : " +JSON.stringify(error));
-    notify("error:", JSON.stringify(error));
+    console.log(error);
+    //notify("error:", JSON.stringify(error));
   }
 }
 module.exports = InferenceClient;
