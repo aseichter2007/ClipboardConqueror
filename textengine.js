@@ -711,6 +711,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         this.sendHold = true;
         this.preserveLastCopy = true;
       }
+      this.duplicateCheck = text;
     }
     if (this.batchLength > 0) {
       this.blockPresort = false;
