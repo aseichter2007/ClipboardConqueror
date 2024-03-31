@@ -706,6 +706,9 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
   }
   setupforAi(text) {
     //console.log(this.batchDocument); 
+    console.log(this.endpoints.duplicateCheck);
+    console.log(this.endpoints.duplicateCheck);
+
     if (this.endpoints.duplicateCheck) {
       if (this.duplicateCheck == text){
         this.sendHold = true;
@@ -823,7 +826,6 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     if (!this.preserveLastCopy) {
       this.recentClip.text = text;// + " ";    
       this.preserveLastCopy = false;
-      this.duplicateCheck = false;
     }
   }
   activatePresort(text) {
