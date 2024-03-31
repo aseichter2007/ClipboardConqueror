@@ -42,7 +42,7 @@
         duplicateCheck: false, //some other clipboard appications duplicate copied text back to the clipboard, set this true to catch those and preserve the proper last copied text. //untested, let me know if it works please. I don't think it busts anything but enabling this /may/ make unblocking after writing quries require non-dublicate text. 
         defaultClient: "kobold",//must match a key in endpoints. Recommend using kobold or tgwchat, ooba also seems to be working.
         defaultOptions: ["kobold", "tgwchat", "oobaRPmerge", "lmstudio",/*not working, ssl? koboldChat too*/ "textGenWebUi", "ooba",  "chatGPT3", "chatGPT4","select defaultClient: from previous items. This field is purely informational for the user, particularly to ease use when writeFiles is enabled."],
-        instructFormat: "rp",
+        instructFormat: "chatML",//overrides the defaultclient's set format
         instructOptions: ["default", "defaultJson", "defaultJsonReturn", "hermes", "chatML", "samantha", "airoboros", "alpaca", "alpacaInstruct", "llamav2", "mistral", "mixtral", "metharme", "bactrian", "baichuan", "baize", "blueMoon", "chatGLM", "openChat", "openChatCode", "wizard", "wizardLM", "vicuna", "mistralLite", "deepseek", "deepseekCoder", "tinyLlama", "pirateLlama", "stableLM", "openAssistant", "vicunav1", "stableVicuna", "select instruct: from previous items or any you add to 0formats.json"],//or in setup below and re-write 0formats.json I think this one might be deprecated.
         persona: "defaultOpenerResolved",//must be a valid identity in identities.identities
          
