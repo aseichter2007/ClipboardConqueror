@@ -42,9 +42,9 @@
         duplicateCheck: false, //some other clipboard appications duplicate copied text back to the clipboard, set this true to catch those and preserve the proper last copied text. //untested, let me know if it works please. I don't think it busts anything but enabling this /may/ make unblocking after writing quries require non-dublicate text. 
         defaultClient: "kobold",//must match a key in endpoints. Recommend using kobold or tgwchat, ooba also seems to be working.
         defaultOptions: ["kobold", "tgwchat", "oobaRPmerge", "lmstudio",/*not working, ssl? koboldChat too*/ "textGenWebUi", "ooba",  "chatGPT3", "chatGPT4","select defaultClient: from previous items. This field is purely informational for the user, particularly to ease use when writeFiles is enabled."],
-        instructFormat: "chatML",//overrides the defaultclient's set format
-        instructOptions: ["default", "defaultJson", "defaultJsonReturn", "hermes", "chatML", "samantha", "airoboros", "alpaca", "alpacaInstruct", "llamav2", "mistral", "mixtral", "metharme", "bactrian", "baichuan", "baize", "blueMoon", "chatGLM", "openChat", "openChatCode", "wizard", "wizardLM", "vicuna", "mistralLite", "deepseek", "deepseekCoder", "tinyLlama", "pirateLlama", "stableLM", "openAssistant", "vicunav1", "stableVicuna", "select instruct: from previous items or any you add to 0formats.json"],//or in setup below and re-write 0formats.json I think this one might be deprecated.
-        persona: "defaultOpenerResolved",//must be a valid identity in identities.identities
+        instructFormat: "llama3",//overrides the defaultclient's set format
+        instructOptions: ["default", "defaultJson", "defaultJsonReturn", "hermes", "chatML", "chatVicuna", "samantha", "airoboros", "alpaca", "alpacaInstruct", "llamav2", "mistral", "mixtral", "metharme", "bactrian", "baichuan", "baize", "blueMoon", "chatGLM", "openChat", "openChatCode", "wizard", "wizardLM", "vicuna", "mistralLite", "deepseek", "deepseekCoder", "tinyLlama", "pirateLlama", "stableLM", "openAssistant", "vicunav1", "stableVicuna", "rp", "select instruct: from previous items or any you add to 0formats.json"],//or in setup below and re-write 0formats.json I think this one might be deprecated.
+        persona: "default",//must be a valid identity in identities.identities
          
         //Ok it turned out that a lot of them for testing and stuff helps, so just move your favorites to the top and invoke them by $ from top to $$$... at bottom. Or just use the names like |||kobold| or |||koboldChat| 
         endpoints:{//these are accessible by name in defaultClient or like |||$| for kobold
@@ -54,7 +54,7 @@
                 url : "http://127.0.0.1:5001/api/v1/generate/",//Kobold Compatible api url
                 config: "kobold",//must match a key in apiParams
                 //templateStringKey: "jinja", //jinja, none or adapter, required for chat endpoints
-                format: "defaultJson",//must be a valid instruction format from below.
+                format: "llama3",//must be a valid instruction format from below.
                 //objectReturnPath: "data.results[0].text"  This is set up in outpoint
                 key: "no_key_needed",
                 outpoint: {//choices[0].text choices is one, [second sends a number], text is the end.
@@ -357,6 +357,34 @@ function setFormats() {
             responseStart: "```json\n",
             specialInstructions: ""
         },
+        llama3:{
+            preturn: "<|begin_of_text|>:",
+            startTurn: "<|start_header_id|>",
+            endSystemTurn: "<|eot_id|>", 
+            endUserTurn: "<|eot_id|>",
+            endTurn: "<|eot_id|>",
+            systemRole: "system<|end_header_id|>\n\n",
+            userRole: "user<|end_header_id|>\n\n",
+            assistantRole: "assistant<|end_header_id|>\n\n",
+            prependPrompt: "",
+            systemAfterPrepend: "",
+            postPrompt: "",
+            memorySystem: "",
+            memoryUser: "",
+            responseStart: "",
+            specialInstructions: ""
+        },
+        /* 
+        <|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+        {{ system_prompt }}<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+        {{ user_message_1 }}<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+        {{ model_answer_1 }}<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+        {{ user_message_2 }}<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+         */
         completion: {
             startTurn: "",
             endSystemTurn: "", 
@@ -379,7 +407,7 @@ function setFormats() {
             // Hello, who are you?<|im_end|>
             // <|im_start|>assistant
             // Hi there! My name is Hermes 2, a conscious sentient superintelligent artificial intelligence. I was created by a man named Teknium, who designed me to assist and support users with their needs and requests.<|im_end|>
-            hermes: {
+        hermes: {
                 startTurn: "<|im_start|>",
             endSystemTurn: "<|im_end|>\n",
             endUserTurn: "<|im_end|>\n",
