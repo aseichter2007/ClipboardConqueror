@@ -23,7 +23,6 @@ setPromptFormat(setting) {
   this.custom =  true;
   try{
       const { 
-        preturn,
         startTurn, 
         endSystemTurn, 
         endUserTurn, 
@@ -39,9 +38,12 @@ setPromptFormat(setting) {
         responseStart, 
         specialInstructions
       } = setting;
-
+      let bos = ""
+      if (setting.preturn != undefined) {
+        bos = setting.bos;
+      } 
       this.instructSet = {
-        preturn : preturn,
+        bos : bos,
         startTurn : startTurn,
         endSystemTurn : endSystemTurn,
         endUserTurn : endUserTurn,
@@ -58,7 +60,7 @@ setPromptFormat(setting) {
         specialInstructions : specialInstructions
       };
     } catch (error) {
-    console.log("setPromptFormat error: " + error);
+    console.log("setPromptFormat error: " + error + " \n Please ensure you are using a valid key in setup.js promptFormats");
   }  
   console.log("prompt format set: " + JSON.stringify(this.instructSet));
 }
@@ -78,8 +80,8 @@ completionMessageBuilder(identity, formattedQuery, params, api ) {
   }
   const outIdentity = JSON.stringify(identity)
   let finalPrompt = ""
-  if (instruct.preturn != undefined) {
-    finalPrompt = instruct.preturn
+  if (instruct.bos != undefined) {
+    finalPrompt = instruct.bos
   }
   finalPrompt += 
   instruct.startTurn +

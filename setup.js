@@ -377,24 +377,7 @@ function setFormats() {
             specialInstructions: ""
         },
         llama3:{
-            preturn: "<|begin_of_text|>:",
-            startTurn: "<|start_header_id|>",
-            endSystemTurn: "<|eot_id|>", 
-            endUserTurn: "<|eot_id|>",
-            endTurn: "<|eot_id|>",
-            systemRole: "system<|end_header_id|>\n\n",
-            userRole: "user<|end_header_id|>\n\n",
-            assistantRole: "assistant<|end_header_id|>\n\n",
-            prependPrompt: "",
-            systemAfterPrepend: "",
-            postPrompt: "",
-            memorySystem: "",
-            memoryUser: "",
-            responseStart: "",
-            specialInstructions: ""
-        },
-        llama3NoPreturn:{
-            //preturn: "<|begin_of_text|>:",
+            //bos: "<|begin_of_text|>:",
             startTurn: "<|start_header_id|>",
             endSystemTurn: "<|eot_id|>", 
             endUserTurn: "<|eot_id|>",
@@ -422,7 +405,7 @@ function setFormats() {
         {{ user_message_2 }}<|eot_id|><|start_header_id|>assistant<|end_header_id|>
          */
         llama3SystemCompletion:{
-            preturn: "<|begin_of_text|>:",
+            bos: "<|begin_of_text|>:",
             startTurn: "<|start_header_id|>",
             endSystemTurn: "<|eot_id|>", 
             endUserTurn: "<|eot_id|>",
@@ -439,7 +422,7 @@ function setFormats() {
             specialInstructions: ""
         },
         llama3Completion:{
-            preturn: "<|begin_of_text|>:",
+            bos: "<|begin_of_text|>:",
             startTurn: "",
             endSystemTurn: "", 
             endUserTurn: "",
