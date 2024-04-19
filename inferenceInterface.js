@@ -39,7 +39,7 @@ setPromptFormat(setting) {
         specialInstructions
       } = setting;
       let bos = ""
-      if (setting.preturn != undefined) {
+      if (setting.bos != undefined) {
         bos = setting.bos;
       } 
       this.instructSet = {
