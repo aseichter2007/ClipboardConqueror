@@ -23,6 +23,7 @@ setPromptFormat(setting) {
   this.custom =  true;
   try{
       const { 
+        preturn,
         startTurn, 
         endSystemTurn, 
         endUserTurn, 
@@ -40,6 +41,7 @@ setPromptFormat(setting) {
       } = setting;
 
       this.instructSet = {
+        preturn : preturn,
         startTurn : startTurn,
         endSystemTurn : endSystemTurn,
         endUserTurn : endUserTurn,
@@ -75,7 +77,11 @@ completionMessageBuilder(identity, formattedQuery, params, api ) {
     params.model = api.model;
   }
   const outIdentity = JSON.stringify(identity)
-  let finalPrompt = 
+  let finalPrompt = ""
+  if (instruct.preturn != undefined) {
+    finalPrompt = instruct.preturn
+  }
+  finalPrompt += 
   instruct.startTurn +
   instruct.systemRole +
   instruct.prependPrompt +
