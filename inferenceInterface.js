@@ -207,8 +207,10 @@ if (this.lastOutpoint !== api.config) {
 }
 async function chat(api, messages, instructions, params, callback,  notify, handler) {
   try {
+    if(api.noFormat != undefined || api.noFormat == false){
     params[api.templateStringKey] =  JinjaFormatter(instructions);
     params.adapter = returnKoboldAdapter(instructions);
+    }
     //messages = JSON.stringify(messages)
     //console.log("messages: " + messages);
     params.messages = messages;
@@ -373,8 +375,10 @@ function returnKoboldAdapter(instructionSet){//should be recieved into params.ad
   };
 }
 async function generateCompletion(api, identity, text, instructions, params, callback, notify, handler) {
-  params[api.templateStringKey] =  JinjaFormatter(instructions);
-  params.adapter = returnKoboldAdapter(instructions);
+  if(api.noFormat != undefined || api.noFormat == false){
+    params[api.templateStringKey] =  JinjaFormatter(instructions);
+    params.adapter = returnKoboldAdapter(instructions);
+  }
   try {
     const url = api.url;
     //console.log(apiKey, identity, formattedQuery, params, apiUrl, model);
