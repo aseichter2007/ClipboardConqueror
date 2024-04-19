@@ -81,6 +81,24 @@
                     four: "content"
                 }  
             },
+            tgwchatNoFormat: {//|||$$| or |||textGenWebUi|
+                type: "chat",
+                buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
+                url : "http://127.0.0.1:5000/v1/chat/completions",
+                config: "TGWopenAICompletions",
+                templateStringKey: "instruction_template_str",
+                format: "defaultJson",// endpoints must use a format matching a key in instructionFormats
+                key: "no_key_needed",
+                model: "unused",
+                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 4,//key for a switch case
+                    one: "choices",//results[0].text
+                    two: 0,//[0].text
+                    three: "message",//text
+                    four: "content"
+                },
+                noFormat: true //prevents sending jinja prompts and adapters for kobold
+            },
             oobaRPmerge: {//|||$$$| or |||textGenWebUi|
                 type: "chat",
                 buildType: "compatible",
@@ -307,6 +325,7 @@ function setFormats() {
     
     const promptFormats = { 
         default: {//I like the option to set the system initialization like ||||system| or ||||instruct| on the fly, and it works well without it, so I'm not using a systemRole.
+            //preturn : "optional initializer token, maybe unneeded"
             startTurn: "<|im_start|>",//this applies to all types of messages, it's for BOS token type stuff.
             systemRole: "",//name of the system role <|im_start|> systemRole
             prependPrompt: "",//right after system role
@@ -320,7 +339,7 @@ function setFormats() {
             //user message
             endUserTurn: "<|im_end|>\n",//end of user message
             assistantRole: "assistant\n",//the name of the assistant
-            endTurn: "<|im_end|>\n",//end of assistant message
+            endTurn: "<|im_end|>\n",//end of assistant message, not typically applied as CC doesn't do proper chat history.
             responseStart: "",//start of response
             specialInstructions: ""//for jinja2 templator
             //all fields are required. This sends a wierd thing in the mixtral template.
@@ -374,6 +393,23 @@ function setFormats() {
             responseStart: "",
             specialInstructions: ""
         },
+        llama3NoPreturn:{
+            //preturn: "<|begin_of_text|>:",
+            startTurn: "<|start_header_id|>",
+            endSystemTurn: "<|eot_id|>", 
+            endUserTurn: "<|eot_id|>",
+            endTurn: "<|eot_id|>",
+            systemRole: "system<|end_header_id|>\n\n",
+            userRole: "user<|end_header_id|>\n\n",
+            assistantRole: "assistant<|end_header_id|>\n\n",
+            prependPrompt: "",
+            systemAfterPrepend: "",
+            postPrompt: "",
+            memorySystem: "",
+            memoryUser: "",
+            responseStart: "",
+            specialInstructions: ""
+        },
         /* 
         <|begin_of_text|><|start_header_id|>system<|end_header_id|>
 
@@ -385,6 +421,40 @@ function setFormats() {
 
         {{ user_message_2 }}<|eot_id|><|start_header_id|>assistant<|end_header_id|>
          */
+        llama3SystemCompletion:{
+            preturn: "<|begin_of_text|>:",
+            startTurn: "<|start_header_id|>",
+            endSystemTurn: "<|eot_id|>", 
+            endUserTurn: "<|eot_id|>",
+            endTurn: "<|eot_id|>",
+            systemRole: "system<|end_header_id|>\n\n",
+            userRole: "",
+            assistantRole: "",
+            prependPrompt: "",
+            systemAfterPrepend: "",
+            postPrompt: "",
+            memorySystem: "",
+            memoryUser: "",
+            responseStart: "",
+            specialInstructions: ""
+        },
+        llama3Completion:{
+            preturn: "<|begin_of_text|>:",
+            startTurn: "",
+            endSystemTurn: "", 
+            endUserTurn: "",
+            endTurn: "",
+            systemRole: "",
+            userRole: "",
+            assistantRole: "",
+            prependPrompt: "",
+            systemAfterPrepend: "",
+            postPrompt: "",
+            memorySystem: "",
+            memoryUser: "",
+            responseStart: "",
+            specialInstructions: ""
+        },
         completion: {
             startTurn: "",
             endSystemTurn: "", 
@@ -1103,7 +1173,7 @@ function setParams(){
                 dynatemp_exponent: 1,
                 smoothing_factor: 0,
                 top_k: 0,
-                repetition_penalty: 1,
+                repetition_penalty: 1.05,
                 repetition_penalty_range: 1024,
                 typical_p: 1,
                 tfs: 1,
