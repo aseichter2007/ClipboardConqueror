@@ -617,6 +617,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       case "assistantrole":
       case "assistant":
       case "assistantname":
+      case "char":
         this.inferenceClient.setOnePromptFormat ("assistantRole", formattedQuery);
         break;
       case "endassistantrole":
@@ -922,7 +923,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       response.push(parsedData[2]);
       run = true;
     }
-    const sendout = response[0] + "\n" + response[1] + "\n" + response[2];
+    const sendout = response[0] + "" + response[1] + "" + response[2];
     return {
       run: run,
       formattedQuery: sendout,
