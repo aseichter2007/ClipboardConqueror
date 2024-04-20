@@ -22,35 +22,111 @@ setOnePromptFormat(setting, value) {
 setPromptFormat(setting) {
   this.custom =  true;
   try{
-      const { 
-        startTurn, 
-        endSystemTurn, 
-        endUserTurn, 
-        endTurn, 
-        systemRole, 
-        userRole, 
-        assistantRole, 
-        prependPrompt, 
-        systemAfterPrepend, 
-        postPrompt, 
-        memorySystem, 
-        memoryUser, 
-        responseStart, 
-        specialInstructions
-      } = setting;
-      let bos = ""
+      
+      let bos = "";
       if (setting.bos != undefined) {
         bos = setting.bos;
       } 
+      let startTurn = "";
+      if (setting.startTurn != undefined) {
+        startTurn = setting.startTurn;
+      }
+      let endTurn = "";
+      if (setting.endTurn != undefined) {
+        endTurn = setting.endTurn;
+      }
+      let startSystem = "";
+      if (setting.startSystem != undefined) {
+        startSystem = setting.startSystem;
+      }
+      let startUser = "";
+      if (setting.startUser != undefined) {
+        startUser = setting.startUser;
+      }
+      let startAssistant = "";
+      if (setting.startAssistant != undefined) {
+        startAssistant = setting.startAssistant;
+      }
+      let endSystemTurn = "";
+      if (setting.endSystemTurn != undefined) {
+        endSystemTurn = setting.endSystemTurn;
+      }
+      let endUserTurn = "";
+      if (setting.endUserTurn != undefined) {
+        endUserTurn = setting.endUserTurn;
+      }
+      let endAssistantTurn = "";
+      if (setting.endTurn != undefined) {
+        endAssistantTurn = setting.endAssistantTurn;
+      }
+      let systemRole = "";
+      if (setting.systemRole != undefined) {
+        systemRole = setting.systemRole;
+      }
+      let endSystemRole = "";
+      if (setting.endUserRole != undefined) {
+        endSystemRole = setting.endSystemRole;
+      }
+      let userRole = "";
+      if (setting.userRole != undefined) {
+        userRole = setting.userRole;
+      }
+      let endUserRole = "";
+      if (setting.endUserRole != undefined) {
+        endUserRole = setting.endUserRole;
+      }
+      let assistantRole = "";
+      if (setting.assistantRole != undefined) {
+      }
+      let endAssistantRole = "";
+      if (setting.endAssistantRole != undefined) {
+        endAssistantRole = setting.endAssistantRole;
+      }
+      let prependPrompt = "";
+      if (setting.prependPrompt != undefined) {
+        prependPrompt = setting.prependPrompt;
+      }
+      let systemAfterPrepend = "";
+      if (setting.systemAfterPrepend != undefined) {
+        systemAfterPrepend = setting.systemAfterPrepend;
+      }
+      let postPrompt = "";
+      if (setting.postPrompt != undefined) {
+        postPrompt = setting.postPrompt;
+      }
+      let memorySystem = "";
+      if (setting.memorySystem != undefined) {
+        memorySystem = setting.memorySystem;
+      }
+      let memoryUser = "";
+      if (setting.memoryUser != undefined) {
+        memoryUser = setting.memoryUser;
+      }
+      let responseStart = "";
+      if (setting.responseStart != undefined) {
+        responseStart = setting.responseStart;
+      }
+      let specialInstructions = "";
+      if (setting.specialInstructions != undefined) {
+        specialInstructions = setting.specialInstructions;
+      }
+
       this.instructSet = {
         bos : bos,
         startTurn : startTurn,
+        endTurn : endTurn,
+        startSystem : startSystem,
+        startUser : startUser,
+        startAssistant : startAssistant,
         endSystemTurn : endSystemTurn,
         endUserTurn : endUserTurn,
-        endTurn : endTurn,
+        endAssistantTurn : endAssistantTurn,
         systemRole : systemRole,
+        endSystemRole : endSystemRole,
         userRole : userRole,
+        endUserRole : endUserRole,
         assistantRole : assistantRole,
+        endAssistantRole : endAssistantRole,
         prependPrompt : prependPrompt,
         systemAfterPrepend : systemAfterPrepend,
         postPrompt : postPrompt,
@@ -64,6 +140,7 @@ setPromptFormat(setting) {
   }  
   console.log("prompt format set: " + JSON.stringify(this.instructSet));
 }
+//|||code|instead of destructruing, take each value and check if it's undefined, as is done to the bos value. 
 
 setFormat(format){
   try {
@@ -79,26 +156,31 @@ completionMessageBuilder(identity, formattedQuery, params, api ) {
     params.model = api.model;
   }
   const outIdentity = JSON.stringify(identity)
-  let finalPrompt = ""
-  if (instruct.bos != undefined) {
-    finalPrompt = instruct.bos
-  }
-  finalPrompt += 
+  let finalPrompt = 
+  instruct.bos +
   instruct.startTurn +
+  instruct.startSystem+
   instruct.systemRole +
+  instruct.endSystemRole +
   instruct.prependPrompt +
   instruct.systemAfterPrepend + 
   outIdentity +
   instruct.postPrompt +
   instruct.memorySystem +
   instruct.endSystemTurn +
+  instruct.endTurn +
   instruct.startTurn +
+  instruct.startUser +
   instruct.userRole +
+  instruct.endUserRole +
   instruct.memoryUser +
   formattedQuery +
   instruct.endUserTurn +
+  instruct.endTurn +
   instruct.startTurn +
+  instruct.startAssistant +
   instruct.assistantRole +
+  instruct.endAssistantRole +
   instruct.responseStart;
   
   params.prompt = finalPrompt;

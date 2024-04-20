@@ -517,10 +517,61 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     return Object.keys(object);
   }
   setPrompt(command, formattedQuery) {
+    // instruct.bos +
+    // instruct.startTurn +
+    // instruct.startSystem+
+    // instruct.systemRole +
+    // instruct.endSystemRole +
+    // instruct.prependPrompt +
+    // instruct.systemAfterPrepend + 
+    // outIdentity +
+    // instruct.postPrompt +
+    // instruct.memorySystem +
+    // instruct.endSystemTurn +
+    // instruct.endTurn +
+    // instruct.startTurn +
+    // instruct.startUser +
+    // instruct.userRole +
+    // instruct.endUserRole +
+    // instruct.memoryUser +
+    // formattedQuery +
+    // instruct.endUserTurn +
+    // instruct.endTurn +
+    // instruct.startTurn +
+    // instruct.startAssistant +
+    // instruct.assistantRole +
+    // instruct.endAssistantRole +
+    // instruct.responseStart;
     switch (command.toLowerCase()) {
+      case "bos":
+        this.inferenceClient.setOnePromptFormat ("bos", formattedQuery);
+        break;
+      case "startturn":
+      case "startall":
+      case "start":
+        this.inferenceClient.setOnePromptFormat ("startTurn", formattedQuery);
+        break;
+      case "endturn":
+      case "end":
+      case "eos":
+      case "aeos":
+      case "endall":
+        this.inferenceClient.setOnePromptFormat ("endTurn", formattedQuery);
+        break;
+      case "startsystem":
+      case "systemtoken":
+        this.inferenceClient.setOnePromptFormat ("startSystem", formattedQuery);
+        break;
+      case "system":
       case "systemrole":
       case "systemname":
+      case "sysname":
         this.inferenceClient.setOnePromptFormat ("systemRole", formattedQuery);
+        break;
+      case "endsystemrole":
+      case "endsystem":
+      case "endsys":
+        this.inferenceClient.setOnePromptFormat ("endSystemRole", formattedQuery);
         break;
       case "prepend":
       case "prependprompt":     
@@ -544,16 +595,15 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       case "seos":
         this.inferenceClient.setOnePromptFormat ("endSystemTurn", formattedQuery);
         break;
-      case "startturn":
-      case "systeminstruction":
-      case "bos":
-        this.inferenceClient.setOnePromptFormat ("startTurn", formattedQuery);
-        break;
       case "userrole":
       case "user":
       case "username":
       case "name":
         this.inferenceClient.setOnePromptFormat ("userRole", formattedQuery);
+        break;
+      case "enduserrole":
+      case "endusername":
+        this.inferenceClient.setOnePromptFormat ("endUserRole", formattedQuery);
         break;
       case "memoryUser": 
       case "usermemory":
@@ -569,11 +619,9 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       case "assistantname":
         this.inferenceClient.setOnePromptFormat ("assistantRole", formattedQuery);
         break;
-      case "endturn":
-      case "end":
-      case "eos":
-      case "aeos":
-        this.inferenceClient.setOnePromptFormat ("endTurn", formattedQuery);
+      case "endassistantrole":
+      case "endassistant":
+        this.inferenceClient.setOnePromptFormat ("endAssistantRole", formattedQuery);
         break;
       case "start":
       case "responsestart":
@@ -583,6 +631,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       case "special":
       case "specialInstructions":
         this.inferenceClient.setOnePromptFormat ("specialInstructions", formattedQuery);
+        break;
       default:
        let notfound = "invalid prompt key: " + command + " Options: systemDefault, systemRole, prepend, postPrompt, systemAfterPost, memorySystem, memoryUser, endSystemTurn, startTurn, userRole, memoryUser, endUserTurn, assistantRole, endTurn, responseStart \n \n you may edit and copy below: \n";
         this.notify("invalid key: " + command ," Options: systemDefault, systemRole, prepend, postPrompt, systemAfterPost, memorySystem, memoryUser, endSystemTurn, startTurn, userRole, memoryUser, endUserTurn, assistantRole, endTurn, responseStart");
@@ -733,14 +782,17 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       this.text = sorted.formattedQuery;
       this.undress();
       //if(sorted.tags.command != ""){ //commented for consistent placing of ### to initialize alpaca
-        this.identity[this.instructions.rootname] = sorted.tags.command;//send ||||this text over if it exists|
-      //}
+      
       if(this.set){
         this.identity = this.setAgent;
-        if (sorted.tags.command != "") {
+        if (sorted.tags.command != "" && sorted.tags.command != undefined) {
           this.identity[this.instructions.rootname] = sorted.tags.command;          
           ifDefault = false;
         }
+      } else{
+        if (sorted.tags.command != "" && sorted.tags.command != undefined) {
+          this.identity[this.instructions.rootname] = sorted.tags.command;//send ||||this text over if it exists|
+         }
       }
       if (sorted.tags.persona) {
         let persona = sorted.tags.persona.split(this.instructions.agentSplit);

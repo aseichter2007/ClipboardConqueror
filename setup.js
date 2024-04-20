@@ -325,28 +325,34 @@ function setFormats() {
     
     const promptFormats = { 
         default: {//I like the option to set the system initialization like ||||system| or ||||instruct| on the fly, and it works well without it, so I'm not using a systemRole.
-            //preturn : "optional initializer token, maybe unneeded"
+            //bos : "optional initializer token, maybe unneeded"
             startTurn: "<|im_start|>",//this applies to all types of messages, it's for BOS token type stuff.
-            systemRole: "",//name of the system role <|im_start|> systemRole
+            endTurn: "<|im_end|>\n",
+            //startSystem: "<|im_start|>", //these three allow separate initializers. Choosethese or startturn, it will apply to each position, doubling them if startturn is used at the same time as startsystem
+            //startAssistant: "<|im_start|>",
+            //startUser: "<|im_start|>",
+            systemRole: "system",//name of the system role <|im_start|> systemRole
+            //endSystemRole: "",//unused in chatML
             prependPrompt: "",//right after system role
             systemAfterPrepend: "",//second system for more control.
             //system message
             postPrompt: "",//for closing the system if you want to before memorySystem
             memorySystem: "",//persistent memory in the system prompt independant of agents
-            endSystemTurn: "<|im_end|>\n",// end of system message          
+            //endSystemTurn: "<|im_end|>\n",// end of system message          
             userRole: "user\n",//the name of user
+            //endUserRole: "",//unused in chatML
             memoryUser: "",//persistent (hidden)memory in the user prompt before user query.
             //user message
-            endUserTurn: "<|im_end|>\n",//end of user message
+            //endUserTurn: "<|im_end|>\n",//end of user message
             assistantRole: "assistant\n",//the name of the assistant
-            endTurn: "<|im_end|>\n",//end of assistant message, not typically applied as CC doesn't do proper chat history.
+            //endTurn: "<|im_end|>\n",//end of assistant message, not typically applied as CC doesn't do proper chat history.
             responseStart: "",//start of response
             specialInstructions: ""//for jinja2 templator
             //all fields are required. This sends a wierd thing in the mixtral template.
         },
         defaultJson: {
-            systemRole: "",
-            prependPrompt: "```json\n",
+            systemRole: "JSON",
+            prependPrompt: "```\n",
             systemAfterPrepend: "",
             postPrompt: "\n```",
             memorySystem: "",
@@ -379,14 +385,14 @@ function setFormats() {
         llama3:{
             //bos: "<|begin_of_text|>:",
             startTurn: "<|start_header_id|>",
-            endSystemTurn: "<|eot_id|>", 
-            endUserTurn: "<|eot_id|>",
-            endTurn: "<|eot_id|>",
-            systemRole: "system<|end_header_id|>\n\n",
-            userRole: "user<|end_header_id|>\n\n",
-            assistantRole: "assistant\n\n",
-            prependPrompt: "<|end_header_id|>",
-            systemAfterPrepend: "",
+            endTurn: "<|eot_id|>", 
+            systemRole: "system",
+            endSystemRole: "<|end_header_id|>\n\n",
+            userRole: "user",
+            endUserRole: "<|end_header_id|>\n\n",
+            assistantRole: "assistant",
+            endAssistantRole: "<|end_header_id|>",
+            prependPrompt: "", 
             postPrompt: "",
             memorySystem: "",
             memoryUser: "",
