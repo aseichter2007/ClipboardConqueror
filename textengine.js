@@ -83,6 +83,10 @@ class TextEngine {
         trip.trip = trip.trip + this.instructions.formatSwitch;
         continue;
       }
+      if (str[i] === this.instructions.nameTag) {
+        trip.trip = trip.trip + this.instructions.nameTag
+        
+      }
       break;
     }
     return trip
@@ -129,6 +133,9 @@ class TextEngine {
       if (identity) {
         if (Number.isNaN(Number(identity))) {
           identity = identity.trim();
+          if (trip.trip === '!'){
+            this.setPrompt("assistant",identity.slice(1))
+          }
           if (this.endpoints.endpoints.hasOwnProperty(identity)) {
             this.api = this.endpoints.endpoints[identity];
             console.log("setting api: " + JSON.stringify(this.api));
@@ -442,6 +449,10 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       case "on":
         this.on = !this.on;
         break;
+      case "no":
+        this.sendHold = true
+        break
+
       case "tokens":
       case "tok":
         this.write = true;
@@ -571,6 +582,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       case "endsystemrole":
       case "endsystem":
       case "endsys":
+      case "seor":
         this.inferenceClient.setOnePromptFormat ("endSystemRole", formattedQuery);
         break;
       case "prepend":
@@ -603,6 +615,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         break;
       case "enduserrole":
       case "endusername":
+      case "ueor":
         this.inferenceClient.setOnePromptFormat ("endUserRole", formattedQuery);
         break;
       case "memoryUser": 
@@ -622,10 +635,13 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         break;
       case "endassistantrole":
       case "endassistant":
+      case "aeor":
         this.inferenceClient.setOnePromptFormat ("endAssistantRole", formattedQuery);
         break;
       case "start":
       case "responsestart":
+      case "response":
+
         // this.instructions.responseStart = formattedQuery;
         this.inferenceClient.setOnePromptFormat ("responseStart", formattedQuery);
         break;
@@ -803,6 +819,9 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         ifDefault =  this.personaAtor(persona, sorted);
         //console.log("identset: " + JSON.stringify(this.identity));
       }
+      if (sorted.tags.name != "" && sorted.tags.name != undefined) {
+        this.setPrompt("assistant",sorted.tags.name);       
+      }
       if (sorted.run || this.on) {
         //const defaultIdentity = { [this.instructions.rootname]: "" };
         //console.log(ifDefault);
@@ -878,13 +897,13 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       this.preserveLastCopy = false;
     }
   }
-  activatePresort(text) {
+    activatePresort(text) {
     
     let run = false;
     text = text.trim();
     var response = [];
     const parsedData = text.split(this.instructions.invoke);
-    let tags = "";
+        let tags = "";
     if (parsedData.length > 3) {//todo: fix this so it works better
       this.notify(
         "Not Sent:",
@@ -940,7 +959,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       output = { persona: tags[0], command: "", text: tags[tags.length - 1] };
     } else if (tags.length >= 3) {
       let text = tags.slice(2)
-      if (text.length > 1) {
+            if (text.length > 1) {
         text = text.join(this.instructions.endTag);
         output = {
           persona: tags[0],
