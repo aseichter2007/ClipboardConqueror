@@ -156,13 +156,15 @@ Usage:
     This is exemplary; character is not a default prompt. Captain Clip will respond. Try:
 
     ```
-    |||frank,user| "Hello, Frank. You can't hide from me. Show yourself."
+    |||frank,!Frank,user| "Hello, Frank. You can't hide from me. Show yourself."
     ```
+    Here we have set the assistant name to Frank, by prepending the desired name with an exclaimaiton point, as well as included his character card. Llama-3 is particularly good with the assistant name set. Set names persist until changed or CC is restarted. 
+
     ```
     |||stable| write a prompt for a picture of a beautiful forest with pixies playing with animals.
     ```
 
-    Stable Diffusion prompts with ease. The logo picture at the top was generated using this tool, automatic1111 and controlnet. 
+    Stable Diffusion prompts with ease. The logo picture at the top was generated using this tool, automatic1111 and controlnet. In the future I hope to make Clipboard Conqueror support images natively, but I can't afford the time to rebuild it.
 
 
 
@@ -253,6 +255,12 @@ Usage:
     By sending a second pipe "|" on the end, you avoid collisionss with "||" OR operators. 
 
   Currently after using a command that writes data from the application,"|||list|", "|||agent,write|", "|||help|", "|||introduction|", or "|||dw|" you must copy your next query twice.
+
+
+All of these commands and agents go directly after the invocation:
+|||these commands|user query
+
+
 
 --------
 OpenAi Compatible 
@@ -388,7 +396,8 @@ CC supports chaining agents sequentially like:
 
 ```
 |||agentFirst,@agentSecond,#@agentThird,#@@anotherAgentThirdandFourth,##@agentFourth,@@@c,@@@d| and on. 
-``````
+```
+
  "@" executes, and it is reccommended to use specifically targeted chaining agents which I have not developed yet. I'm hoping someone has used superAGI and can point me a direction.
 
  "#" Skips execution, or whatever you like, as everything else in Clipboard Conqueror it can be adjusted to your satisfaction in 0instructions.json.
@@ -416,6 +425,8 @@ Chaining Captain Clip or AGI will stop the chain of execution. (agents with inst
 |||frank,@abe,#@frank,#@kobold,tgwchat,#@tgwchat,c,@@c,d,@@d|
 ```
 This query will build a multiturn conversation, frank's response to the query is sent to abe, abe's response to the query is sent to frank, and the middle conversation is held in |||dw| if you copy it, you will get back the middle. Or it's in the clipboard history as well, I never used that really, sorry clipboard history champs. This app absolutely pollutes it. I gotta rebuild in c# to fix that.
+
+Sending names like !Name @!Name, or setting any prompt segment like |||PROMPT:{{segment}}| will hold prompt format overrides, interfering with multiple backend support, use  noFormat: true as a key, (example: setup.js line 100) per endpoint, to prevent sending jinja or kobold adapters and preserve the default instruct format supplied by the backend from the model config when using multiple models with different instruct sets, or avoid !names.
 
 It seems this triggers the same bug as write. If Clipboard Conqueror seems stuck, copy a little text with no invoke, and try your query again. 
 
@@ -892,3 +903,4 @@ This info belongs here somewhere.
 
 // Winogrande - Common sense reasoning
 // `
+https://www.npmjs.com/package/keypress
