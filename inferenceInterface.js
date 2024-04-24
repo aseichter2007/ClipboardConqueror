@@ -289,12 +289,18 @@ if (this.lastOutpoint !== api.config) {
     chat(api, messages, this.instructSet, params, this.callback, this.notify, this.handler)
   }
 }
-async function chat(api, messages, instructions, params, callback,  notify, handler) {
+async function chat(api, messages, promptFormat, params, callback,  notify, handler) {
   try {
     if(api.noFormat != undefined || api.noFormat == false){
-    params[api.templateStringKey] =  JinjaFormatter(instructions);
-    params.adapter = returnKoboldAdapter(instructions);
+      if (api.templateStringKey!= undefined || api.templateStringKey != "") {
+        params[api.templateStringKey] =  JinjaFormatter(promptFormat);
+      }
+      if (api.koboldAdapter != undefined || api.koboldAdapter != false) {
+        params.koboldAdapter = returnKoboldAdapter(promptFormat);  
+      }
     }
+    console.log("sending to completion api: " + api.url);
+
     //messages = JSON.stringify(messages)
     //console.log("messages: " + messages);
     params.messages = messages;
@@ -303,6 +309,7 @@ async function chat(api, messages, instructions, params, callback,  notify, hand
       url: api.url,
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
         'Authorization': `Bearer ${api.key}`,
       },
       data: params,
@@ -401,17 +408,17 @@ function JinjaFormatter(instructionSet) {
    {%- endfor -%}
    {%- for message in messages %}
       {%- if message['role'] == 'system' -%}
-        {{- '` + instructionSet.startTurn + instructionSet.systemRole + instructionSet.prependPrompt + instructionSet.systemAfterPrepend + `' + message['content'] + '` + instructionSet.postPrompt + instructionSet.memorySystem  + instructionSet.endSystemTurn + `' -}}
+        {{- '` + instructionSet.bos + instructionSet.startTurn + instructionSet.startSystem + instructionSet.systemRole + instructionSet.endSystemRole + instructionSet.prependPrompt + instructionSet.systemAfterPrepend + `' + message['content'] + '` + instructionSet.postPrompt + instructionSet.memorySystem  + instructionSet.endSystemTurn + instructionSet.endTurn `' -}}
       {%- else -%}
       {%- if message['role'] == 'user' -%}
-        {{-'` + instructionSet.startTurn + instructionSet.userRole + instructionSet.memoryUser + `' + message['content']` + instructionSet.specialInstructions + ` + '` + instructionSet.endUserTurn + `'-}}
+        {{-'` + instructionSet.startTurn + instructionSet.startUser + instructionSet.userRole + instructionSet.endUserRole + instructionSet.memoryUser + `' + message['content']` + instructionSet.specialInstructions + ` + '` + instructionSet.endUserTurn + instructionSet.endTurn `'-}}
       {%- else -%}
-        {{-'` + instructionSet.startTurn + instructionSet.assistantRole + `' + message['content'] + '` + instructionSet.endTurn + `' -}}
+        {{-'` + instructionSet.startTurn + instructionSet.startAssistant + instructionSet.assistantRole + instructionSet.endAssistantRole + `' + message['content'] + '` + instructionSet.endTurn + `' -}}
         {%- endif -%}
       {%- endif -%}
     {%- endfor -%}
   {%- if add_generation_prompt -%}
-  {{-'` + instructionSet.startTurn + instructionSet.assistantRole + instructionSet.responseStart + `'-}}
+  {{-'` + instructionSet.startTurn + instructionSet.startAssistant + instructionSet.assistantRole + instructionSet.endAssistantRole + instructionSet.responseStart + `'-}}
   {%- endif -%}
   `;
 }
@@ -443,12 +450,12 @@ function JinjaFormatter(instructionSet) {
 //   return jinja;
 // }
 function returnKoboldAdapter(instructionSet){//should be recieved into params.adapter
-  const systemStart = instructionSet.startTurn + instructionSet.systemRole + instructionSet.prependPrompt + instructionSet.systemAfterPrepend;
-  const systemEnd = instructionSet.postPrompt + instructionSet.memorySystem  + instructionSet.endSystemTurn;
-  const userStart = instructionSet.startTurn + instructionSet.userRole + instructionSet.memoryUser;
-  const userEnd = instructionSet.endUserTurn;
-  const assistantStart = instructionSet.startTurn + instructionSet.assistantRole;
-  const assistantEnd = instructionSet.endTurn + instructionSet.responseStart;
+  const systemStart = instructionSet.startTurn + instructionSet.startSystem + instructionSet.systemRole + instructionSet.endSystemRole + instructionSet.prependPrompt + instructionSet.systemAfterPrepend;
+  const systemEnd = instructionSet.postPrompt + instructionSet.memorySystem  + instructionSet.endSystemTurn + instructionSet.endTurn;
+  const userStart = instructionSet.startTurn + instructionSet.startUser + instructionSet.userRole + instructionSet.endUserRole + instructionSet.memoryUser;
+  const userEnd = instructionSet.endUserTurn + instructionSet.endTurn;
+  const assistantStart = instructionSet.startTurn + instructionSet.startAssistant + instructionSet.assistantRole + instructionSet.endAssistantRole;
+  const assistantEnd = instructionSet.endAssistantRole + instructionSet.endTurn + instructionSet.responseStart;
   return {
     system_start: systemStart,
     system_end: systemEnd,
