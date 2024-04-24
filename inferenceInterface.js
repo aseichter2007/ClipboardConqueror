@@ -291,7 +291,7 @@ if (this.lastOutpoint !== api.config) {
 }
 async function chat(api, messages, promptFormat, params, callback,  notify, handler) {
   try {
-    if(api.noFormat != undefined || api.noFormat == false){
+    if(api.noFormat == undefined || api.noFormat == false){
       if (api.templateStringKey!= undefined || api.templateStringKey != "") {
         params[api.templateStringKey] =  JinjaFormatter(promptFormat);
       }
