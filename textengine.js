@@ -135,6 +135,7 @@ class TextEngine {
           identity = identity.trim();
           if (trip.trip === '!'){
             this.setPrompt("assistant",identity.slice(1))
+            found = true;
           }
           if (this.endpoints.endpoints.hasOwnProperty(identity)) {
             this.api = this.endpoints.endpoints[identity];
@@ -559,7 +560,6 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         break;
       case "startturn":
       case "startall":
-      case "start":
         this.inferenceClient.setOnePromptFormat ("startTurn", formattedQuery);
         break;
       case "endturn":
@@ -815,12 +815,8 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         let persona = sorted.tags.persona.split(this.instructions.agentSplit);
         //console.log("persona tags: " + JSON.stringify(persona));
         //console.log("persona count: " + sorted.tags.length);
-        let temPersona = {};
         ifDefault =  this.personaAtor(persona, sorted);
         //console.log("identset: " + JSON.stringify(this.identity));
-      }
-      if (sorted.tags.name != "" && sorted.tags.name != undefined) {
-        this.setPrompt("assistant",sorted.tags.name);       
       }
       if (sorted.run || this.on) {
         //const defaultIdentity = { [this.instructions.rootname]: "" };
@@ -897,7 +893,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       this.preserveLastCopy = false;
     }
   }
-    activatePresort(text) {
+  activatePresort(text) {
     
     let run = false;
     text = text.trim();

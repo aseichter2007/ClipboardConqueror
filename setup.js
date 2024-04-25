@@ -1848,9 +1848,7 @@ Thinking Link: an outline of questions surrounding the content to guide a reply 
 rot:`
 Chain of thought(cot): a chain of idea expansion for guiding a robust final answer. Thinking Link: an outline of questions surrounding the content to guide a reply that avoids potentiall points of failure. 
 
-Reply to the Thinking Link query list node:
-
-Create a resolution to the previous node containing a sequence of ideas related to the topic from user to craft an answer. 
+Reply using Thinking Link node to direct this final response:
 `,
 tot: `"""
 Answer the Question by exploring multiple reasoning paths as follows:
