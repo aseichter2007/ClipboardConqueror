@@ -56,7 +56,7 @@ setPromptFormat(setting) {
         endUserTurn = setting.endUserTurn;
       }
       let endAssistantTurn = "";
-      if (setting.endTurn != undefined) {
+      if (setting.endAssistantTurn != undefined) {
         endAssistantTurn = setting.endAssistantTurn;
       }
       let systemRole = "";
@@ -77,6 +77,7 @@ setPromptFormat(setting) {
       }
       let assistantRole = "";
       if (setting.assistantRole != undefined) {
+        assistantRole = setting.assistantRole;
       }
       let endAssistantRole = "";
       if (setting.endAssistantRole != undefined) {
@@ -155,7 +156,14 @@ completionMessageBuilder(identity, formattedQuery, params, api ) {
   if (api.model) {
     params.model = api.model;
   }
-  const outIdentity = JSON.stringify(identity)
+  
+  let outIdentity = ""
+  if (api.jsonSystem != undefined && api.jsonSystem) {
+    outIdentity - identityStringifier(identity);
+  } else {
+    outIdentity = JSON.stringify(identity);
+  }
+
   let finalPrompt = 
   instruct.bos +
   instruct.startTurn +
@@ -267,7 +275,7 @@ if (this.lastOutpoint !== api.config) {
     let messages = [];
     messages.push ({
         "role": 'system',
-        "content": JSON.stringify(identity)//might need to json string it
+        "content": identityStringifier(identity)//might need to json string it
         //"content": identity
     })
     messages.push ({
@@ -503,5 +511,12 @@ async function generateCompletion(api, identity, text, instructions, params, cal
     console.log(error);
     //notify("error:", JSON.stringify(error));
   }
+}
+function identityStringifier(identity){
+  let secretIdentity = "";
+  for (const key in identity) {
+    secretIdentity += " "+key +" : "+ identity[key] +"\n\n"
+  }
+  return secretIdentity
 }
 module.exports = InferenceClient;

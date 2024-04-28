@@ -60,40 +60,47 @@ class TextEngine {
     if (typeof str !== "string"){
       return "Error: Input must be a string";
     } 
-    //for over str
+    let tripCoding= 0;
     let trip ={api:0, batch:0, format: 0, trip:""};
     for (let i = 0; i < str.length; i++ ){
       if (str[i] === this.instructions.backendSwitch )  {
         trip.api++;
         trip.trip = trip.trip + this.instructions.backendSwitch;
-        continue;
-      }
-      if (str[i] === this.instructions.batchSwitch) {
+        tripCoding++
+      } else if (str[i] === this.instructions.batchSwitch) {
         trip.batch++;
         trip.trip = trip.trip + this.instructions.batchSwitch;
-        continue;
-      }
-      if(str[i] === this.instructions.batchMiss){
+        tripCoding++
+      } else if(str[i] === this.instructions.batchMiss){
         trip.batch++;
         trip.trip = trip.trip + this.instructions.batchMiss;
-        continue;
-      }
-      if(str[i] === this.instructions.formatSwitch){
+        tripCoding++
+      } else if(str[i] === this.instructions.formatSwitch){
         trip.format++;
         trip.trip = trip.trip + this.instructions.formatSwitch;
-        continue;
+        tripCoding++
+      } else if (str[i] === this.instructions.assistantTag) {
+        trip.trip = trip.trip + this.instructions.assistantTag;
+        tripCoding++
+      } else if (str[i] === this.instructions.userTag) {
+        trip.trip = trip.trip + this.instructions.userTag;
+        tripCoding++
+      } else if (str[i] === this.instructions.systemTag) {
+        trip.trip = trip.trip + this.instructions.systemTag;
+        tripCoding++
+      } else if (str[i] === this.instructions.batchNameSwitch) {
+        trip.trip = trip.trip + this.instructions.batchNameSwitch;
+        tripCoding++
       }
-      if (str[i] === this.instructions.nameTag) {
-        trip.trip = trip.trip + this.instructions.nameTag
-        
+      if (i < tripCoding){
+        return trip;
       }
-      break;
     }
-    return trip
+    return trip;
   }
   batchAgent(identity, trip){
-    this.batchContinue = "";
-    this.batchDocument = "";
+    //this.batchContinue = "";
+    //this.batchDocument = "";
     //batchAgent builds up a an object of agents to be used in the batch
     if (this.batchLength < trip.batch){
       this.batchLength = trip.batch;
@@ -133,11 +140,23 @@ class TextEngine {
       if (identity) {
         if (Number.isNaN(Number(identity))) {
           identity = identity.trim();
-          if (trip.trip === '!'){
-            this.setPrompt("assistant",identity.slice(1))
+          if (trip.trip === this.instructions.assistantTag){
+            this.setPrompt("assistantRole",identity.slice(1))
             found = true;
           }
-          if (this.endpoints.endpoints.hasOwnProperty(identity)) {
+          if (trip.trip === this.instructions.userTag){
+            this.setPrompt("userRole",identity.slice(1))
+          }
+          if (trip.trip === this.instructions.systemTag) {
+            this.setPrompt("systemRole", identity.slice(1))
+          }
+          if (trip.trip === this.instructions.formatSwitch){
+            this.setInferenceFormat(identity.slice(1))
+          }
+          if (trip.trip === this.instructions.batchNameSwitch){
+            this.instructions.batchlimiter = this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet.endAssistantTurn + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet.startAssistant + this.inferenceClient.instructSet.assistantRole + this.inferenceClient.instructSet.endAssistantRole
+          }
+          if(this.endpoints.endpoints.hasOwnProperty(identity)) {
             this.api = this.endpoints.endpoints[identity];
             console.log("setting api: " + JSON.stringify(this.api));
 
@@ -481,7 +500,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         case "c":
         case "continue":
           this.continue = true;
-          this.batchContinue += this.text + "\n";
+          this.batchContinue += this.instructions.batchLimiter + this.text ;
         break;
         case "d":
         case "debug":
@@ -687,6 +706,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
   persona.forEach(tag => {
     tag = tag.trim();
     let commands = tag.split(this.instructions.settinglimit);
+    console.log(commands);
     if (commands.length === 2) {
       commands[0] = commands[0].trim();
       commands[1] = commands[1].trim();
@@ -787,6 +807,8 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     }
     else {
       this.noBatch = true;
+      this.batchDocument = this.batchContinue;
+      this.batchContinue = "";
     }
     if (this.blockPresort) {
       this.blockPresort = false;
