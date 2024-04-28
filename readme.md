@@ -136,6 +136,14 @@ Clipboard Conqueror is designed to work seamlessly across multiple platforms inc
 
 Usage:
 ------
+The Clipboard Conqueror format is extremely configurable, but always adheres to the following formula:
+
+    (invocation"|||") optional agents and commands (split "|")  optional system prompt (split "|") user text
+
+"!@# query" could be valid, "~~~agent+" query could be valid, and "{!?!?!} agent (8)^ prompt (8)^ query" is valid, but there is no setting to change the order or skip segments
+
+Personally I like pipes ||| | |. The default. 
+
 
 1. Enter `|||` followed by your request or command. Pipe "|" can be typed by pressing shift + backslash (above enter, left of enter for European layouts).
 2. Copy the text to your clipboard. After a few moments, you should get a notification and the response is ready to paste:
@@ -160,13 +168,23 @@ Usage:
     ```
     Here we have set the assistant name to Frank, by prepending the desired name with an exclaimaiton point, as well as included his character card. Llama-3 is particularly good with the assistant name set. Set names persist until changed or CC is restarted. 
 
+      There are 4 inection commands
+      - "!" assitant name
+      - ">" user name
+      - "}" system name
+      - "%" format like format |||%chatML|, do this one first if you use it.
+
+      ||| %chatML, ! Rick, > Morty, writer, } Narrator's notes| Rick answers morty's questions.| Where are we going today, grandpa? 
+      
     ```
-    |||stable| write a prompt for a picture of a beautiful forest with pixies playing with animals.
+    "prompt": "<|im_start|> Narrator's notes{\"system\":\" Rick answers morty's questions.\",\"writer\":\"Write a lengthy prose about user's topic. Do not wrap up, end, or conclude the narrative, write the next chapter.\\n \\n\"}<|im_end|>\n<|im_start|> Morty Where are we going today, grandpa?<|im_end|>\n<|im_start|> Rick"}
     ```
+    Clipboard Conqueror inserts the data to assemble a complex query in seconds. 
 
-    Stable Diffusion prompts with ease. The logo picture at the top was generated using this tool, automatic1111 and controlnet. In the future I hope to make Clipboard Conqueror support images natively, but I can't afford the time to rebuild it.
-
-
+    ```
+    ||| } set system name, >set user name, ! set assistant name | quick prompt | each change the corresponding portion of the prompt
+    ```
+    prompt: "<|start_header_id|> set system name<|end_header_id|>\n\n{\"system\":\" quick prompt \"}<|eot_id|><|start_header_id|>set user name<|end_header_id|>\n\n each change the corresponding portion of the prompt<|eot_id|><|start_header_id|> set assistant name<|end_header_id|>"
 
     ```
     |||frank,mem|Frank, how many fingers am I holding up?
@@ -174,7 +192,7 @@ Usage:
 
     Ask Frank Drebin if he has information contained in tag "mem"
 
-    Note: Agents, memory agents, and instructions can be combined like |||agent1,agent2|.
+    - Note: Agents, memory agents, and instructions can be combined like |||agent1,agent2|.
     Three pipes, agent, one pipe. No spaces. Any agents or settings must be closed with one pipe or the names will be sent as text to the default agent (Captain Clip).
 
     ```
@@ -195,22 +213,18 @@ Usage:
     ```
       |||rf| what is in the rf agent? 
     ```
-    - return last copied first in prompt inserted like an agent at the level rf is placed relative to other agents ex |frank,rf,tot| copied text comes after frank agent in the system prompt. Clip will go after in this case because of how he is added, but you can do |||default,rf| if you want Clip's prompt first.
+    - return last copy in system prompt inserted like an agent at the level rf is placed relative to other agents ex |frank,rf,tot| copied text comes after frank agent in the system prompt.
    
 
     ```
     |||memory:save| writes or overwrites an identity called memory with this text: " writes or overwrites an identity..."
     ```
 
-     - Note - I reccomend editing the json directly for complex agents, especially if you are testing prompts to use in production. 
 
     ```
     |||mem:save| SYSTEM: take on the role of {{character}}, description:  description.
     ```
 
-     - |||coder,mute,memone,stevesdayoff|
-     > This command will insert the coder character card, the mute card, memone, and stevesdayoff. The AI will receive each of these.
-     Note, only coder is a standard card.
 
      It's useful to save information like
 
@@ -252,13 +266,10 @@ Usage:
     ```
     |||code|| 
     ```
-    By sending a second pipe "|" on the end, you avoid collisionss with "||" OR operators. 
+    By sending a second pipe "|" on the end, you avoid collisionss with "||" OR operators. Alternatively, you could change the invoke delimiter in setup.js 
 
-  Currently after using a command that writes data from the application,"|||list|", "|||agent,write|", "|||help|", "|||introduction|", or "|||dw|" you must copy your next query twice.
+  Currently after using a command that writes data from the application,"|||list|", "|||agent,write|", "|||help|", "|||introduction|", or "|||dw|" you must copy your next query twice before it sends to the LLM.
 
-
-All of these commands and agents go directly after the invocation:
-|||these commands|user query
 
 
 
@@ -352,10 +363,10 @@ OpenAi Compatible
 
 Clipboard Conqueror applies formatting like:
 ```
-"prompt":"<|im_start|>[\"###": Command First.\",[\"SYSTEM: Write a lengthy prose about the requested topic. Do not wrap up, end, or conclude the story, write the next chapter.\\n \\n Story:\",\"\"]]<|im_end|>\n<|im_start|>user:\n User: after agent writer\n\n<|im_end|>\n<|im_start|>assistant:\n
+"prompt": "<|start_header_id|>system<|end_header_id|>\n\n{\"system\":\" Command First.\",\"writer\":\"Write a lengthy prose about user's topic. Do not wrap up, end, or conclude the narrative, write the next chapter.\\n \\n\"}<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n User: after agent writer<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n"
 ```
 
-"###" is a configurable key and should only be present when a quick prompt is specified and removed if it is empty.
+"system" is a configurable key in setup.js and should only be present when a quick prompt is specified and removed if it is empty.
 
 ```
 |||re,frank|this text is invisible to :save| user query
@@ -369,7 +380,7 @@ instant system prompts like |||e ( *for empty prompt* )| off the cuff system pro
 |||rf,frank,set,joe|these system commands persist| query goes out. 
 ```
 
- - set will save all agents before it as a persistent default, and include any system command sent at this time. in this case joe does not persist with the next simple ||| 
+ - set will save all agents before it as a persistent default, and include any system command sent at this time. in this case joe does not persist with the next simple invoke ||| 
  
  once set "|||"{query} will behave as 
  ```
@@ -397,10 +408,12 @@ CC supports chaining agents sequentially like:
 ```
 |||agentFirst,@agentSecond,#@agentThird,#@@anotherAgentThirdandFourth,##@agentFourth,@@@c,@@@d| and on. 
 ```
+Special initializers "! > } %" are supported when batching. 
+
 
  "@" executes, and it is reccommended to use specifically targeted chaining agents which I have not developed yet. I'm hoping someone has used superAGI and can point me a direction.
 
- "#" Skips execution, or whatever you like, as everything else in Clipboard Conqueror it can be adjusted to your satisfaction in 0instructions.json.
+ "#" Skips execution, or whatever you like, as everything else in Clipboard Conqueror it can be adjusted to your satisfaction in setup.js.
 
  I like to think of it like feeding a tape, so I can send in the manager every so often to keep track like ###@##@##@#@@@#manager, who knows what you will find with workflows like this that can be shifted and set up in moments and executed by small LLMs in minutes. 
 
@@ -422,15 +435,30 @@ In this case, Captain Clip will be sent first to Kobold with the initial query. 
 Chaining Captain Clip or AGI will stop the chain of execution. (agents with instructions to write invokes cause the chain to stop)
 
 ```
-|||frank,@abe,#@frank,#@kobold,tgwchat,#@tgwchat,c,@@c,d,@@d|
+|||frank, ! Frank,@abe,@%chatML, @! Abe,#@frank,#@%llama3 #@! Frank, kobold,#@kobold,@tgwchat,c,@@c|
 ```
-This query will build a multiturn conversation, frank's response to the query is sent to abe, abe's response to the query is sent to frank, and the middle conversation is held in |||dw| if you copy it, you will get back the middle. Or it's in the clipboard history as well, I never used that really, sorry clipboard history champs. This app absolutely pollutes it. I gotta rebuild in c# to fix that.
+This query will build a multiturn conversation, Frank's response(kobold api) to the initial query is sent to abe marked with chatML format(Text Gen Webui api), abe's response to the query is sent to frank(with llama 3 markup on kobold api), 
 
-Sending names like !Name @!Name, or setting any prompt segment like |||PROMPT:{{segment}}| will hold prompt format overrides, interfering with multiple backend support, use  noFormat: true as a key, (example: setup.js line 100) per endpoint, to prevent sending jinja or kobold adapters and preserve the default instruct format supplied by the backend from the model config when using multiple models with different instruct sets, or avoid !names.
 
-It seems this triggers the same bug as write. If Clipboard Conqueror seems stuck, copy a little text with no invoke, and try your query again. 
+ |||dw| will contain the c links from the end, showing the intermediary steps. 
+  - if you copy |||dw|, you will get back the middle conversation steps as carried by c. Or it's in the clipboard history as well, I never used that really, sorry clipboard history champs. This app absolutely pollutes it. I gotta rebuild in c# to fix that.
+  - |||dw| is a writing command so it causes the hang where you have to copy text with no invoke. I gotta figure this bug out...
 
-It might be that I was using dw though, and that is a writing command so it causes the hang where you have to copy text with no invoke. I gotta figure this bug out... //Many moons later, this is still only minimized, you should be able to copy text with the invoke and it will reset but it still fails to send initially. 
+
+ "c" carries the chat context forward optionally like #@#@c.
+ "&" will set the history splitter to the target name like
+ ```
+  |||cot, !Query Node, @! Rick Sanchez @& Rick's Inner thoughts| 
+ ```
+Will present the query node as a discrete turn labeled Rick's Inner thoughts in the c log. C is cleared at the end of execution but stored in dw until the next query.
+
+
+
+Sending names like !Name @!Name, or setting any prompt segment like |||PROMPT:{{segment}}| will hold prompt format overrides, interfering with multiple backend support, use  noFormat: true as a key, (example: setup.js line 100) per endpoint, to prevent sending jinja or kobold adapters and preserve the default instruct format supplied by the backend from the model config when using multiple models with different instruct sets.
+
+Handle % format changes first, like %alpaca !name or the format change overwrites the name change. 
+
+
 
 
 Prompt Formats:
@@ -504,7 +532,7 @@ and special for jinja formatter only:
 |||PROMPT:special|.rstrip() //Probably not needed for typical use. Not sure what .rstrip() does. I think it removes whitespace at the end of the string, really I hate this behavior for CC. I want to know exactly what the machine sees. 
 
 ```
- 
+I think I missed a few. CC supports a lot of flexibility in prompt formats.
 None of these are case sensitive. |||PROMPT:SySTEMmemOrY| is the same as |||PPROMPT:systemmemory|||. There are a few options to hit these as well, such as username or name, endturn or end, etc. I've hopefully reached easy to remember without adding confusion.
 
 
