@@ -123,11 +123,13 @@ Save agents on the fly to store, sort, query, think, review, or just tell you jo
 
 Key Features:
 --------------
-* Locally run large language model support with KoboldCPP for powerful, secure, text processing.
-* Combines user-supplied text with AI output for precise customization.
-* Supports multiple languages and contexts for diverse applications. Not all LLM models are multilingual, some configuration may be required.
-* Targeted agents for specific tasks.
+* Control every part of LLM prompts without needing to switch context to a different tab, window, or program. 
+* Wtite and quickly call targeted agents for specific tasks.
 * Quick saving of new agents and information for later use.
+* Tailors text with proper formatting for precise AI responses.
+* Locally run large language model support with KoboldCPP for powerful, secure, text processing.
+* Supports multiple backends, diverse prompt configurations, and even a no code framework for prototyping chain-of-actor or chain-of-thought prompts for multi-step agent development pipelines.
+* Supports multiple languages and contexts for diverse applications. Not all LLM models are multilingual, some configuration may be required.
 
 
 Desktop Platforms:
@@ -138,135 +140,139 @@ Usage:
 ------
 The Clipboard Conqueror format is extremely configurable, but always adheres to the following formula:
 
-    (invocation"|||") optional agents and commands (split "|")  optional system prompt (split "|") user text
+    (invocation"|||") optional agents and commands (optional split "|")  optional system prompt (optional split "|") user text (optional continue "~~~") optional start of assistant response
 
-"!@# query" could be valid, "~~~agent+" query could be valid, and "{!?!?!} agent (8)^ prompt (8)^ query" is valid, but there is no setting to change the order or skip segments
+"!@# query" could be valid, "123ai+ query" could be valid, and "{!?!?!} agents (8)^ quick prompt (8)^ query" could valid, but there is no setting to change the order. 
 
-Personally I like pipes ||| | |. The default. 
+Personally I like pipes |||agents|quick prompt|user query ~~~ start assistant response. The default. 
 
 
 1. Enter `|||` followed by your request or command. Pipe "|" can be typed by pressing shift + backslash (above enter, left of enter for European layouts).
 2. Copy the text to your clipboard. After a few moments, you should get a notification and the response is ready to paste:
-   ```
-   ||| "Ahoy Captain, open the airlock, we're coming aboard the Clipboard Conqueror"
-   ```
-   Copy the line above. Wait for the notification to paste the AI response. Sometimes my notifications are a little funny but I have about a thousand layers of mess running all the time so it could be something related to streaming stuff. Also errors have been reported with linux notifications and sounds. 
+  ```
+  ||| "Ahoy Captain, open the airlock, we're coming aboard the Clipboard Conqueror"
+  ```
+  Copy the line above. Wait for the notification to paste the AI response. Sometimes my notifications are a little funny but I have about a thousand layers of mess running all the time so it could be something related to streaming stuff. Also errors have been reported with linux notifications and sounds. 
 
-   ```
-    |||introduction|
-   ```
-   will tell you about LLMs and how they work, and explain the settings that are useful to control generation. Ready to paste immediately. Currently after using a command that writes data from the application, "|||agent,write|", "|||help|", "|||introduction|" you must copy text with no invoke token to clear a bugged state. 
+  ```
+  |||introduction|
+  ```
+  This is a writing command, it provides immediately ready to paste text from this application. It will tell you about LLMs and how they work, and explain the settings that are useful to control generation. Ready to paste immediately. Currently after using a command that writes data from the application, "|||agent,write|", "|||help|", "|||introduction|" the next copy made will not send text to the AI. Copy your command again, it should work the second time. If not, ensure you are only copying one ||| invoke with your text. 
 
-    ```
-    |||character,temperature:1.4|What is a square root and what dishes and sauces are they best served with?
-    ```
-    aside: there does not appear to be a too hot for general queries, is this thing on? Hermes is simply not having any square root soup. 
-    This is exemplary; character is not a default prompt. Captain Clip will respond. Try:
+  ```
+  |||character,temperature:1.4|What is a square root and what dishes and sauces are they best served with?
+  ```
+  aside: there does not appear to be a too hot for general queries, is this thing on? Hermes is simply not having any square root soup. 
+  This is exemplary; character is not a default prompt. Captain Clip will respond. Try:
 
-    ```
-    |||frank,!Frank,user| "Hello, Frank. You can't hide from me. Show yourself."
-    ```
-    Here we have set the assistant name to Frank, by prepending the desired name with an exclaimaiton point, as well as included his character card. Llama-3 is particularly good with the assistant name set. Set names persist until changed or CC is restarted. 
+  ```
+  |||frank,!Frank,user| "Hello, Frank. You can't hide from me. Show yourself."
+  ```
+  Here we have set the assistant name to Frank, by prepending the desired name with an exclaimaiton point, as well as included his character card. Llama-3 is particularly good with the assistant name set. Set names persist until changed or CC is restarted. 
 
-      There are 4 inection commands
-      - "!" assitant name
-      - ">" user name
-      - "}" system name
-      - "%" format like format |||%chatML|, do this one first if you use it.
+    There are 4 inection commands
+    - "!" assitant name
+    - ">" user name
+    - "}" system name
+    - "%" format like format |||%chatML|, do this one first if you use it.
 
-      ||| %chatML, ! Rick, > Morty, writer, } Narrator's notes| Rick answers morty's questions.| Where are we going today, grandpa? 
-      
-    ```
-    "prompt": "<|im_start|> Narrator's notes{\"system\":\" Rick answers morty's questions.\",\"writer\":\"Write a lengthy prose about user's topic. Do not wrap up, end, or conclude the narrative, write the next chapter.\\n \\n\"}<|im_end|>\n<|im_start|> Morty Where are we going today, grandpa?<|im_end|>\n<|im_start|> Rick"}
-    ```
-    Clipboard Conqueror inserts the data to assemble a complex query in seconds. 
+    ||| %chatML, ! Rick, > Morty, writer, } Narrator's notes| Rick answers morty's questions.| Where are we going today, grandpa? 
+    
+  ```
+  "prompt": "<|im_start|> Narrator's notes{\"system\":\" Rick answers morty's questions.\",\"writer\":\"Write a lengthy prose about user's topic. Do not wrap up, end, or conclude the narrative, write the next chapter.\\n \\n\"}<|im_end|>\n<|im_start|> Morty Where are we going today, grandpa?<|im_end|>\n<|im_start|> Rick"}
+  ```
+  "%}>!" all persist until overwritten. 
+  
+  Clipboard Conqueror inserts the data to assemble a complex query in seconds. 
 
-    ```
-    ||| } set system name, >set user name, ! set assistant name | quick prompt | each change the corresponding portion of the prompt
-    ```
-    prompt: "<|start_header_id|> set system name<|end_header_id|>\n\n{\"system\":\" quick prompt \"}<|eot_id|><|start_header_id|>set user name<|end_header_id|>\n\n each change the corresponding portion of the prompt<|eot_id|><|start_header_id|> set assistant name<|end_header_id|>"
-
-    ```
-    |||frank,mem|Frank, how many fingers am I holding up?
-    ```
-
-    Ask Frank Drebin if he has information contained in tag "mem"
-
-    - Note: Agents, memory agents, and instructions can be combined like |||agent1,agent2|.
-    Three pipes, agent, one pipe. No spaces. Any agents or settings must be closed with one pipe or the names will be sent as text to the default agent (Captain Clip).
-
-    ```
-    |||2700| write a long story bout a picture of a story where an artist draws a picture of a story about an artist being written by an author
-    ```
-    - sets the max response length to 2700. Also works like |||agent,setting:0.5,1000| just a number is always max response length.
-
-    ```
-     |||temperature:1.1| be more unpredictable, normalize probabilities by 10% after other samplers.
-     ```
-    - sets the temperature to 1.1. This works for any setting, e.g., top_p, min_p. supports :true :false. Overrides the params in setup.js.
-    - Only persists in memory and used for the defaultClient set in setup.js. |||settings:set| are not used for secondary endpoints used like |||tgwchat|.
-    ```
-      |||re| what is this code doing? 
-      ```
-    - return copy at end of prompt inserted after user prompt.
-    - sends the thing you copied last after "what is this code doing? \n \n", copied text here at the end of the user prompt" and sends the Captain Clip assistant in the system prompt.
-    ```
-      |||rf| what is in the rf agent? 
-    ```
-    - return last copy in system prompt inserted like an agent at the level rf is placed relative to other agents ex |frank,rf,tot| copied text comes after frank agent in the system prompt.
-   
-
-    ```
-    |||memory:save| writes or overwrites an identity called memory with this text: " writes or overwrites an identity..."
-    ```
+  ```
+  ||| } set system name, >set user name, ! set assistant name | quick prompt | each change the corresponding portion of the prompt ~~~ Clipboard Conqueror is ready to completely control any LLM!
+  ```
+  prompt: "<|start_header_id|> set system name<|end_header_id|>\n\n{\"system\":\" quick prompt \"}<|eot_id|><|start_header_id|>set user name<|end_header_id|>\n\n each change the corresponding portion of the prompt<|eot_id|><|start_header_id|> set assistant name<|end_header_id|> Clipboard Conqueror is ready to completely control any LLM!"
 
 
+|||~~~ sets text after the "~~~" to the start of the assistant reply for this turn only. 
+  ```
+  |||frank,mem|Frank, how many fingers am I holding up?
+  ```
+
+  Ask Frank Drebin if he has information contained in tag "mem"
+
+  - Note: Agents, memory agents, and instructions can be combined like |||agent1,agent2|.
+  Three pipes, agent, one pipe. No spaces. Any agents or settings must be closed with one pipe or the names will be sent as text to the default agent (Captain Clip).
+
+  ```
+  |||2700| write a long story bout a picture of a story where an artist draws a picture of a story about an artist being written by an author
+  ```
+  - sets the max response length to 2700. Also works like |||agent,setting:0.5,1000| just a number is always max response length.
+
+  ```
+    |||temperature:1.1| be more unpredictable, normalize probabilities by 10% after other samplers.
     ```
-    |||mem:save| SYSTEM: take on the role of {{character}}, description:  description.
+  - sets the temperature to 1.1. This works for any setting, e.g., top_p, min_p. supports :true :false. Overrides the params in setup.js.
+  - Only persists in memory and used for the defaultClient set in setup.js. |||settings:set| are not used for secondary endpoints used like |||tgwchat|.
+  ```
+    |||re| what is this code doing? 
     ```
+  - return copy at end of prompt inserted after user prompt.
+  - sends the thing you copied last after "what is this code doing? \n \n", copied text here at the end of the user prompt" and sends the Captain Clip assistant in the system prompt.
+  ```
+    |||rf| what is in the rf agent? 
+  ```
+  - return last copy in system prompt inserted like an agent at the level rf is placed relative to other agents ex |frank,rf,tot| copied text comes after frank agent in the system prompt.
+  
+
+  ```
+  |||memory:save| writes or overwrites an identity called memory with this text: " writes or overwrites an identity..."
+  ```
 
 
-     It's useful to save information like
-
-    ```
-    |||memory:save|thisFunction(variable){ return variable + variable * variable; }
-    ```
-
-    and then use it like
-
-    ```
-    |||coder,memory| describe the function of the code and suggest descriptive variable names. 
-    ```
-    ```
-    |||memory| walk me through the expected output if "variable" is equal to 10. 
-    ```
-
-    ```
-    |||memory:delete| removes memory, defaults will return when Clipboard Conqueror is restarted. 
-    ```
+  ```
+  |||mem:save| SYSTEM: take on the role of {{character}}, description:  description.
+  ```
 
 
-    List is useful for knowing what is available.
+    It's useful to save information like
 
-    ```
-    |||list|
-    ```
-    The list command sends a list of current agents in memory to the clipboard, ready to paste out immediately.
+  ```
+  |||memory:save|thisFunction(variable){ return variable + variable * variable; }
+  ```
 
-    ```
-    |||mem,write|
-    ```
-    The write command will copy the entire prompt of all entered agent tags to the clipboard ready to paste, and then copy back under a new name or edited.
+  and then use it like
 
-    ```
-    |||agent:file|
-    ```
-    The file command saves that agent to the 0identities.json file. Currently only supports agents and will save settings values as agents if you tell it to.  Currently the only way to delete filed agents is to delete them from 0identites.json or delete the json entirely to restore defaults next run.
+  ```
+  |||coder,memory| describe the function of the code and suggest descriptive variable names. 
+  ```
+  ```
+  |||memory| walk me through the expected output if "variable" is equal to 10. 
+  ```
 
-    ```
-    |||code|| 
-    ```
-    By sending a second pipe "|" on the end, you avoid collisionss with "||" OR operators. Alternatively, you could change the invoke delimiter in setup.js 
+  ```
+  |||memory:delete| removes memory, defaults will return when Clipboard Conqueror is restarted. 
+  ```
+
+
+  List is for knowing what is available. It will provide an easy to expand list of available agents.
+
+  ```
+  |||list|
+  ```
+  The list command sends a list of current agents in memory to the clipboard, ready to paste out immediately.
+
+  ```
+  |||mem,write|
+  ```
+  The write command will copy the entire prompt of all entered agent tags to the clipboard ready to paste, and then copy back under a new name or edited.
+
+  ```
+  |||agent:file|
+  ```
+  The file command saves that agent to the 0identities.json file. Currently only supports agents and will save settings values as agents if you tell it to.  Currently the only way to delete filed agents is to delete them from 0identites.json or delete the json entirely to restore defaults next run.
+
+  ```
+  |||code|| 
+  ```
+  By sending a second pipe "|" on the end, you avoid collisionss with "||" OR operators. Alternatively, you could change the invoke delimiter in setup.js (instruct.endTag)
 
   Currently after using a command that writes data from the application,"|||list|", "|||agent,write|", "|||help|", "|||introduction|", or "|||dw|" you must copy your next query twice before it sends to the LLM.
 
@@ -298,10 +304,6 @@ OpenAi Compatible
   Add endpoints and parameters in settings.js or 0endpoints.json if settings files are enabled. File writing is off by default, the settings files are more for use with binaries.
 
   When using these commands, be aware that data may be sent to outside systems. This may be a breach of your company's data protection policy.
-```
-|||model:gpt-3.5-turbo| 
-```
-  will change the target openai model. names must be exact. I dont know them or have a gpt key to test this feature. I put the ones that arent marked depreciating in |||gpts,write|  This is curently superceded by models set on the endpoint configuration. I think this can still be used if you don't specify a model in the endpoint configuration. 
 
   |||$,set| will behave as expected and send to the compatible endpoint until |||set| to release. //todo: determine if this is broken.
 
@@ -309,46 +311,46 @@ OpenAi Compatible
   You can safely use any other command to query sensitive data, and depending on your configuration, gpt commands can be sent locally as well. 
 
 
-   super advanced save: 
-   ---
-  ``` 
-  |||CurrentText:save,re,LastCopy:save|CurrentText
-  ``````
-  - if the re flag is set, saved agents come from the last copy. This allows saving an agent from the current text that is distinct from the lastCopy agent which comes from the last clipboard contents, and allows saving agents while making an initial query like:  
+super advanced save: 
+---
+``` 
+|||CurrentText:save,re,LastCopy:save|CurrentText
+``````
+- if the re flag is set, saved agents come from the last copy. This allows saving an agent from the current text that is distinct from the lastCopy agent which comes from the last clipboard contents, and allows saving agents while making an initial query like:  
 
-
-  ```
-  |||re,frank,dataCopiedLast:save| Hey get a load of this!
-  ```
-
-  - This will save the last copy to the clipboard into dataCopiedLast and send the frank system agent and user "Hey get a load of this!" followed by the last copied text to the LLM. Note, tags between the | | parse left to right. It matters where re is placed
-  
-  ``` 
-  |||frank,dataCopiedLast:save,re| Hey get a load of this! 
-  ```
-  - will save "Hey get a load of this!" to dataCopiedLast because re is not activated until after the :save.
-
-  ```  
-  |||CurrentText,LastCopy| query combined next like this. 
-  ```
-
- System commands
- ---
 
 ```
- ||||System command sends before captain clip | "user query"
-```
- - note 4 "|" to send a custom system prompt with the default agent
-```
- |||writer| system command sends before writer| "user query"
+|||re,frank,dataCopiedLast:save| Hey get a load of this!
 ```
 
- This syntax lets you command the system directly at the same time you send as user. 
+- This will save the last copy to the clipboard into dataCopiedLast and send the frank system agent and user "Hey get a load of this!" followed by the last copied text to the LLM. Note, tags between the | | parse left to right. It matters where re is placed
 
- ```
- |||| assistant gives really weird bogus advice: | how can I become as pretty as OPs mom?
- ```
- - not the advice I was expecting, I wasnt expecting "stalk her down and become her". WOW!
+``` 
+|||frank,dataCopiedLast:save,re| Hey get a load of this! 
+```
+- will save "Hey get a load of this!" to dataCopiedLast because re is not activated until after the :save.
+
+```  
+|||CurrentText,LastCopy| query combined next like this. 
+```
+
+System commands
+---
+
+```
+||||System command sends before captain clip | "user query"
+```
+- note 4 "|" to send a custom system prompt with the default agent
+```
+|||writer| system command sends before writer| "user query"
+```
+
+This syntax lets you command the system directly at the same time you send as user. 
+
+```
+|||| assistant gives really weird bogus advice: | how can I become as pretty as OPs mom?
+```
+- not the advice I was expecting, I wasnt expecting "stalk her down and become her". WOW!
 
 ```
 ||||System: Command first before Clip agent.|  query from user
@@ -369,7 +371,7 @@ Clipboard Conqueror applies formatting like:
 "system" is a configurable key in setup.js and should only be present when a quick prompt is specified and removed if it is empty.
 
 ```
-|||re,frank|this text is invisible to :save| user query
+|||re,frank|this text is invisible to :save| user query ~~~ and this text is invisible to save as well. 
 ```
 instant system prompts like |||e ( *for empty prompt* )| off the cuff system prompt.| are preserved with |||set|.
 
@@ -380,23 +382,23 @@ instant system prompts like |||e ( *for empty prompt* )| off the cuff system pro
 |||rf,frank,set,joe|these system commands persist| query goes out. 
 ```
 
- - set will save all agents before it as a persistent default, and include any system command sent at this time. in this case joe does not persist with the next simple invoke ||| 
- 
- once set "|||"{query} will behave as 
- ```
- |||(that last copy saved with rf),frank|these system commands persist|{query} 
- ```
- 
- 
- until |||set| is copied again, clearing the set agents. 
+- set will save all agents before it as a persistent default, and include any system command sent at this time. in this case joe does not persist with the next simple invoke ||| 
 
- While set, |||any,additional,agents| can be sent and add after the set agents, and will go along after the set agents.
+once set "|||"{query} will behave as 
+```
+|||(that last copy saved with rf),frank|these system commands persist|{query} 
+```
 
- |||rf,set| is extremely useful for repeated queries against the same copied data. 
 
- while set ||||any| any replaces the old system instruction before agents this time only.
- 
- - again note 4 pipes before system insert. 
+until |||set| is copied again, clearing the set agents. 
+
+While set, |||any,additional,agents| can be sent and add after the set agents, and will go along after the set agents.
+
+|||rf,set| is extremely useful for repeated queries against the same copied data. 
+
+while set ||||any| any replaces the old system instruction before agents this time only.
+
+- again note 4 pipes before system insert. 
 
 
 Multi agent chaining and complex agent workflows. 
@@ -411,20 +413,20 @@ CC supports chaining agents sequentially like:
 Special initializers "! > } %" are supported when batching. 
 
 
- "@" executes, and it is reccommended to use specifically targeted chaining agents which I have not developed yet. I'm hoping someone has used superAGI and can point me a direction.
+"@" executes, and it is reccommended to use specifically targeted chaining agents which I have not developed yet. I'm hoping someone has used superAGI and can point me a direction.
 
- "#" Skips execution, or whatever you like, as everything else in Clipboard Conqueror it can be adjusted to your satisfaction in setup.js.
+"#" Skips execution, or whatever you like, as everything else in Clipboard Conqueror it can be adjusted to your satisfaction in setup.js.
 
- I like to think of it like feeding a tape, so I can send in the manager every so often to keep track like ###@##@##@#@@@#manager, who knows what you will find with workflows like this that can be shifted and set up in moments and executed by small LLMs in minutes. 
+I like to think of it like feeding a tape, so I can send in the manager every so often to keep track like ###@##@##@#@@@#manager, who knows what you will find with workflows like this that can be shifted and set up in moments and executed by small LLMs in minutes. 
 
- If you're quick you can just paste out each step. 
+If you're quick you can just paste out each step. 
 
- "d" or "debug" like ,@@@@debug saves a growing output of each turn if not skipped like ##@#. this example returns only the third to final of the 6 total interactions. The final output is never captured, the first input can be captured like |||agent,@agent,d,@d| @ chains always execute second.
+"d" or "debug" like ,@@@@debug saves a growing output of each turn if not skipped like ##@#. this example returns only the third to final of the 6 total interactions. The final output is never captured, the first input can be captured like |||agent,@agent,d,@d| @ chains always execute second.
 
- 
- return the debug log by copying  |||dw| or |||debugWrite| and paste.  The first turn is the initial query followed by what this contains, and the final output is not contained with d.  "dw" returns the middle for debugging your bot interactions. 
 
- "c" or "continue" works similarly to send the log internally to the LLM with minimal markup "</s>"  between messages to build more of a chatlog.  
+return the debug log by copying  |||dw| or |||debugWrite| and paste.  The first turn is the initial query followed by what this contains, and the final output is not contained with d.  "dw" returns the middle for debugging your bot interactions. 
+
+"c" or "continue" works similarly to send the log internally to the LLM with minimal markup "</s>"  between messages to build more of a chatlog.  
 
 endpoints defined in setup.js or 0endpoints.json. can be used and chained by name like |||@textGenWebUiChat|
 ```
@@ -440,16 +442,16 @@ Chaining Captain Clip or AGI will stop the chain of execution. (agents with inst
 This query will build a multiturn conversation, Frank's response(kobold api) to the initial query is sent to abe marked with chatML format(Text Gen Webui api), abe's response to the query is sent to frank(with llama 3 markup on kobold api), 
 
 
- |||dw| will contain the c links from the end, showing the intermediary steps. 
-  - if you copy |||dw|, you will get back the middle conversation steps as carried by c. Or it's in the clipboard history as well, I never used that really, sorry clipboard history champs. This app absolutely pollutes it. I gotta rebuild in c# to fix that.
-  - |||dw| is a writing command so it causes the hang where you have to copy text with no invoke. I gotta figure this bug out...
+|||dw| will contain the c links from the end, showing the intermediary steps. 
+- if you copy |||dw|, you will get back the middle conversation steps as carried by c. Or it's in the clipboard history as well, I never used that really, sorry clipboard history champs. This app absolutely pollutes it. I gotta rebuild in c# to fix that.
+- |||dw| is a writing command so it causes the hang where you have to copy text with no invoke. I gotta figure this bug out...
 
 
- "c" carries the chat context forward optionally like #@#@c.
- "&" will set the history splitter to the target name like
- ```
-  |||cot, !Query Node, @! Rick Sanchez @& Rick's Inner thoughts| 
- ```
+"c" carries the chat context forward optionally like #@#@c.
+"&" will set the history splitter to the target name like
+```
+|||cot, !Query Node, @! Rick Sanchez @& Rick's Inner thoughts| 
+```
 Will present the query node as a discrete turn labeled Rick's Inner thoughts in the c log. C is cleared at the end of execution but stored in dw until the next query.
 
 
@@ -568,13 +570,15 @@ Currently there are no built binaries and Node is required to run Clipboard Conq
     I supply a sample batch file for loading a model with your settings file after you get kobold dialed in from the launcher. 
 
 3. Kobold needs a model. I like GGUF because it is one file rather than a folder of mess.
-   Here are my reccomendations 2/25/24:[OpenHermes 2.5 Mistral 7B 16K Context.GGUF](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-16k-GGUF) 
+   Here are my reccomendations 4/30/24:[Llama 3 GGUFs](https://huggingface.co/bartowski/Meta-Llama-3-8B-Instruct-GGUF) get one that fits in your ram with 1.5gb free for context and basic windows stuff. 
 
-    OpenHermes-2.5-Mistral 7b 16k.gguf supports 16384 context.
-    This is a decent few pages. 
-    If it seems slow reduce your context to 8k, if the problem persists, select a lower Quantization.
+   CUDA0 buffer size =  7605.33 MiB : this is the memory size of the Q8 quant for Llama 3 8B
 
-    Most of my prompts are tuned against OpenHermes 2.5 Mistral 7b with chatML.
+   CUDA0 KV buffer size =  1036.00 MiB 8192(8k) context. 
+
+   With some extra stuff open(web browser, vsCode, etc) I'm at 11 GB vram utilized in total. Without using a graphics card, this would all be in regular ram.
+
+    Most of my prompts are tuned against OpenHermes 2.5 Mistral 7b with chatML. Some against Llama 3 8B.
     any chatML model should work great out of the box. 
     Psyfighter2 works pretty well too, though it doesn't nail the instructions as well being a storytelling model. 
   
@@ -629,12 +633,20 @@ setup.js writes files for each type of setting. If formatting errors are introdu
 Choosing A Model:
 --------
 
+The links below are to OpenHermes 2.5 Mistral 7B.
+
+OpenHermes-2.5-Mistral 7b 16k.gguf supports 16384 context, a decent few pages. 
+
+If it seems slow, reduce your context to 8k. If the problem persists, select a smaller Quantization.
 
 hardware("token speed")  [fast = 20+ tokens/sec, medium =  ~<10 tokens/sec. slow = <2tokens/sec]* Lower on this chart is smarter. Partial offloading the video ram is possible but costs speed. 
 
 ```
 In the world of inference, some macs can be medium with even very large models. Metal. 
 ```
+
+Quant links:
+---
 16gb ram and no graphics card, or laptop with shared gfx memory(slow, notable quality loss): 
 
 [Q3_K_M](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b.Q3_K_M.gguf)VRAM used: 5429.57 MB (model: 3301.56 MB, context: 2128.01 MB) + a bit for ingestion, use lower quants for less than  16gb  RAM consider Rocket 3B//untested
@@ -649,7 +661,7 @@ Less than 8gb gfx cards(fast-medium, notable quality loss):
 
 .
 
-8gb gfx cards(medium, prompt ingestion might not fit in mem = slow consider as low as 4k context if faster): 
+8gb gfx cards(medium, prompt ingestion might not fit in mem. If slow, consider as low as 4k context if faster, or partial offload a few layers to keep context processing fast): 
 
 [Q5_K_M 16k context](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-GGUF/blob/main/openhermes-2.5-mistral-7b-16k.Q5_K_M.gguf)VRAM used: 7691.57 MB (model: 5563.56 MB, 8k context: 2128.01 MB)//I think this data is for Q6
 
@@ -686,7 +698,7 @@ minimum hardware:[rocket_3B](https://huggingface.co/TheBloke/rocket-3B-GGUF) sho
 For large models, set the batch size lower in kobold to keep the working context memory requirements smaller. I like 128 these days. 5 threads on a 6 core system to preserve responsiveness.
          
 
-  >I thought about recommending other models, but OpenHermes 2.5 is simply decent and fast, even tested on a friend's old 1080, under one minute for complex queries and with no gfx acceleration on 16gb ram its painfully slow to ingest, a few minutes for a large query and response.  smaller batches help you be sure its not hung up. 
+  >I thought about recommending other models, but OpenHermes 2.5 is simply decent and fast, even tested on a friend's old 1080, under one minute for complex queries and with no gfx acceleration on 16gb ram its painfully slow to ingest, a few minutes for a large query and response.  smaller batch size helps you be sure its not hung up. 
 
   >let me know about your hardware and token speed and i will make this reflect the general experience better. 
 
@@ -865,10 +877,46 @@ Additional Resources:
 
 [OpenHermes 2.5 Mistral prompting ideas](https://www.reddit.com/r/LocalLLaMA/comments/18j59g1/you_are_a_helpful_ai_assistant/)]
 
+This info belongs here somewhere.
+// GSM8K is a dataset of 8.5K high-quality linguistically diverse grade school math word problems created by human problem writers
+
+// HellaSwag is the large language model benchmark for commonsense reasoning.
+
+// Truful QA: is a benchmark to measure whether a language model is truthful in generating answers to questions.
+
+// Winogrande - Common sense reasoning
+// `
+
+1.	GRADE (Goal, Request, Action, Details, Example): Structures prompts to be goal-oriented and actionable.
+2.	RODES (Role, Objective, Details, Example, Sense Check): Enhances precision and relevance with a final sense check.
+3.	Chain of Thought (CoT): Encourages step-by-step articulation of reasoning processes.
+4.	Zero-Shot and Few-Shots Learning: Prompts AI without or with minimal examples to demonstrate adaptability.
+5.	ReAct (Reason and Act): Combines reasoning and task-specific actions in one prompt.
+6.	Instruction Tuning: Fine-tunes AI on specific instructions for better direct response performance.
+7.	Interactive Prompts: Engages AI in a dynamic back-and-forth interaction to refine outputs.
+8.	TRACI (Task, Role, Audience, Create, Intent): Tailors prompts by considering task specifics and audience.
+9.	TRAACI (Task, Role, Analyze, Audience, Create, Intent): Adds an analysis step to TRACI for deeper insight.
+10.	Scaffolded Prompts: Provides a series of incremental prompts for complex or educational tasks.
+11.	SMART (Specific, Measurable, Achievable, Relevant, Timebound): Applies goal-setting principles to prompt engineering.
+12.	Prompt Chaining: Uses sequential prompts for complex or multistep tasks.
+13.	Contextual Prompting: Incorporates rich context for more accurate and relevant responses.
+14.	Contrastive Prompts: Uses contrasting examples to clarify what to do and what to avoid.
+15.	Meta Prompts: Prompts about creating or optimizing other prompts.
+16.	Dynamic Prompting: Adapts prompts based on real-time feedback or changes.
+17.	Multimodal Prompts: Uses multiple types of data inputs to enrich AI interactions.
+18.	Ethical Prompting: Ensures prompts adhere to ethical guidelines and cultural sensitivities.
+19.	Hierarchical Prompting: Structures prompts from general to specific for layered information.
+20.	Guided Imagery Prompts: Guides AI to generate detailed visual content or descriptions.
+21.	Recursive Prompts: Uses output from one prompt as input for the next to refine responses.
+22.	Adaptive Learning Prompts: Adjusts prompt complexity based on AI’s performance or user’s progress.
+23.	Cross-Modal Prompts: Transforms inputs across different modalities (e.g., text to audio).
+These summaries are designed to help you easily remember the essence of each prompting framework.
+
 //todo: link assorted knowledge banks. 
 
 
 dev:
+https://www.npmjs.com/package/keypress
 
 
 //access clipboard//done
@@ -921,14 +969,3 @@ todo: a server for a mystery agent to play twenty questions against. If you gues
 
 //todo: Implement FunkyTown, you kids will never guess what this does. 
 
-
-This info belongs here somewhere.
-// GSM8K is a dataset of 8.5K high-quality linguistically diverse grade school math word problems created by human problem writers
-
-// HellaSwag is the large language model benchmark for commonsense reasoning.
-
-// Truful QA: is a benchmark to measure whether a language model is truthful in generating answers to questions.
-
-// Winogrande - Common sense reasoning
-// `
-https://www.npmjs.com/package/keypress
