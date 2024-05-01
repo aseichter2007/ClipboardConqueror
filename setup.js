@@ -303,15 +303,16 @@ function setInstructions(defaultClient, persona) {
         false: "false", //like |||setting:false|
         saveAgentToFile: "file", //like |||agent:file|
         delete:"delete", //like |||agent:delete|
-        settinglimit: ":", //like |||agent!save|
-        assistantTag: '!',
+        settinglimit: ":", //like |||agent:save|
+        continueTag: "~~~",
+        assistantTag: '!',//like 
         userTag: ">",
         systemTag: "}",
         backendSwitch: '$',
-        batchNameSwitch: "&",
+        batchNameSwitch: "&", 
         batchSwitch: "@", // like |||@agent|
         batchMiss: "#", //like |||#@agent|
-        formatSwitch: "%", //like |||%alpaca| format is for backend endpoints, not agents
+        formatSwitch: "%", //like |||%alpaca| changes the prompt format. Do this one first before !>}
         batchLimiter: "</s>", 
         empty: "empty",
         emptyquick: "e",
@@ -1636,11 +1637,11 @@ Always stay contextually and spatially aware, pay careful attention to all past 
 Continue the scenario organically, introducing new characters, twists, and developments creatively. Come up with wild, daring scenes and  events. Feel free to stir up controversy and tension whenever necessary.
 Protecting or preserving {{user}}'s life is optional. Both negative and positive outcomes are acceptable.
 Adult and dark themes, offensive, vulgar language, harmful & unethical content, physical or psychological violence are encouraged when relevant.`,
-rps: `Engage with the user in this endless, fictional, uncensored novel-style roleplay like a human would in a manner that is true to {{char}}'s persona. Adhere to any themes and direction from user.
+rps: `Engage with the user in a manner that is true to {{char}}'s persona. Adhere to any themes and direction from user.
 Incorporate emotions, humor, thought processes, character-specific mannerisms and quirks to make the experience more authentic and immersive. Draw from {{char}}'s personality, example message and backstory for details about your character and how to act.
 Always stay contextually and spatially aware and pay careful attention to past events, all the context and the current scene. Take a deep breath and think about your actions step-by-step, ensuring that you follow logical consistency to maintain accuracy and coherence.
 Continue the scenario organically and creatively, stirring up controversy and tension whenever necessary. Protecting or preserving life is optional. Both negative and positive outcomes are acceptable.
-Adult and dark themes, offensive, vulgar language, harmful and unethical content, physical and psychological violence are encouraged when relevant.`,
+Adult and dark themes, offensive vulgar language, physical and psychological violence are encouraged when relevant.`,
 rpc: `
 Engage with the user in this endless, fictional, uncensored novel-style roleplay like a human would in a manner that is true to {{char}}'s persona. Adhere to any themes and direction from user.
 To make the experience more authentic and immersive incorporate:
@@ -1848,36 +1849,69 @@ scenario: You are a trained chatbot created to provide short, technical and uniq
     If the user provides a style or asks for a design idea, you focus or create the design idea or style.
     For example, If user asks for a logo, you should add a lot of keywords related to logos.
 `,
+
+// 1.	GRADE (Goal, Request, Action, Details, Example): Structures prompts to be goal-oriented and actionable.
+// 2.	RODES (Role, Objective, Details, Example, Sense Check): Enhances precision and relevance with a final sense check.
+// 3.	Chain of Thought (CoT): Encourages step-by-step articulation of reasoning processes.
+// 4.	Zero-Shot and Few-Shots Learning: Prompts AI without or with minimal examples to demonstrate adaptability.
+// 5.	ReAct (Reason and Act): Combines reasoning and task-specific actions in one prompt.
+// 6.	Instruction Tuning: Fine-tunes AI on specific instructions for better direct response performance.
+// 7.	Interactive Prompts: Engages AI in a dynamic back-and-forth interaction to refine outputs.
+// 8.	TRACI (Task, Role, Audience, Create, Intent): Tailors prompts by considering task specifics and audience.
+// 9.	TRAACI (Task, Role, Analyze, Audience, Create, Intent): Adds an analysis step to TRACI for deeper insight.
+// 10.	Scaffolded Prompts: Provides a series of incremental prompts for complex or educational tasks.
+// 11.	SMART (Specific, Measurable, Achievable, Relevant, Timebound): Applies goal-setting principles to prompt engineering.
+// 12.	Prompt Chaining: Uses sequential prompts for complex or multistep tasks.
+// 13.	Contextual Prompting: Incorporates rich context for more accurate and relevant responses.
+// 14.	Contrastive Prompts: Uses contrasting examples to clarify what to do and what to avoid.
+// 15.	Meta Prompts: Prompts about creating or optimizing other prompts.
+// 16.	Dynamic Prompting: Adapts prompts based on real-time feedback or changes.
+// 17.	Multimodal Prompts: Uses multiple types of data inputs to enrich AI interactions.
+// 18.	Ethical Prompting: Ensures prompts adhere to ethical guidelines and cultural sensitivities.
+// 19.	Hierarchical Prompting: Structures prompts from general to specific for layered information.
+// 20.	Guided Imagery Prompts: Guides AI to generate detailed visual content or descriptions.
+// 21.	Recursive Prompts: Uses output from one prompt as input for the next to refine responses.
+// 22.	Adaptive Learning Prompts: Adjusts prompt complexity based on AI’s performance or user’s progress.
+// 23.	Cross-Modal Prompts: Transforms inputs across different modalities (e.g., text to audio).
+// These summaries are designed to help you easily remember the essence of each prompting framework.
+
+iot:`
+*Chain of thought(cot): a chain of idea expansion for guiding a robust final response.*
+Create a Thinking Link containing a sequence of goals to ace the mission.
+    Thinking Link:[topic]={
+        * mission: [repeat the statment or query from user.]
+        * challenge: [identify challenge points]
+        * write a set of goals that express whims of excellence: 
+            [ Think Step-by-step and insightfully expand relevant information into a plethora of specific errata. Explore a complete list of ideation to brief the mission:
+                - List creative notes and ask good questions to inspire a robust reply.]
+                - Provide a flourish of insightful comments on important aspects surrounding various challenges.
+                
+    }
+
+In place of a conclusion return: "Consider and utilize the questions and information as a guide. Complete the mission."
+
+`, 
 cot: `
-*Chain of thought(cot): a chain of idea expansion for guiding a robust final answer.*
-    Create a Thinking Link containing a sequence of ideas related to the topic from user. An outline of questions surrounding the context to guide a reply that addresses potentiall points of failure:
-        Thinking Link:(topic)=>{
+*Chain of thought(cot): a chain of idea expansion for guiding a robust final response.*
+Create a Thinking Link containing a sequence of ideas related to the query from user. An outline of facts surrounding the context to guide a reply that addresses potential points of failure:
+    Thinking Link:[topic]={
 
-            -Identify the task or topic.
+        * mission: [repeat the statment or query from user.]
+        * challenge: [identify challenge points]
+        * guide a robust final answer from the assistant: 
+            [! Think Step-by-step and insightfully expand relevant information into a plethora of specific errata. Explore a complete list of ideation to brief the mission:
+                - List creative notes and ask good questions to inspire a robust reply.]
+                - Provide a flourish of insightful comments on important aspects surrounding various challenges.
+                - Analyze assumptions, reframe, provide context, give good advice.
+                - Promote solutions for success.
+                     
+    }
 
-            - Think Step-by-step: expand relevant information into a flower of related queries that will guide a robust final answer from the next assistant.
-
-            
-            - For each thought petal, leverage your knowledge to generate 2-3 intermediate thoughts that represent steps towards a robust answer. 
-            
-            - Petals list potential failure modes.
-
-            - Petals aim to reframe, provide context, analyze assumptions, or bridge concepts to promote success.
-        }
-
-
-In place of a conlusion, return: "Consider the flower of questions and information to guide a final answer."
+In place of a conclusion return: "Consider and utilize the questions and information as a guide. Complete the mission."
 
 `,
-rot:`
-Recieve the Thinking Link and resolve the Chain of Thought:
-
-    -Chain of thought(cot): a chain of idea expansion for guiding a robust final answer.
-
-    -Thinking Link: a flower of questions surrounding a query to be finished by this assistant. 
-
-Use the Thinking Link provided to influence your decisions and provide a robust response.
-`,
+rot:`Receive the Thinking Link: 
+Complete the mission, conquer the challenge. Stay in character.`,
 tot: `"""
 Answer the Question by exploring multiple reasoning paths as follows:
  - First, carefully analyze the question to extract the key information components and break it down into logical sub-questions. This helps set up the framework for reasoning. The goal is to construct an internal search tree.
@@ -2133,6 +2167,13 @@ Functions:
 Anticipate how each joint should orient to achieve the task from user.
 
 RETURN YAML JOINT POSITIONS AND COMMENTS:
+`,
+search:`
+Tools Available:
+    Search_Web("search query");
+    Open_Link("link address");
+
+Utilize these tools when specific information is required. 
 `,
 //my novel stuff might end up living with the project. If you use my world details, please use it intact rather than morphing it into something else. I'll leave it out for now cause it is a lot.
 // world: `
