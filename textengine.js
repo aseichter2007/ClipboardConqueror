@@ -777,7 +777,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
   }
   });
   return ifDefault;
-}
+} 
   pickupFormat(setting) {
     console.log("hit pickup format: " + setting);
     try {
@@ -788,6 +788,24 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       this.notify("invalid format: ", error);
       console.log("invalid format: " +JSON.stringify(error));
     }
+
+  }
+  continueText(text){
+    
+    const splitText = text.split(this.instructions.continueTag);
+    // console.log("Lenght: "+ splitText.length + " : " +  JSON.stringify(splitText));
+    if (splitText.length ===  1){
+      return splitText[0];
+    } else if ( splitText.length ===  2){
+      this.setPrompt("start", splitText[1]);
+      return splitText[0];
+    } else if (splitText.length === 3){
+      this.setPrompt("start", splitText[1]);
+      return splitText[0] + splitText[2]; 
+    } else if (splitText.length >= 3){
+      return text;
+    }
+    return text;
 
   }
   setupforAi(text) {
@@ -819,6 +837,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     let ifDefault = true;
     if (sorted) {
       this.text = sorted.formattedQuery;
+      sorted.formattedQuery = this.continueText(sorted.formattedQuery);
       this.undress();
       //if(sorted.tags.command != ""){ //commented for consistent placing of ### to initialize alpaca
       
@@ -912,8 +931,9 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     } 
     if (!this.preserveLastCopy) {
       this.recentClip.text = text;// + " ";    
-      this.preserveLastCopy = false;
     }
+    this.preserveLastCopy = false;
+    this.setPrompt("responsestart","");//clear assistanr response start.
   }
   activatePresort(text) {
     
@@ -967,9 +987,10 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       tags: tags
     };
   }
+
   tagExtractor(text) {
     text = text.trim();
-    const tags = text.split(this.instructions.endTag);//todo: I think currently if you pick up a code block like ||| If ( a || b) its gonna get wierd.
+    const tags = text.split(this.instructions.endTag);
     var output = {};
     if (tags.length === 1) {
       output = { persona: "", command: "", text: text };
