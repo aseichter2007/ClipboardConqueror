@@ -310,11 +310,12 @@ function setInstructions(defaultClient, persona) {
         userTag: ">",
         systemTag: "}",
         backendSwitch: "$",
-        batchNameSwitch: "&", 
+        batchNameSwitch: "]", 
+        batchAssistantSwitch: ";",
         batchSwitch: "@", // like |||@agent|
         batchMiss: "#", //like |||#@agent|
         formatSwitch: "%", //like |||%alpaca| changes the prompt format. Do this one first before !>}
-        batchLimiter: "</s>", 
+        batchLimiter: "", //if empty, will mark the continue history with full format chat turns.
         empty: "empty",
         emptyquick: "e",
         agentSplit: ",", //like |||agent.write|
@@ -969,8 +970,7 @@ function setFormats() {
             memorySystem: "",
             memoryUser: "",
             finalprompt: "",
-            responseStart: "Pirate: ",
-            specialInstructions: ""          
+            responseStart: "Pirate: ",        
         },
         // StableLM
         // <|prompter|>
@@ -984,35 +984,17 @@ function setFormats() {
             systemRole: "<|SYSTEM|>",
             userRole: "<|USER|>'",
             assistantRole: "<|ASSISTANT|>'",
-            prependPrompt: "\# StableLM Tuned (Alpha version)\n- StableLM is a helpful and harmless open-source AI language model developed by StabilityAI.\n- StableLM is excited to be able to help the user, but will refuse to do anything that could be considered harmful to the user.\n- StableLM is more than just an information source, StableLM is also able to write poetry, short stories, and make jokes.\n- StableLM will refuse to participate in anything that could harm a human.\n\n",
-            systemAfterPrepend: "",
-            postPrompt: "",
-            memorySystem: "",
-            memoryUser: "",
-            finalprompt: "",
-            responseStart: "",
-            specialInstructions: ""
-            
+            prependPrompt: "\# StableLM Tuned (Alpha version)\n- StableLM is a helpful and harmless open-source AI language model developed by StabilityAI.\n- StableLM is excited to be able to help the user, but will refuse to do anything that could be considered harmful to the user.\n- StableLM is more than just an information source, StableLM is also able to write poetry, short stories, and make jokes.\n- StableLM will refuse to participate in anything that could harm a human.\n\n",            
         },
             
         // OpenAssistant-sft7
         // <|prompter|>
         // <|assistant|>:
         openAssistant: {
-            startTurn: "",
-            endSystemTurn: "",
             endUserTurn: "<|endoftext|>",
             endTurn: "<|endoftext|>",
-            systemRole: "",
             userRole: "<|prompter|>",
             assistantRole: "<|assistant|>",
-            prependPrompt: "",
-            postPrompt: "",
-            memorySystem: "",
-            memoryUser: "",
-            finalprompt: "",
-            responseStart: "",
-            specialInstructions: ""
         },       
         // Vicuna 1.1 13b:
         // HUMAN:
@@ -1026,12 +1008,7 @@ function setFormats() {
             userRole: "HUMAN:",
             assistantRole: "ASSISTANT:",
             prependPrompt: "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user\'s questions. \n\n",
-            postPrompt: "",
-            memorySystem: "",
-            memoryUser: "",
-            finalprompt: "",
-            responseStart: "",
-            specialInstructions: ""
+       
         },
         
         // Stable Vicuna
