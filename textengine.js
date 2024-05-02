@@ -536,6 +536,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         break;
       case "clearHistory":
       case "ch":
+      case "cc":
       case "clearC":
       case "clearChat":
         this.debugLog = this.ChatLog;
@@ -879,7 +880,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       User:"Assistant",
     }
 
-    return this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet["end"+typeStepBack[type]+"Turn"] + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet["start"+type ] + name + this.inferenceClient.instructSet["end"+type+"Role"];
+    return this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet["end"+typeStepBack[type]+"Turn"] + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet["start"+type ] + name + this.inferenceClient.instructSet["end"+type+"Role"] + this.inferenceClient.instructSet.endRole;
   }
   chatBuilder(text){
     if (this.chatHistory && text != "" && !this.noChatLogging ){

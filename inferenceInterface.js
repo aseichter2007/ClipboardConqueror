@@ -71,6 +71,10 @@ setPromptFormat(setting) {
       if (setting.userRole != undefined) {
         userRole = setting.userRole;
       }
+      let endRole = "";
+      if (setting.endRole != undefined){
+        endRole = setting.endRole;
+      }
       let endUserRole = "";
       if (setting.endUserRole != undefined) {
         endUserRole = setting.endUserRole;
@@ -126,6 +130,7 @@ setPromptFormat(setting) {
         endSystemRole : endSystemRole,
         userRole : userRole,
         endUserRole : endUserRole,
+        endRole : endRole,
         assistantRole : assistantRole,
         endAssistantRole : endAssistantRole,
         prependPrompt : prependPrompt,
@@ -170,6 +175,7 @@ completionMessageBuilder(identity, formattedQuery, params, api ) {
   instruct.startSystem+
   instruct.systemRole +
   instruct.endSystemRole +
+  instruct.endRole +
   instruct.prependPrompt +
   instruct.systemAfterPrepend + 
   outIdentity +
@@ -181,6 +187,7 @@ completionMessageBuilder(identity, formattedQuery, params, api ) {
   instruct.startUser +
   instruct.userRole +
   instruct.endUserRole +
+  instruct.endRole +
   instruct.memoryUser +
   formattedQuery +
   instruct.endUserTurn +
@@ -189,6 +196,7 @@ completionMessageBuilder(identity, formattedQuery, params, api ) {
   instruct.startAssistant +
   instruct.assistantRole +
   instruct.endAssistantRole +
+  instruct.endRole +
   instruct.responseStart;
   
   params.prompt = finalPrompt;
