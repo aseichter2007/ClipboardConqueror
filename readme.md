@@ -170,11 +170,12 @@ Personally I like pipes |||agents|quick prompt|user query ~~~ start assistant re
   ```
   Here we have set the assistant name to Frank, by prepending the desired name with an exclaimaiton point, as well as included his character card. Llama-3 is particularly good with the assistant name set. Set names persist until changed or CC is restarted. 
 
-    There are 4 inection commands
+    There are 5 special operators for the |||agents| segment, that start with the symbol, and end with hte next comma "," (agentSplit).
     - "!" assitant name
     - ">" user name
     - "}" system name
-    - "%" format like format |||%chatML|, do this one first if you use it.
+    - "~" start of assistant response, ~~~ overwrites a this one.
+    - "%" format like format |||%chatML|, do this one first if you use it, it overwrites the others. 
 
     ||| %chatML, ! Rick, > Morty, writer, } Narrator's notes| Rick answers morty's questions.| Where are we going today, grandpa? 
     

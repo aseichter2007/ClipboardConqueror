@@ -91,8 +91,10 @@ class TextEngine {
       } else if (str[i] === this.instructions.batchNameSwitch) {
         trip.trip = trip.trip + this.instructions.batchNameSwitch;
         tripCoding++
-      }
-      if (i < tripCoding){
+      } else if (str[i] === this.instructions.batchContinueTag) {
+        trip.trip = trip.trip + this.instructions.batchContinueTag;
+        tripCoding++
+      } else if (i < tripCoding){
         return trip;
       }
     }
@@ -140,21 +142,24 @@ class TextEngine {
       if (identity) {
         if (Number.isNaN(Number(identity))) {
           identity = identity.trim();
-          if (trip.trip === this.instructions.assistantTag){
+          if (trip.trip[0] === this.instructions.assistantTag){
             this.setPrompt("assistantRole",identity.slice(1))
             found = true;
           }
-          if (trip.trip === this.instructions.userTag){
+          if (trip.trip[0] === this.instructions.userTag){
             this.setPrompt("userRole",identity.slice(1))
           }
-          if (trip.trip === this.instructions.systemTag) {
+          if (trip.trip[0] === this.instructions.systemTag) {
             this.setPrompt("systemRole", identity.slice(1))
           }
-          if (trip.trip === this.instructions.formatSwitch){
+          if (trip.trip[0] === this.instructions.formatSwitch){
             this.setInferenceFormat(identity.slice(1))
           }
-          if (trip.trip === this.instructions.batchNameSwitch){
+          if (trip.trip[0] === this.instructions.batchNameSwitch){
             this.instructions.batchlimiter = this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet.endAssistantTurn + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet.startAssistant + this.inferenceClient.instructSet.assistantRole + this.inferenceClient.instructSet.endAssistantRole
+          }
+          if (trip.trip[0] === this.instructions.batchContinueTag) {
+            this.setPrompt("responseStart", identity.slice(1));
           }
           if(this.endpoints.endpoints.hasOwnProperty(identity)) {
             this.api = this.endpoints.endpoints[identity];
@@ -837,7 +842,6 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     let ifDefault = true;
     if (sorted) {
       this.text = sorted.formattedQuery;
-      sorted.formattedQuery = this.continueText(sorted.formattedQuery);
       this.undress();
       //if(sorted.tags.command != ""){ //commented for consistent placing of ### to initialize alpaca
       
@@ -850,7 +854,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       } else{
         if (sorted.tags.command != "" && sorted.tags.command != undefined) {
           this.identity[this.instructions.rootname] = sorted.tags.command;//send ||||this text over if it exists|
-         }
+        }
       }
       if (sorted.tags.persona) {
         let persona = sorted.tags.persona.split(this.instructions.agentSplit);
@@ -859,6 +863,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         ifDefault =  this.personaAtor(persona, sorted);
         //console.log("identset: " + JSON.stringify(this.identity));
       }
+      sorted.formattedQuery = this.continueText(sorted.formattedQuery);
       if (sorted.run || this.on) {
         //const defaultIdentity = { [this.instructions.rootname]: "" };
         //console.log(ifDefault);

@@ -305,10 +305,11 @@ function setInstructions(defaultClient, persona) {
         delete:"delete", //like |||agent:delete|
         settinglimit: ":", //like |||agent:save|
         continueTag: "~~~",
-        assistantTag: '!',//like 
+        batchContinueTag: "~",
+        assistantTag: "!",//like 
         userTag: ">",
         systemTag: "}",
-        backendSwitch: '$',
+        backendSwitch: "$",
         batchNameSwitch: "&", 
         batchSwitch: "@", // like |||@agent|
         batchMiss: "#", //like |||#@agent|
