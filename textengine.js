@@ -21,31 +21,33 @@ class TextEngine {
     this.settingSaver = settingSaver;
     this.fs = fs;
     this.endpoints = endpoints;
-  
+    
     this.identities = identities;
     this.instructions = instructions;
     this.notify = notify;
     this.params = apiParams.default;
     this.apiParams = apiParams.params;
-    this.apiConfigSet = endpoints.defaultClient;
+    //this.apiConfigSet = endpoints.endpoints;
+    this.api = endpoints.endpoints[endpoints.defaultClient];
     this.formats = formats;
     this.identity = {};
     this.recentClip = { text: "" };
     this.text = "";//sorted
     this.setAgent = {};
     this.memory = "";
-    this.batchContinue = "";
-    this.batchDocument = "";
+    this.ChatLog = "";
+    this.debugLog = "";
     this.memengines = {};
     this.agentBatchKit = {};
     this.batchLength = 0;
     this.batch = "";
     this.duplicateCheck = "";
-    this.api = endpoints.endpoints[endpoints.defaultClient];
-    //this.lastAgentTags = [];
+    this.batchAssistantLimiter = "";
+    this.batchUserLimiter = "";
+    this.copyResponse = "";
     this.set = false;
-    this.continue = false;
-    this.document   = false;
+    this.chatHistory = false;
+    this.document = false;
     this.sendHold = false;
     this.write = false;
     this.writeSettings = false;
@@ -54,6 +56,7 @@ class TextEngine {
     this.noBatch = true;
     this.blockPresort = false;
     this.preserveLastCopy = false;
+    this.noChatLogging= false;
   }
 
   returnTrip(str) {
@@ -94,15 +97,16 @@ class TextEngine {
       } else if (str[i] === this.instructions.batchContinueTag) {
         trip.trip = trip.trip + this.instructions.batchContinueTag;
         tripCoding++
-      } else if (i < tripCoding){
+      } else if (str[i] === this.instructions.batchAssistantSwitch) {
+        trip.trip = trip.trip + this.instructions.batchAssistantSwitch;
+        tripCoding++
+      }else if (i < tripCoding){
         return trip;
       }
     }
     return trip;
   }
   batchAgent(identity, trip){
-    //this.batchContinue = "";
-    //this.batchDocument = "";
     //batchAgent builds up a an object of agents to be used in the batch
     if (this.batchLength < trip.batch){
       this.batchLength = trip.batch;
@@ -127,8 +131,6 @@ class TextEngine {
         
       }  
       this.batch = setBatch.join(this.instructions.agentSplit);
-    }else{
-      //this.continue = false;
     }
   }
   updateIdentity(identity) {
@@ -143,20 +145,25 @@ class TextEngine {
         if (Number.isNaN(Number(identity))) {
           identity = identity.trim();
           if (trip.trip[0] === this.instructions.assistantTag){
-            this.setPrompt("assistantRole",identity.slice(1))
+            this.setPrompt("assistantRole",identity.slice(1));
             found = true;
           }
           if (trip.trip[0] === this.instructions.userTag){
-            this.setPrompt("userRole",identity.slice(1))
+            this.setPrompt("userRole",identity.slice(1));
           }
           if (trip.trip[0] === this.instructions.systemTag) {
-            this.setPrompt("systemRole", identity.slice(1))
+            this.setPrompt("systemRole", identity.slice(1));
           }
           if (trip.trip[0] === this.instructions.formatSwitch){
-            this.setInferenceFormat(identity.slice(1))
+            this.setInferenceFormat(identity.slice(1));
           }
           if (trip.trip[0] === this.instructions.batchNameSwitch){
-            this.instructions.batchlimiter = this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet.endAssistantTurn + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet.startAssistant + this.inferenceClient.instructSet.assistantRole + this.inferenceClient.instructSet.endAssistantRole
+            this.batchUserLimiter = this.getBatchLimiterName("user",identity.slice(1));
+            this.chatHistory = true;
+          }
+          if (trip.trip[0] === this.instructions.batchAssistantSwitch){
+            this.batchUserLimiter = this.getBatchLimiterName("assistant",identity.slice(1));
+            this.chatHistory = true;
           }
           if (trip.trip[0] === this.instructions.batchContinueTag) {
             this.setPrompt("responseStart", identity.slice(1));
@@ -169,7 +176,7 @@ class TextEngine {
           }
           if (trip.batch > 0){
             identity = identity.slice(trip.batch);
-            this.batchAgent(identity, trip)
+            this.batchAgent(identity, trip);
             batching = true;
           }  
           
@@ -362,6 +369,16 @@ Now wait for the notification. It could be a while depending on your hardware, s
 I rarely wait over 30 seconds with my 3090 running 8 bit OpenHermes 2.5 Mistral, but on very slow hardware you might wait minutes or turn the max generation size down like |||200|
 
 
+There are 5 special operators for the |||agents| segment, that start with the symbol, and end with hte next comma "," (agentSplit).
+- "!" assitant name
+- ">" user name
+- "}" system name
+- "~" start of assistant response, ~~~ overwrites a this one.
+- "%" format like format |||%chatML|, do this one first if you use it, it overwrites the others. 
+
+||| %chatML, ! Rick, > Morty, writer, } Narrator's notes| Rick answers morty's questions.| Where are we going today, grandpa? 
+
+
 See? Not quite. lets try and cool things off a bit. LLMs have a parameter called a temperature, even chatGPT.
 |||temperature:0.4|Jack and Jill went up the hill, each carrying 10 apples. Jack fell down, rolled down the hill, and dopped all of his apples. Jill did not come tumbling after. Jill gave half her apples to Jack when he returned to the top of the hill. They each ate an apple, and then climbed back down the hill, where they spotted an apple tree. Jack picked 3 apples and gave them to Jill, while Jill pickes 8 apples and splits them between herself and jack, adding half to the apples she carried down the hill. How many apples do each have at the end?
 
@@ -496,39 +513,61 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
           this.set = false;
         }
         break;
-        case "e":
-        case "empty":
-          outp.text = "";
-          outp.found = true;
-          outp.set = true;
-        break;
-        case "c":
-        case "continue":
-          this.continue = true;
-          this.batchContinue += this.instructions.batchLimiter + this.text ;
-        break;
-        case "d":
-        case "debug":
-          this.batchDocument += this.text;
-        break;
-        case "dw":
-        case "debugWrite":
-        this.write = true;
-        this.sendHold = true;
-        outp.text = this.batchDocument;
+      case "e":
+      case "empty":
+        outp.text = "";
         outp.found = true;
         outp.set = true;
         break;
-        case "agi":
-        case "default":
-        case "defaultOpenerResolved":
-          this.noBatch = true;//agi always writes |||, clip often writes |||help|. it's confusing. 
+      case "c":
+      case "chat":
+      case "useHistory":
+        this.chatHistory = true;
+        /* 
+        
+        */
         break;
-        case "dateTime":
-          outp.text = new Date();
-          console.log(outp.text);
-          outp.found = true;
-          outp.set = true;
+      case "sc":
+      case "silentChat":
+      case "silentContinue":
+      case "ghostChat":
+        this.chatHistory = true;
+        this.noChatLogging = true;
+        break;
+      case "clearHistory":
+      case "ch":
+      case "clearC":
+      case "clearChat":
+        this.debugLog = this.ChatLog;
+        this.ChatLog = "";
+        this.sendHold= true;
+        break;
+      case "d":
+      case "debug":
+        this.debugLog += this.text;
+        break;
+      case "dw":
+      case "debugWrite":
+        this.write = true;
+        this.sendHold = true;
+        outp.text = this.debugLog;
+        outp.found = true;
+        outp.set = true;
+        break;
+      case "cleard":
+      case "clearDebug":
+        this.debugLog = "";
+        break;
+      case "agi":
+      case "default":
+      case "defaultOpenerResolved":
+        this.noBatch = true;//agi always writes |||, clip often writes |||help|. it's confusing. 
+        break;
+      case "dateTime":
+        outp.text = new Date();
+        console.log(outp.text);
+        outp.found = true;
+        outp.set = true;
         break;
         
       default:
@@ -799,9 +838,9 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     
     const splitText = text.split(this.instructions.continueTag);
     // console.log("Lenght: "+ splitText.length + " : " +  JSON.stringify(splitText));
-    if (splitText.length ===  1){
+    if (splitText.length === 1){
       return splitText[0];
-    } else if ( splitText.length ===  2){
+    } else if ( splitText.length === 2){
       this.setPrompt("start", splitText[1]);
       return splitText[0];
     } else if (splitText.length === 3){
@@ -811,6 +850,53 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       return text;
     }
     return text;
+
+  }
+  getBatchLimiter(type){
+    
+    if (type === "user"){
+      type = "User";
+    }
+    if (type === "assistant") {
+      type = "Assistant"
+    }
+    let typeStepBack = {
+      Assistant: "User",
+      User:"Assistant",
+    }
+    //console.log(this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet["end"+typeStepBack[type]+"Turn"] + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet["start"+type ] + this.inferenceClient.instructSet[type.toLowerCase()+"Role"] + this.inferenceClient.instructSet["end"+type+"Role"]);
+    return this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet["end"+typeStepBack[type]+"Turn"] + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet["start"+type ] + this.inferenceClient.instructSet[type.toLowerCase() +"Role"] + this.inferenceClient.instructSet["end"+type+"Role"];
+  }
+  getBatchLimiterName(type,name){
+    if (type === "user"){
+      type = "User";
+    }
+    if (type === "assistant") {
+      type = "Assistant"
+    }
+    let typeStepBack = {
+      Assistant: "User",
+      User:"Assistant",
+    }
+
+    return this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet["end"+typeStepBack[type]+"Turn"] + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet["start"+type ] + name + this.inferenceClient.instructSet["end"+type+"Role"];
+  }
+  chatBuilder(text){
+    if (this.chatHistory && text != "" && !this.noChatLogging ){
+      if (this.instructions.batchLimiter === "") {
+          if (this.batchAssistantLimiter != "") {
+            this.ChatLog += this.batchAssistantLimiter + text;
+
+          }else {
+            this.ChatLog += this.getBatchLimiter("Assistant") + text;
+          }
+        
+      } else {
+        this.ChatLog += this.instructions.batchLimiter + text;
+      }
+    }
+    this.chatHistory = false;
+    this.noChatLogging = false;
 
   }
   setupforAi(text) {
@@ -830,20 +916,20 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     }
     else {
       this.noBatch = true;
-      this.batchDocument = this.batchContinue;
-      this.batchContinue = "";
+      //this.debugLog = this.ChatLog;
     }
     if (this.blockPresort) {
       this.blockPresort = false;
       return
     }
-    let sorted = this.activatePresort(text);
     
+    this.chatBuilder(this.recentClip.text);
+    let sorted = this.activatePresort(text);
     let ifDefault = true;
     if (sorted) {
+      sorted.formattedQuery = this.continueText(sorted.formattedQuery);
       this.text = sorted.formattedQuery;
       this.undress();
-      //if(sorted.tags.command != ""){ //commented for consistent placing of ### to initialize alpaca
       
       if(this.set){
         this.identity = this.setAgent;
@@ -860,10 +946,9 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         let persona = sorted.tags.persona.split(this.instructions.agentSplit);
         //console.log("persona tags: " + JSON.stringify(persona));
         //console.log("persona count: " + sorted.tags.length);
-        ifDefault =  this.personaAtor(persona, sorted);
+        ifDefault = this.personaAtor(persona, sorted);
         //console.log("identset: " + JSON.stringify(this.identity));
       }
-      sorted.formattedQuery = this.continueText(sorted.formattedQuery);
       if (sorted.run || this.on) {
         //const defaultIdentity = { [this.instructions.rootname]: "" };
         //console.log(ifDefault);
@@ -875,16 +960,17 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         if (this.identity[this.instructions.rootname] === "" && this.instructions.clean){
           delete this.identity[this.instructions.rootname];
         }
-          //if this.identity contains a key called "e" remove it.
+        //if this.identity contains a key called "e" remove it.
         if(this.identity.hasOwnProperty(this.instructions.emptyquick)) {
           delete this.identity[this.instructions.emptyquick];
         }
         if (this.identity.hasOwnProperty(this.instructions.empty)) {
           delete this.identity[this.instructions.empty];
         }
-        if (this.continue) {
-          sorted.formattedQuery = this.batchContinue + this.instructions.batchLimiter+ "\n" + sorted.formattedQuery;
-          this.continue = false;
+        if (this.chatHistory) {
+          if(this.ChatLog != ""){
+            this.identity.continue = this.ChatLog; 
+          }
         }
         if (this.sendLast) {
           this.sendLast = false;
@@ -896,10 +982,10 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
           this.blockPresort = true;
           delete this.identity[this.instructions.rootname];
           let sendtoclipoardtext =
-            this.instructions.writeSave + "\n" +
-            JSON.stringify(this.identity) +
-            this.instructions.writeSplit +
-            sorted.formattedQuery; 
+          this.instructions.writeSave + "\n" +
+          JSON.stringify(this.identity) +
+          this.instructions.writeSplit +
+          sorted.formattedQuery; 
           sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, "\n");
           this.notify("Paste Ready:", sendtoclipoardtext.slice(0, 150));
           this.recentClip.text = sendtoclipoardtext
@@ -910,10 +996,10 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
           this.noBatch = true;
           this.blockPresort = true;
           let sendtoclipoardtext =
-            this.instructions.writeSettings + "\n" +
-            JSON.stringify(this.identity.settings) +//this is set up for PROMPT edit failures
-            this.instructions.writeSplit +
-            sorted.formattedQuery; 
+          this.instructions.writeSettings + "\n" +
+          JSON.stringify(this.identity.settings) +//this is set up for PROMPT edit failures
+          this.instructions.writeSplit +
+          sorted.formattedQuery; 
           //sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, "\n");
           this.notify("Paste Response:", sendtoclipoardtext.slice(0, 150));
           this.recentClip.text = sendtoclipoardtext
@@ -924,101 +1010,113 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
           //console.log("params: " + JSON.stringify(this.params));
           // let outParams = this.params;
           // if (this.api.config && this.apiConfigSet !== this.api.config) {
-          //   outParams = this.apiParams[this.api.config];
-          //   //todo: build whole engine to transport settings across multiple apis
-          // }
-          // console.log("outParams: " + JSON.stringify(outParams));
-          this.inferenceClient.send(this.identity, sorted.formattedQuery, this.params, this.api);
-        } else {
-          this.sendHold = false;
+            //   outParams = this.apiParams[this.api.config];
+            //   //todo: build whole engine to transport settings across multiple apis
+            // }
+            // console.log("outParams: " + JSON.stringify(outParams));
+            this.inferenceClient.send(this.identity, sorted.formattedQuery, this.params, this.api);
+          } else {
+            this.sendHold = false;
+          }
+        }
+      } 
+      if (this.chatHistory && !this.noChatLogging) {
+        if(this.batchUserLimiter != ""){
+          this.ChatLog += this.batchUserLimiter + this.text
+          this.batchUserLimiter = "";
+        } else{
+        this.ChatLog += this.getBatchLimiter("user") + this.text;
         }
       }
-    } 
-    if (!this.preserveLastCopy) {
-      this.recentClip.text = text;// + " ";    
+      if (!this.preserveLastCopy) {
+        this.recentClip.text = this.text;// + " ";    
+      }
+      this.preserveLastCopy = false;
+      this.setPrompt("responsestart","");//clear assistant response start.
     }
-    this.preserveLastCopy = false;
-    this.setPrompt("responsestart","");//clear assistanr response start.
-  }
-  activatePresort(text) {
-    
-    let run = false;
-    text = text.trim();
-    var response = [];
-    const parsedData = text.split(this.instructions.invoke);
-        let tags = "";
-    if (parsedData.length > 3) {//todo: fix this so it works better
-      this.notify(
-        "Not Sent:",
-        "too many " + this.instructions.invoke + ". max 2."
-      );
-      this.sendHold = true;
-      //this.noBatch = true;
-      //this.write = true;
-      return {
-        run: run,
-        formattedQuery: parsedData.join(""),
-        tags: tags
-      };
-    }
-    //console.log("parse delimiter: " + JSON.stringify(parsedData));
-    let longtrue = text.length > parsedData[0].length;
-    if (longtrue && parsedData.length === 1) {
-      tags = this.tagExtractor(parsedData[0]);
-      response.push(tags.text);
-      response.push("");
-      response.push("");
-
-      run = true;
-    }
-    if (parsedData.length === 2) {
-      tags = this.tagExtractor(parsedData[1]);
-      response.push(tags.text);
-      response.push(parsedData[0]);
-      response.push("");
-      run = true;
-    }
-    if (parsedData[0].length === 3) {
-      tags = this.tagExtractor(parsedData[1]);
-      response.push(tags.text);
-      response.push(parsedData[0]);
-      response.push(parsedData[2]);
-      run = true;
-    }
-    const sendout = response[0] + "" + response[1] + "" + response[2];
-    return {
-      run: run,
-      formattedQuery: sendout,
-      tags: tags
-    };
-  }
-
-  tagExtractor(text) {
-    text = text.trim();
-    const tags = text.split(this.instructions.endTag);
-    var output = {};
-    if (tags.length === 1) {
-      output = { persona: "", command: "", text: text };
-    } else if (tags.length === 2) {
-      output = { persona: tags[0], command: "", text: tags[tags.length - 1] };
-    } else if (tags.length >= 3) {
-      let text = tags.slice(2)
-            if (text.length > 1) {
-        text = text.join(this.instructions.endTag);
-        output = {
-          persona: tags[0],
-          command: tags[1],
-          text: text
-        };
-      } else {
-        output = {
-          persona: tags[0],
-          command: tags[1],
-          text: text[0]
+    activatePresort(text) {
+      
+      let run = false;
+      text = text.trim();
+      var response = [];
+      const parsedData = text.split(this.instructions.invoke);
+      let tags = "";
+      if (parsedData.length > 3) {//todo: fix this so it works better
+        this.notify(
+          "Not Sent:",
+          "too many " + this.instructions.invoke + ". max 2."
+          );
+          this.sendHold = true;
+          //this.noBatch = true;
+          //this.write = true;
+          return {
+            run: run,
+            formattedQuery: parsedData.join(""),
+            tags: tags
+          };
+        }
+        //console.log("parse delimiter: " + JSON.stringify(parsedData));
+        let longtrue = text.length > parsedData[0].length;
+        if (!longtrue){
+          this.copyResponse = text;
+        }
+        if (longtrue && parsedData.length === 1) {
+          tags = this.tagExtractor(parsedData[0]);
+          response.push(tags.text);
+          response.push("");
+          response.push("");
+          
+          run = true;
+        }
+        if (parsedData.length === 2) {
+          tags = this.tagExtractor(parsedData[1]);
+          response.push(tags.text);
+          response.push(parsedData[0]);
+          response.push("");
+          run = true;
+        }
+        if (parsedData[0].length === 3) {
+          tags = this.tagExtractor(parsedData[1]);
+          response.push(tags.text);
+          response.push(parsedData[0]);
+          response.push(parsedData[2]);
+          run = true;
+        }
+        const sendout = response[0] + "" + response[1] + "" + response[2];
+        return {
+          run: run,
+          formattedQuery: sendout,
+          tags: tags
         };
       }
+      
+      tagExtractor(text) {
+        text = text.trim();
+        const tags = text.split(this.instructions.endTag);
+        var output = {};
+        if (tags.length === 1) {
+          output = { persona: "", command: "", text: text };
+        } else if (tags.length === 2) {
+          output = { persona: tags[0], command: "", text: tags[tags.length - 1] };
+        } else if (tags.length >= 3) {
+          let text = tags.slice(2)
+          if (text.length > 1) {
+            text = text.join(this.instructions.endTag);
+            output = {
+              persona: tags[0],
+              command: tags[1],
+              text: text
+            };
+          } else {
+            output = {
+              persona: tags[0],
+              command: tags[1],
+              text: text[0]
+            };
+          }
+        }
+        return output;
+      }
     }
-    return output;
-  }
-}
-module.exports = TextEngine;
+    module.exports = TextEngine;
+    
