@@ -162,7 +162,7 @@ class TextEngine {
             this.chatHistory = true;
           }
           if (trip.trip[0] === this.instructions.batchAssistantSwitch){
-            this.batchUserLimiter = this.getBatchLimiterName("assistant",identity.slice(1));
+            this.batchAssistantLimiter = this.getBatchLimiterName("assistant",identity.slice(1));
             this.chatHistory = true;
           }
           if (trip.trip[0] === this.instructions.batchContinueTag) {
@@ -866,7 +866,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       User:"Assistant",
     }
     //console.log(this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet["end"+typeStepBack[type]+"Turn"] + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet["start"+type ] + this.inferenceClient.instructSet[type.toLowerCase()+"Role"] + this.inferenceClient.instructSet["end"+type+"Role"]);
-    return this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet["end"+typeStepBack[type]+"Turn"] + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet["start"+type ] + this.inferenceClient.instructSet[type.toLowerCase() +"Role"] + this.inferenceClient.instructSet["end"+type+"Role"];
+    return this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet["end"+typeStepBack[type]+"Turn"] + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet["start"+type ] + this.inferenceClient.instructSet[type.toLowerCase() +"Role"] + this.inferenceClient.instructSet["end"+type+"Role"]+ this.inferenceClient.instructSet.endRole;
   }
   getBatchLimiterName(type,name){
     if (type === "user"){
@@ -970,7 +970,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         }
         if (this.chatHistory) {
           if(this.ChatLog != ""){
-            this.identity.continue = this.ChatLog; 
+            this.identity[this.instructions.historyName] = this.ChatLog; 
           }
         }
         if (this.sendLast) {

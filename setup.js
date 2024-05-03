@@ -310,8 +310,9 @@ function setInstructions(defaultClient, persona) {
         userTag: ">",
         systemTag: "}",
         backendSwitch: "$",
-        batchNameSwitch: "]", 
-        batchAssistantSwitch: ";",
+        batchNameSwitch: "]", // changes chat history user name this turn
+        batchAssistantSwitch: ";", //changes chat history assistant name
+        historyName : "continue",
         batchSwitch: "@", // like |||@agent|
         batchMiss: "#", //like |||#@agent|
         formatSwitch: "%", //like |||%alpaca| changes the prompt format. Do this one first before !>}
@@ -340,6 +341,7 @@ function setFormats() {
             // startSystem+
             // systemRole +
             // endSystemRole +
+            // endRole +
             // prependPrompt +
             // systemAfterPrepend + 
             // // // // //outIdentity +//not valid in setFormats
@@ -351,6 +353,7 @@ function setFormats() {
             // startUser +
             // userRole +
             // endUserRole +
+            // endRole +
             // memoryUser +
             // // // // //formattedQuery +//not valid in setFormats
             // endUserTurn +
@@ -359,6 +362,7 @@ function setFormats() {
             // startAssistant +
             // assistantRole +
             // endAssistantRole +
+            // endRole +
             // responseStart;
     const promptFormats = { 
         default: {//I like the option to set the system initialization like ||||system| or ||||instruct| on the fly, and it works well without it, so I'm not using a systemRole.
@@ -424,11 +428,12 @@ function setFormats() {
             startTurn: "<|start_header_id|>",
             endTurn: "<|eot_id|>", 
             systemRole: "system",
-            endSystemRole: "<|end_header_id|>\n\n",
+            endRole: "<|end_header_id|>\n\n",
+            //endSystemRole: "<|end_header_id|>\n\n",
             userRole: "user",
-            endUserRole: "<|end_header_id|>\n\n",
+            //endUserRole: "<|end_header_id|>\n\n",
             assistantRole: "assistant",
-            endAssistantRole: "<|end_header_id|>\n\n",
+            //endAssistantRole: "<|end_header_id|>\n\n",
             prependPrompt: "", 
             postPrompt: "",
             memorySystem: "",
