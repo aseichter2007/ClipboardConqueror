@@ -164,9 +164,9 @@ completionMessageBuilder(identity, formattedQuery, params, api ) {
   
   let outIdentity = ""
   if (api.jsonSystem != undefined && api.jsonSystem) {
-    outIdentity - identityStringifier(identity);
-  } else {
     outIdentity = JSON.stringify(identity);
+  } else {
+    outIdentity = identityStringifier(identity); 
   }
 
   let finalPrompt = 
