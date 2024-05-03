@@ -110,13 +110,16 @@ Clipboard Conqueror makes the process of accessing an LLM simple and efficient i
 Clipboard Conqueror provides a whole toolbox of predefined assistants, ready to work for you.  
 
 
-
 - |||agi|"AI Generate Instructions" will help you execute any operation you ask for help with. Captain Clip does well too, but this is based on the kobold agi script and is superior to a simple ask. 
 
 - |||stable| will write you an image prompt for use in stable diffusion automatic 1111
 This identity and some other cards were found on chub.ai, some are my own or significant customizations, or simply found out in the web.
 
 - |||tot|"tree of thought" will expand and include near concepts, questions, or ideas to produce a more comprehensive solution
+
+- Chain of Thought agent batching for superior final output. 
+
+- Quickly prototype prompts for producuction environments, great for testing errata quickly. 
 
 
 Save agents on the fly to store, sort, query, think, review, or just tell you jokes or anything you can  ask for, really. 
@@ -140,7 +143,7 @@ Usage:
 ------
 The Clipboard Conqueror format is extremely configurable, but always adheres to the following formula:
 
-    (invocation"|||") optional agents and commands (optional split "|")  optional system prompt (optional split "|") user text (optional continue "~~~") optional start of assistant response
+    (invocation"|||") optional agents and commands (optional split "|")  optional system prompt (optional split "|") user text (optional assistant dictation "~~~") optional start of assistant response
 
 "!@# query" could be valid, "123ai+ query" could be valid, and "{!?!?!} agents (8)^ quick prompt (8)^ query" could valid, but there is no setting to change the order. 
 
@@ -174,7 +177,7 @@ Personally I like pipes |||agents|quick prompt|user query ~~~ start assistant re
     - "!" assitant name
     - ">" user name
     - "}" system name
-    - "~" start of assistant response, ~~~ overwrites a this one.
+    - "~" start of assistant response, "~~~" overwrites "~".
     - "%" format like format |||%chatML|, do this one first if you use it, it overwrites the others. 
 
     ||| %chatML, ! Rick, > Morty, writer, } Narrator's notes| Rick answers morty's questions.| Where are we going today, grandpa? 
@@ -228,12 +231,10 @@ Personally I like pipes |||agents|quick prompt|user query ~~~ start assistant re
   ```
 
 
-  ```
-  |||mem:save| SYSTEM: take on the role of {{character}}, description:  description.
-  ```
 
 
-    It's useful to save information like
+
+It's useful to save information like
 
   ```
   |||memory:save|thisFunction(variable){ return variable + variable * variable; }
@@ -278,7 +279,37 @@ Personally I like pipes |||agents|quick prompt|user query ~~~ start assistant re
   Currently after using a command that writes data from the application,"|||list|", "|||agent,write|", "|||help|", "|||introduction|", or "|||dw|" you must copy your next query twice before it sends to the LLM.
 
 
+c for Chat:
+---
+the |||c| or |||chat| flag creates a chat history using the interaction, which builds, extending the system prompt into a conversation history.  c should always go last, though it doesn't have to, allowing for end of chat insertion of additional agent text. 
 
+This context doesn't send without c, and always advances when called. 
+
+|||sc| or |||silentChat| lets you chat without saving new messages to the conversation. 
+
+"]" renames text from user in the chatlog.
+
+";" renames text from assistant in the chatlog. 
+
+```
+|||ch|  or |||clearHistory| or |||clearChat|
+```
+Will clear the chat history. It is preserved in |||dw| until you clear that with |||clearDebug| or restart Clipboard Conqueror.
+
+|||e,c,] Batman,; Superman| Howdy pal. 
+
+```
+"prompt": "<|start_header_id|>system<|end_header_id|>\n\n<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n Howdy pal.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n"
+```
+The first shot doesn't have a history to append. Next:
+
+
+|||e,c,] Aquaman,; Superman| We're just checking things out. 
+
+```
+"prompt": "<|start_header_id|>system<|end_header_id|>\n\n continue : <|eot_id|><|start_header_id|> Batman<|end_header_id|>\n\n Howdy pal.<|eot_id|><|start_header_id|> Superman<|end_header_id|>\n\nHowdy back atcha, partner! What brings you to these here parts?\n\n<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n We're just checking things out.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n"
+```
+Both turns have been appended to the history. (the preface, "continue" can be changed, instruct.historyName in setup.js) It can't be eliminated without extra code. I chose continue as a default to avoid collisions with |||history:save| when crafting a narrative. 
 
 --------
 OpenAi Compatible 
@@ -409,9 +440,10 @@ Clipboard Conqueror is a no code and non code testing, basic multi-agent chat fr
 CC supports chaining agents sequentially like:
 
 ```
-|||agentFirst,@agentSecond,#@agentThird,#@@anotherAgentThirdandFourth,##@agentFourth,@@@c,@@@d| and on. 
+|||agentFirst,@agentSecond,#@agentThird,#@@anotherAgentThirdandFourth,##@agentFourth,@@@c| and on. 
 ```
-Special initializers "! > } %" are supported when batching. 
+Special initializers "! > } % ] ;" are supported when batching. "]" and ";"change the names in the chatlog, so you can prompt for response and then change to a name suitable for the next agent to recognise. 
+"c" or "continue" crates a chatlog in proper format to keep consistent conversation context for the various agents. .  
 
 
 "@" executes, and it is reccommended to use specifically targeted chaining agents which I have not developed yet. I'm hoping someone has used superAGI and can point me a direction.
@@ -422,12 +454,10 @@ I like to think of it like feeding a tape, so I can send in the manager every so
 
 If you're quick you can just paste out each step. 
 
-"d" or "debug" like ,@@@@debug saves a growing output of each turn if not skipped like ##@#. this example returns only the third to final of the 6 total interactions. The final output is never captured, the first input can be captured like |||agent,@agent,d,@d| @ chains always execute second.
 
 
 return the debug log by copying  |||dw| or |||debugWrite| and paste.  The first turn is the initial query followed by what this contains, and the final output is not contained with d.  "dw" returns the middle for debugging your bot interactions. 
 
-"c" or "continue" works similarly to send the log internally to the LLM with minimal markup "</s>"  between messages to build more of a chatlog.  
 
 endpoints defined in setup.js or 0endpoints.json. can be used and chained by name like |||@textGenWebUiChat|
 ```
@@ -435,31 +465,29 @@ endpoints defined in setup.js or 0endpoints.json. can be used and chained by nam
 ```
 In this case, Captain Clip will be sent first to Kobold with the initial query. The output from Kobold then goes to TextGenWebUi completions, and the out from there to ChatGPT 3.5 turbo though the openAI api. Here, there are no agents defined for the second and third queries. Add them like |||@tgwchat,#@chatGPT3,@writer| will send the writer agent to TextGenWebUi completions. If we added c,@@c then c is built up like a chatlog and sent in the system prompt.
 
-Chaining Captain Clip or AGI will stop the chain of execution. (agents with instructions to write invokes cause the chain to stop)
+Chaining Captain Clip or AGI will stop the chain of execution. (agents with instructions to write invokes can cause the chain to stop)
 
 ```
 |||frank, ! Frank,@abe,@%chatML, @! Abe,#@frank,#@%llama3 #@! Frank, kobold,#@kobold,@tgwchat,c,@@c|
 ```
-This query will build a multiturn conversation, Frank's response(kobold api) to the initial query is sent to abe marked with chatML format(Text Gen Webui api), abe's response to the query is sent to frank(with llama 3 markup on kobold api), 
+This query will build a multiturn conversation, Frank's response(kobold api) to the initial query is sent to abe marked with chatML format(Text Gen Webui api), abe's response to the query is sent to frank(with llama 3 markup on kobold api), and the whole conversation has history with c,@@c
 
 
-|||dw| will contain the c links from the end, showing the intermediary steps. 
-- if you copy |||dw|, you will get back the middle conversation steps as carried by c. Or it's in the clipboard history as well, I never used that really, sorry clipboard history champs. This app absolutely pollutes it. I gotta rebuild in c# to fix that.
+|||dw| will contain the chatlog after it is cleared with |||cc| or |||clearHistory|.
+- if you copy |||dw|, you will get back the conversation steps as carried by c. Or it's in the clipboard history as well, I never used that really, sorry clipboard history champs. This app absolutely pollutes it. I gotta rebuild in c# to fix that.
 - |||dw| is a writing command so it causes the hang where you have to copy text with no invoke. I gotta figure this bug out...
 
 
 "c" carries the chat context forward optionally like #@#@c.
-"&" will set the history splitter to the target name like
 ```
-|||cot, !Query Node, @! Rick Sanchez @& Rick's Inner thoughts| 
+|||cot, !Query Node, @! Rick Sanchez @; Rick's Inner thoughts| 
 ```
-Will present the query node as a discrete turn labeled Rick's Inner thoughts in the c log. C is cleared at the end of execution but stored in dw until the next query.
-
+Will present the query node as a discrete turn labeled Rick's Inner thoughts in the chat log. 
 
 
 Sending names like !Name @!Name, or setting any prompt segment like |||PROMPT:{{segment}}| will hold prompt format overrides, interfering with multiple backend support, use  noFormat: true as a key, (example: setup.js line 100) per endpoint, to prevent sending jinja or kobold adapters and preserve the default instruct format supplied by the backend from the model config when using multiple models with different instruct sets.
 
-Handle % format changes first, like %alpaca !name or the format change overwrites the name change. 
+Handle % format changes first, like |||%alpaca, !name| or the format change overwrites the name change. 
 
 
 
@@ -484,12 +512,6 @@ Or you can set individual prompt segments like this:
 |||PROMPT:startTurn|<|im_start|>
 ```
 ```
-|||PROMPT:endSystem|<|im_end|>\n 
-```
-```
-|||PROMPT:endUser|<|im_end|>\n
-```
-```
 |||PROMPT:endTurn|<|im_end|>\n
 ```
 ```
@@ -503,6 +525,15 @@ Or you can set individual prompt segments like this:
 ```
 these set up basic ChatML formatting, the rest are kind of extra. For alpaca I reccommend setting the format strings in the role positions. StartTurn starts all turns; system, user, and assistant.  
 StartTurn is a bad place for "### Instruction:" as it goes before user and assistant as well.
+
+```
+|||PROMPT:endSystem|<|im_end|>\n 
+```
+each standard title (system, assistant, and user) each have their own end, while "endTurn" ends all turns, be careful not to duplicate bits by setting both.
+```
+|||PROMPT:endUserRole|<|role_end|>\n
+```
+As above, each role has individual role closing tokens and a group role closing token. If both are set there will be an extra. 
 ```
 |||PROMPT:prepend|You are a helpfull assistant\n\n 
 ```
