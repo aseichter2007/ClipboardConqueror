@@ -75,6 +75,10 @@ setPromptFormat(setting) {
       if (setting.endRole != undefined){
         endRole = setting.endRole;
       }
+      let roleGap = "";
+      if (setting.roleGap != undefined) {
+        roleGap = setting.roleGap;
+      }
       let endUserRole = "";
       if (setting.endUserRole != undefined) {
         endUserRole = setting.endUserRole;
@@ -131,6 +135,7 @@ setPromptFormat(setting) {
         userRole : userRole,
         endUserRole : endUserRole,
         endRole : endRole,
+        roleGap: roleGap,
         assistantRole : assistantRole,
         endAssistantRole : endAssistantRole,
         prependPrompt : prependPrompt,
@@ -162,13 +167,23 @@ completionMessageBuilder(identity, formattedQuery, params, api ) {
     params.model = api.model;
   }
   
-  let outIdentity = ""
-  if (api.jsonSystem != undefined && api.jsonSystem) {
-    outIdentity = JSON.stringify(identity);
-  } else {
+  let outIdentity = ""//identityStringifyNoKey(identity);
+  if ( api.jsonSystem != undefined ){
+    if( api.jsonSystem === "full"){
+      outIdentity = JSON.stringify(identity);
+    } else if( api.jsonSystem === "keys" ){
+      outIdentity = identityStringifier(identity); 
+    }else if ( api.jsonSystem === "markup" ){
+      outIdentity = this.systemPromptBuilder(identity);
+    } else if ( api.jsonSystem === "none" ){
+      outIdentity = identityStringifyNoKey( identity );
+    }else{
+      outIdentity = identityStringifier(identity); 
+    }
+  }else{
     outIdentity = identityStringifier(identity); 
   }
-
+  
   let finalPrompt = 
   instruct.bos +
   instruct.startTurn +
@@ -176,6 +191,7 @@ completionMessageBuilder(identity, formattedQuery, params, api ) {
   instruct.systemRole +
   instruct.endSystemRole +
   instruct.endRole +
+  instruct.roleGap +
   instruct.prependPrompt +
   instruct.systemAfterPrepend + 
   outIdentity +
@@ -188,6 +204,7 @@ completionMessageBuilder(identity, formattedQuery, params, api ) {
   instruct.userRole +
   instruct.endUserRole +
   instruct.endRole +
+  instruct.roleGap +
   instruct.memoryUser +
   formattedQuery +
   instruct.endUserTurn +
@@ -197,6 +214,7 @@ completionMessageBuilder(identity, formattedQuery, params, api ) {
   instruct.assistantRole +
   instruct.endAssistantRole +
   instruct.endRole +
+  instruct.roleGap +
   instruct.responseStart;
   
   params.prompt = finalPrompt;
@@ -303,6 +321,15 @@ if (this.lastOutpoint !== api.config) {
     ];
     //messages = JSON.stringify(messages);
     chat(api, messages, this.instructSet, params, this.callback, this.notify, this.handler)
+  }
+  systemPromptBuilder(identity){
+    let secretIdentity = "";
+    for (const key in identity) {
+      secretIdentity += this.instructSet.endTurn + this.instructSet.endUserTurn + this.instructSet.startTurn + this.instructSet.startUser + key + this.instructSet.endUserRole + this.instructSet.endRole + identity[key] + this.instructSet.roleGap;
+    }//this.instructSet.endTurn + this.inferenceClient.instructSet["end"+typeStepBack[type]+"Turn"] + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet["start"+type ] + name + this.inferenceClient.instructSet["end"+type+"Role"] + this.inferenceClient.instructSet.endRole;
+
+    return secretIdentity
+  
   }
 }
 async function chat(api, messages, promptFormat, params, callback,  notify, handler) {
@@ -527,4 +554,12 @@ function identityStringifier(identity){
   }
   return secretIdentity
 }
+function identityStringifyNoKey(){
+  let secretIdentity = "";
+  for (const key in identity) {
+    secretIdentity +=identity[key] +"\n\n"
+  }
+  return secretIdentity
+}
+
 module.exports = InferenceClient;
