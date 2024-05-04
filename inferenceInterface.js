@@ -331,6 +331,20 @@ if (this.lastOutpoint !== api.config) {
     return secretIdentity
   
   }
+  identityStringifier(identity){
+    let secretIdentity = "";
+    for (const key in identity) {
+      secretIdentity += " "+key +" : "+ identity[key] + this.instructSet.roleGap;
+    }
+    return secretIdentity
+  }
+  identityStringifyNoKey(identity){
+    let secretIdentity = "";
+    for (const key in identity) {
+      secretIdentity +=identity[key] +this.instructSet.roleGap;
+    }
+    return secretIdentity
+  }
 }
 async function chat(api, messages, promptFormat, params, callback,  notify, handler) {
   try {
@@ -547,19 +561,6 @@ async function generateCompletion(api, identity, text, instructions, params, cal
     //notify("error:", JSON.stringify(error));
   }
 }
-function identityStringifier(identity){
-  let secretIdentity = "";
-  for (const key in identity) {
-    secretIdentity += " "+key +" : "+ identity[key] +"\n\n"
-  }
-  return secretIdentity
-}
-function identityStringifyNoKey(){
-  let secretIdentity = "";
-  for (const key in identity) {
-    secretIdentity +=identity[key] +"\n\n"
-  }
-  return secretIdentity
-}
+
 
 module.exports = InferenceClient;
