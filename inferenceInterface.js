@@ -298,10 +298,26 @@ if (this.lastOutpoint !== api.config) {
       params.model = api.model;
     }
     //for key in identity
+    let outIdentity = ""//identityStringifyNoKey(identity);
+    if ( api.jsonSystem != undefined ){
+      if( api.jsonSystem === "full"){
+        outIdentity = JSON.stringify(identity);
+      } else if( api.jsonSystem === "keys" ){
+        outIdentity = identityStringifier(identity); 
+      }else if ( api.jsonSystem === "markup" ){
+        outIdentity = this.systemPromptBuilder(identity);
+      } else if ( api.jsonSystem === "none" ){
+        outIdentity = identityStringifyNoKey( identity );
+      }else{
+        outIdentity = identityStringifier(identity); 
+      }
+    }else{
+      outIdentity = identityStringifier(identity); 
+    }
     let messages = [];
     messages.push ({
         "role": 'system',
-        "content": identityStringifier(identity)//might need to json string it
+        "content": outIdentity//might need to json string it
         //"content": identity
     })
     messages.push ({
