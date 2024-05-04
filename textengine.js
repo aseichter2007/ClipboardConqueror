@@ -588,8 +588,8 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         this.ChatLog = "";
         this.sendHold= true;
         break;
-      case "c":
-      case "c":
+      case "cf":
+      case "clearFirst":
         this.ChatLog = "";
         break;
       case "d":
@@ -952,7 +952,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       if (this.appSettings.batchLimiter === "") {
           if (this.batchAssistantLimiter != "") {
             this.ChatLog += this.batchAssistantLimiter + text;
-
+            this.batchAssistantLimiter = "";
           }else {
             this.ChatLog += this.getBatchLimiter("Assistant") + text;
           }
