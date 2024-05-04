@@ -50,7 +50,7 @@
         endpoints:{//these are accessible by name in defaultClient or like |||$| for kobold
             kobold:{ //|||$| or just ||| with matching defaultClient or |||kobold|
                 type: "completion",// completion or chat, completion allows CC to control the formatting completely.
-                jsonSystem : "full",//completion only //full sends JSON.Stringify into the system prompt.  keys sends the contents like key : content \n\n key2 : ... markup makes each agent it's own chat message.
+                jsonSystem : "full",//markup,full,keys,none//completion and chat combined only //full sends JSON.Stringify into the system prompt.  keys sends the contents like key : content \n\n key2 : ... markup makes each agent it's own chat message, none sends only the agent text.
                 //buildType: "unused",
 
                 url : "http://127.0.0.1:5001/api/v1/generate/",//Kobold Compatible api url
@@ -69,6 +69,7 @@
             tgwchat: {//|||$$| or |||textGenWebUi|
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
+                jsonSystem : "full",
                 url : "http://127.0.0.1:5000/v1/chat/completions",
                 config: "TGWopenAICompletions",
                 templateStringKey: "instruction_template_str",
