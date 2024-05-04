@@ -50,7 +50,7 @@
         endpoints:{//these are accessible by name in defaultClient or like |||$| for kobold
             kobold:{ //|||$| or just ||| with matching defaultClient or |||kobold|
                 type: "completion",// completion or chat, completion allows CC to control the formatting completely.
-                jsonSystem : false, //true sends JSON.Stringify into the system prompt.  false  writes the system keys and contents like key : content \n key2 : ...
+                jsonSystem : "full",//completion only //full sends JSON.Stringify into the system prompt.  keys sends the contents like key : content \n\n key2 : ... markup makes each agent it's own chat message.
                 //buildType: "unused",
 
                 url : "http://127.0.0.1:5001/api/v1/generate/",//Kobold Compatible api url
@@ -286,13 +286,12 @@
 }
 return endpoints;
 }
-function setInstructions(defaultClient, persona) {
-    const instruct = {//left justified for consistency in settings definitions
+function setappSettings(defaultClient, persona) {
+    const appSettings = {//left justified for consistency in settings definitions
         //this needs to be more elegant. Maybe split up into multiple files with selection from endpointsKey.json
         // leave a comment with final line number of the block where this all comes together.
         defaultClient: defaultClient,
-        //defaultClient: "compatible",
-        //defaultClient: "openAi",
+   
         
         //defaultInstruct: "chatML", todo: add this
         defaultPersona: persona,//is this still used?
@@ -304,6 +303,7 @@ function setInstructions(defaultClient, persona) {
         saveAgentToFile: "file", //like |||agent:file|
         delete:"delete", //like |||agent:delete|
         settinglimit: ":", //like |||agent:save|
+        quickPromptLimit: ":",
         continueTag: "~~~",
         batchContinueTag: "~",
         assistantTag: "!",//like 
@@ -317,6 +317,7 @@ function setInstructions(defaultClient, persona) {
         batchMiss: "#", //like |||#@agent|
         formatSwitch: "%", //like |||%alpaca| changes the prompt format. Do this one first before !>}
         batchLimiter: "", //if empty, will mark the continue history with full format chat turns.
+        setJsonLevel: "`",
         empty: "empty",
         emptyquick: "e",
         agentSplit: ",", //like |||agent.write|
@@ -332,7 +333,7 @@ function setInstructions(defaultClient, persona) {
 
         
     }
-    return instruct;
+    return appSettings;
 }
 function setFormats() {
     
@@ -428,7 +429,8 @@ function setFormats() {
             startTurn: "<|start_header_id|>",
             endTurn: "<|eot_id|>", 
             systemRole: "system",
-            endRole: "<|end_header_id|>\n\n",
+            endRole: "<|end_header_id|>",
+            roleGap: "\n\n",
             //endSystemRole: "<|end_header_id|>\n\n",
             userRole: "user",
             //endUserRole: "<|end_header_id|>\n\n",
@@ -545,12 +547,11 @@ function setFormats() {
         chatML: {
             //todo: like [startTurn,content, endSystemTurn, endUserTurn, endTurn]
             startTurn: "<|im_start|>",
-            endSystemTurn: "<|im_end|>\n",
-            endUserTurn: "<|im_end|>\n",
-            endAssistantTurn: "<|im_end|>\n",
-            systemRole: "system\n",
-            userRole: "user\n",
-            assistantRole: "assistant\n",
+            endTurn: "<|im_end|>\n",
+            systemRole: "system",
+            userRole: "user",
+            assistantRole: "assistant",
+            roleGap: "\n",
             prependPrompt: '',
             systemAfterPrepend: "",
             postPrompt: "",
@@ -558,6 +559,13 @@ function setFormats() {
             memoryUser: "",
             responseStart: "",
             specialInstructions: ""
+        },
+        commandr:{
+            startturn: "<|START_OF_TURN_TOKEN|>",
+            endTurn: "<|END_OF_TURN_TOKEN|>",
+            systemRole: "<|SYSTEM_TOKEN|>",
+            userRole: "<|USER_TOKEN|>",
+            assistantRole: "<|CHATBOT_TOKEN|>",
         },
         chatVicuna: {
             //todo: like [startTurn,content, endSystemTurn, endUserTurn, endTurn]
@@ -2211,14 +2219,14 @@ function setup( endPointConfig, instructions, params, identities, formats, forma
             instructions.defaultPersona = endPointConfig.routes.persona;
         }
         else{
-            instructions.instructions = setInstructions(endPointConfig.routes.defaultClient, endPointConfig.routes.persona);
+            instructions.instructions = setappSettings(endPointConfig.routes.defaultClient, endPointConfig.routes.persona);
             if (write) {
                 writeObjectToFileAsJson(instruct, '0instructions.json',fs);
             }
         }
     }catch(error){
         console.log(error);
-        instructions.instructions = setInstructions(endPointConfig.routes.defaultClient, endPointConfig.routes.persona);
+        instructions.instructions = setappSettings(endPointConfig.routes.defaultClient, endPointConfig.routes.persona);
         if (write) {
             writeObjectToFileAsJson(instructions.instructions, '0instructions.json',fs);
         }
