@@ -23,7 +23,7 @@ class TextEngine {
     this.endpoints = endpoints;
     
     this.identities = identities;
-    this.instructions = instructions;
+    this.appSettings = instructions;
     this.notify = notify;
     this.params = apiParams.default;
     this.apiParams = apiParams.params;
@@ -66,39 +66,42 @@ class TextEngine {
     let tripCoding= 0;
     let trip ={api:0, batch:0, format: 0, trip:""};
     for (let i = 0; i < str.length; i++ ){
-      if (str[i] === this.instructions.backendSwitch )  {
+      if (str[i] === this.appSettings.backendSwitch )  {
         trip.api++;
-        trip.trip = trip.trip + this.instructions.backendSwitch;
+        trip.trip = trip.trip + this.appSettings.backendSwitch;
         tripCoding++
-      } else if (str[i] === this.instructions.batchSwitch) {
+      } else if (str[i] === this.appSettings.batchSwitch) {
         trip.batch++;
-        trip.trip = trip.trip + this.instructions.batchSwitch;
+        trip.trip = trip.trip + this.appSettings.batchSwitch;
         tripCoding++
-      } else if(str[i] === this.instructions.batchMiss){
+      } else if(str[i] === this.appSettings.batchMiss){
         trip.batch++;
-        trip.trip = trip.trip + this.instructions.batchMiss;
+        trip.trip = trip.trip + this.appSettings.batchMiss;
         tripCoding++
-      } else if(str[i] === this.instructions.formatSwitch){
+      } else if(str[i] === this.appSettings.formatSwitch){
         trip.format++;
-        trip.trip = trip.trip + this.instructions.formatSwitch;
+        trip.trip = trip.trip + this.appSettings.formatSwitch;
         tripCoding++
-      } else if (str[i] === this.instructions.assistantTag) {
-        trip.trip = trip.trip + this.instructions.assistantTag;
+      } else if (str[i] === this.appSettings.assistantTag) {
+        trip.trip = trip.trip + this.appSettings.assistantTag;
         tripCoding++
-      } else if (str[i] === this.instructions.userTag) {
-        trip.trip = trip.trip + this.instructions.userTag;
+      } else if (str[i] === this.appSettings.userTag) {
+        trip.trip = trip.trip + this.appSettings.userTag;
         tripCoding++
-      } else if (str[i] === this.instructions.systemTag) {
-        trip.trip = trip.trip + this.instructions.systemTag;
+      } else if (str[i] === this.appSettings.systemTag) {
+        trip.trip = trip.trip + this.appSettings.systemTag;
         tripCoding++
-      } else if (str[i] === this.instructions.batchNameSwitch) {
-        trip.trip = trip.trip + this.instructions.batchNameSwitch;
+      } else if (str[i] === this.appSettings.batchNameSwitch) {
+        trip.trip = trip.trip + this.appSettings.batchNameSwitch;
         tripCoding++
-      } else if (str[i] === this.instructions.batchContinueTag) {
-        trip.trip = trip.trip + this.instructions.batchContinueTag;
+      } else if (str[i] === this.appSettings.batchContinueTag) {
+        trip.trip = trip.trip + this.appSettings.batchContinueTag;
         tripCoding++
-      } else if (str[i] === this.instructions.batchAssistantSwitch) {
-        trip.trip = trip.trip + this.instructions.batchAssistantSwitch;
+      } else if (str[i] === this.appSettings.batchAssistantSwitch) {
+        trip.trip = trip.trip + this.appSettings.batchAssistantSwitch;
+        tripCoding++
+      }else if (str[i] === this.appSettings.setJsonLevel) {
+        trip.trip = trip.trip + this.appSettings.setJsonLevel;
         tripCoding++
       }else if (i < tripCoding){
         return trip;
@@ -120,17 +123,56 @@ class TextEngine {
       this.batchLength--;
       for (let key in this.agentBatchKit) {       
           console.log(key, this.agentBatchKit[key]);
-          if (this.agentBatchKit[key].trip[0]  === this.instructions.batchSwitch){
+          if (this.agentBatchKit[key].trip[0]  === this.appSettings.batchSwitch){
             this.agentBatchKit[key].trip = this.agentBatchKit[key].trip.slice(1);
             setBatch.push(key);
-          } else if (this.agentBatchKit[key].trip[0]  === this.instructions.batchMiss){
+          } else if (this.agentBatchKit[key].trip[0]  === this.appSettings.batchMiss){
             this.agentBatchKit[key].trip = this.agentBatchKit[key].trip.slice(1);
           } else if (this.agentBatchKit[key].trip.length === 0){
             delete this.agentBatchKit[key];
           }
         
       }  
-      this.batch = setBatch.join(this.instructions.agentSplit);
+      this.batch = setBatch.join(this.appSettings.agentSplit);
+    }
+  }
+  setJsonLevel(identity){
+    let trimmed = identity.slice(1).trim()
+    if (trimmed === "") {
+      this.api.jsonSystem = ""
+    } else if(trimmed === ""){
+      this.api.jsonSystem
+    } else {
+      this.api.jsonSystem = identity.slice(1).trim()
+    }
+    switch (trimmed) {
+      case "1":
+      case "markup":
+      case "full turns":
+      case "fullTurns":
+        this.api.jsonSystem = "markup"
+        break;
+      case "2":
+      case "json":
+      case "code":
+      case "full":
+
+        this.api.jsonSystem = "full"
+        break;
+      case "3":
+      case "keys":
+      case "useKeys":
+      case "partial":
+        this.api.jsonSystem = "keys"
+        break;
+      case "4":
+      case "no":
+      case "none":
+      case "off":
+        this.api.jsonSystem = "none"
+        break;            
+      default:
+        break;
     }
   }
   updateIdentity(identity) {
@@ -144,29 +186,32 @@ class TextEngine {
       if (identity) {
         if (Number.isNaN(Number(identity))) {
           identity = identity.trim();
-          if (trip.trip[0] === this.instructions.assistantTag){
+          if (trip.trip[0] === this.appSettings.assistantTag){
             this.setPrompt("assistantRole",identity.slice(1));
             found = true;
           }
-          if (trip.trip[0] === this.instructions.userTag){
+          if (trip.trip[0] === this.appSettings.userTag){
             this.setPrompt("userRole",identity.slice(1));
           }
-          if (trip.trip[0] === this.instructions.systemTag) {
+          if (trip.trip[0] === this.appSettings.systemTag) {
             this.setPrompt("systemRole", identity.slice(1));
           }
-          if (trip.trip[0] === this.instructions.formatSwitch){
+          if (trip.trip[0] === this.appSettings.formatSwitch){
             this.setInferenceFormat(identity.slice(1));
           }
-          if (trip.trip[0] === this.instructions.batchNameSwitch){
+          if (trip.trip[0] === this.appSettings.batchNameSwitch){
             this.batchUserLimiter = this.getBatchLimiterName("user",identity.slice(1));
             this.chatHistory = true;
           }
-          if (trip.trip[0] === this.instructions.batchAssistantSwitch){
+          if (trip.trip[0] === this.appSettings.batchAssistantSwitch){
             this.batchAssistantLimiter = this.getBatchLimiterName("assistant",identity.slice(1));
             this.chatHistory = true;
           }
-          if (trip.trip[0] === this.instructions.batchContinueTag) {
+          if (trip.trip[0] === this.appSettings.batchContinueTag) {
             this.setPrompt("responseStart", identity.slice(1));
+          }
+          if (trip.trip[0] === this.appSettings.setJsonLevel) {
+           this.setJsonLevel(identity);
           }
           if(this.endpoints.endpoints.hasOwnProperty(identity)) {
             this.api = this.endpoints.endpoints[identity];
@@ -468,11 +513,11 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         for (let key in this.identities) {
           list =
             list +
-            this.instructions.invoke +
+            this.appSettings.invoke +
             key +
-            this.instructions.agentSplit +
+            this.appSettings.agentSplit +
             "write" +
-            this.instructions.endTag +
+            this.appSettings.endTag +
             "\n";
         }
         outp.text = list;
@@ -542,6 +587,10 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         this.debugLog = this.ChatLog;
         this.ChatLog = "";
         this.sendHold= true;
+        break;
+      case "c":
+      case "c":
+        this.ChatLog = "";
         break;
       case "d":
       case "debug":
@@ -750,44 +799,44 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
   personaAtor(persona, sorted, ifDefault){
   persona.forEach(tag => {
     tag = tag.trim();
-    let commands = tag.split(this.instructions.settinglimit);
+    let commands = tag.split(this.appSettings.settinglimit);
     console.log(commands);
     if (commands.length === 2) {
       commands[0] = commands[0].trim();
       commands[1] = commands[1].trim();
-      if (commands[1] == this.instructions.save && this.sendLast) {
+      if (commands[1] == this.appSettings.save && this.sendLast) {
         //save like |||agent:save|
         this.identities[commands[0]] = this.recentClip; 
         tag = commands[0];
-      } else if (commands[1] == this.instructions.save) {
+      } else if (commands[1] == this.appSettings.save) {
         //save like |||agent:save|
         this.sendHold = true;
         this.identities[commands[0]] = sorted.formattedQuery; 
         tag = commands[0];
-      } else if (commands[1] == this.instructions.delete) {
+      } else if (commands[1] == this.appSettings.delete) {
         //save like |||agent:delete|
         this.sendHold = true;
         delete this.identities[commands[0]];
         tag = commands[0];
-      } else if (commands[1] == this.instructions.saveAgentToFile) {
+      } else if (commands[1] == this.appSettings.saveAgentToFile) {
         //save like |||agent:file|
         this.sendHold = true;
         let setting  ={[commands[0]]:this.identities[commands[0]]}
         //console.log(JSON.stringify(setting));
         this.settingSaver(setting, "0identities.json", this.notify, this.fs) //todo: fix this magic string.
         tag = commands[0];
-      } else if (commands[0] == this.instructions.setPromptFormat && this.instructions.save == commands[1]) {
+      } else if (commands[0] == this.appSettings.setPromptFormat && this.appSettings.save == commands[1]) {
         this.sendHold = true;
         this.pickupFormat(sorted.formattedQuery);
-      }  else if (commands[0] == this.instructions.setInstruction) {
+      }  else if (commands[0] == this.appSettings.setInstruction) {
         this.sendHold = true;
         this.setPrompt(commands[1],sorted.formattedQuery);
       }else if (!isNaN(commands[1])) {
         this.params[commands[0]] = parseFloat(commands[1]);
         //console.log(commands[0] + commands[1] +" written> " + this.params[commands[0]]);//ill keep this one for now
-      } else if (commands[1] == this.instructions.true) {
+      } else if (commands[1] == this.appSettings.true) {
         this.params[commands[0]] = true;
-      } else if (commands[1] == this.instructions.false) {
+      } else if (commands[1] == this.appSettings.false) {
         this.params[commands[0]] = false;
       }
       else {
@@ -807,7 +856,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         else{
           console.log("no matching max_length or max_tokens in params: " +JSON.stringify(this.params));
         }
-      } else if (tag === this.instructions.setPromptFormat) {
+      } else if (tag === this.appSettings.setPromptFormat) {
         this.sendHold = true;
         this.setInferenceFormat(sorted.formattedQuery);
       } else {
@@ -837,7 +886,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
   }
   continueText(text){
     
-    const splitText = text.split(this.instructions.continueTag);
+    const splitText = text.split(this.appSettings.continueTag);
     // console.log("Lenght: "+ splitText.length + " : " +  JSON.stringify(splitText));
     if (splitText.length === 1){
       return splitText[0];
@@ -852,6 +901,22 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     }
     return text;
 
+  }
+  continueSetText(text){
+    const splitText = text.split(this.appSettings.continueTag);
+    // console.log("Lenght: "+ splitText.length + " : " +  JSON.stringify(splitText));
+    if (splitText.length === 1){
+      return splitText[0];
+    } else if ( splitText.length === 2){
+      //this.setPrompt("start", splitText[1]);
+      return splitText[0];
+    } else if (splitText.length === 3){
+      //this.setPrompt("start", splitText[1]);
+      return splitText[0] + splitText[2]; 
+    } else if (splitText.length >= 3){
+      return text;
+    }
+    return text;
   }
   getBatchLimiter(type){
     
@@ -880,11 +945,11 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       User:"Assistant",
     }
 
-    return this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet["end"+typeStepBack[type]+"Turn"] + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet["start"+type ] + name + this.inferenceClient.instructSet["end"+type+"Role"] + this.inferenceClient.instructSet.endRole;
+    return this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet["end"+typeStepBack[type]+"Turn"] + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet["start"+type ] + name + this.inferenceClient.instructSet["end"+type+"Role"] + this.inferenceClient.instructSet.endRole +this.inferenceClient.instructSet.roleGap;
   }
   chatBuilder(text){
     if (this.chatHistory && text != "" && !this.noChatLogging ){
-      if (this.instructions.batchLimiter === "") {
+      if (this.appSettings.batchLimiter === "") {
           if (this.batchAssistantLimiter != "") {
             this.ChatLog += this.batchAssistantLimiter + text;
 
@@ -893,12 +958,46 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
           }
         
       } else {
-        this.ChatLog += this.instructions.batchLimiter + text;
+        this.ChatLog += this.appSettings.batchLimiter + text;
       }
     }
     this.chatHistory = false;
     this.noChatLogging = false;
 
+  }
+  isKeyName(string) {
+    let regex = /^[a-zA-Z0-9_-]+$/;
+    if (regex.test(string)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+  commandHandle(tags){//todo: fix this.
+    
+    console.log(tags);
+    if (tags.command != undefined && tags.command != '' && tags.command != "") {
+      let splitCommand = tags.command.split(this.appSettings.quickPromptLimit);
+      if (splitCommand.length = 1) {
+        return 0;
+      } else if (splitCommand.length = 2){
+        if (this.isKeyName(splitCommand[0])) {
+          this.appSettings.rootname = splitCommand[0];
+          tags.command = splitCommand[1];
+          return splitCommand[0].length;
+        } else {
+          return 0;
+        }
+        
+      } else if (splitCommand.length > 2) {
+        if (this.isKeyName(splitCommand[0])) {
+          this.appSettings.rootname = splitCommand[0];
+          return splitCommand.slice(1).join(this.appSettings.quickPromptLimit)
+        } else {
+          return 0;
+        }
+      }
+    }
   }
   setupforAi(text) {
     //console.log(this.batchDocument); 
@@ -913,7 +1012,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       this.blockPresort = false;
       this.noBatch = false;
       this.batchProcessor();      
-      text = this.instructions.invoke + this.batch + this.instructions.endTag + text;      
+      text = this.appSettings.invoke + this.batch + this.appSettings.endTag + text;      
     }
     else {
       this.noBatch = true;
@@ -925,52 +1024,54 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
     }
     
     this.chatBuilder(this.recentClip.text);
-    let sorted = this.activatePresort(text);
+    const sorted = this.activatePresort(text);
     let ifDefault = true;
     if (sorted) {
-      sorted.formattedQuery = this.continueText(sorted.formattedQuery);
-      this.text = sorted.formattedQuery;
+      this.text = this.continueSetText(sorted.formattedQuery);
       this.undress();
-      
+      // console.log(sorted.tags.command);
+      // sorted.tags.command = sorted.tags.command.slice(this.commandHandle(sorted.tags));
+      // console.log(sorted.tags.command);
       if(this.set){
         this.identity = this.setAgent;
-        if (sorted.tags.command != "" && sorted.tags.command != undefined) {
-          this.identity[this.instructions.rootname] = sorted.tags.command;          
-          ifDefault = false;
+        ifDefault = false;
+        if ( sorted.tags.command != undefined && sorted.tags.command != "" ) {
+          this.identity[this.appSettings.rootname] = sorted.tags.command;          
         }
       } else{
-        if (sorted.tags.command != "" && sorted.tags.command != undefined) {
-          this.identity[this.instructions.rootname] = sorted.tags.command;//send ||||this text over if it exists|
+        if (sorted.tags.command != undefined && sorted.tags.command != "") {
+          this.identity[this.appSettings.rootname] = sorted.tags.command;//send ||||this text over if it exists|
         }
       }
       if (sorted.tags.persona) {
-        let persona = sorted.tags.persona.split(this.instructions.agentSplit);
+        let persona = sorted.tags.persona.split(this.appSettings.agentSplit);
         //console.log("persona tags: " + JSON.stringify(persona));
         //console.log("persona count: " + sorted.tags.length);
         ifDefault = this.personaAtor(persona, sorted);
         //console.log("identset: " + JSON.stringify(this.identity));
       }
+      sorted.formattedQuery = this.continueText(sorted.formattedQuery);
       if (sorted.run || this.on) {
         //const defaultIdentity = { [this.instructions.rootname]: "" };
         //console.log(ifDefault);
         if (ifDefault && !this.set) {
           //console.log("hit default");
-          this.identity.CaptainClip = this.identities[this.instructions.defaultPersona];
+          this.identity.CaptainClip = this.identities[this.appSettings.defaultPersona];
           this.noBatch = true;
         }
-        if (this.identity[this.instructions.rootname] === "" && this.instructions.clean){
-          delete this.identity[this.instructions.rootname];
+        if (this.identity[this.appSettings.rootname] === "" && this.appSettings.clean){
+          delete this.identity[this.appSettings.rootname];
         }
         //if this.identity contains a key called "e" remove it.
-        if(this.identity.hasOwnProperty(this.instructions.emptyquick)) {
-          delete this.identity[this.instructions.emptyquick];
+        if(this.identity.hasOwnProperty(this.appSettings.emptyquick)) {
+          delete this.identity[this.appSettings.emptyquick];
         }
-        if (this.identity.hasOwnProperty(this.instructions.empty)) {
-          delete this.identity[this.instructions.empty];
+        if (this.identity.hasOwnProperty(this.appSettings.empty)) {
+          delete this.identity[this.appSettings.empty];
         }
         if (this.chatHistory) {
           if(this.ChatLog != ""){
-            this.identity[this.instructions.historyName] = this.ChatLog; 
+            this.identity[this.appSettings.historyName] = this.ChatLog; 
           }
         }
         if (this.sendLast) {
@@ -981,11 +1082,11 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
           this.write = false;
           this.noBatch = true;
           this.blockPresort = true;
-          delete this.identity[this.instructions.rootname];
+          delete this.identity[this.appSettings.rootname];
           let sendtoclipoardtext =
-          this.instructions.writeSave + "\n" +
+          this.appSettings.writeSave + "\n" +
           JSON.stringify(this.identity) +
-          this.instructions.writeSplit +
+          this.appSettings.writeSplit +
           sorted.formattedQuery; 
           sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, "\n");
           this.notify("Paste Ready:", sendtoclipoardtext.slice(0, 150));
@@ -997,9 +1098,9 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
           this.noBatch = true;
           this.blockPresort = true;
           let sendtoclipoardtext =
-          this.instructions.writeSettings + "\n" +
+          this.appSettings.writeSettings + "\n" +
           JSON.stringify(this.identity.settings) +//this is set up for PROMPT edit failures
-          this.instructions.writeSplit +
+          this.appSettings.writeSplit +
           sorted.formattedQuery; 
           //sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, "\n");
           this.notify("Paste Response:", sendtoclipoardtext.slice(0, 150));
@@ -1015,6 +1116,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
             //   //todo: build whole engine to transport settings across multiple apis
             // }
             // console.log("outParams: " + JSON.stringify(outParams));
+            console.log(sorted);            
             this.inferenceClient.send(this.identity, sorted.formattedQuery, this.params, this.api);
           } else {
             this.sendHold = false;
@@ -1040,12 +1142,12 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       let run = false;
       text = text.trim();
       var response = [];
-      const parsedData = text.split(this.instructions.invoke);
+      const parsedData = text.split(this.appSettings.invoke);
       let tags = "";
       if (parsedData.length > 3) {//todo: fix this so it works better
         this.notify(
           "Not Sent:",
-          "too many " + this.instructions.invoke + ". max 2."
+          "too many " + this.appSettings.invoke + ". max 2."
           );
           this.sendHold = true;
           //this.noBatch = true;
@@ -1093,26 +1195,26 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       
       tagExtractor(text) {
         text = text.trim();
-        const tags = text.split(this.instructions.endTag);
+        const tags = text.split(this.appSettings.endTag);
         var output = {};
         if (tags.length === 1) {
           output = { persona: "", command: "", text: text };
         } else if (tags.length === 2) {
-          output = { persona: tags[0], command: "", text: tags[tags.length - 1] };
+          output = { persona: tags[0], command: "", text: tags[1] };
         } else if (tags.length >= 3) {
-          let text = tags.slice(2)
+          const cutTags = tags.slice(2)
           if (text.length > 1) {
-            text = text.join(this.instructions.endTag);
+            const wholeText = cutTags.join(this.appSettings.endTag);
             output = {
               persona: tags[0],
               command: tags[1],
-              text: text
+              text: wholeText
             };
           } else {
             output = {
               persona: tags[0],
               command: tags[1],
-              text: text[0]
+              text: cutTags[0]
             };
           }
         }
