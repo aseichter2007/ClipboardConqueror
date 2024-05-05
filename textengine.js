@@ -698,6 +698,11 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
       case "seor":
         this.inferenceClient.setOnePromptFormat ("endSystemRole", formattedQuery);
         break;
+      case"rolegap":
+      case"rolehead":
+      case"rolebreak":
+        this.inferenceClient.setOnePromptFormat ("roleGap",formattedQuery)
+        break;
       case "prepend":
       case "prependprompt":     
         this.inferenceClient.setOnePromptFormat ("prependPrompt", formattedQuery);
