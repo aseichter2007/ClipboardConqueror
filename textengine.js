@@ -275,57 +275,59 @@ class TextEngine {
     var outp = { text: "", found: false, set: false };
     switch (flag) {
       case "help"://left justified for formatitng when printed
-        const intro = `delete the extra on this line before saving or sharing agents printed with write.
+        const intro = `
 Welcome to Clipboard Commander!\n
 
-|||introduction| will explain the basics of LLMs, this help is more about this software.
+${this.appSettings.invoke}introduction${this.appSettings.endTag} will explain the basics of LLMs and generation settings, this help is more about using this software.
 
 Remember, LLMs predict the next word using all the words that come in and predict each next word one at a time.
 Lanuage specifity is important for results, and the small models can stumble in strange ways on misspelled words, vague requests, or poor wording in instructions. For storytelling less can be more, but for specific results you must give specific input. 
+
 They usually get things pretty right, but the quality of the output suffers.  Use specific language. I tend to spend the time waiting for the reponse refining my query so that if it's confused by any bad language the first time, I can ask it in a better way. 
+
 Run on sentences for a given instruction work well, commas tent to bring forward the idea. Periods are good to start a new idea.
+
 For instance, describing a class and a function, I would describe the class in one run on rather than multiple sentences, and the function in another run on. 
+
 This will help the AI keep these ideas seperate rather than tying sentences together to continue them like "the class. the class. the class. The fucntion. the function." This will be much more likely to return a mess or near miss. 
+
 Do it like: The class is, has, needs, whatever. The function is for, needs, does, etc.
 
 Either way can work, for very complex stuff you have to do both, and sometimes you gotta play around cause it doesnt get something, but as you learn how the model likes to be told, you will begin to get incredible results from these small models. 
 I feel that voice is not specific enough, so I made this tool to bring your AI anywhere, and Clipboard Conqueror can interface the same backend and run side by side.
 
-||| invokes the default agent Captain Clip to respond to any text sent with the invoke token. Say Hi, Clip!
+${this.appSettings.invoke} invokes the default agent Captain Clip to respond to any text sent with the invoke token. Say Hi, Clip!
 
-the invoke token is clipped out, so it can be anywhere in the text you copy or at the end too|||
+the invoke token is clipped out, so it can be anywhere in the text you copy or at the end too${this.appSettings.invoke}
 
-|||writer| Write me a bedtime story about 11 little squirrels who talk to and help a little girl find shelter in a storm.
+${this.appSettings.invoke}writer${this.appSettings.endTag} Write me a bedtime story about 11 little squirrels who talk to and help a little girl find shelter in a storm.
 
-|||writer,frank| Title: "Frank's Sauciest Case: Big pizza from little Tony."
+${this.appSettings.invoke}writer,frank${this.appSettings.endTag} Title: "Frank's Sauciest Case: Big pizza from little Tony."
   Sends the frank derbin character and the writer along with any text you send to guide the story.  
 
-|||writer,write| will write the contents of the writer agent to the clipboard, ready to paste back instantly and see what is sent to the ai with |||writer|. 
+  ${this.appSettings.invoke}writer,write${this.appSettings.endTag} will write the contents of the writer agent to the clipboard, ready to paste back instantly and see what is sent to the ai with ${this.appSettings.invoke}writer${this.appSettings.endTag}. 
 
-This message starts with |||name:save|. change 'name' to your choice of name(or leave it name), and any text you copy with this will be saved with that name
+This message starts with ${this.appSettings.invoke}name:save${this.appSettings.endTag}. change 'name' to your choice of name(or leave it name), and any text you copy with this will be saved with that name
 
-:save| accepts json but incorrectly formatted json will fail to parse and not be saved.
-note the full colon. ,save tries to send data stored as save. |||save:save| will work just fine, saving anything copied along into |||save|. Without care, you could get confusing results. 
-currently no changes are written to the hard drive. Restarting this program will reset any changed agents and any custom will be lost. Luckily you can copy them right back in.
-//todo: build and link my own charachter library
+agentName:save${this.appSettings.endTag} saves text to insert with the system prompt or as a discrete message with "(backtick)markup"
 
-|||on| toggles activation on every copy even with no invoke until |||on| is called again.
+${this.appSettings.invoke}on${this.appSettings.endTag} toggles activation on every copy even with no invoke until ${this.appSettings.invoke}on${this.appSettings.endTag} is called again.
 
-|||list| writes a list of all agents that are currently available.
+${this.appSettings.invoke}list${this.appSettings.endTag} writes a list of all agents that are currently available.
 
-|||re| what is this code doing? 
+${this.appSettings.invoke}re${this.appSettings.endTag} what is this code doing? 
 
 - return copy at end of prompt inserted like continued user question.
 - sends the thing you copied last,   after "what is this code doing? \n \n {{lastcopy}}", at the end of the user prompt" and sends the Captian Clip assistant in the system prompt to help consider the instruction.
   
-|||rf| what is this code doing? 
+${this.appSettings.invoke}rf${this.appSettings.endTag} what is this code doing? 
 
-- return last copied first in prompt inserted like an agent at the level rf is placed relative to other agents ex |frank,rf,tot| copied text comes after frank agent.
+- return last copied first in prompt inserted like an agent at the level rf is placed relative to other agents ex ${this.appSettings.invoke}frank,rf,tot${this.appSettings.endTag} copied text comes after frank agent.
 - sends the thing you copied last before the Captian Clip assistant prompt to help frame the output format and preconceptions.
 
-|||1200| sets the max response length to 1200. Also works like |||agent,setting:0.5,1000| just a number is always max response length.  
+${this.appSettings.invoke}1200${this.appSettings.endTag} sets the max response length to 1200. Also works like ${this.appSettings.invoke}agent,setting:0.5,1000${this.appSettings.endTag} just a number is always max response length.  
 
-|||temperature:1.1| sets the temperature to 1.1. This works for any setting ex: top_p, min_p. Use 1 and 0 to set true/false //true/false untested.
+${this.appSettings.invoke}temperature:1.1${this.appSettings.endTag} sets the temperature to 1.1. This works for any setting ex: top_p, min_p. Use 1 and 0 to set true/false //true/false untested.
 again, full colon on settings, which go directly to the backend api. 
 
 Troubleshooting:
@@ -335,55 +337,93 @@ Troubleshooting:
 
 Copy the following block to exchange the Captain Clip persona for a more professional AI:
 
-|||default:save|[[{"SYSTEM":"Simulate an AI described by DIP - Do It Professionally. First, list your assumptions. Next, think step-by-step. Finally, state your conclusion.  DIP is a very logical AI assistant. Answer any questions truthfully and complete tasks appropriately and in order.]","description":"DIP will Do It Professionally","confused":"If not given a different instruction, summarize and explain any content provided. DIP will explain he can not learn, is based on past data, and can not access the internet if he is asked for current events or research.","voice":"Sure Boss. Here you go. \"Get started: \"."},""],[null,""]]
+${this.appSettings.invoke}default:save${this.appSettings.endTag}Simulate an AI described by DIP - Do It Professionally. First, list your assumptions. Next, think step-by-step. Finally, state your conclusion.  DIP is a very logical AI assistant. Answer any questions truthfully and complete tasks appropriately and in order.]","description":"DIP will Do It Professionally","confused":"If not given a different instruction, summarize and explain any content provided. DIP will explain he can not learn, is based on past data, and can not access the internet if he is asked for current events or research.","voice":"Sure Boss. Here you go. 
 
 Advanced Command:
 
-||||System: Command first before Clip agent.|  text from <user> in the internal chain
+${this.appSettings.invoke}${this.appSettings.endTag}System: Command first before Clip agent.${this.appSettings.endTag}  text from <user> in the internal chain
 
-^^^^note 4 "|" , and the close on the end
+^^^^note 4 "${this.appSettings.endTag}" , and the close on the end
 
-|||writer|SYSTEM: Command First.| User: after agent writer
+${this.appSettings.invoke}writer${this.appSettings.endTag}SYSTEM: Command First.${this.appSettings.endTag} User: after agent writer
 
 System applies set formatting like:
 ---
 "prompt":"<|im_start|>[\"SYSTEM: Command First.\",[\"SYSTEM: Write a lengthy prose about the requested topic. Do not wrap up, end, or conclude the story, write the next chapter.\\n \\n Story:\",\"\"]]<|im_end|>\n<|im_start|>user:\n User: after agent 
 frank\n\n<|im_end|>\n<|im_start|>assistant:\n
 
----
 
-|||re,frank|this text is invisible to :save| query.
+Remember:  You should always check its work. LLMs will make stuff up sometimes. It is not current, and has no internet connectivity. It may reccomand outdated software, imaginary modules, or misunderstand a key component and return nonsense altogther. 
+If you ask for smut, you are likely to get it. 
 
-||set|:
+We're heading into a future of AI everywhere, and a day will come that you have an AI respond to an email. You owe it to yourself, whoever you sent it to, and just general decency, at least read what the AI says on your behalf, every single time.  
 
-|||rf,frank,set,joe|these system commands persist| query goes out. 
-
-- set will save all agents before it as a persistent default, and include any system command sent at this time. in this case joe does not persist with the next simple ||| 
-
-once set "|||"{query} will behave as 
-
-"|||(that last copy saved with rf),frank|these system commands persist|"{query}
-
-until |||set| is copied again, clearing the set agents. 
-
-While set, |||any,additional,agents| can be sent and add after the set agents.
-
-|||rf,set| is extremely useful for repeated queries against the same copied data. 
-
-while set |||any|this instruction replaces the old system instruction before agents this time only| {query}
-
-
-Remember: this is a large language model AI, and a small one at that. You should always check its work. It will make stuff up sometimes. It is not current, and has no internet connectivity. It may reccomand outdated software, imaginary modules, or misunderstand a key component and return nonsense altogther. 
-If you ask for smut, you are likely to get it. We're heading into a future of AI everywhere, and a day will come that you have an AI respond to an email. You owe it to yourself, whoever you sent it to, and just general decency, at least read what the AI says on your behalf, every single time.  
 The AI can tell you a lot of real info about many things. It can debug, rubber duck, respond in charachter, tell new and original stories, or summarize text, all with great success. 
 Expecially with smaller models, your words matter, how you ask is everything. Bigger models do better inferring intent, but the best results always come from specific language, and the AI won't always do what you expect. 
 
-Speaking of help, I've been struggling to find work and my son will be born any day now. I built this tool to hopefully make some money, though the paid features are still in the works.
-This is me pan-handling folks, but I'm not playing drums on buckets in the street, I integrated a sweet set of tools for you to use anytime and help do your job. Help sell the software or send me something, please. 
-If you get good use from this software, or are using it in a commercial environment, please send what it's worth to you.. I need it to support my family. Thank you for using Clipboard Conqueror.
+Special ${this.appSettings.invoke} [operators] to apply${this.appSettings.endTag}:
+---
+-"]" renames text from user in the chatlog.
 
-https://patreon.com/ClipboardConqueror
-https://ko-fi.com/aseichter2007
+- ";" renames text from assistant in the chatlog. 
+
+- "%" format, like ${this.appSettings.invoke}chatML, agents${this.appSettings.endTag}, do this one first if you use it, it overwrites the others. Valid formats are stored in setup.js
+
+- "!" assitant name
+
+- ">" user name
+
+- "}" system name
+
+- "~" start of assistant response, "~~~" overwrites "~".
+
+- "\`" the backtick or grave symbol changes the system prompt format. Supports "json","markup","partial", or none. 
+
+Fancy ${this.appSettings.invoke}flags${this.appSettings.endTag}
+---
+${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions about CC operations. 
+
+"introduction" has more about samplers and settings. 
+
+"e" or empty blocks the default agent to provide an empty prompt
+
+"write" sends an instantly ready to paste set of agents preceding the write command.
+
+"list" will instantly supply a ready to paste list of all agents like below.
+
+"rf" will put the last thing you copied at the position of rf in the system prompt. 
+
+"re" will send the last copied text after text from ${this.appSettings.invoke}re${this.appSettings.endTag}user  last copied text.
+
+"on" makes clipboard conqueror run every copy, no invoke required, till you toggle it off.
+
+"no" prevents sending to AI, useful for copying entire invokes, just add the flag.
+
+
+"set" or "setDefault" saves agents left of it to be added until toggled off like ${this.appSettings.invoke}set${this.appSettings.endTag}
+
+
+"c" or "chat" activates the history
+
+
+"sc" or "silentChat" sends the history wihout adding the new turn to the history.
+
+
+"ch" or "clearHistory" clears the chatlog and prevents sending to the AI.
+
+
+"cf" or "clearFirst" clears the chatlog while sending the query to the LLM.
+
+
+"d" or "debug" The last cleared history is stored here till CC is restarted or you clear again
+
+
+"dw" or "debugWrite" ready to paste last history cleared.
+
+"cd" or "clearDebug" clear debug manually.
+
+"dateTime" sends the date and time in the system prompt at the position you send it.
+
 `;
         //intro = JSON.parse(intro);
         this.write = true;
@@ -408,43 +448,38 @@ You can always load the model of your choice and uncomment the proper instructio
 ____________________________________
 *note, you can get this far without a backend host running. Ensure that you have started a compatible backend like koboldcpp.*
 Lets try it out! Copy the following:
-||| Jack and Jill went up the hill, each carrying 10 apples. Jack fell down, rolled down the hill, and dopped all of his apples. Jill did not come tumbling after. Jill gave half her apples to Jack when he returned to the top of the hill. They each ate an apple, and then climbed back down the hill, where they spotted an apple tree. Jack picked 3 apples and gave them to Jill, while Jill pickes 8 apples and splits them between herself and jack, adding half to the apples she carried down the hill. How many apples do each have at the end?
+${this.appSettings.invoke} Jack and Jill went up the hill, each carrying 10 apples. Jack fell down, rolled down the hill, and dopped all of his apples. Jill did not come tumbling after. Jill gave half her apples to Jack when he returned to the top of the hill. They each ate an apple, and then climbed back down the hill, where they spotted an apple tree. Jack picked 3 apples and gave them to Jill, while Jill pickes 8 apples and splits them between herself and jack, adding half to the apples she carried down the hill. How many apples do each have at the end?
 
 Now wait for the notification. It could be a while depending on your hardware, settings, and how much the AI writes. When you are notified, paste the response somewhere.
-I rarely wait over 30 seconds with my 3090 running 8 bit OpenHermes 2.5 Mistral, but on very slow hardware you might wait minutes or turn the max generation size down like |||200|
+On slow hardware you might wait minutes or turn the max generation size down like ${this.appSettings.invoke}200${this.appSettings.endTag}
 
 
-There are 5 special operators for the |||agents| segment, that start with the symbol, and end with hte next comma "," (agentSplit).
-- "!" assitant name
-- ">" user name
-- "}" system name
-- "~" start of assistant response, ~~~ overwrites a this one.
-- "%" format like format |||%chatML|, do this one first if you use it, it overwrites the others. 
+See? Not quite. lets try and cool things off a bit. LLMs have a parameter called a temperature, even chatGPT. //Llama 3 Hermes 2 pro nailed it first try. nice.
 
-||| %chatML, ! Rick, > Morty, writer, } Narrator's notes| Rick answers morty's questions.| Where are we going today, grandpa? 
+${this.appSettings.invoke}temperature:0.4${this.appSettings.endTag}Jack and Jill went up the hill, each carrying 10 apples. Jack fell down, rolled down the hill, and dopped all of his apples. Jill did not come tumbling after. Jill gave half her apples to Jack when he returned to the top of the hill. They each ate an apple, and then climbed back down the hill, where they spotted an apple tree. Jack picked 3 apples and gave them to Jill, while Jill pickes 8 apples and splits them between herself and jack, adding half to the apples she carried down the hill. How many apples do each have at the end?
 
-
-See? Not quite. lets try and cool things off a bit. LLMs have a parameter called a temperature, even chatGPT.
-|||temperature:0.4|Jack and Jill went up the hill, each carrying 10 apples. Jack fell down, rolled down the hill, and dopped all of his apples. Jill did not come tumbling after. Jill gave half her apples to Jack when he returned to the top of the hill. They each ate an apple, and then climbed back down the hill, where they spotted an apple tree. Jack picked 3 apples and gave them to Jill, while Jill pickes 8 apples and splits them between herself and jack, adding half to the apples she carried down the hill. How many apples do each have at the end?
-
-probably better. Do math and logic stuff at low temperature for better results.
+probably better. Do math and logic stuff at low temperature for better results. The most probable token is amplified.
 lets get back to standard, the setting persists unless you restart this application:
-|||temperature:1|What happens if I make a computer successfully divide by zero?
+
+${this.appSettings.invoke}temperature:1${this.appSettings.endTag}What happens if I make a computer successfully divide by zero?
 
 higher temps get better results when you are trying to generate fiction or do imaginative things like:
 
-|||temperature:1.6| Write me 10 ideas for videos to record on a youtube. Avoid already popular tropes and focus on finding a fun and imaginative niche for me to fill.
-  //with psyfighter, we get some sailing contaminatoin from the Captain Clip prompt. That's why there is a |||writer,agi,tot,code,etc...| 
+${this.appSettings.invoke}temperature:1.6${this.appSettings.endTag} Write me a story about my friend and his pet pineapple.
+
+  We get some sailing contaminatoin from the Captain Clip prompt. That's why there is a ${this.appSettings.invoke}writer,agi,tot,code,etc...${this.appSettings.endTag} 
 Higher temps lead to AI halucination and making stuff up, and that can be desirable, but don't ask for programming help at high temps or you might be led to install fake node modules.
-Hot as you can handle makes some fancy fantasy, but really for serious writing I reccommend Psyfighter 13b or something bigger over OpenHermes, the 7Bs are a step behind.
+
+Hot as you can handle makes some fancy fantasy, but really for serious writing I reccommend Llama 3 8B or something bigger over OpenHermes, the 7Bs are a step behind in prose.
 
 
 As you can see, Small ai isn't perfect but a few years ago this type of query against a computer was basically impossible. The experience this software provides will improve as the models and technology available evolve further.
 
-We've established that LLMs are not calculators. They work by predicting what the next word should be, for every word. 
+LLMs work by predicting what the next word should be, for every word. 
 Temperature changes the selection probability of each word. All the likely choices are scaled, temperature below 1 makes unlikey words less likely, temperature above 1 makes unlikely words more likely. 2 is max. 
 
-in addition to temperature for controlling the output, we also have other values. I've included the defaults for this applicatoin.
+in addition to temperature for controlling the output, we also have other values. I've included the defaults for this application.
+These are the samplers, these run in a configurable order and eliminate output tokens by various maths, leaving the final token to be selected at random from a reduced set of propbably correct words.
 
   min_p: 0.1,//0.1: discard possible tokens less than 10% as probable as the most likely possible token.  If top token is 10% likely, tokens less than 1% are discarded.
   I saw a post about how this works and I'm sold, I reccomend starting here. 1 should be deterministic, with more possible tokens as you approach zero.
@@ -461,6 +496,9 @@ in addition to temperature for controlling the output, we also have other values
   there is also mirostat_modes 1 and 2. Reccomend 0 or 2. Mirostat uses previous context to tune against perplexity somehow. I don't understand it so I can't reccomend it, but I've tried it out and it seems to work fine. 
   Mirostat turns off select other settings, and does use temperature.
 
+  Dynamic temp adjusts the temp automagially to vary by some parameters
+
+  rep penalty reduces the probability of words that would be repeated, and has a configurable difference and scaling. This is for preventing the model from looping output.
 
 Info for model selection. Preffered format chatML, but you can change the instructions in the settings - in the constructor of textengine.js.
 Model sizes:
@@ -484,11 +522,11 @@ KoboldCPP uses GGUF format, which are quantized from 16 bit to between 2 bit and
 lower bits require less ram, but there is a drop in reasoning and writing quality, though even the q2 was following instructions well. 
 I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative writing, ideas, and agi in a 13B, I think it expects alpaca formatting.
 
-|||Tell me about the funciton of the liver and what activities damage it.
+${this.appSettings.invoke}Tell me about the funciton of the liver and what activities damage it.
 
-|||coder|write fizzbuzz with comments on each line. Explain how fizzbuzz is used to judge candidates in interviews
+${this.appSettings.invoke}coder${this.appSettings.endTag}write fizzbuzz with comments on each line. Explain how fizzbuzz is used to judge candidates in interviews
 
-|||agi| walk me though setting up a react website including components for the navigation header, footer, and a window for the main content. 
+${this.appSettings.invoke}agi${this.appSettings.endTag} walk me though setting up a react website including components for the navigation header, footer, and a window for the main content. 
 `;
         this.write = true;
         this.sendHold = true;
@@ -604,7 +642,7 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         outp.found = true;
         outp.set = true;
         break;
-      case "cleard":
+      case "cd":
       case "clearDebug":
         this.debugLog = "";
         break;
@@ -614,10 +652,93 @@ I get all mine from huggingface/thebloke, and reccommend Tiefighter for creative
         this.noBatch = true;//agi always writes |||, clip often writes |||help|. it's confusing. 
         break;
       case "dateTime":
-        outp.text = new Date();
+        const now = new Date();
+        outp.text = now.toLocaleString();
         console.log(outp.text);
         outp.found = true;
         outp.set = true;
+        break;
+      case "qr":
+        const quickReference  = `
+(invocation"${this.appSettings.invoke}") optional agents and commands (optional split "${this.appSettings.endTag}")  optional system prompt (optional split "${this.appSettings.endTag}") user text (optional assistant dictation "${this.appSettings.continueTag}") optional start of assistant response
+      
+Special ${this.appSettings.invoke} [operators] to apply${this.appSettings.endTag}:
+---
+-"]" renames text from user in the chatlog.
+
+- ";" renames text from assistant in the chatlog. 
+
+- "%" format, like ${this.appSettings.invoke}chatML, agents${this.appSettings.endTag}, do this one first if you use it, it overwrites the others. Valid formats are stored in setup.js
+
+- "!" assitant name
+
+- ">" user name
+
+- "}" system name
+
+- "~" start of assistant response, "~~~" overwrites "~". 
+
+- "\`" the backtick or grave symbol changes the system json level. Supports "json","markup","partial", or none. 
+
+- "@" executes a batch
+
+- "#" skips a batch
+
+Fancy ${this.appSettings.invoke}flags${this.appSettings.endTag}
+---
+${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions about CC operations. 
+
+"introduction" has more about samplers and settings. 
+
+"e" or empty blocks the default agent to provide an empty prompt
+
+"write" sends an instantly ready to paste set of agents preceding the write command.
+
+"list" will instantly supply a ready to paste list of all agents like below.
+
+"rf" will put the last thing you copied at the position of rf in the system prompt. 
+
+"re" will send the last copied text after text from ${this.appSettings.invoke}re${this.appSettings.endTag}user  last copied text.
+
+"on" makes clipboard conqueror run every copy, no invoke required, till you toggle it off.
+
+"no" prevents sending to AI, useful for copying entire invokes, just add the flag.
+
+
+"set" or "setDefault" saves agents left of it to be added until toggled off like ${this.appSettings.invoke}set${this.appSettings.endTag}
+
+
+"c" or "chat" activates the history
+
+
+"sc" or "silentChat" sends the history wihout adding the new turn to the history.
+
+
+"ch" or "clearHistory" clears the chatlog and prevents sending to the AI.
+
+
+"cf" or "clearFirst" clears the chatlog while sending the query to the LLM.
+
+
+"d" or "debug" The last cleared history is stored here till CC is restarted or you clear again
+
+
+"dw" or "debugWrite" ready to paste last history cleared.
+
+"cd" or "clearDebug" clear debug manually.
+
+"dateTime" sends the date and time in the system prompt at the position you send it.
+
+        `;
+        this.write = true;
+        this.sendHold = true;
+        this.noBatch = true;
+
+        //this.nicereturn = true;
+        outp.text = quickReference;
+        outp.found = true;
+        outp.set = true;
+        //return identity;
         break;
         
       default:
