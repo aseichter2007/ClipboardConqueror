@@ -9,25 +9,25 @@ Clipboard Conqueror is a multi-platform omnipresent copilot alternative. Current
 
 
 
-*Special thank you to the creators of KoboldAi, KoboldCPP, llamma, openAi, and the communities that made all this possible to figure out. 
+*Special thank you to the creators of KoboldAi, KoboldCPP, Meta, openAi, and the communities that made all this possible to figure out. 
 
-If you are unhappy with my syntax, almost everything is configurable in setup.js. 
 
-Pipe in Clipboard Conqueror to leverage cutting edge Artificial Intelligende.
+Pipe in Clipboard Conqueror to leverage cutting edge Artificial Intelligence.
 
-Invoke it by `copying` three pipes and a question or command:  `||| "your request"` 
+Invoke it by copying three pipes and a question or command:  `||| "your request"` 
 
 Local LLMs will produce a response.
 
 If you are using local LLMs, CC is a data secure alternative integration provided you trust whatever backend solution you use.   
 
 There is a wealth of information linked below and in setup.js.
-All you really need to know is copying ||| with Clipboard Conqueror and Koboldcpp running will send any text you copy with that ||| to local AI.
+All you really need to know is copying ||| with Clipboard Conqueror and Koboldcpp running will send any text you copy with that `|||` to local AI.
 
 When Copying code or text containing "|" symbols, you can use 5 pipes "|||||". Or change the default invoke settings. This will send the default agent with your query.
 
-to banish the default agent, invoke like "|||e||", or send a prompt with your query like "|||writer|"
+to banish the default agent, invoke like "`|||e||`", or send a prompt with your query like "`|||writer|`"
 
+If you are unhappy with my syntax, almost everything is configurable in setup.js. 
 
 
 Please help me share Clipboard Conqueror with everyone. 
