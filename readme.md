@@ -16,7 +16,7 @@ Pipe in Clipboard Conqueror to leverage cutting edge Artificial Intelligence.
 
 Invoke it by copying three pipes and a question or command:  `||| "your request"` 
 
-Local LLMs will produce a response.
+Local LLMs will produce a response, paste it directly wherever you want.
 
 If you are using local LLMs, CC is a data secure alternative integration provided you trust whatever backend solution you use.   
 
