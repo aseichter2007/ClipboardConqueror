@@ -45,7 +45,7 @@ Please help me share Clipboard Conqueror with everyone.
 
 [Basic Use](useClipboardConqueror.md)
 
-[agents](agents.md)
+[Agents And Operators](agents.md)
 
 [Prompt Formatting](promptFormatting.md)
 
@@ -316,7 +316,7 @@ https://www.npmjs.com/package/keypress
 
 //todo text to speech agent that can interact with the clipboard contents. //waiting on upstream that runs on my hardware without dinkin around or enough generosity to set up a closet server or at least new hard drives, I'm too full to experiment with a new OS. //kobold now supports llava and SD. I gotta find enough peace to rewrite this entire app in c# to support audio and images.
 
-//decline: use case? I guess return tokens like|||tokens| so you can see if it will fit... ok. undecline: todo: /api/extra/generate/check  //return in progress, useful for vlarge gens on slow mode
+//decline: use case? I guess return tokens like |||tokens| so you can see if it will fit... ok. undecline: todo: /api/extra/generate/check  //return in progress, useful for vlarge gens on slow mode
 //todo: /api/extra/tokencount //should run against entered data and updates should be shown after setting mem or agent and on final send. //I'm gonna wait and do this after I figure out more completion backends and make it work for oogabooga and others.
 
 
