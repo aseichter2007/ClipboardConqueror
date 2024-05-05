@@ -172,16 +172,16 @@ completionMessageBuilder(identity, formattedQuery, params, api ) {
     if( api.jsonSystem === "full"){
       outIdentity = JSON.stringify(identity);
     } else if( api.jsonSystem === "keys" ){
-      outIdentity = identityStringifier(identity); 
+      outIdentity = this.identityStringifier(identity); 
     }else if ( api.jsonSystem === "markup" ){
       outIdentity = this.systemPromptBuilder(identity);
     } else if ( api.jsonSystem === "none" ){
-      outIdentity = identityStringifyNoKey( identity );
+      outIdentity = this.identityStringifyNoKey( identity );
     }else{
-      outIdentity = identityStringifier(identity); 
+      outIdentity = this.identityStringifier(identity); 
     }
   }else{
-    outIdentity = identityStringifier(identity); 
+    outIdentity = this.identityStringifier(identity); 
   }
   
   let finalPrompt = 
@@ -303,16 +303,16 @@ if (this.lastOutpoint !== api.config) {
       if( api.jsonSystem === "full"){
         outIdentity = JSON.stringify(identity);
       } else if( api.jsonSystem === "keys" ){
-        outIdentity = identityStringifier(identity); 
+        outIdentity = this.identityStringifier(identity); 
       }else if ( api.jsonSystem === "markup" ){
         outIdentity = this.systemPromptBuilder(identity);
       } else if ( api.jsonSystem === "none" ){
-        outIdentity = identityStringifyNoKey( identity );
+        outIdentity = this.identityStringifyNoKey( identity );
       }else{
-        outIdentity = identityStringifier(identity); 
+        outIdentity = this.identityStringifyNoKey(identity); 
       }
     }else{
-      outIdentity = identityStringifier(identity); 
+      outIdentity = this.identityStringifyNoKey(identity); 
     }
     let messages = [];
     messages.push ({
