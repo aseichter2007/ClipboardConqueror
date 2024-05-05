@@ -1,7 +1,3 @@
----
-title: Clipboard Conqueror Readme
----
-
 ![Clipboard Conqueror Graphic logo. The letters are clouds and buildings on a lush estate.](CCfinal.jpg)
 Clipboard Conqueror - Choosing A Model:
 =============================
