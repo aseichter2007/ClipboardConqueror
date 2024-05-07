@@ -481,17 +481,17 @@ function JinjaFormatter(instructionSet) {
    {%- endfor -%}
    {%- for message in messages %}
       {%- if message['role'] == 'system' -%}
-        {{- '` + instructionSet.bos + instructionSet.startTurn + instructionSet.startSystem + instructionSet.systemRole + instructionSet.endSystemRole + instructionSet.prependPrompt + instructionSet.systemAfterPrepend + `' + message['content'] + '` + instructionSet.postPrompt + instructionSet.memorySystem  + instructionSet.endSystemTurn + instructionSet.endTurn `' -}}
+        {{- '` + instructionSet.bos + instructionSet.startTurn + instructionSet.startSystem + instructionSet.systemRole + instructionSet.endRole + instructionSet.endSystemRole + instructionSet.roleGap+ instructionSet.prependPrompt + instructionSet.systemAfterPrepend + `' + message['content'] + '` + instructionSet.postPrompt + instructionSet.memorySystem  + instructionSet.endSystemTurn + instructionSet.endTurn `' -}}
       {%- else -%}
       {%- if message['role'] == 'user' -%}
-        {{-'` + instructionSet.startTurn + instructionSet.startUser + instructionSet.userRole + instructionSet.endUserRole + instructionSet.memoryUser + `' + message['content']` + instructionSet.specialInstructions + ` + '` + instructionSet.endUserTurn + instructionSet.endTurn `'-}}
+        {{-'` + instructionSet.startTurn + instructionSet.startUser + instructionSet.userRole + instructionSet.endUserRole +instructionSet.endRole + instructionSet.roleGap + instructionSet.memoryUser + `' + message['content']` + instructionSet.specialInstructions + ` + '` + instructionSet.endUserTurn + instructionSet.endTurn `'-}}
       {%- else -%}
-        {{-'` + instructionSet.startTurn + instructionSet.startAssistant + instructionSet.assistantRole + instructionSet.endAssistantRole + `' + message['content'] + '` + instructionSet.endTurn + `' -}}
+        {{-'` + instructionSet.startTurn + instructionSet.startAssistant + instructionSet.assistantRole + instructionSet.endAssistantRole + instructionSet.endRole + instructionSet.roleGap + `' + message['content'] + '` + instructionSet.endAssistantTurn + instructionSet.endTurn `' -}}
         {%- endif -%}
       {%- endif -%}
     {%- endfor -%}
   {%- if add_generation_prompt -%}
-  {{-'` + instructionSet.startTurn + instructionSet.startAssistant + instructionSet.assistantRole + instructionSet.endAssistantRole + instructionSet.responseStart + `'-}}
+  {{-'` + instructionSet.startTurn + instructionSet.startAssistant + instructionSet.assistantRole + instructionSet.endAssistantRole + instructionSet.endRole + instructionSet.roleGap+ instructionSet.responseStart + `'-}}
   {%- endif -%}
   `;
 }
@@ -523,12 +523,12 @@ function JinjaFormatter(instructionSet) {
 //   return jinja;
 // }
 function returnKoboldAdapter(instructionSet){//should be recieved into params.adapter
-  const systemStart = instructionSet.startTurn + instructionSet.startSystem + instructionSet.systemRole + instructionSet.endSystemRole + instructionSet.prependPrompt + instructionSet.systemAfterPrepend;
+  const systemStart = instructionSet.bos+ instructionSet.startTurn + instructionSet.startSystem + instructionSet.systemRole + instructionSet.endSystemRole +instructionSet.endRole + instructionSet.roleGap + instructionSet.prependPrompt + instructionSet.systemAfterPrepend;
   const systemEnd = instructionSet.postPrompt + instructionSet.memorySystem  + instructionSet.endSystemTurn + instructionSet.endTurn;
   const userStart = instructionSet.startTurn + instructionSet.startUser + instructionSet.userRole + instructionSet.endUserRole + instructionSet.memoryUser;
   const userEnd = instructionSet.endUserTurn + instructionSet.endTurn;
-  const assistantStart = instructionSet.startTurn + instructionSet.startAssistant + instructionSet.assistantRole + instructionSet.endAssistantRole;
-  const assistantEnd = instructionSet.endAssistantRole + instructionSet.endTurn + instructionSet.responseStart;
+  const assistantStart = instructionSet.startTurn + instructionSet.startAssistant + instructionSet.assistantRole + instructionSet.endAssistantRole + instructionSet.endRole + instructionSet.roleGap;
+  const assistantEnd = instructionSet.endAssistantRole + instructionSet.endAssistantTurn + instructionSet.endTurn + instructionSet.responseStart;
   return {
     system_start: systemStart,
     system_end: systemEnd,
