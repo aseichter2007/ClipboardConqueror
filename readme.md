@@ -140,8 +140,12 @@ OpenAi Compatible
 
   Kobold or other local inference engines are not strictly required to use Clipboard Conqueror, but it requires paid openAi api credit to access ChatGPT. OpenAi access has been included to ensure anyone can master prompting with my tools, on any hardware.  If CC really gets rolling and meets my needs, I will host a dedicated cluster of my own to ensure free access for anyone on secure and transparent terms, with the excess. AI will change everything at an incredible rate, everyone deserves the best tools we can get our hands on in these trying times. 
 
------
+---
+## Star History
 
+[![Star History Chart](https://api.star-history.com/svg?repos=aseichter2007/ClipboardConqueror&type=Date)](https://star-history.com/#aseichter2007/ClipboardConqueror&Date)
+
+---
 Large Language Models:
 ---
 
@@ -197,16 +201,6 @@ and paste a quick review of common Clipboard Conqueror functions.
 
 //I'll just leave this here https://www.reddit.com/r/bookmarklets/comments/d8pqe2/toggle_design_mode/
 ---
-
-Settings Conqueror is poor and should be avoided.
----
- It will mess your settings up. Current defaults avoid writing files because my use case is hampered by the development impact of said files. Settings files and Settings Conqueror are more for use with binaries that I haven't got around to yet. 
-
----------------------------------
-Settings Conqueror is currently delayed while I think hard about how to make user definable function calling and how to make that a neat package that is easy to use. It will get binaries when I am happy with it, for now it's a very basic GUI for changing the settings. 
-
-
-It also needs node, and can be run with the install and run batch files in the folder.
 
 
 Bug Reports and Feature Requests:

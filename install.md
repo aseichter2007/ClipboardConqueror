@@ -11,7 +11,7 @@ Clipboard Conqueror reccomends [KoboldCPP](http://www.github.com/LostRuins/kobol
 
 [OpenHermes 2.5 Mistral 7B 16K Context.GGUF](https://huggingface.co/TheBloke/OpenHermes-2.5-Mistral-7B-16k-GGUF)
 
-Get a model that fits in your graphics card or system ram, more details in installation, faaar below. 
+Get a model that fits in your graphics card or system ram, more details in installation, below. 
 
 [Download Clipboard Conqueror](https://github.com/aseichter2007/ClipboardConqueror/archive/refs/heads/main.zip). Unzip it.
 
