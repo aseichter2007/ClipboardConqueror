@@ -1007,7 +1007,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
 
   }
   continueText(text){
-    
+
     var splitText = text.split(this.appSettings.continueTag);
     // console.log("ContinueText Lenght: "+ splitText.length + " : " +  JSON.stringify(splitText));
     if (splitText.length === 1){
@@ -1282,6 +1282,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
         // }
         if (longtrue && parsedData.length === 1) {
           tags = this.tagExtractor(parsedData[0]);
+          console.log("tags : " + JSON.stringify(tags));
           response.push(tags.text);
           response.push("");
           response.push("");
