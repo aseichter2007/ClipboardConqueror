@@ -162,7 +162,7 @@ Linux/Mac Notes.
 
 [Prompt Tower](https://github.com/backnotprop/prompt-tower)
 ---
-This VSCode extension is excellent for building code propmts, and works seamlessly with CC, just add your invocation to the top of the prompt tower and click Copy Prompt. 
+This VSCode extension is excellent for building code prompts, and works seamlessly with CC, just add your invocation to the top of the prompt tower and click Copy Prompt. 
 
 ---
 Additional Resources:
