@@ -176,7 +176,7 @@ Additional Resources:
 
 [LLMs, how do they work?](https://bbycroft.net/llm) this is a cool visualization of how the machine does the magic.
 
-[OpenHermes 2.5 Mistral prompting ideas](https://www.reddit.com/r/LocalLLaMA/comments/18j59g1/you_are_a_helpful_ai_assistant/)]
+[OpenHermes 2.5 Mistral prompting ideas](https://www.reddit.com/r/LocalLLaMA/comments/18j59g1/you_are_a_helpful_ai_assistant/)
 
 
 Bug Reports and Feature Requests:
