@@ -1301,7 +1301,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
           response.push(parsedData[2]);
           run = true;
         } else {
-          response.push(te);
+          response.push(text);
           response.push("");
           response.push("");
         }
