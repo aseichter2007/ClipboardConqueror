@@ -15,19 +15,26 @@ Get a model that fits in your graphics card or system ram, more details in insta
 
 [Download Clipboard Conqueror](https://github.com/aseichter2007/ClipboardConqueror/archive/refs/heads/main.zip). Unzip it.
 
+
+Run the install script first, it gets the dependencies installed. 
+
 Windows:
 ---
-Run z-instalCC.bat
+Install:
+> z-instalCC.bat
 
-Run z-runCC.bat
+Run 
+> z-runCC.bat
 
-I like z-runCCnodeMon.bat because it automatically restarts and loads changes in setup.js, unless settings files are enabled, that gets clunky. 
+I like z-runCCnodeMon.bat because it automatically restarts and loads changes in setup.js. Unless settings files are enabled, that gets clunky. 
 
 linux or Mac:
 ---
-y-linux-mac-install.sh
+install:
+>y-linux-mac-install.sh
 
-y-linux-mac-start-no-nodemon.sh
+run:
+>y-linux-mac-start-no-nodemon.sh
 
 
 
@@ -128,6 +135,32 @@ Sometimes models take up to a few minutes to respond. If it is taking longer, ma
 currently the entire settings for my app are in setup.js.
 setup.js writes files for each type of setting. If formatting errors are introduced in those files, they are overwritten with the defaults. 
 
+
+Quick launch shortcuts:
+---
+
+
+I provide sampleLaunchKoboldBat.bat and hermes16.kcpps to ease making quick launch shortcuts. They need to be changed to match your system, and the bat expects to be in the same folder as both koboldcpp.exe and hermes16.kcpps.  hermes16.kcpps contains a full path that must match the model location, I recommend loading and saving the file to change the target. Also, lately I have found smaller batch sizes is better when I am pushing my memory limits, 512 and higher end up putting context on the hard drive at large contexts.
+
+--------------------------------
+Begin elevated computeration. 
+--------------------------------
+
+Copy this line:
+```
+|||introduction|
+```
+paste in a text field, a big one. The introduction is jam packed with information.
+
+three pipes invokes the AI. If you want to skip the introduction you can get right to things like:
+```
+|||what is an inverse square root and how is it useful. 
+```
+Have fun and remember you can always ask for
+```
+|||help|
+```
+and paste a quick review of common Clipboard Conqueror functions. 
 
 If you have all the bits going, head to [Basic Use](useClipboardConqueror.md),
 ---

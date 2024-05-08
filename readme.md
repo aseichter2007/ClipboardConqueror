@@ -145,24 +145,11 @@ OpenAi Compatible
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aseichter2007/ClipboardConqueror&type=Date)](https://star-history.com/#aseichter2007/ClipboardConqueror&Date)
 
+
 ---
-Large Language Models:
+[Install Clipboard Conqueror](install.md)
 ---
-
-LLMs are powerful tools but it's important to understand how they work. The input text is vectorized and put through matrix transformations and a big complex vector is built, and then each word is added to that vector as it is chosen in turn one at a time, with some randomity to get better speech flavor, until the next probable token is a stop token or max length is exceeded.
-
-In an LLM every word is a cloud of numbers that represent how that token relates to other words and phrase structures. By turning words into numbers, we can then beat them with math and determine which numbers probably are appropriate to go next.
-
-It doesn't really reason, it doesn't really think, it amplifies patterns and guesses using probabilities and random, each next word chosen with such accuracy and literate complexity that kind of functionally it simulates having thought.  An important note: LLMs return a list of probable tokens and their probability, and after the LLM has done the math, one word is selected by user set rules from the returned set.  
-
-LLM models don't make the choice, sampling happens after and then the machine is asked for the next tokens to choose from, ev-ery -to-ke-n - however the words are sliced.
-
-It's weird, but they have no state, it's data-crunch-out every word in turn, no real consideration. 
-
-Use them effectively within their limits to succeed in 2024.
-
-You can go find the right data and paste the text at an LLM and it can use that data, but no LLM should be trusted implicitly, just as a first resort, right here aboard the Clipboard Conqueror.
-
+Begin elevated computeration. 
 
 
 Linux/Mac Notes. 
@@ -170,37 +157,26 @@ Linux/Mac Notes.
   The notification when generation finished workes but there is no audible sound. Consider investigating how to define one in the toast notification config object in copyconqueror.js line 43.
 
 
-Quick launch shortcuts:
+
+
+
+[Prompt Tower](https://github.com/backnotprop/prompt-tower)
+---
+This VSCode extension is excellent for building code propmts, and works seamlessly with CC, just add your invocation to the top of the prompt tower and click Copy Prompt. 
+
+---
+Additional Resources:
 ---
 
+[A bookmarklet to toggle design mode on any browser](https://www.reddit.com/r/bookmarklets/comments/d8pqe2/toggle_design_mode/)
 
-I provide sampleLaunchKoboldBat.bat and hermes16.kcpps to ease making quick launch shortcuts. They need to be changed to match your system, and the bat expects to be in the same folder as both koboldcpp.exe and hermes16.kcpps.  hermes16.kcpps contains a full path that must match the model location, I recommend loading and saving the file to change the target. Also, lately I have found smaller batch sizes is better when I am pushing my memory limits, 512 and higher end up putting context on the hard drive at large contexts.
+[AMD GPU resources](https://llm-tracker.info/howto/AMD-GPUs)
 
---------------------------------
-[Install Clipboard Conqueror](install.md)
+[The HitchHiker's guide to LLMs](https://osanseviero.github.io/hackerllama/blog/posts/hitchhiker_guide/)
 
-Begin elevated computeration. 
---------------------------------
+[LLMs, how do they work?](https://bbycroft.net/llm) this is a cool visualization of how the machine does the magic.
 
-Copy this line:
-```
-|||introduction|
-```
-paste in a text field, a big one. The introduction is jam packed with information.
-
-three pipes invokes the AI. If you want to skip the introduction you can get right to things like:
-```
-|||what is an inverse square root and how is it useful. 
-```
-Have fun and remember you can always ask for
-```
-|||help|
-```
-and paste a quick review of common Clipboard Conqueror functions. 
-
-
-//I'll just leave this here https://www.reddit.com/r/bookmarklets/comments/d8pqe2/toggle_design_mode/
----
+[OpenHermes 2.5 Mistral prompting ideas](https://www.reddit.com/r/LocalLLaMA/comments/18j59g1/you_are_a_helpful_ai_assistant/)]
 
 
 Bug Reports and Feature Requests:
@@ -231,14 +207,25 @@ Your understanding and respect for these terms are appreciated.
 
 If Clipboard Conqueror is helping you get paid, I would very much appreciate a donation.
 
-Additional Resources:
+
 ---
-[AMD GPU resources](https://llm-tracker.info/howto/AMD-GPUs)
-[The HitchHiker's guide to LLMs](https://osanseviero.github.io/hackerllama/blog/posts/hitchhiker_guide/)
+Large Language Models:
+---
 
-[LLMs, how do they work?](https://bbycroft.net/llm) this is a cool visualization of how the machine does the magic.
+LLMs are powerful tools but it's important to understand how they work. The input text is vectorized and put through matrix transformations and a big complex vector is built, and then each word is added to that vector as it is chosen in turn one at a time, with some randomity to get better speech flavor, until the next probable token is a stop token or max length is exceeded.
 
-[OpenHermes 2.5 Mistral prompting ideas](https://www.reddit.com/r/LocalLLaMA/comments/18j59g1/you_are_a_helpful_ai_assistant/)]
+In an LLM every word is a cloud of numbers that represent how that token relates to other words and phrase structures. By turning words into numbers, we can then beat them with math and determine which numbers probably are appropriate to go next.
+
+It doesn't really reason, it doesn't really think, it amplifies patterns and guesses using probabilities and random, each next word chosen with such accuracy and literate complexity that kind of functionally it simulates having thought.  An important note: LLMs return a list of probable tokens and their probability, and after the LLM has done the math, one word is selected by user set rules from the returned set.  
+
+LLM models don't make the choice, sampling happens after and then the machine is asked for the next tokens to choose from, ev-ery -to-ke-n - however the words are sliced.
+
+It's weird, but they have no state, it's data-crunch-out every word in turn, no real consideration. 
+
+Use them effectively within their limits to succeed in 2024.
+
+You can go find the right data and paste the text at an LLM and it can use that data, but no LLM should be trusted implicitly, just as a first resort, right here aboard the Clipboard Conqueror.
+
 
 This info belongs here somewhere.
 // GSM8K is a dataset of 8.5K high-quality linguistically diverse grade school math word problems created by human problem writers
