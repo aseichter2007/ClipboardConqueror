@@ -103,7 +103,7 @@ class TextEngine {
       }else if (str[i] === this.appSettings.setJsonLevel) {
         trip.trip = trip.trip + this.appSettings.setJsonLevel;
         tripCoding++
-      }else if (i < tripCoding){
+      }else if (i > tripCoding){
         return trip;
       }
     }
@@ -118,11 +118,10 @@ class TextEngine {
   }
   batchProcessor(){
     let setBatch = [];
-    //console.log(this.batchLength);
     if (this.batchLength > 0){
       this.batchLength--;
       for (let key in this.agentBatchKit) {       
-          console.log(key, this.agentBatchKit[key]);
+          console.log(key + this.agentBatchKit[key]);
           if (this.agentBatchKit[key].trip[0]  === this.appSettings.batchSwitch){
             this.agentBatchKit[key].trip = this.agentBatchKit[key].trip.slice(1);
             setBatch.push(key);
@@ -746,9 +745,6 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
     }
     return outp;
   }
-  updatePreviousCopy(copy) {
-    this.recentClip.text = copy;
-  }
   checkEndpoints(identity) {
     //check if keys in this.endpoints match identity
     const endpointKeys = this.getObjectKeys(this.endpoints.endpoints);
@@ -926,7 +922,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
   persona.forEach(tag => {
     tag = tag.trim();
     let commands = tag.split(this.appSettings.settinglimit);
-    console.log(commands);
+    console.log("persona/flag: " + commands);
     if (commands.length === 2) {
       commands[0] = commands[0].trim();
       commands[1] = commands[1].trim();
@@ -1012,8 +1008,8 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
   }
   continueText(text){
     
-    const splitText = text.split(this.appSettings.continueTag);
-    // console.log("Lenght: "+ splitText.length + " : " +  JSON.stringify(splitText));
+    var splitText = text.split(this.appSettings.continueTag);
+    // console.log("ContinueText Lenght: "+ splitText.length + " : " +  JSON.stringify(splitText));
     if (splitText.length === 1){
       return splitText[0];
     } else if ( splitText.length === 2){
@@ -1101,7 +1097,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
 }
   commandHandle(tags){//todo: fix this.
     
-    console.log(tags);
+    console.log("Tags : " + tags);
     if (tags.command != undefined && tags.command != '' && tags.command != "") {
       let splitCommand = tags.command.split(this.appSettings.quickPromptLimit);
       if (splitCommand.length = 1) {
@@ -1155,9 +1151,6 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
     if (sorted) {
       this.text = this.continueSetText(sorted.formattedQuery);
       this.undress();
-      // console.log(sorted.tags.command);
-      // sorted.tags.command = sorted.tags.command.slice(this.commandHandle(sorted.tags));
-      // console.log(sorted.tags.command);
       if(this.set){
         this.identity = this.setAgent;
         ifDefault = false;
@@ -1171,10 +1164,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
       }
       if (sorted.tags.persona) {
         let persona = sorted.tags.persona.split(this.appSettings.agentSplit);
-        //console.log("persona tags: " + JSON.stringify(persona));
-        //console.log("persona count: " + sorted.tags.length);
         ifDefault = this.personaAtor(persona, sorted);
-        //console.log("identset: " + JSON.stringify(this.identity));
       }
       sorted.formattedQuery = this.continueText(sorted.formattedQuery);
       if (sorted.run || this.on) {
@@ -1216,21 +1206,20 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
           sorted.formattedQuery; 
           sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, "\n");
           this.notify("Paste Ready:", sendtoclipoardtext.slice(0, 150));
-          this.recentClip.text = sendtoclipoardtext
+          //this.recentClip.text = sendtoclipoardtext;
           return this.sendToClipboard(sendtoclipoardtext);
         }
         if (this.writeSettings) {
           this.writeSettings = false;
           this.noBatch = true;
           this.blockPresort = true;
-          let sendtoclipoardtext =
-          this.appSettings.writeSettings + "\n" +
+          let sendtoclipoardtext = this.appSettings.writeSettings + "\n" +
           JSON.stringify(this.identity.settings) +//this is set up for PROMPT edit failures
           this.appSettings.writeSplit +
           sorted.formattedQuery; 
           //sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, "\n");
           this.notify("Paste Response:", sendtoclipoardtext.slice(0, 150));
-          this.recentClip.text = sendtoclipoardtext
+          //this.recentClip.text = sendtoclipoardtext;
           return this.sendToClipboard(sendtoclipoardtext);
         }
         if (!this.sendHold) {
@@ -1257,7 +1246,9 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
         this.ChatLog += this.getBatchLimiter("user") + this.text;
         }
       }
-      if (!this.preserveLastCopy) {
+      if (this.preserveLastCopy) {
+
+      } else {
         this.recentClip.text = this.text;// + " ";    
       }
       this.preserveLastCopy = false;
@@ -1284,11 +1275,11 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
             tags: tags
           };
         }
-        //console.log("parse delimiter: " + JSON.stringify(parsedData));
-        let longtrue = text.length > parsedData[0].length;
-        if (!longtrue){
-          this.copyResponse = text;
-        }
+        ///check that an invoke was removed
+        const longtrue = text.length > parsedData[0].length;
+        // if (!longtrue){
+        //   this.copyResponse = text;
+        // }
         if (longtrue && parsedData.length === 1) {
           tags = this.tagExtractor(parsedData[0]);
           response.push(tags.text);
@@ -1296,20 +1287,22 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
           response.push("");
           
           run = true;
-        }
-        if (parsedData.length === 2) {
+        } else if (parsedData.length === 2) {
           tags = this.tagExtractor(parsedData[1]);
           response.push(tags.text);
           response.push(parsedData[0]);
           response.push("");
           run = true;
-        }
-        if (parsedData[0].length === 3) {
+        } else if (parsedData[0].length === 3) {
           tags = this.tagExtractor(parsedData[1]);
           response.push(tags.text);
           response.push(parsedData[0]);
           response.push(parsedData[2]);
           run = true;
+        } else {
+          response.push(te);
+          response.push("");
+          response.push("");
         }
         const sendout = response[0] + "" + response[1] + "" + response[2];
         return {
