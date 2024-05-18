@@ -35,15 +35,16 @@ class TextEngine {
     this.text = "";//sorted
     this.setAgent = {};
     this.memory = "";
-    this.ChatLog = "";
+    this.chatLog = "";
+    this.history = [];
     this.debugLog = "";
     this.memengines = {};
     this.agentBatchKit = {};
     this.batchLength = 0;
     this.batch = "";
     this.duplicateCheck = "";
-    this.batchAssistantLimiter = "";
-    this.batchUserLimiter = "";
+    this.batchAssistantName = "";
+    this.batchUserName = "";
     this.copyResponse = "";
     this.set = false;
     this.chatHistory = false;
@@ -137,18 +138,13 @@ class TextEngine {
   }
   setJsonLevel(identity){
     let trimmed = identity.slice(1).trim()
-    if (trimmed === "") {
-      this.api.jsonSystem = ""
-    } else if(trimmed === ""){
-      this.api.jsonSystem
-    } else {
-      this.api.jsonSystem = identity.slice(1).trim()
-    }
+   
     switch (trimmed) {
       case "1":
       case "markup":
       case "full turns":
       case "fullTurns":
+      case "turns":
         this.api.jsonSystem = "markup"
         break;
       case "2":
@@ -171,6 +167,7 @@ class TextEngine {
         this.api.jsonSystem = "none"
         break;            
       default:
+        this.api.jsonSystem = "none"
         break;
     }
   }
@@ -199,12 +196,15 @@ class TextEngine {
             this.setInferenceFormat(identity.slice(1));
           }
           if (trip.trip[0] === this.appSettings.batchNameSwitch){
-            this.batchUserLimiter = this.getBatchLimiterName("user",identity.slice(1));
+            this.batchUserName = identity.slice(1);
             this.chatHistory = true;
+            console.log( "'"+ this.appSettings.batchNameSwitch + "' activates history, it only changes the history");
           }
           if (trip.trip[0] === this.appSettings.batchAssistantSwitch){
-            this.batchAssistantLimiter = this.getBatchLimiterName("assistant",identity.slice(1));
+            this.batchAssistantName = identity.slice(1);
             this.chatHistory = true;
+            console.log( "'"+ this.appSettings.batchAssistantSwitch + "' activates history, it only changes the history");
+
           }
           if (trip.trip[0] === this.appSettings.batchContinueTag) {
             this.setPrompt("responseStart", identity.slice(1));
@@ -621,13 +621,15 @@ ${this.appSettings.invoke}agi${this.appSettings.endTag} walk me though setting u
       case "cc":
       case "clearC":
       case "clearChat":
-        this.debugLog = this.ChatLog;
-        this.ChatLog = "";
-        this.sendHold= true;
+        this.debugLog = this.chatLog;
+        this.chatLog = "";
+        this.history = [];
+        this.sendHold = true;
         break;
       case "cf":
       case "clearFirst":
-        this.ChatLog = "";
+        this.chatLog = "";
+        this.history = [];
         break;
       case "d":
       case "debug":
@@ -876,8 +878,6 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
       case "start":
       case "responsestart":
       case "response":
-
-        // this.instructions.responseStart = formattedQuery;
         this.inferenceClient.setOnePromptFormat ("responseStart", formattedQuery);
         break;
       case "special":
@@ -934,6 +934,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
         //save like |||agent:save|
         this.sendHold = true;
         this.identities[commands[0]] = sorted.formattedQuery; 
+        console.log("Saved "+ commands[0]);
         tag = commands[0];
       } else if (commands[1] == this.appSettings.delete) {
         //save like |||agent:delete|
@@ -1069,22 +1070,49 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
 
     return this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet["end"+typeStepBack[type]+"Turn"] + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet["start"+type ] + name + this.inferenceClient.instructSet["end"+type+"Role"] + this.inferenceClient.instructSet.endRole +this.inferenceClient.instructSet.roleGap;
   }
-  chatBuilder(text){
+  chatHistoryBuilder(){//todo: finish building history each turn to respect new prompt formatting per turn
+    let formattedHistory = "";
+    this.history.forEach(message => {
+      formattedHistory += this.getBatchLimiterName(message.origin, message.name) + message.text;
+    });
+    return formattedHistory;
+  }
+  chatHistorySetup(text, origin, name){
+    this.history.push( {origin: origin, text : text, name: name} );
+  }
+  chatBuilder(text,origin){
     if (this.chatHistory && text != "" && !this.noChatLogging ){
-      if (this.appSettings.batchLimiter === "") {
-          if (this.batchAssistantLimiter != "") {
-            this.ChatLog += this.batchAssistantLimiter + text;
-            this.batchAssistantLimiter = "";
-          }else {
-            this.ChatLog += this.getBatchLimiter("Assistant") + text;
+      if (origin === "user") {
+        if (this.appSettings.batchLimiter === "") {
+          if(this.batchUserName != ""){
+            this.chatHistorySetup(text,origin,this.batchUserName)
+            //this.chatLog += this.batchUserLimiter + this.text
+            this.batchUserName = "";
+          } else{
+            this.chatHistorySetup(text,origin,"user")
+            //this.chatLog += this.getBatchLimiter("user") + this.text;
           }
-        
+        } else {
+          this.chatLog += this.appSettings.batchLimiter + text;
+        }
       } else {
-        this.ChatLog += this.appSettings.batchLimiter + text;
+        if (this.appSettings.batchLimiter === "") {
+          if (this.batchAssistantName != "") {
+              this.chatHistorySetup(text,origin,this.batchAssistantName)
+              //this.chatLog += this.batchAssistantLimiter + text;
+              this.batchAssistantName = "";
+            }else {
+              this.chatHistorySetup(text,origin,"Assistant")
+              //this.chatLog += this.getBatchLimiter("Assistant") + text;
+            }
+          
+        } else {
+          this.chatLog += this.appSettings.batchLimiter + text;
+        }
+        this.chatHistory = false;
+        this.noChatLogging = false;
       }
     }
-    this.chatHistory = false;
-    this.noChatLogging = false;
 
   }
   isKeyName(string) {
@@ -1145,7 +1173,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
       return
     }
     
-    this.chatBuilder(this.recentClip.text);
+    this.chatBuilder(this.recentClip.text,"Assistant");
     const sorted = this.activatePresort(text);
     let ifDefault = true;
     if (sorted) {
@@ -1186,8 +1214,10 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
           delete this.identity[this.appSettings.empty];
         }
         if (this.chatHistory) {
-          if(this.ChatLog != ""){
-            this.identity[this.appSettings.historyName] = this.ChatLog; 
+          if(this.chatLog != ""){
+            this.identity[this.appSettings.historyName] = this.chatLog; 
+          }else if (this.history.length > 0) {
+            this.identity[this.appSettings.historyName] = this.chatHistoryBuilder(); 
           }
         }
         if (this.sendLast) {
@@ -1238,14 +1268,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
           }
         }
       } 
-      if (this.chatHistory && !this.noChatLogging) {
-        if(this.batchUserLimiter != ""){
-          this.ChatLog += this.batchUserLimiter + this.text
-          this.batchUserLimiter = "";
-        } else{
-        this.ChatLog += this.getBatchLimiter("user") + this.text;
-        }
-      }
+      this.chatBuilder(this.text,"user");
       if (this.preserveLastCopy) {
 
       } else {
@@ -1282,7 +1305,6 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
         // }
         if (longtrue && parsedData.length === 1) {
           tags = this.tagExtractor(parsedData[0]);
-          console.log("tags : " + JSON.stringify(tags));
           response.push(tags.text);
           response.push("");
           response.push("");
