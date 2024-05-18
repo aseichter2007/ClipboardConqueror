@@ -52,7 +52,7 @@ There are 6 special operators for the `|||agents|` segment, that start with the 
     - "~" start of assistant response, "~~~" overwrites "~".
     - "`" the backtick or grave symbol changes the system prompt format. Supports "json","markup","partial", or none. 
 
-  `"%}>!" all persist until overwritten.` 
+  `"%}>!" all persist until overwritten.` Note: "`:`", the setting break is not supported inside these operators, and will cause trouble. If you need that for your assistant name, change settinglimit or add it in setup.js promptFormats. Similar for comments.
 
 >|||`json, %chatML, ! Rick, > Morty, writer, } Narrator's notes| Rick answers morty's questions.| Where are we going today, grandpa?  
 
