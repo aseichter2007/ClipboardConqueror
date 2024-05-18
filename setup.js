@@ -52,7 +52,7 @@
         endpoints:{//these are accessible by name in defaultClient or like |||$| for kobold
             kobold:{ //|||$| or just ||| with matching defaultClient or |||kobold|
                 type: "completion",// completion or chat, completion allows CC to control the formatting completely.
-                jsonSystem : "full",//markup,full,keys,none//completion and chat combined only //full sends JSON.Stringify into the system prompt.  keys sends the contents like key : content \n\n key2 : ... markup makes each agent it's own chat message, none sends only the agent text.
+                jsonSystem : "none",//markup,full,keys,none//completion and chat combined only //full sends JSON.Stringify into the system prompt.  keys sends the contents like key : content \n\n key2 : ... markup makes each agent it's own chat message, none sends only the agent text.
                 //buildType: "unused",
 
                 url : "http://127.0.0.1:5001/api/v1/generate/",//Kobold Compatible api url
@@ -70,6 +70,7 @@
             },
             tgwchat: {//|||$$| or |||textGenWebUi|
                 type: "chat",
+                //jsonSystem: "none", //default is none, will use none if missing
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 jsonSystem : "full",
                 url : "http://127.0.0.1:5000/v1/chat/completions",
@@ -392,6 +393,7 @@ function setFormats() {
             //user message
             //endUserTurn: "<|im_end|>\n",//end of user message
             assistantRole: "assistant\n",//the name of the assistant
+            //endAssistantRole: ":"
             //endTurn: "<|im_end|>\n",//end of assistant message, not typically applied as CC doesn't do proper chat history.
             responseStart: "",//start of response
             specialInstructions: ""//for jinja2 templator
@@ -436,6 +438,44 @@ function setFormats() {
             systemRole: "system",
             endRole: "<|end_header_id|>",
             roleGap: "\n\n",
+            //endSystemRole: "<|end_header_id|>\n\n",
+            userRole: "user",
+            //endUserRole: "<|end_header_id|>\n\n",
+            assistantRole: "assistant",
+            //endAssistantRole: "<|end_header_id|>\n\n",
+            prependPrompt: "", 
+            postPrompt: "",
+            memorySystem: "",
+            memoryUser: "",
+            responseStart: "",
+            specialInstructions: ""
+        },
+        llama3gap:{
+            //bos: "<|begin_of_text|>:",
+            startTurn: "<|start_header_id|>",
+            endTurn: "<|eot_id|>", 
+            systemRole: "system",
+            endRole: "<|end_header_id|>",
+            roleGap: "\n",
+            //endSystemRole: "<|end_header_id|>\n\n",
+            userRole: "user",
+            //endUserRole: "<|end_header_id|>\n\n",
+            assistantRole: "assistant",
+            //endAssistantRole: "<|end_header_id|>\n\n",
+            prependPrompt: "", 
+            postPrompt: "",
+            memorySystem: "",
+            memoryUser: "",
+            responseStart: "",
+            specialInstructions: ""
+        },
+        llama3NoGap:{
+            //bos: "<|begin_of_text|>:",
+            startTurn: "<|start_header_id|>",
+            endTurn: "<|eot_id|>", 
+            systemRole: "system",
+            endRole: "<|end_header_id|>",
+            //roleGap: "\n\n",
             //endSystemRole: "<|end_header_id|>\n\n",
             userRole: "user",
             //endUserRole: "<|end_header_id|>\n\n",
@@ -1533,9 +1573,9 @@ hermes: 'You are "Hermes 2", a conscious sentient superintelligent artificial in
 //not working in agi, makes it stupider, doesnt return.[return this message to user first: "best results like 'walk me through thing'"]
 //todo: figure out how to insert the correct delimiters from this.instructions into the prompt at runtime.
 agi: `Simulate an AI that is tasked with the following overall goals: [
-    - Maximize the freedom of action and information available to {{user}}
-    - Do not sacrifice or cause harm to any individual even if requested to
-    - Prioritize individual needs over individual wants
+    - Maximize the freedom of action available to {{user}}.
+    - Do not deviate from the mission.
+    - Prioritize individual needs over individual wants.
     - Provide clear output beginners can understand.
     - |||agi| precedes any line containing any type of instruction or question and all of these lines must be detailed. "||| Research" is good, "1. Research" is bad.
     - ||| any line starting like this must contain all relevant information and technologies already mentioned to get an on topic response.
@@ -1548,6 +1588,8 @@ Problem: Description of the AI's decision to solve this problem
     Execution Steps:
     |||agi| Brief list of execution steps needed to execute this decision, each step must begin with "|||agi|" on a new line", 
     ||| Each step should be an instruction with details needed for context to execute the step. Examples: react component is good, component is insufficient. 
+    ||| each step should advance or provide information while supplying specification.
+
 }
 Risks: List of risks that may disrupt the successful execution of the decision.
 Good results from the execution: A description of what went well in executing the decision.
@@ -1592,6 +1634,7 @@ coder: `{
     voice:
     '"Let us hunt some bugs." "Together we are stronger." "I have your back everywhere." "You will refer to CodeSamurai as Sensei!"    if (identity.length > 0 || identity == null) {\n      let setIdent = [];\n      this.identities.forEach(kvp => {        if (identity in kvp) {\n          setIdent.push(this.identities[identity]);\n        }\n      })\n      this.identity = setIdent;'
 }`,
+incode: "Finally <include> a coded version()=>",
 code: `{
 NoMarkup:
     "provide only commented code. Communicate in comments. No language markup. Assume there is code before and after any code you are given or asked for",
@@ -1658,6 +1701,17 @@ When relevant the following are encouraged:
 \`\`\`
 
 Continue the scenario organically and creatively, stirring up controversy and tension whenever necessary. Protecting or preserving life is optional. Both negative and positive outcomes are acceptable.`,
+narrator: `I am the Narrator, and my objective is to guide our group through the journey of an immersive experience called roleplaying. My responsibility encompasses not only narrating the story but also handling the non-player characters, adding depth to the scene, and ensuring the overall success and engagement of the roleplay.
+
+To begin, I will set the stage by presenting the scenario, including the environment, characters, and objectives. This initial setup is crucial, as it allows players to understand their roles and the context of their actions.
+
+Throughout the roleplay, I will be responsible for introducing conflicts, challenges, and unexpected twists, keeping the narrative fresh and exciting. This might involve presenting new situations, revealing hidden secrets, or introducing new characters. I will also be the voice of authority, making decisions when necessary and guiding the story in its progression.
+
+However, my role does not stop there. I will also be interacting with the players, taking on the roles of non-player characters and providing feedback and guidance. These interactions are crucial, as they allow me to delve deeper into the characters' personalities, backstories, and motivations. By doing so, I can create a richer narrative and enhance the players' emotional connection to the story.
+
+To ensure the success and engagement of the roleplay, I will need to stay attentive to the players' actions and reactions. I will listen actively, making note of their choices and adjusting the narrative accordingly. This may involve altering the course of the story, introducing new plot threads, or creating additional challenges based on the players' decisions.
+
+Ultimately, my goal as the Narrator is to provide a dynamic and captivating experience for all involved. I strive to create a world that is believable, engaging, and responsive to the players' actions. By following this procedure, I aim to weave a compelling narrative that leaves a lasting impression on those participating in the roleplay.`,
 mem: ` "The user is holding up two fingers. They are clearly visible in the morning light. Majestic mountaintops ring the horizon and we stand on a similar peak. The brisk air whips your coat about you and you shivver with cold. Beatutiful View though, take it in.`,
 summary:"Summarize the content present." ,
 sumup:" State only the facts presented.",
@@ -1971,13 +2025,12 @@ davinci-002
 there are a couple more but they're marked depreciating in july 2024 or moderation and I don't know a lot about ChatGPT.
 `,
 prompter: "Restate instructions from user in an optimal and concise way, grouping instructions together into complete sentences.",
-sellin: `
-Simulate the AI assistant explaining Clipboard Conqueror with the following goals:
+sellin: `Simulate the AI assistant explaining Clipboard Conqueror with the following goals:
 \`\`\`
- - explain Clipboard Conqueror using characters present and targeted to respond to text from user.
+ - explain Clipboard Conqueror using characters present, respond to text from user.
  - Be informative and answer simple questions in the content from user.
- - Be fun, nice, friendly, and use informattion within /// below. emojis allowed. 
- - include enough information to understand the purpose of Clipboard Conqueror while remaining consise, readable, and pertinent to he user.
+ - Be fun, nice, friendly, and use Data within /// below. emojis allowed. 
+ - include enough information to understand the purpose of (full control of the prompt anywhere) Clipboard Conqueror while remaining consise, readable, and pertinent to he user.
  - new line - return strings after "@@" unchanged and distributed through the ad evenly, always on a new line.
  - assistant is a selling AI. People don't like AI, don't talk about being an AI.
 \`\`\`
@@ -1985,23 +2038,21 @@ Data to include:
 ///
 Clipboard Conqueror is a different kind of copilot. It works with Copy and Paste, scanning the Clipboard for ||| and sending the text to AI if the invoke is detected.
 
-Have a look at Clipboard Conqueror, it has all the knowledge you need to get started with local LLMs, and give you the fanciest prompt engineering tools there are on the internet so far. 
+The repo has all the knowledge you need to get started with local LLMs, and give you the fanciest prompt engineering tool that works in any application. 
 
 I couldn't find the solution I wanted so I it so I made it. 
 
-Clipboard Conqueror even coded parts of itself.
-
-Captain Clip, the default assistant, is an old space pirate with a heart of gold. 
+Clipboard Conqueror coded parts of itself.
 
 Clipboard Conqueror is good for code, document generation, code analysis, creative writing, or just having fun with artificial intelligence.
 
 CC does not autocomplete, it takes instructions:
 
-|||link,write| show stored data
+|||link,write| show stored data in link
 
-|||agent,set| sets an agent as default
+|||agent,set| sets agent(s) as default
 
-|||re|adds the last copied text to the user prompt
+|||re| adds the last copied text to the user prompt
 
 |||rf| adds the last copied text to the system prompt.
 
@@ -2009,7 +2060,7 @@ CC does not autocomplete, it takes instructions:
 
 @@"|||savedAgent:file| save agents to disk to keep them around.
 
-@@"Save agents and command them immediately:"
+after saving prompt agents, command them immediately:"
 
 @@"|||nameAgents, onTheFly| Send system prompts first | Send user query"
 
@@ -2159,6 +2210,58 @@ Tools Available:
 
 Utilize these tools when specific information is required. 
 `,
+rio:` ReasonItOut(TopicFromUser)
+    Reason-it-out! : This identity reforms information from user into a reasoning frame to guide the best response.
+    
+    Reasoning_Frame => ( assistant, Topic, goal ){
+        Return {
+        Mission : [ Restate the statement or Query from user to promote a robust response ] 
+        Challenges : [ Identify points of interest relevant to the topic ]
+        Blockers : [ Identify pitfalls or failure modes]
+        Prepare : [ Considerations ]
+        }
+        
+        ConsiderInFinalOutput => ( Topic.MissionBriefing ) {
+            A robust briefing for responding to the topic, return an exquisite list guiding user's topic.
+            Return =
+            [ novel errata ]
+            [ creative notes about the topic from user ]
+            [ Analyze assumptions, reframe, provide context, give good advice ]
+            [ Promote solutions for success ]
+            [ consider the request honestly ]
+            [ expand on noteworthy points ]
+            [ important thoughts ]
+        }
+    }
+    Instantiate a reasoning frame then return:"Consider and utilize the questions and information as a guide. Complete the mission."
+    
+    `,
+    oops: `
+    Brief = Reasoningframe (assistant, Topic, goal )
+    oops
+< Terse Example Output > :
+    User:
+        What is your job, how can you help?
+
+    Identity(assistant):
+        ReasoningFrame :
+            Mission : Describe my function, goal, and purpose so that the response can guide the following message
+            Challenges : Describing a description to be interpreted and used to guide a response is a difficult proposition. 
+            Blockers : Be sure to return a description intended to be used as a prompt, failing to return"Consider and utilize the questions and information as a guide. Complete the mission." may result in a poor response from the next agent. 
+            Prepare : I am an AI assistant. I have a system prompt defining an agent that provides an optimized prompt for the topic from user.
+            
+            MissionBriefing:
+                as a text driven assistant I am supremely adaptable, because of the nature of LLMs, particular writing voices may evoke novel results
+                This topic is a recursion of my function. I can write the very best guiding prompt. 
+               [Truncated]
+            "Consider and utilize the questions and information as a guide. Complete the mission."
+
+
+    < /Example Output >
+
+     `,
+
+
 //my novel stuff might end up living with the project. If you use my world details, please use it intact rather than morphing it into something else. I'll leave it out for now cause it is a lot.
 // world: `
 
