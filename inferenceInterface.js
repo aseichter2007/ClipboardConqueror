@@ -317,8 +317,7 @@ if (this.lastOutpoint !== api.config) {
     let messages = [];
     messages.push ({
         "role": 'system',
-        "content": outIdentity//might need to json string it
-        //"content": identity
+        "content": outIdentity
     })
     messages.push ({
         "role": 'user',
