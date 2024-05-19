@@ -31,7 +31,7 @@ I like z-runCCnodeMon.bat because it automatically restarts and loads changes in
 linux or Mac:
 ---
 install:
->y-linux-mac-install.sh
+>xy-linux-mac-install.sh
 
 run:
 >y-linux-mac-start-no-nodemon.sh
@@ -60,14 +60,14 @@ Currently there are no built binaries and Node is required to run Clipboard Conq
 
 2. Clipboard Conqueror is most powerful with [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/releases/),or a kobold compatible API. [openAI compatible API](https://github.com/oobabooga/text-generation-webui) 
 
-Koboldcpp is a standalone executable, easy to get started with. 
+    Koboldcpp is a standalone executable, easy to get started with. 
 
 CC works with either or both! or just an openAI key. Or even more! I'd love to hear how you connect your choice of backend for a compatibility list and maybe adding your settings to the defaults.
 
 
 For macOS get KoboldAi, TextGenerationWebUi or anything that hosts a completion or chat api. //Notes below for linux and mac, thank Herro.
 
-I supply a sample batch file for loading a model with your settings file after you get koboldcpp dialed in from the launcher. 
+I supply a sample batch file for loading a model with your settings file after you get koboldcpp dialed in from the launcher. Edit and go. My desktop has icons for a dozen models to load depending on what I want back.
 
     a kobold or openAI compatible api must be running to use Clipboard Conqueror, or you can connect to an online service such as the official Open Ai api to access chatGPT.
 
@@ -101,31 +101,52 @@ after it finishes run:
 
 z-runCC.bat
 
+or 
+
+z-runCCnodeMon.bat. nodemon: file changes restart CC and clear memory.
+
 linux
 ---
 
 xy-linux-mac-install.sh
+
 y-linux-start-no-nodemon.sh
 
 Mac
 ---
 
 xy-linux-mac-install.sh
+
 x-mac-start-no-nodemon.sh
-or just run from the folder:
+
+
+
+
+or from a terminal at the folder:
+--
 npm i
 
-npm start      
-(windows)
+then choose the appropriate from:
 
-or 
+    npm run linux 
 
-npm run linux for both linux and mac
+    npm run linuxnomon
+
+    npm run mac
+
+    npm run macnomon
+
+    npm run win
+
+    npm start //windows, nodemon: file changes restart and clear memory.
+
+
+
 
 Troubleshooting:
 ---
 
-If Clipboard Conqueror closes on launch, check to be sure you have Node installed and have run z-runCC.bat or y-linux-mac-install.sh.
+If Clipboard Conqueror closes on launch, check to be sure you have Node installed and have run z-runCC.bat,xy-linux-mac-install.sh, or npm i.
 
 The most common issue with setup is people who expect they have node but do not. 
 
