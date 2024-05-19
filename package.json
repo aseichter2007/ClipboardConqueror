@@ -8,7 +8,9 @@
     "start": "nodemon copyconqueror.js",
     "win": "node copyconqueror.js",
     "linux": "chmod +x node_modules/clipboard-event/platform/clipboard-event-handler-linux && nodemon copyconqueror.js",
-    "linuxnomon": "chmod +x node_modules/clipboard-event/platform/clipboard-event-handler-linux && node copyconqueror.js"
+    "linuxnomon": "chmod +x node_modules/clipboard-event/platform/clipboard-event-handler-linux && node copyconqueror.js",
+    "mac": "chmod +x node_modules/clipboard-event/platform/clipboard-event-handler-mac && nodemon copyconqueror.js",
+    "macnomon" : "chmod +x node_modules/clipboard-event/platform/clipboard-event-handler-mac && node copyconqueror.js"
   },
   "keywords": [],
   "author": "",
