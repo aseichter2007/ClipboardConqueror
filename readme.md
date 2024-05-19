@@ -126,7 +126,7 @@ Clipboard Conqueror makes the process of accessing an LLM simple and efficient i
 
 - Clipboard Conqueror provides a whole toolbox of predefined assistants, ready to work for you.  
 
-Save agents on the fly to store, sort, query, think, review, or just tell you jokes or anything you can  ask for, really. 
+Save agents on the fly to store, sort, query, think, review, or just tell you jokes or anything you can ask for, really. 
 
 
 Desktop Platforms:
@@ -154,7 +154,7 @@ Begin elevated computeration.
 
 Linux/Mac Notes. 
 ----
-  The notification when generation finished workes but there is no audible sound. Consider investigating how to define one in the toast notification config object in copyconqueror.js line 43.
+  The notification when generation finished workes but there may be no audible sound. This is a limitation of the fallbaack notification system "Growl"
 
 
 
@@ -178,7 +178,7 @@ Additional Resources:
 
 [OpenHermes 2.5 Mistral prompting ideas](https://www.reddit.com/r/LocalLLaMA/comments/18j59g1/you_are_a_helpful_ai_assistant/)
 
-
+[Llama 3 Quant Loss](https://github.com/matt-c1/llama-3-quant-comparison)
 Bug Reports and Feature Requests:
 ---------------------------------
 If CC seems hung, copy text with no invoke a couple times and try again. 
@@ -299,8 +299,6 @@ https://www.npmjs.com/package/keypress
 
 //todo: implement some kind of update check and notification.//half, update bat.
 
-//pass, just close CC it launches in one second//implement |||no| //uh oh, better comment needed. I should learn from this someday. Waaait, it's coming back to me. |||no| will disable parsing on the next run for transporting instructions, though its much easier to just error it off like "||| move this without invoking||| ||| " recommend extra at the end.
-//this needs reworking. its setting off that write bug too.
 
 //todo: savesettings and getsettings. overwrite settings like |||settings,write| to paste ' |||settings,save| `{ the settings serialized json }` ' which can be edited in place and copied to save the settings. //partial, agent save is pretty ready to pass in the right stuff, I just need to do the bits to make it go.
 

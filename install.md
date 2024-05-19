@@ -101,12 +101,17 @@ after it finishes run:
 
 z-runCC.bat
 
-Mac/Linux
+linux
 ---
 
-y-linux-mac-install.sh
-y-linux-mac-start-no-nodemon.sh
+xy-linux-mac-install.sh
+y-linux-start-no-nodemon.sh
 
+Mac
+---
+
+xy-linux-mac-install.sh
+x-mac-start-no-nodemon.sh
 or just run from the folder:
 npm i
 
