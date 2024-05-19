@@ -28,15 +28,20 @@ Run
 
 I like z-runCCnodeMon.bat because it automatically restarts and loads changes in setup.js. Unless settings files are enabled, that gets clunky. 
 
-linux or Mac:
+
+linux
 ---
-install:
->xy-linux-mac-install.sh
 
-run:
->y-linux-mac-start-no-nodemon.sh
+xy-linux-mac-install.sh
 
+y-linux-start-no-nodemon.sh
 
+Mac
+---
+
+xy-linux-mac-install.sh
+
+x-mac-start-no-nodemon.sh
 
 ---
 Installation with more details:
@@ -97,29 +102,36 @@ windows:
 
 run z-instalCC.bat
 
+Mac and linux:
+---
+xy-linux-mac-install.sh
+
+
+
 after it finishes run:
 
 z-runCC.bat
 
 or 
 
-z-runCCnodeMon.bat. nodemon: file changes restart CC and clear memory.
+z-runCCnodeMon.bat. nodemon: file changes restart CC and clear memory while updating settings from setup.js.
 
 linux
 ---
-
-xy-linux-mac-install.sh
-
 y-linux-start-no-nodemon.sh
+
+or
+
+y-linux-start-nodemon.sh
 
 Mac
 ---
 
-xy-linux-mac-install.sh
-
 x-mac-start-no-nodemon.sh
 
+or
 
+x-mac-start-nodemon.sh
 
 
 or from a terminal at the folder:
@@ -130,11 +142,11 @@ then choose the appropriate from:
 
     npm run linux 
 
-    npm run linuxnomon
+    npm run linuxnomo //no-monitoring or nodemon
 
     npm run mac
 
-    npm run macnomon
+    npm run macnomon //no-monitoring or nodemon
 
     npm run win
 
@@ -150,7 +162,7 @@ If Clipboard Conqueror closes on launch, check to be sure you have Node installe
 
 The most common issue with setup is people who expect they have node but do not. 
 
-If Clipboard Conqueror seems unresponsive, close and open the console.  If you are running with nodemon, type rs in the console and hit enter to restart the app.
+If Clipboard Conqueror seems unresponsive, close and re-launch CC.  If you are running with nodemon, type rs in the console and hit enter to restart the app.
 
 For API errors make sure Koboldcpp or your choice of backend is running, and that it is set as the defaultClient in setup.js. I always get impatient and beat the API to the ready mark. I should finish squasing the API error problems so it doesn't hang, but I gotta figure out why I can't hit LMstudio first.
 
