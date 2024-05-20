@@ -485,7 +485,7 @@ function JinjaFormatter(instructionSet) {
       {%- if message['role'] == 'user' -%}
         {{-'` + instructionSet.startTurn + instructionSet.startUser + instructionSet.userRole + instructionSet.endUserRole +instructionSet.endRole + instructionSet.roleGap + instructionSet.memoryUser + `' + message['content']` + instructionSet.specialInstructions + ` + '` + instructionSet.endUserTurn + instructionSet.endTurn `'-}}
       {%- else -%}
-        {{-'` + instructionSet.startTurn + instructionSet.startAssistant + instructionSet.assistantRole + instructionSet.endAssistantRole + instructionSet.endRole + instructionSet.roleGap + `' + message['content'] + '` + instructionSet.endAssistantTurn + instructionSet.endTurn `' -}}
+        {{-'` + instructionSet.startTurn + instructionSet.startAssistant + instructionSet.assistantRole + instructionSet.endAssistantRole + instructionSet.endRole + instructionSet.roleGap + `' + message['content'] + '` + instructionSet.endAssistantTurn + instructionSet.endTurn + `' -}}
         {%- endif -%}
       {%- endif -%}
     {%- endfor -%}
