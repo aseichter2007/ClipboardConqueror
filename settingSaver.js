@@ -1,6 +1,6 @@
 //this file contains a function that saves settings to a file, loading the file, updating the object key, and saving the json over the top of the old one.
 
-function saveSettings(setting,target,notify,fs) {
+function saveSettings(setting,identities,target,notify,fs) {
   // Step 1: Create an empty object to hold the saved settings
   let savedSettings = {};
 
@@ -12,8 +12,15 @@ function saveSettings(setting,target,notify,fs) {
     fs.writeFileSync(target, JSON.stringify(savedSettings));
     console.log("0identies.json updated.");
   } catch (err) {
-    notify("Error loading settings:", err.message);
-    console.log(`Error loading settings: ${err.message}`);
+    try {    
+      notify("file doesn't exist, writing:", err.message);
+      console.log(`file doesn't exist, writings: ${err.message}`);
+      fs.writeFileSync(target, JSON.stringify(identities));
+      console.log("0identies.json written.");
+    } catch (error) {
+      console.log("error writing " + target);
+
+    }
   }
 
   // Step 3: Update the object with the new settings

@@ -946,7 +946,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
         this.sendHold = true;
         let setting  ={[commands[0]]:this.identities[commands[0]]}
         //console.log(JSON.stringify(setting));
-        this.settingSaver(setting, "0identities.json", this.notify, this.fs) //todo: fix this magic string.
+        this.settingSaver(setting,this.identities, "0identities.json", this.notify, this.fs) //todo: fix this magic string.
         tag = commands[0];
       } else if (commands[0] == this.appSettings.setPromptFormat && this.appSettings.save == commands[1]) {
         this.sendHold = true;
@@ -956,7 +956,6 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
         this.setPrompt(commands[1],sorted.formattedQuery);
       }else if (!isNaN(commands[1])) {
         this.params[commands[0]] = parseFloat(commands[1]);
-        //console.log(commands[0] + commands[1] +" written> " + this.params[commands[0]]);//ill keep this one for now
       } else if (commands[1] == this.appSettings.true) {
         this.params[commands[0]] = true;
       } else if (commands[1] == this.appSettings.false) {
