@@ -483,7 +483,7 @@ function JinjaFormatter(instructionSet) {
         {{- '` + instructionSet.bos + instructionSet.startTurn + instructionSet.startSystem + instructionSet.systemRole + instructionSet.endRole + instructionSet.endSystemRole + instructionSet.roleGap+ instructionSet.prependPrompt + instructionSet.systemAfterPrepend + `' + message['content'] + '` + instructionSet.postPrompt + instructionSet.memorySystem  + instructionSet.endSystemTurn + instructionSet.endTurn + `' -}}
       {%- else -%}
       {%- if message['role'] == 'user' -%}
-        {{-'` + instructionSet.startTurn + instructionSet.startUser + instructionSet.userRole + instructionSet.endUserRole +instructionSet.endRole + instructionSet.roleGap + instructionSet.memoryUser + `' + message['content']` + instructionSet.specialInstructions + ` + '` + instructionSet.endUserTurn + instructionSet.endTurn `'-}}
+        {{-'` + instructionSet.startTurn + instructionSet.startUser + instructionSet.userRole + instructionSet.endUserRole +instructionSet.endRole + instructionSet.roleGap + instructionSet.memoryUser + `' + message['content']` + instructionSet.specialInstructions + ` + '` + instructionSet.endUserTurn + instructionSet.endTurn + `'-}}
       {%- else -%}
         {{-'` + instructionSet.startTurn + instructionSet.startAssistant + instructionSet.assistantRole + instructionSet.endAssistantRole + instructionSet.endRole + instructionSet.roleGap + `' + message['content'] + '` + instructionSet.endAssistantTurn + instructionSet.endTurn + `' -}}
         {%- endif -%}
