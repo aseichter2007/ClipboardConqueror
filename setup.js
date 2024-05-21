@@ -46,7 +46,7 @@
         defaultOptions: ["kobold", "tgwchat", "oobaRPmerge", "lmstudio",/*not working, ssl? koboldChat too*/ "textGenWebUi", "ooba",  "chatGPT3", "chatGPT4","select defaultClient: from previous items. This field is purely informational for the user, particularly to ease use when writeFiles is enabled."],
         instructFormat: "llama3",//overrides the defaultclient's set format
         instructOptions: ["default", "defaultJson", "defaultJsonReturn", "hermes", "chatML", "chatVicuna", "samantha", "airoboros", "alpaca", "alpacaInstruct", "llamav2", "mistral", "mixtral", "metharme", "bactrian", "baichuan", "baize", "blueMoon", "chatGLM", "openChat", "openChatCode", "wizard", "wizardLM", "vicuna", "mistralLite", "deepseek", "deepseekCoder", "tinyLlama", "pirateLlama", "stableLM", "openAssistant", "vicunav1", "stableVicuna", "rp", "select instruct: from previous items or any you add to 0formats.json"],//or in setup below and re-write 0formats.json I think this one might be deprecated.
-        persona: "default",//must be a valid identity in identities.identities
+        persona: "default",//must be a valid identity in idents
          
         //Ok it turned out that a lot of them for testing and stuff helps, so just move your favorites to the top and invoke them by $ from top to $$$... at bottom. Or just use the names like |||kobold| or |||koboldChat| 
         endpoints:{//these are accessible by name in defaultClient or like |||$| for kobold
@@ -56,9 +56,11 @@
                 //buildType: "unused",
 
                 url : "http://127.0.0.1:5001/api/v1/generate/",//Kobold Compatible api url
-                config: "kobold",//must match a key in apiParams
+                config: "kobold",//params. must match a key in apiParams. It it is the same as the endpoint, then switching endpoints will change the parameters as well
+                autoConfigParams: true,//false prevents overriding params with |||tgwchat|
                 //templateStringKey: "jinja", //jinja, none or adapter, required for chat endpoints
                 format: "llama3",//must be a valid instruction format from below.
+                autoConfigFormat: false,//false prevents overriding prompt formatting with |||tgwchat|
                 //objectReturnPath: "data.results[0].text"  This is set up in outpoint
                 key: "no_key_needed",
                 outpoint: {//choices[0].text choices is one, [second sends a number], text is the end.
@@ -72,11 +74,13 @@
                 type: "chat",
                 //jsonSystem: "none", //default is none, will use none if missing
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
-                jsonSystem : "full",
+                jsonSystem : "none",
                 url : "http://127.0.0.1:5000/v1/chat/completions",
-                config: "TGWopenAICompletions",
-                templateStringKey: "instruction_template_str",
-                format: "defaultJson",// endpoints must use a format matching a key in instructionFormats
+                config: "tgwchat",
+                autoConfigParams: true,//false prevents overriding params with |||tgwchat|
+                autoConfigFormat: true,//false prevents overriding prompt formatting with |||tgwchat|
+                templateStringKey: "instruction_template_str",//if present and not "" will build and send a jinja template to tgwui.
+                format: "alpaca",// endpoints must use a format matching a key in instructionFormats, overwrites current settings when chaining, etc.
                 key: "no_key_needed",
                 model: "unused",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
@@ -92,6 +96,9 @@
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "http://127.0.0.1:5000/v1/chat/completions",
                 config: "TGWopenAICompletions",
+                autoConfigParams: true,//false prevents overriding params with |||tgwchat|
+                autoConfigFormat: true,//false prevents overriding prompt formatting with |||tgwchat|
+
                 templateStringKey: "instruction_template_str",
                 format: "defaultJson",// endpoints must use a format matching a key in instructionFormats
                 key: "no_key_needed",
@@ -184,6 +191,22 @@
                 } 
             },
             ooba: {//|||$$$$$| or |||textGenWebUi|
+                type: "completion",
+                jsonSystem: true,
+                url : "http://127.0.0.1:5000/v1/completions",
+                config: "ooba",
+                templateStringKey: "instruction_template_str",
+
+                format: "llama3",//completion endpoints must use a format matching a key in instructionFormats
+                key: "no_key_needed",
+                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 3,//key for a switch case
+                    one: "choices",//results[0].text
+                    two: 0,//[0].text
+                    three: "text"//text
+                } 
+            },
+            tgw: {//|||$$$$$| or |||textGenWebUi|
                 type: "completion",
                 jsonSystem: true,
                 url : "http://127.0.0.1:5000/v1/completions",
@@ -322,6 +345,7 @@ function setappSettings(defaultClient, persona) {
         batchSwitch: "@", // like |||@agent|
         batchMiss: "#", //like |||#@agent|
         formatSwitch: "%", //like |||%alpaca| changes the prompt format. Do this one first before !>}
+        paramSwitch: "^",
         batchLimiter: "", //if empty, will mark the continue history with full format chat turns.
         setJsonLevel: "`",//like |||`1| or |||`json| etc
         empty: "empty",//I think this is extra, I used e instead.
@@ -329,11 +353,13 @@ function setappSettings(defaultClient, persona) {
         agentSplit: ",", //like |||agent.write|
         rootname: "system", //this goes into the object sent as identity at creation and |||| this text goes in the value| "request"
         //rootname: "system", //this is kind of intermittent because it is not always there. ### is more neutral and seems to wake up the bigger models.
+        paramatron: true, // false disallows naked key name matching like |||ooba|
         clean: true, //clean takes out the rootname key when it's not set. Set false to always send the rootname
-        setInstruction: "PROMPT", // like |||PROMPT:system| <SYSTEM>, //options:system, prepend, post, memory, memoryUser, final, start"
+        setInstruction: "PROMPT", // like |||PROMPT:system|<SYSTEM>, //options:system, prepend, post, memory, memoryUser, final, start"
         setPromptFormat: "FORMAT",// like |||FORMAT| name, //options: chatML, alpaca, vicuna, deepseekCoder, openchat",
+        setParams: "PARAMS",
         writeSave: "|||name:save|",//writes when you do |||agent,write|
-        writeSettings: "|||FORMAT|chatML",//|||FORMAT|alpaca     old: //like |||FORMAT:save|{system: "user", prepend: "system"}
+        writeSettings: "|||FORMAT|",//|||FORMAT|alpaca     old: //like |||FORMAT:save|{system: "user", prepend: "system"}
         writeSplit: "\n _______\n",//limiter after |||name,write| idk, it felt neccessary. make it "" and its like it isnt there at all. 
         returnRE: ">user:", //for |rs| to return this on the end of resoponse for easy conversation, havent decided how that should get from the settings to the response processor. 
 
@@ -371,9 +397,13 @@ function setFormats() {
             // endAssistantRole +
             // endRole +
             // responseStart;
-    const promptFormats = { 
-        default: {//I like the option to set the system initialization like ||||system| or ||||instruct| on the fly, and it works well without it, so I'm not using a systemRole.
+    const promptFormats = { //|||^kobold| and when you call these like |||kobold| they also change the backend endpoint and params if matching entries exist, change the names to suit your needs. 
+        default: {
+            //warning: calling  |||default| also calls the default agent, and any params or endpoints called default. 
+            
+            //I like the option to set the system initialization like ||||}system| or ||||%instruct| on the fly, and it works well without it, so I'm not using a systemRole.
             //bos : "optional initializer token, maybe unneeded"
+            //todo: beforeStart: "" consider adding this to send text before initialization.
             startTurn: "<|im_start|>",//this applies to all types of messages, it's for BOS token type stuff.
             endTurn: "<|im_end|>\n",
             //startSystem: "<|im_start|>", //these three allow separate initializers. Choosethese or startturn, it will apply to each position, doubling them if startturn is used at the same time as startsystem
@@ -1110,7 +1140,7 @@ function setFormats() {
     return promptFormats;
 }
 function setParams(){
-    const apiParams = {
+    const apiParams = {//|||^kobold| and when you call these like |||kobold| they also change the backend endpoint and prompt format, change the names to suit your needs. 
         kobold: {
             use_story: false,
             use_memory: false,
@@ -1149,10 +1179,9 @@ function setParams(){
         ooba: {
             
             //max_context_length: 4096,
-            max_context_length: 8192,
+            //max_context_length: 8192,
             //max_context_length: 16384,
-
-            max_length: 2000,
+            max_tokens: 700,
             temperature: 1,
             repetition_penalty: 1.05,
             top_p: 1,
@@ -1177,7 +1206,7 @@ function setParams(){
             temperature : 1,
             stream : false
         },
-        TGWopenAICompletions: {//from TextGenWebUi openAiCompletions http://127.0.0.1:5000/docs#/default/openai_completions_v1_completions_post
+        tgwchat: {//from TextGenWebUi openAiCompletions http://127.0.0.1:5000/docs#/default/openai_completions_v1_completions_post
             //model: "no",
             //prompt: "string",
             //best_of: 1,
