@@ -71,7 +71,7 @@ This query is formatted like:
   ```
     - ~~~ sets text after the "~~~" to the start of the assistant reply for this turn only. 
 
->"prompt": "<|im_start|> `set system name`\n `quick prompt` \n<|im_end|>\n<|im_start|>`set user name`\n each change the corresponding portion of the prompt  `for complete control.`\n`Anywhere.` <|im_end|>\n<|im_start|> `set assistant name`\n Clipboard Conqueror is ready to completely control any LLM!"
+>"prompt": "<|im_start|> `set system name`\n `quick prompt` \n<|im_end|>\n<|im_start|>`set user name`\n each change the corresponding portion of the prompt  `for complete control.``Anywhere.` <|im_end|>\n<|im_start|> `set assistant name`\n Clipboard Conqueror is ready to completely control any LLM!"
 
 
 
