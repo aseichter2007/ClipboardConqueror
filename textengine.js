@@ -171,7 +171,7 @@ class TextEngine {
       this.batchLength = trip.batch;
     }
     this.agentBatchKit[identity] = trip;
-    console.log("batchAgent" + identity + " : " +JSON.stringify(trip));
+    console.log("batchAgent" + color(identity,"gold" )+ " : " +JSON.stringify(trip));
   }
   batchProcessor(){
     let setBatch = [];
@@ -240,6 +240,7 @@ class TextEngine {
     }
     if(this.endpoints.endpoints.hasOwnProperty(identity)) {
       this.api = this.endpoints.endpoints[identity];
+      console.log(color("paramatron setting api: ","yellow") + JSON.stringify(this.api));
       if (this.api.autoConfigParams == undefined || this.api.autoConfigParams != false) {
         console.log("paramatron setting endpoint: " + this.api.config);
         this.setParams(identity);     
@@ -248,7 +249,6 @@ class TextEngine {
         console.log("paramatron setting format: " + this.api.format);
         this.inferenceClient.setPromptFormat(this.formats[this.api.format]);//todo I think undefined lives here on %
       }
-      console.log("paramatron setting api: " + JSON.stringify(this.api));
     }
   }
   updateIdentity(identity) {
@@ -287,13 +287,13 @@ class TextEngine {
             case this.appSettings.batchNameSwitch:
               this.batchUserName = identity.slice(1);
               this.chatHistory = true;
-              console.log( "'"+ this.appSettings.batchNameSwitch + "' activates history, it only changes the history");
+              console.log(color("'"+ this.appSettings.batchNameSwitch + "' activates history, it only changes the history","blue"));
               break;
           
             case this.appSettings.batchAssistantSwitch:
               this.batchAssistantName = identity.slice(1);
               this.chatHistory = true;
-              console.log( "'"+ this.appSettings.batchAssistantSwitch + "' activates history, it only changes the history");
+              console.log(color("'"+ this.appSettings.batchAssistantSwitch + "' activates history, it only changes the history","blue"));
               break;
           
             case this.appSettings.batchContinueTag:
@@ -355,24 +355,24 @@ class TextEngine {
               if (counter === trip.api) {
                 this.api = this.endpoints.endpoints[key];
                 if (this.api.autoConfigParams == undefined || this.api.autoConfigParams != false) {
-                  console.log("quick setting params: " + this.api.config);
+                  console.log(color("quick setting params: ","blue") + this.api.config);
                   this.params = this.formats[this.api.config];
                 }
                 if (this.api.autoConfigFormat == undefined || this.api.autoConfigFormat != false) {
-                  console.log("setting format: " + this.api.format);
+                  console.log(color("setting format: ","blue") + this.api.format);
                   this.inferenceClient.setPromptFormat( this.instructionFormats[this.api.format]);//todo: this breaks custom formating including ~~~ on quick backend switches...
                 }
-                console.log("setting api: " + JSON.stringify(this.api));  
+                console.log(color("setting api: ","blue") + JSON.stringify(this.api));  
                 identity = identity.slice(trip.api); 
-                console.log("Trip api: "+identity);
+                console.log(color("Trip api: ","blue")+identity);
               }
               counter++;
             }
-          }
+            }
           }else {
             //if (this.api.config != this.endpoints.endpoints[this.endpoints.defaultClient].config){
               this.api = this.endpoints.endpoints[this.endpoints.defaultClient];
-              console.log("using default api: " + JSON.stringify(this.api));
+              console.log(color("using default api: ","green") + JSON.stringify(this.api));
             //}
           }
           
@@ -1037,7 +1037,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
     //console.log(JSON.stringify(this.formats));
     try {
       let set = this.formats[setting];
-      console.log("set format: " +JSON.stringify(set));
+      console.log(color("set format: ", "yellow") +JSON.stringify(set));
       this.inferenceClient.setPromptFormat(set);
     } catch (error) {
       for (let key in this.formats) {
@@ -1046,11 +1046,12 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
       console.log( setting + " : format not found, options: " + JSON.stringify(names) );
     }
   }
+   
   setParams(setting) {
     setting = setting.trim();
     try {
       let set = this.apiParams[setting];
-      console.log("set params: " +JSON.stringify(set));//|||explain how to color the console with javascript
+      console.log(color("setting params","yellow") +JSON.stringify(set));//|||pro|explain how to color the console with javascript. provide example code
       this.params = set;
     } catch (error) {
       let names = [];
@@ -1064,7 +1065,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
   persona.forEach(tag => {
     tag = tag.trim();
     let commands = tag.split(this.appSettings.settinglimit);
-    console.log("persona/flag: " + commands);
+    console.log("persona/flag: " + color(commands, "green"));
     if (commands.length === 2) {
       commands[0] = commands[0].trim();
       commands[1] = commands[1].trim();
@@ -1076,7 +1077,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
         //save like |||agent:save|
         this.sendHold = true;
         this.identities[commands[0]] = sorted.formattedQuery; 
-        console.log("Saved "+ commands[0]);
+        console.log(color("Saved ","cyan")+ commands[0]);
         tag = commands[0];
       } else if (commands[1] == this.appSettings.delete) {
         //save like |||agent:delete|
@@ -1124,7 +1125,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
           this.params.max_new_tokens = parseInt(tag);
         }
         else{
-          console.log("no matching max_length or max_tokens in params: " +JSON.stringify(this.params));
+          console.log(color("no max_length or max_tokens in params: ","red") +JSON.stringify(this.params));
         }
       } else if (tag === this.appSettings.setParams) {
         this.sendHold = true;
@@ -1275,7 +1276,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
 }
   commandHandle(tags){//todo: fix this.
     
-    console.log("Tags : " + tags);
+    console.log(color("Tags : ","purple" ) + tags);
     if (tags.command != undefined && tags.command != '' && tags.command != "") {
       let splitCommand = tags.command.split(this.appSettings.quickPromptLimit);
       if (splitCommand.length = 1) {
@@ -1411,7 +1412,8 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
             //   //todo: build whole engine to transport settings across multiple apis
             // }
             // console.log("outParams: " + JSON.stringify(outParams));
-            //console.log(sorted);            
+            //console.log(sorted);     
+            console.log(color("Sending to endpoint: ","green"))       
             this.inferenceClient.send(this.identity, sorted.formattedQuery, this.params, this.api);
           } else {
             this.sendHold = false;
@@ -1513,5 +1515,50 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
         return output;
       }
     }
+function color(text, color) {
+  switch (text,color) {
+    case 'red':
+      return `\x1B[31m${text}\x1B[0m`;
+    case 'green':
+      return `\x1B[32m${text}\x1B[0m`;
+    case 'yellow':
+      return `\x1B[33m${text}\x1B[0m`;
+    case 'blue':
+      return `\x1B[34m${text}\x1B[0m`;
+    case 'white':
+      return `\x1B[37m${text}\x1B[0m`;
+    case 'black':
+      return `\x1B[30m${text}\x1B[0m`;
+    case 'magenta':
+      return `\x1B[35m${text}\x1B[0m`;
+    case 'cyan':
+      return `\x1B[36m${text}\x1B[0m`;
+    case 'gray':
+      return `\x1B[90m${text}\x1B[0m`;
+    case 'light gray':
+      return `\x1B[38m${text}\x1B[0m`;
+    // Add other colors here
+    case 'purple':
+      return `\x1B[91m${text}\x1B[0m`;
+    case 'brown':
+      return `\x1B[92m${text}\x1B[0m`;
+    case 'orange':
+      return `\x1B[93m${text}\x1B[0m`;
+    case 'pink':
+      return `\x1B[94m${text}\x1B[0m`;
+    case 'turquoise':
+      return `\x1B[95m${text}\x1B[0m`;
+    case 'lime':
+      return `\x1B[96m${text}\x1B[0m`;
+    case 'gold':
+      return `\x1B[97m${text}\x1B[0m`;
+    case 'silver':
+      return `\x1B[98m${text}\x1B[0m`;
+    case 'maroon':
+      return `\x1B[99m${text}\x1B[0m`;
+    default:
+      return text;
+  }
+}   
     module.exports = TextEngine;
     
