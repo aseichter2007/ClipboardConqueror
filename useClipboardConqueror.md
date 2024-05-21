@@ -11,7 +11,7 @@ setup.js contains all the settings.
 
 The Clipboard Conqueror format is very configurable, but always adheres to the following formula:
 
->(invocation"`|||`") optional agents and commands (optional split "`|`")  optional system prompt (optional split "`|`") user text (optional assistant dictation "`~~~`") optional start of assistant response
+>`text before`(invocation"`|||`") optional agents and commands (optional split "`|`")  optional system prompt (optional split "`|`") user text (optional assistant dictation "`~~~`") optional start of assistant response (optional close assistant "`~~~`") continue user text (`text before` goes at the end. )
 
 "!@# query" could be valid, "123ai+ query" could be valid, and "{!?!?!} agents (8)^ quick prompt (8)^ query" could valid, but there is no setting to change the order. 
 
@@ -30,7 +30,7 @@ Using Clipboard Conqueror:
   ```
   |||introduction|
   ```
-  This is a writing command, it provides immediately ready to paste text from this application. It will tell you about LLMs and how they work, and explain the settings that are useful to control generation. Ready to paste immediately. Currently `after using a command that writes` data from the application, "|||agent,write|", "|||help|", "|||introduction|" `the next copy made will not send` text to the AI. `Copy your command again`, it should work the second time. If not, `ensure you are only copying one ||| invoke` with your text. 
+  This is a writing command, it provides immediately ready to paste text from this application. It will tell you about LLMs and how they work, and explain the settings that are useful to control generation. Ready to paste immediately. Currently after using a command that writes data from the application, "|||agent,write|", "|||help|", "|||introduction|" `the next copy made will not send` text to the AI. `Copy your command again`, it should work the second time. If not, `ensure you are only copying one ||| invoke` with your text. 
 
   ```
   |||character,temperature:1.4|What is a square root and what dishes and sauces are they best served with?
@@ -50,9 +50,12 @@ There are 6 special operators for the `|||agents|` segment, that start with the 
     - ">" user name
     - "}" system name
     - "~" start of assistant response, "~~~" overwrites "~".
+    - "^" change params for api, overwrites current settings.
     - "`" the backtick or grave symbol changes the system prompt format. Supports "json","markup","partial", or none. 
 
-  `"%}>!" all persist until overwritten.` Note: "`:`", the setting break is not supported inside these operators, and will cause trouble. If you need that for your assistant name, change settinglimit or add it in setup.js promptFormats. Similar for comments.
+  `"%}^>!" all persist until overwritten.`  On backend switching, You're left talking to the last backend you accessed after one invokation. Additional tags to tgwui will overwrite settings changes like |||450,temperature:0.7|. there is a per backend endpoint setting to prevent this behavior.
+
+  - Note: "`:`", the setting break is not supported inside these operators, and will cause trouble. If you need that for your assistant name, change settinglimit or add it in setup.js promptFormats. Similar for comments.
 
 >|||`json, %chatML, ! Rick, > Morty, writer, } Narrator's notes| Rick answers morty's questions.| Where are we going today, grandpa?  
 
@@ -64,11 +67,11 @@ This query is formatted like:
   Clipboard Conqueror inserts the data to assemble a complex query in seconds. 
 
   ```
-  |||`none, } set system name, >set user name, ! set assistant name | quick prompt | each change the corresponding portion of the prompt ~~~ Clipboard Conqueror is ready to completely control any LLM!
+  Anywhere. |||`none, } set system name, >set user name, ! set assistant name | quick prompt | each change the corresponding portion of the prompt ~~~ Clipboard Conqueror is ready to completely control any LLM! ~~~ for complete control.
   ```
     - ~~~ sets text after the "~~~" to the start of the assistant reply for this turn only. 
 
->"prompt": "<|im_start|> `set system name`\n `quick prompt` \n<|im_end|>\n<|im_start|>`set user name`\n each change the corresponding portion of the prompt <|im_end|>\n<|im_start|> `set assistant name`\n Clipboard Conqueror is ready to completely control any LLM!"
+>"prompt": "<|im_start|> `set system name`\n `quick prompt` \n<|im_end|>\n<|im_start|>`set user name`\n each change the corresponding portion of the prompt  `for complete control.`\n`Anywhere.` <|im_end|>\n<|im_start|> `set assistant name`\n Clipboard Conqueror is ready to completely control any LLM!"
 
 
 
@@ -92,6 +95,9 @@ Three pipes, agent, one pipe. No spaces. Any agents or settings must be closed w
 |||temperature:1.1| be more unpredictable, normalize probabilities by 10% after other samplers.
 ```
 - sets the temperature to 1.1. This works for any setting, e.g., top_p, min_p. supports :true :false. Overrides the params in setup.js.
+
+`setting names vary per backend you connect to.` 
+
 - Only persists in memory and used for the defaultClient set in setup.js. |||settings:set| are not used for secondary endpoints used like |||tgwchat|.
 ```
 |||re| what is this code doing? 
@@ -144,14 +150,14 @@ The write command will copy the entire prompt of all entered agent tags to the c
 ```
 |||agent:file|
 ```
-The file command saves that agent to the 0identities.json file. Currently only supports agents and will save settings values as agents if you tell it to.  Currently the only way to delete filed agents is to delete them from 0identites.json or delete the json entirely to restore defaults next run.
+The file command saves that agent to the 0identities.json file. Currently only supports agents and will save settings values and backends as agents if you tell it to. This will mess up sending to apis set like |||kobold| and require cleaning the 0identities.json.  Currently the only way to delete filed agents is to delete them from 0identites.json or delete the json entirely to restore defaults next run.
 
-File depends on the existence of 0identites.json, without a file to add to, it won't work. 
+File will write 0identities.json if it doesn't exist. 
 
 
 >|||code|`|` 
 
-By sending a second pipe "|" on the end, you avoid collisionss with "||" OR operators. Alternatively, you could change the invoke delimiter in setup.js (instruct.endTag)
+By sending a second pipe "|" on the end, you avoid collisionss with "||" OR operators or loose pipes in the text. Alternatively, you could change the invoke delimiter in setup.js (instruct.endTag)
 
 Currently after using a command that writes data from the application,"`|||list|`", "`|||agent,write|`", "`|||help|`", "`|||introduction|`", or "`|||dw|`" `you must copy your next query twice` before it sends to the LLM.
 

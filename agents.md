@@ -18,13 +18,17 @@ Special ||| [operators] to apply|:
 
 - "`}`" system name
 
-- "`~`" start of assistant response, "~~~" overwrites "~".
+- "`~`" start of assistant response, "~~~" overwrites "~". "~" can be chained to shape later responses
 
-- "`" the backtick or grave symbol changes the system prompt format. Supports "json","markup","partial", or none. 
+- "`" the backtick or grave symbol changes the system prompt format. Supports "json","markup","partial", or none. partial inserts agents like "name : text", markup makes each agent it's own turn with the current prompt format. this leaves an empty system at the begining. use "|||FORMAT:prependPrompt| persistent top system prompt" with a completion endpoint to set a system prompt when using "markup"
 
-- "`@`" executes a batch
+- "`@`" executes a next turn using the assistant response as the user query. 
 
-- "`#`" skips a batch
+- "`#`" skips a turn in the chain
+
+- "`]`" activates the chat history and sets this name for  user in the history. Best when chaining. 
+
+- "`;`" activates the chat history and sets this name for asstant in the history. Best when chaining. 
 
 Fancy |||`flags`|
 ---
@@ -52,7 +56,7 @@ Fancy |||`flags`|
 
 `c` or `chat` activates the history
 
-`sc` or `silentChat` sends the history wihout adding the new turn to the history.
+`sc` or `silentChat` sends the history wihout adding the new turn to the history. For multiple queries against the same history. 
 
 `ch` or `clearHistory` clears the chatlog and prevents sending to the AI.
 

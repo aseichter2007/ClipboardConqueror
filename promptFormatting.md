@@ -12,6 +12,9 @@ Change the instruction format like :
 |||FORMAT|chatML
 or
 |||FORMAT|alpaca
+
+or inline:
+|||%chatML| query to answer
 etc.
 ```
 Formats must exist in setup.js or 0formats.json, the name must match the object key. Files override setup.js when enabled, so if you use settings files, you have to delete or rename them to reflect changes in setup.js.
@@ -30,12 +33,17 @@ Or you can set individual prompt segments like this:
 ```
 |||PROMPT:systemRole|system
 ```
+or inline like |||}system| query to answer
 ```
 |||PROMPT:userRole|user 
 ```
+or inline like |||>user| query to answer
+
 ```
 |||PROMPT:assistantRole|assistant
 ```
+or inline like |||!assistant| query to answer
+
 ```
 |||PROMPT:roleBreak|\n
 ```
