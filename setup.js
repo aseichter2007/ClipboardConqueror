@@ -57,7 +57,7 @@
 
                 url : "http://127.0.0.1:5001/api/v1/generate/",//Kobold Compatible api url
                 config: "kobold",//params. must match a key in apiParams. It it is the same as the endpoint, then switching endpoints will change the parameters as well
-                autoConfigParams: true,//false prevents overriding params with |||tgwchat|
+                autoConfigParams: false,//false prevents overriding params with |||tgwchat|
                 //templateStringKey: "jinja", //jinja, none or adapter, required for chat endpoints
                 format: "llama3",//must be a valid instruction format from below.
                 autoConfigFormat: false,//false prevents overriding prompt formatting with |||tgwchat|
@@ -77,7 +77,7 @@
                 jsonSystem : "none",
                 url : "http://127.0.0.1:5000/v1/chat/completions",
                 config: "tgwchat",
-                autoConfigParams: true,//false prevents overriding params with |||tgwchat|
+                autoConfigParams: false,//false prevents overriding params with |||tgwchat|
                 autoConfigFormat: true,//false prevents overriding prompt formatting with |||tgwchat|
                 templateStringKey: "instruction_template_str",//if present and not "" will build and send a jinja template to tgwui.
                 format: "alpaca",// endpoints must use a format matching a key in instructionFormats, overwrites current settings when chaining, etc.
@@ -100,7 +100,7 @@
                 autoConfigFormat: true,//false prevents overriding prompt formatting with |||tgwchat|
 
                 templateStringKey: "instruction_template_str",
-                format: "defaultJson",// endpoints must use a format matching a key in instructionFormats
+                format: "chatML",// endpoints must use a format matching a key in instructionFormats
                 key: "no_key_needed",
                 model: "unused",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
@@ -117,6 +117,9 @@
                 buildType: "compatible",
                 url : "http://127.0.0.1:5000/v1/chat/completions",
                 config: "oobarpmerge",
+                autoConfigParams: true,//false prevents overriding params with |||tgwchat|
+                autoConfigFormat: true,//false prevents overriding prompt formatting with |||tgwchat|
+
                 templateStringKey: "instruction_template_str",
                 format: "rp",//completion endpoints must use a format matching a key in instructionFormats
                 key: "no_key_needed",
@@ -181,6 +184,7 @@
                 jsonSystem : true,
                 url : "http://127.0.0.1:5000/v1/completions",//this only returns 16 characters, and that seems unavoidable.
                 config: "TGWopenAICompletions",
+                
                 format: "defaultJson",//completion endpoints must use a format matching a key in instructionFormats
                 key: "no_key_needed",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
@@ -196,7 +200,6 @@
                 url : "http://127.0.0.1:5000/v1/completions",
                 config: "ooba",
                 templateStringKey: "instruction_template_str",
-
                 format: "llama3",//completion endpoints must use a format matching a key in instructionFormats
                 key: "no_key_needed",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.

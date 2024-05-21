@@ -23,8 +23,12 @@ Clipboard Conqueror - Multiple Backend Support
   |||$$|this will go to the second configured endpoint
   ```
   ```
-  |||tgwchat|this will go to the TextGenerationWebUi openAI endpoint.  (|||ooba| for standard completion isn't working as expected, it only sends back 16 tokens despite asking for more.)
+  |||tgwchat|this will go to the Text Generation WebUi openAI endpoint. //todo: fix jinja templating, it's not sending the start of assistant responses
   ```
+```
+|||ooba| or |||tgw| will go to the Text Generation Webui completion endpoint for full feature support. 
+```
+
   Add endpoints and parameters in settings.js or 0endpoints.json if settings files are enabled. File writing is off by default, the settings files are more for use with binaries.
 
   When using these commands, be aware that data may be sent to outside systems. This may be a breach of your company's data protection policy.

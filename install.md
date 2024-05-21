@@ -63,7 +63,7 @@ Currently there are no built binaries and Node is required to run Clipboard Conq
 
 
 
-2. Clipboard Conqueror is most powerful with [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/releases/),or a kobold compatible API. [openAI compatible API](https://github.com/oobabooga/text-generation-webui) 
+2. Clipboard Conqueror is most powerful with [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/releases/),or a kobold compatible API like  [Text Genteration Webui](https://github.com/oobabooga/text-generation-webui) 
 
     Koboldcpp is a standalone executable, easy to get started with. 
 
@@ -168,7 +168,7 @@ For API errors make sure Koboldcpp or your choice of backend is running, and tha
 
 
 If CC seems hung, copy text with no invoke and try again. When using Text Generation Webui, it's can be hard to tell if it's working. Consider asking for fewer tokens until you know it's working. 
-Sometimes models take up to a few minutes to respond. If it is taking longer, make sure you aren't running out of memory. There is a setting in the nvidia control panel that controls how memory overflows are handled. The default setting starts offloading a before memory is all the way full, so I disable this, in favor of crashes over very slow generation. 
+Sometimes models take up to a few minutes to respond. If it is taking longer than you like, make sure you aren't running out of memory. There is a setting in the nvidia control panel that controls how memory overflows are handled. The default setting starts offloading a before memory is all the way full, so I disable this, in favor of crashes over very slow generation. 
 
 currently the entire settings for my app are in setup.js.
 setup.js writes files for each type of setting. If formatting errors are introduced in those files, they are overwritten with the defaults. 
