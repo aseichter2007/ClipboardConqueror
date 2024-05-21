@@ -351,7 +351,6 @@ class TextEngine {
           if (trip.api > 0 && !batching) {
             let counter = 1;//start at one to let zero be the default
             for (const key in this.endpoints.endpoints){
-              console.log(trip.api + " : " + counter);
               if (counter === trip.api) {
                 this.api = this.endpoints.endpoints[key];
                 if (this.api.autoConfigParams == undefined || this.api.autoConfigParams != false) {
@@ -360,8 +359,7 @@ class TextEngine {
                 }
                 if (this.api.autoConfigFormat == undefined || this.api.autoConfigFormat != false) {
                   console.log(color("setting format: ","blue") + this.api.format);
-                  this.inferenceClient.setPromptFormat( this.instructionFormats[this.api.format]);//todo: this breaks custom formating including ~~~ on quick backend switches...
-                }
+                  this.inferenceClient.setPromptFormat( this.formats[this.api.format]);                }
                 console.log(color("setting api: ","blue") + JSON.stringify(this.api));  
                 identity = identity.slice(trip.api); 
                 console.log(color("Trip api: ","blue")+identity);

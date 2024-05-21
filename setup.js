@@ -50,6 +50,21 @@
          
         //Ok it turned out that a lot of them for testing and stuff helps, so just move your favorites to the top and invoke them by $ from top to $$$... at bottom. Or just use the names like |||kobold| or |||koboldChat| 
         endpoints:{//these are accessible by name in defaultClient or like |||$| for kobold
+            ooba: {//|||$| or |||ooba|
+                type: "completion",
+                jsonSystem: true,
+                url : "http://127.0.0.1:5000/v1/completions",
+                config: "ooba",
+                templateStringKey: "instruction_template_str",
+                format: "llama3",//completion endpoints must use a format matching a key in instructionFormats
+                key: "no_key_needed",
+                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 3,//key for a switch case
+                    one: "choices",//results[0].text
+                    two: 0,//[0].text
+                    three: "text"//text
+                } 
+            },
             kobold:{ //|||$| or just ||| with matching defaultClient or |||kobold|
                 type: "completion",// completion or chat, completion allows CC to control the formatting completely.
                 jsonSystem : "none",//markup,full,keys,none//completion and chat combined only //full sends JSON.Stringify into the system prompt.  keys sends the contents like key : content \n\n key2 : ... markup makes each agent it's own chat message, none sends only the agent text.
@@ -194,21 +209,7 @@
                     three: "text"//text
                 } 
             },
-            ooba: {//|||$$$$$| or |||textGenWebUi|
-                type: "completion",
-                jsonSystem: true,
-                url : "http://127.0.0.1:5000/v1/completions",
-                config: "ooba",
-                templateStringKey: "instruction_template_str",
-                format: "llama3",//completion endpoints must use a format matching a key in instructionFormats
-                key: "no_key_needed",
-                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
-                    outpointPathSteps: 3,//key for a switch case
-                    one: "choices",//results[0].text
-                    two: 0,//[0].text
-                    three: "text"//text
-                } 
-            },
+            
             tgw: {//|||$$$$$| or |||textGenWebUi|
                 type: "completion",
                 jsonSystem: true,

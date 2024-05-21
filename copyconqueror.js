@@ -66,9 +66,7 @@ function returnSummary(text){
     sendEngine.recievesummary(Response);
   
 }
-function recieveProcessedClip(identity, query, params) {
-    client.formatQueryAndSend(identity, query, params);
-}
+
 function recieveApiResponse(text){
     text = text.replace(/\\n/g, '\n');
     NotificationBell("Paste Response:", text);   
@@ -78,11 +76,9 @@ function recieveApiResponse(text){
 }
 clipboardListener.on('change', () => {
     ncp.paste(clipboardChangeHandler)
-    //console.log('Clipboard changed');
 });
 function clipboardChangeHandler(err,text){
-    //console.log(JSON.stringify(text));
-    console.log("ClipboardChangeHandler: " +text);
+    console.log(color("New Copy: ","green") +text);
     if (err) {
         NotificationBell("error: ", err+text); 
         return console.log(err+text);
@@ -110,4 +106,53 @@ clipboardListener.startListening();
     process.exit(0);
   });
 }
+
+
+function color(text, color) {
+    
+    switch (color.toLowerCase()) {
+      case 'red':
+        return `\x1B[31m${text}\x1B[0m`;
+      case 'green':
+        return `\x1B[32m${text}\x1B[0m`;
+      case 'yellow':
+        return `\x1B[33m${text}\x1B[0m`;
+      case 'blue':
+        return `\x1B[34m${text}\x1B[0m`;
+      case 'white':
+        return `\x1B[37m${text}\x1B[0m`;
+      case 'black':
+        return `\x1B[30m${text}\x1B[0m`;
+      case 'magenta':
+        return `\x1B[35m${text}\x1B[0m`;
+      case 'cyan':
+        return `\x1B[36m${text}\x1B[0m`;
+      case 'gray':
+        return `\x1B[90m${text}\x1B[0m`;
+      case 'light gray':
+        return `\x1B[38m${text}\x1B[0m`;
+      // Add other colors here
+      case 'purple':
+        return `\x1B[91m${text}\x1B[0m`;
+      case 'brown':
+        return `\x1B[92m${text}\x1B[0m`;
+      case 'orange':
+        return `\x1B[93m${text}\x1B[0m`;
+      case 'pink':
+        return `\x1B[94m${text}\x1B[0m`;
+      case 'turquoise':
+        return `\x1B[95m${text}\x1B[0m`;
+      case 'lime':
+        return `\x1B[96m${text}\x1B[0m`;
+      case 'gold':
+        return `\x1B[97m${text}\x1B[0m`;
+      case 'silver':
+        return `\x1B[98m${text}\x1B[0m`;
+      case 'maroon':
+        return `\x1B[99m${text}\x1B[0m`;
+      default:
+        return text;
+    }
+}
+
 
