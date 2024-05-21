@@ -67,7 +67,7 @@ Chaining Captain Clip or AGI will stop the chain of execution. (agents with inst
 This query will build a multiturn conversation, Frank's response(kobold api) to the initial query is sent to abe marked with chatML format(Text Gen Webui completion api), abe's response to the query is sent to frank(with llama 3 markup on kobold api), and the whole conversation has history with c,@@c
 
 
-|||c,write| sends the history to the clipboard ready to paste. 
+|||c,write| sends the history to the clipboard ready to paste.
 
 |||dw| will contain the chatlog after it is cleared with |||cc| or |||clearHistory|.
 - if you copy |||dw|, you will get back the conversation steps as carried by c. Or it's in the clipboard history as well, I never used that really, sorry clipboard history champs. This app absolutely pollutes it. I gotta rebuild in c# to fix that.
@@ -75,10 +75,9 @@ This query will build a multiturn conversation, Frank's response(kobold api) to 
 
 
 "c" carries the chat context forward optionally like #@#@c.
-```
-|||cot, !Query Node, @! Rick Sanchez @; Rick's Inner thoughts| 
-```
-Will present the query node as a discrete turn labeled Rick's Inner thoughts in the chat log for the second turn. 
+
+The history only appears and builds on the next turns where it is enabled. use sc to skip a turn writing to the history. 
+
 
 
 Sending names like !Name @!Name, or setting any prompt segment like |||PROMPT:{{segment}}| will hold prompt format overrides, interfering with multiple backend support, use  noFormat: true as a key, (example: setup.js line 100) per endpoint, to prevent sending jinja or kobold adapters and preserve the default instruct format supplied by the backend from the model config when using multiple models with different instruct sets.
@@ -90,9 +89,21 @@ Handle % format changes first, like |||%alpaca, !name| or the format change over
 ;assistant,
 ]user,
 
-these activate the history, and they change the history name as it is built, allowing you to rename a response to direct the next agent's response to the content. 
+```
+|||cf, !Query Node, ;Rick's Inner thoughts, >user, ]summer, @!Rick Sanchez,@>morty,@~An adventure?, @c|  Hey lets go on an adventure, grandpa.
+```
 
-The history only applies on the next turn where it is enabled. 
+Will present the query node as a discrete turn labeled Rick's Inner thoughts in the chat log for the second turn, as well as change the original query to summer. @>morty is overwritten by ;Rick's Inner thoughts, but still changes the assistant name. 
+these activate the history, and they change the history name as it is built, allowing you to rename a response to direct the next agent's response to the content. 
+turn one:
+>"prompt": "<|start_header_id|>system<|end_header_id|>\n\n<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n  Hey lets go on an adventure, grandpa.<|eot_id|><|start_header_id|>Query Node<|end_header_id|>\n\n"
+
+turn two:
+>"prompt": "<|start_header_id|>system<|end_header_id|>\n\n<|eot_id|><|start_header_id|>summer<|end_header_id|>\n\n  Hey lets go on an adventure, grandpa.<|eot_id|><|start_header_id|>Rick's Inner thoughts<|end_header_id|>\n\nAs we embark on this adventure, I must admit that I'm feeling a bit older than usual today. The journey ahead of us seems long and winding, filled with unexpected twists and turns.\n\n<|eot_id|><|start_header_id|>morty<|end_header_id|>\n\nAs we embark on this adventure, I must admit that I'm feeling a bit older than usual today. The journey ahead of us seems long and winding, filled with unexpected twists and turns.<|eot_id|><|start_header_id|>Rick Sanchez<|end_header_id|>\n\nAn adventure?"
+
+
+ Ha! There's no such thing as an adventure, Morty. There's just survival. And if you're lucky, maybe you'll find something worth surviving for. Now let's get moving before things get any worse.
+
 
 ---
 
