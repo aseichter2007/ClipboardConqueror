@@ -60,54 +60,109 @@ class TextEngine {
     this.noChatLogging= false;
   }
 
-  returnTrip(str) {
-    if (typeof str !== "string"){
-      return "Error: Input must be a string";
-    } 
+  returnTrip(str) { 
     let tripCoding= 0;
-    let trip ={api:0, batch:0, format: 0, trip:""};
+    let trip ={api:0, batch:0, trip:""};
+    //|||e|convert to a switch case
     for (let i = 0; i < str.length; i++ ){
-      if (str[i] === this.appSettings.backendSwitch )  {
-        trip.api++;
-        trip.trip = trip.trip + this.appSettings.backendSwitch;
-        tripCoding++
-      } else if (str[i] === this.appSettings.batchSwitch) {
-        trip.batch++;
-        trip.trip = trip.trip + this.appSettings.batchSwitch;
-        tripCoding++
-      } else if(str[i] === this.appSettings.batchMiss){
-        trip.batch++;
-        trip.trip = trip.trip + this.appSettings.batchMiss;
-        tripCoding++
-      } else if(str[i] === this.appSettings.formatSwitch){
-        trip.format++;
-        trip.trip = trip.trip + this.appSettings.formatSwitch;
-        tripCoding++
-      } else if (str[i] === this.appSettings.assistantTag) {
-        trip.trip = trip.trip + this.appSettings.assistantTag;
-        tripCoding++
-      } else if (str[i] === this.appSettings.userTag) {
-        trip.trip = trip.trip + this.appSettings.userTag;
-        tripCoding++
-      } else if (str[i] === this.appSettings.systemTag) {
-        trip.trip = trip.trip + this.appSettings.systemTag;
-        tripCoding++
-      } else if (str[i] === this.appSettings.batchNameSwitch) {
-        trip.trip = trip.trip + this.appSettings.batchNameSwitch;
-        tripCoding++
-      } else if (str[i] === this.appSettings.batchContinueTag) {
-        trip.trip = trip.trip + this.appSettings.batchContinueTag;
-        tripCoding++
-      } else if (str[i] === this.appSettings.batchAssistantSwitch) {
-        trip.trip = trip.trip + this.appSettings.batchAssistantSwitch;
-        tripCoding++
-      }else if (str[i] === this.appSettings.setJsonLevel) {
-        trip.trip = trip.trip + this.appSettings.setJsonLevel;
-        tripCoding++
-      }else if (i > tripCoding){
-        return trip;
+      //if (str[i] === this.appSettings.backendSwitch )  {
+      //  trip.api++;
+      //  trip.trip = trip.trip + this.appSettings.backendSwitch;
+      //  tripCoding++
+      //} else if (str[i] === this.appSettings.batchSwitch) {
+      //  trip.batch++;
+      //  trip.trip = trip.trip + this.appSettings.batchSwitch;
+      //  tripCoding++
+      //} else if(str[i] === this.appSettings.batchMiss){
+      //  trip.batch++;
+      //  trip.trip = trip.trip + this.appSettings.batchMiss;
+      //  tripCoding++
+      //} else if(str[i] === this.appSettings.formatSwitch){
+      //  trip.format++;
+      //  trip.trip = trip.trip + this.appSettings.formatSwitch;
+      //  tripCoding++
+      //} else if (str[i] === this.appSettings.assistantTag) {
+      //  trip.trip = trip.trip + this.appSettings.assistantTag;
+      //  tripCoding++
+      //} else if (str[i] === this.appSettings.userTag) {
+      //  trip.trip = trip.trip + this.appSettings.userTag;
+      //  tripCoding++
+      //} else if (str[i] === this.appSettings.systemTag) {
+      //  trip.trip = trip.trip + this.appSettings.systemTag;
+      //  tripCoding++
+      //} else if (str[i] === this.appSettings.batchNameSwitch) {
+      //  trip.trip = trip.trip + this.appSettings.batchNameSwitch;
+      //  tripCoding++
+      //} else if (str[i] === this.appSettings.batchContinueTag) {
+      //  trip.trip = trip.trip + this.appSettings.batchContinueTag;
+      //  tripCoding++
+      //} else if (str[i] === this.appSettings.batchAssistantSwitch) {
+      //  trip.trip = trip.trip + this.appSettings.batchAssistantSwitch;
+      //  tripCoding++
+      //}else if (str[i] === this.appSettings.setJsonLevel) {
+      //  trip.trip = trip.trip + this.appSettings.setJsonLevel;
+      //  tripCoding++
+      //}else if (i > tripCoding){
+      //  return trip;
+      //}
+      // }
+      switch (str[i]) {
+        case this.appSettings.backendSwitch:
+          trip.api++;
+          trip.trip += this.appSettings.backendSwitch;
+          tripCoding++;
+          break;
+        case this.appSettings.batchSwitch:
+          trip.batch++;
+          trip.trip += this.appSettings.batchSwitch;
+          tripCoding++;
+          break;
+        case this.appSettings.batchMiss:
+          trip.batch++;
+          trip.trip += this.appSettings.batchMiss;
+          tripCoding++;
+          break;
+        case this.appSettings.formatSwitch:
+          trip.trip += this.appSettings.formatSwitch;
+          tripCoding++;
+          break;
+        case this.appSettings.assistantTag:
+          trip.trip += this.appSettings.assistantTag;
+          tripCoding++;
+          break;
+        case this.appSettings.userTag:
+          trip.trip += this.appSettings.userTag;
+          tripCoding++;
+          break;
+        case this.appSettings.systemTag:
+          trip.trip += this.appSettings.systemTag;
+          tripCoding++;
+          break;
+        case this.appSettings.batchNameSwitch:
+          trip.trip += this.appSettings.batchNameSwitch;
+          tripCoding++;
+          break;
+        case this.appSettings.batchContinueTag:
+          trip.trip += this.appSettings.batchContinueTag;
+          tripCoding++;
+          break;
+        case this.appSettings.batchAssistantSwitch:
+          trip.trip += this.appSettings.batchAssistantSwitch;
+          tripCoding++;
+          break;
+        case this.appSettings.paramSwitch:
+          trip.trip += this.appSettings.paramSwitch;
+          tripCoding++;
+          break;
+        case this.appSettings.setJsonLevel:
+          trip.trip += this.appSettings.setJsonLevel;
+          tripCoding++;
+          break;
+        default:
+            return trip;
+          break;
       }
-    }
+    } 
     return trip;
   }
   batchAgent(identity, trip){
@@ -115,14 +170,15 @@ class TextEngine {
     if (this.batchLength < trip.batch){
       this.batchLength = trip.batch;
     }
-    this.agentBatchKit[identity] = trip
+    this.agentBatchKit[identity] = trip;
+    console.log("batchAgent" + identity + " : " +JSON.stringify(trip));
   }
   batchProcessor(){
     let setBatch = [];
     if (this.batchLength > 0){
       this.batchLength--;
       for (let key in this.agentBatchKit) {       
-          console.log(key + this.agentBatchKit[key]);
+          console.log(key + JSON.stringify(this.agentBatchKit[key]));
           if (this.agentBatchKit[key].trip[0]  === this.appSettings.batchSwitch){
             this.agentBatchKit[key].trip = this.agentBatchKit[key].trip.slice(1);
             setBatch.push(key);
@@ -171,6 +227,30 @@ class TextEngine {
         break;
     }
   }
+
+  paramatron(identity){
+    //|||javascript to check if a key existss on an object.
+    if (this.apiParams.hasOwnProperty(identity.trim)) {
+      this.setParams(identity);
+    }
+    if(this.formats.hasOwnProperty(identity.trim)){
+      this.setInferenceFormat(identity);
+      console.log("paramatronsetting format: " + JSON.stringify(this.api));
+
+    }
+    if(this.endpoints.endpoints.hasOwnProperty(identity)) {
+      this.api = this.endpoints.endpoints[identity];
+      if (this.api.autoConfigParams == undefined || this.api.autoConfigParams != false) {
+        console.log("paramatron setting endpoint: " + this.api.config);
+        this.setParams(identity);     
+       }
+      if (this.api.autoConfigFormat == undefined || this.api.autoConfigFormat != false ||this.inferenceClient.custom === false) {
+        console.log("paramatron setting format: " + this.api.format);
+        this.inferenceClient.setPromptFormat(this.formats[this.api.format]);//todo I think undefined lives here on %
+      }
+      console.log("paramatron setting api: " + JSON.stringify(this.api));
+    }
+  }
   updateIdentity(identity) {
     let trip = this.returnTrip(identity);
     let found = false;
@@ -181,43 +261,87 @@ class TextEngine {
     if (identity !== "" && identity !== null && identity !== undefined) {
       if (identity) {
         if (Number.isNaN(Number(identity))) {
-          identity = identity.trim();
-          if (trip.trip[0] === this.appSettings.assistantTag){
-            this.setPrompt("assistantRole",identity.slice(1));
-            found = true;
-          }
-          if (trip.trip[0] === this.appSettings.userTag){
-            this.setPrompt("userRole",identity.slice(1));
-          }
-          if (trip.trip[0] === this.appSettings.systemTag) {
-            this.setPrompt("systemRole", identity.slice(1));
-          }
-          if (trip.trip[0] === this.appSettings.formatSwitch){
-            this.setInferenceFormat(identity.slice(1));
-          }
-          if (trip.trip[0] === this.appSettings.batchNameSwitch){
-            this.batchUserName = identity.slice(1);
-            this.chatHistory = true;
-            console.log( "'"+ this.appSettings.batchNameSwitch + "' activates history, it only changes the history");
-          }
-          if (trip.trip[0] === this.appSettings.batchAssistantSwitch){
-            this.batchAssistantName = identity.slice(1);
-            this.chatHistory = true;
-            console.log( "'"+ this.appSettings.batchAssistantSwitch + "' activates history, it only changes the history");
+          identity = identity.trim();//|||convert this to a switch case:
+          switch(trip.trip[0]) {
+            case this.appSettings.assistantTag:
+              this.setPrompt("assistantRole", identity.slice(1));
+              found = true;
+              break;
+          
+            case this.appSettings.userTag:
+              this.setPrompt("userRole", identity.slice(1));
+              break;
+          
+            case this.appSettings.systemTag:
+              this.setPrompt("systemRole", identity.slice(1));
+              break;
+          
+            case this.appSettings.formatSwitch:
+              this.setInferenceFormat(identity.slice(1));
+              break;
 
-          }
-          if (trip.trip[0] === this.appSettings.batchContinueTag) {
-            this.setPrompt("responseStart", identity.slice(1));
-          }
-          if (trip.trip[0] === this.appSettings.setJsonLevel) {
-           this.setJsonLevel(identity);
-          }
-          if(this.endpoints.endpoints.hasOwnProperty(identity)) {
-            this.api = this.endpoints.endpoints[identity];
-            console.log("setting api: " + JSON.stringify(this.api));
+            case this.appSettings.paramSwitch:
+              this.setParams(identity.slice(1));
+              break;
 
-            return { text: "", agent: false, set: false }
+            case this.appSettings.batchNameSwitch:
+              this.batchUserName = identity.slice(1);
+              this.chatHistory = true;
+              console.log( "'"+ this.appSettings.batchNameSwitch + "' activates history, it only changes the history");
+              break;
+          
+            case this.appSettings.batchAssistantSwitch:
+              this.batchAssistantName = identity.slice(1);
+              this.chatHistory = true;
+              console.log( "'"+ this.appSettings.batchAssistantSwitch + "' activates history, it only changes the history");
+              break;
+          
+            case this.appSettings.batchContinueTag:
+              this.setPrompt("responseStart", identity.slice(1));
+              break;
+          
+            case this.appSettings.setJsonLevel:
+              this.setJsonLevel(identity);
+              break;
+          
+            default:
+              if (this.appSettings.paramatron){
+                this.paramatron(identity)
+              }
+            break;
+              // handle default case here
           }
+          // if (trip.trip[0] === this.appSettings.assistantTag){
+          //   this.setPrompt("assistantRole",identity.slice(1));
+          //   found = true;
+          // }
+          // if (trip.trip[0] === this.appSettings.userTag){
+          //   this.setPrompt("userRole",identity.slice(1));
+          // }
+          // if (trip.trip[0] === this.appSettings.systemTag) {
+          //   this.setPrompt("systemRole", identity.slice(1));
+          // }
+          // if (trip.trip[0] === this.appSettings.formatSwitch){
+          //   this.setInferenceFormat(identity.slice(1));
+          //   this.setParams(identity.slice(1));
+          // }
+          // if (trip.trip[0] === this.appSettings.batchNameSwitch){
+          //   this.batchUserName = identity.slice(1);
+          //   this.chatHistory = true;
+          //   console.log( "'"+ this.appSettings.batchNameSwitch + "' activates history, it only changes the history");
+          // }
+          // if (trip.trip[0] === this.appSettings.batchAssistantSwitch){
+          //   this.batchAssistantName = identity.slice(1);
+          //   this.chatHistory = true;
+          //   console.log( "'"+ this.appSettings.batchAssistantSwitch + "' activates history, it only changes the history");
+          // }
+          // if (trip.trip[0] === this.appSettings.batchContinueTag) {
+          //   this.setPrompt("responseStart", identity.slice(1));
+          // }
+          // if (trip.trip[0] === this.appSettings.setJsonLevel) {
+          //  this.setJsonLevel(identity);
+          // }
+         
           if (trip.batch > 0){
             identity = identity.slice(trip.batch);
             this.batchAgent(identity, trip);
@@ -230,17 +354,26 @@ class TextEngine {
               console.log(trip.api + " : " + counter);
               if (counter === trip.api) {
                 this.api = this.endpoints.endpoints[key];
+                if (this.api.autoConfigParams == undefined || this.api.autoConfigParams != false) {
+                  console.log("quick setting params: " + this.api.config);
+                  this.params = this.formats[this.api.config];
+                }
+                if (this.api.autoConfigFormat == undefined || this.api.autoConfigFormat != false) {
+                  console.log("setting format: " + this.api.format);
+                  this.inferenceClient.setPromptFormat( this.instructionFormats[this.api.format]);//todo: this breaks custom formating including ~~~ on quick backend switches...
+                }
                 console.log("setting api: " + JSON.stringify(this.api));  
                 identity = identity.slice(trip.api); 
-                console.log(identity);
-                break;
+                console.log("Trip api: "+identity);
               }
               counter++;
             }
           }
           }else {
-            this.api = this.endpoints.endpoints[this.endpoints.defaultClient];
-            console.log("using default api: " + JSON.stringify(this.api));
+            //if (this.api.config != this.endpoints.endpoints[this.endpoints.defaultClient].config){
+              this.api = this.endpoints.endpoints[this.endpoints.defaultClient];
+              console.log("using default api: " + JSON.stringify(this.api));
+            //}
           }
           
           if (this.identities.hasOwnProperty(identity) && !batching) {
@@ -712,7 +845,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
 "c" or "chat" activates the history
 
 
-"sc" or "silentChat" sends the history wihout adding the new turn to the history.
+"sc" or "silentChat" sends the history wihout adding the new turn to the history. For multiple turns with the same history.
 
 
 "ch" or "clearHistory" clears the chatlog and prevents sending to the AI.
@@ -885,18 +1018,14 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
         this.inferenceClient.setOnePromptFormat ("specialInstructions", formattedQuery);
         break;
       default:
-       let notfound = "invalid prompt key: " + command + " Options: systemDefault, systemRole, prepend, postPrompt, systemAfterPost, memorySystem, memoryUser, endSystemTurn, startTurn, userRole, memoryUser, endUserTurn, assistantRole, endTurn, responseStart \n \n you may edit and copy below: \n";
-        this.notify("invalid key: " + command ," Options: systemDefault, systemRole, prepend, postPrompt, systemAfterPost, memorySystem, memoryUser, endSystemTurn, startTurn, userRole, memoryUser, endUserTurn, assistantRole, endTurn, responseStart");
-        // let settings = {
-          
-        //   system: this.inferenceClient.instruct.system + "\n",
-        //   prependPrompt: this.inferenceClient.instruct.prependPrompt + "\n",
-        //   postPrompt: this.inferenceClient.instruct.postPrompt + "\n",
-        //   memorySystem: this.inferenceClient.instruct.memorySystem + "\n",
-        //   memoryUser: this.inferenceClient.instruct.memoryUser + "\n",
-        //   finalprompt: this.inferenceClient.instruct.finalprompt + "\n",
-        //   responseStart: this.inferenceClient.instruct.responseStart
-        // }
+        this.notify("invalid key: " + command ," invalid format segment name, see console for options");
+        
+        let names = [];
+        for (let key in this.inferenceClient.instructSet) {
+          names.push(key);
+        }
+        console.log( setting + " : prompt segment not found, options: " + JSON.stringify(names) );
+        let notfound = "invalid prompt key: " + command + " Options: (some, its a bit more flexible)" + JSON.stringify(names);
         this.identity.settings = notfound;
         this.writeSettings = true
         break;
@@ -906,17 +1035,30 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
     setting = setting.trim();
     let names = [];
     //console.log(JSON.stringify(this.formats));
-    let set = {};
     try {
-      set = this.formats[setting];
-      //console.log("\nset: " +JSON.stringify(set));
+      let set = this.formats[setting];
+      console.log("set format: " +JSON.stringify(set));
+      this.inferenceClient.setPromptFormat(set);
     } catch (error) {
       for (let key in this.formats) {
         names.push(key);
       }
       console.log( setting + " : format not found, options: " + JSON.stringify(names) );
     }
-    this.inferenceClient.setPromptFormat(set);
+  }
+  setParams(setting) {
+    setting = setting.trim();
+    try {
+      let set = this.apiParams[setting];
+      console.log("set params: " +JSON.stringify(set));//|||explain how to color the console with javascript
+      this.params = set;
+    } catch (error) {
+      let names = [];
+      for (let key in this.apiParams) {
+        names.push(key);
+      }
+      console.log( setting + " : Param set not found, options: " + JSON.stringify(names) );
+    }
   }
   personaAtor(persona, sorted, ifDefault){
   persona.forEach(tag => {
@@ -927,7 +1069,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
       commands[0] = commands[0].trim();
       commands[1] = commands[1].trim();
       if (commands[1] == this.appSettings.save && this.sendLast) {
-        //save like |||agent:save|
+        //save like |||re,agent:save|
         this.identities[commands[0]] = this.recentClip; 
         tag = commands[0];
       } else if (commands[1] == this.appSettings.save) {
@@ -944,13 +1086,16 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
       } else if (commands[1] == this.appSettings.saveAgentToFile) {
         //save like |||agent:file|
         this.sendHold = true;
-        let setting  ={[commands[0]]:this.identities[commands[0]]}
+        let setting  = {[commands[0]]:this.identities[commands[0]]}
         //console.log(JSON.stringify(setting));
         this.settingSaver(setting,this.identities, "0identities.json", this.notify, this.fs) //todo: fix this magic string.
         tag = commands[0];
       } else if (commands[0] == this.appSettings.setPromptFormat && this.appSettings.save == commands[1]) {
         this.sendHold = true;
         this.pickupFormat(sorted.formattedQuery);
+      }  else if (commands[0] == this.appSettings.setInstruction) {
+        this.sendHold = true;
+        this.setPrompt(commands[1],sorted.formattedQuery);
       }  else if (commands[0] == this.appSettings.setInstruction) {
         this.sendHold = true;
         this.setPrompt(commands[1],sorted.formattedQuery);
@@ -975,9 +1120,15 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
         else if (this.params.max_tokens) {
           this.params.max_tokens = parseInt(tag);
         }
+        else if (this.params.max_new_tokens) {
+          this.params.max_new_tokens = parseInt(tag);
+        }
         else{
           console.log("no matching max_length or max_tokens in params: " +JSON.stringify(this.params));
         }
+      } else if (tag === this.appSettings.setParams) {
+        this.sendHold = true;
+        this.setParams(sorted.formattedQuery);
       } else if (tag === this.appSettings.setPromptFormat) {
         this.sendHold = true;
         this.setInferenceFormat(sorted.formattedQuery);
@@ -1161,7 +1312,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
       this.blockPresort = false;
       this.noBatch = false;
       this.batchProcessor();      
-      text = this.appSettings.invoke + this.batch + this.appSettings.endTag + text;      
+      text = this.appSettings.invoke + this.batch + this.appSettings.endTag + this.appSettings.endTag + text;      
     }
     else {
       this.noBatch = true;
@@ -1260,7 +1411,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
             //   //todo: build whole engine to transport settings across multiple apis
             // }
             // console.log("outParams: " + JSON.stringify(outParams));
-            console.log(sorted);            
+            //console.log(sorted);            
             this.inferenceClient.send(this.identity, sorted.formattedQuery, this.params, this.api);
           } else {
             this.sendHold = false;
