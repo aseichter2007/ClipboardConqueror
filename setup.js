@@ -126,7 +126,27 @@
                     three: "text"//text
                 }            
             },
-            
+            ollamaChat:{ 
+                type: "chat",// completion or chat, completion allows CC to control the formatting completely.
+                jsonSystem : "none",//markup,full,keys,none//completion and chat combined only //full sends JSON.Stringify into the system prompt.  keys sends the contents like key : content \n\n key2 : ... markup makes each agent it's own chat message, none sends only the agent text.
+                buildType: "combined",
+
+                url : "http://localhost:11434/api/chat",//Kobold Compatible api url
+                config: "ollama",//params. must match a key in apiParams. It it is the same as the endpoint, then switching endpoints will change the parameters as well
+                autoConfigParams: false,//false prevents overriding params with |||tgwchat|
+                //templateStringKey: "jinja", //jinja, none or adapter, required for chat endpoints
+                format: "llama3",//must be a valid instruction format from below.
+                autoConfigFormat: false,//false prevents overriding prompt formatting with |||tgwchat|
+                //objectReturnPath: "choices[0].message.content"  This is set up in outpoint
+                key: "no_key_needed",
+                outpoint: {//choices[0].text choices is one, [second sends a number], text is the end.
+                    outpointPathSteps: 4,//key for a nifty switch case to get the response
+                    one: "choices",//results[0].text. keys must be lowercase numbers up to ten like one two three four...
+                    two: 0,//[0].text
+                    three: "message",//text
+                    four: "content"
+                }            
+            },
             tgwchatNoFormat: {//|||$$| or |||textGenWebUi|
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
@@ -1220,6 +1240,7 @@ function setParams(){
         },
         ollama: {
             model: "llama3",
+            //keep_alive: "5m",
             stream: false,
             options: {
                 num_keep: 5,
