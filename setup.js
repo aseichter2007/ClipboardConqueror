@@ -106,6 +106,27 @@
                     four: "content"
                 }  
             },
+            ollama:{ 
+                type: "completion",// completion or chat, completion allows CC to control the formatting completely.
+                jsonSystem : "none",//markup,full,keys,none//completion and chat combined only //full sends JSON.Stringify into the system prompt.  keys sends the contents like key : content \n\n key2 : ... markup makes each agent it's own chat message, none sends only the agent text.
+                //buildType: "unused",
+
+                url : "http://127.0.0.1:11434/api/generate",//Kobold Compatible api url
+                config: "ollama",//params. must match a key in apiParams. It it is the same as the endpoint, then switching endpoints will change the parameters as well
+                autoConfigParams: false,//false prevents overriding params with |||tgwchat|
+                //templateStringKey: "jinja", //jinja, none or adapter, required for chat endpoints
+                format: "llama3",//must be a valid instruction format from below.
+                autoConfigFormat: false,//false prevents overriding prompt formatting with |||tgwchat|
+                //objectReturnPath: "data.results[0].text"  This is set up in outpoint
+                key: "no_key_needed",
+                outpoint: {//choices[0].text choices is one, [second sends a number], text is the end.
+                    outpointPathSteps: 3,//key for a nifty switch case to get the response
+                    one: "results",//results[0].text. keys must be lowercase numbers up to ten like one two three four...
+                    two: 0,//[0].text
+                    three: "text"//text
+                }            
+            },
+            
             tgwchatNoFormat: {//|||$$| or |||textGenWebUi|
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
@@ -356,7 +377,6 @@ function setappSettings(defaultClient, persona) {
         emptyquick: "e",///|||e| for empty system prompt. 
         agentSplit: ",", //like |||agent.write|
         rootname: "system", //this goes into the object sent as identity at creation and |||| this text goes in the value| "request"
-        //rootname: "system", //this is kind of intermittent because it is not always there. ### is more neutral and seems to wake up the bigger models.
         paramatron: true, // false disallows naked key name matching like |||ooba|
         clean: true, //clean takes out the rootname key when it's not set. Set false to always send the rootname
         setInstruction: "PROMPT", // like |||PROMPT:system|<SYSTEM>, //options:system, prepend, post, memory, memoryUser, final, start"
@@ -1198,9 +1218,43 @@ function setParams(){
             repetition_penalty_slope: 0.7,
             sampler_order: [6, 5, 0, 1, 3, 4, 2]
         },
+        ollama: {
+            model: "llama3",
+            stream: false,
+            options: {
+                num_keep: 5,
+                seed: 42,
+                num_predict: 100,
+                top_k: 20,
+                top_p: 0.9,
+                tfs_z: 0.5,
+                typical_p: 0.7,
+                repeat_last_n: 33,
+                temperature: 0.8,
+                repeat_penalty: 1.2,
+                presence_penalty: 1.5,
+                frequency_penalty: 1.0,
+                mirostat: 1,
+                mirostat_tau: 0.8,
+                mirostat_eta: 0.6,
+                penalize_newline: true,
+                stop: ["\n", "user:"],
+                numa: false,
+                num_ctx: 1024,
+                num_batch: 2,
+                num_gpu: 1,
+                main_gpu: 0,
+                low_vram: false,
+                f16_kv: true,
+                vocab_only: false,
+                use_mmap: true,
+                use_mlock: false,
+                num_thread: 8
+            }
+        },
         lmstudio : {
             //model : "can also go here, will be overridden by above",
-            max_tokens : 2000,
+            max_tokens: 2000,
             temperature: 1,
             stream : false
             //todo: figure out this api
@@ -2293,6 +2347,27 @@ rio:` ReasonItOut(TopicFromUser)
     < /Example Output >
 
      `,
+sentiment:` Return an object for the API:
+\`\`\`
+key descriptions:
+    content: Core ideas in text from user. Preserve facts formatted as a string array,
+    sentiment : mood sentiment, informative, happy, sad, etc.
+    include as many items as necessary to preserve all ideas.
+    vulgar : if content is vulgar or impolite, return true.
+    isQuestion : if the content is a question return true, if content contains questions but closes them
+    analysis : Describe the text.
+
+API FORMAT:
+    {
+        content: ARRAY
+        sentiment : STRING
+        vulgar : BOOL,
+        isQuestion : BOOL,
+        analysis : STRING
+    }
+\`\`\`
+Respond using the defined keys in the API format. Fill using content from user, no preface or explanation is required, just fill and return the form.
+`
 
 
 //my novel stuff might end up living with the project. If you use my world details, please use it intact rather than morphing it into something else. I'll leave it out for now cause it is a lot.
