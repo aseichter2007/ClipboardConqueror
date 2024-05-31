@@ -18,6 +18,10 @@ The Clipboard Conqueror format is very configurable, but always adheres to the f
 Personally I like pipes |||agents|quick prompt|user query ~~~ start assistant response. The default. 
 
 
+
+
+
+
 Using Clipboard Conqueror:
 ---
 1. Enter `|||` followed by your request or command. Pipe `|` can be typed by pressing `shift + backslash` (above enter, left of enter for European layouts).
@@ -50,7 +54,7 @@ There are 6 special operators for the `|||agents|` segment, that start with the 
     - ">" user name
     - "}" system name
     - "~" start of assistant response, "~~~" overwrites "~".
-    - "^" change params for api, overwrites current settings.
+    - "^" change params for api, overwrites current api parameter settings.
     - "`" the backtick or grave symbol changes the system prompt format. Supports "json","markup","partial", or none. 
 
   `"%}^>!" all persist until overwritten.`  On backend switching, You're left talking to the last backend you accessed after one invokation. Additional tags to tgwui will overwrite settings changes like |||450,temperature:0.7|. there is a per backend endpoint setting to prevent this behavior.

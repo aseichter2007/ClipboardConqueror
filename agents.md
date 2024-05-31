@@ -20,7 +20,12 @@ Special ||| [operators] to apply|:
 
 - "`~`" start of assistant response, "~~~" overwrites "~". "~" can be chained to shape later responses
 
-- "`" the backtick or grave symbol changes the system prompt format. Supports "json","markup","partial", or none. partial inserts agents like "name : text", markup makes each agent it's own turn with the current prompt format. this leaves an empty system at the begining. use "|||FORMAT:prependPrompt| persistent top system prompt" with a completion endpoint to set a system prompt when using "markup"
+- "`" the backtick or grave symbol changes Clipboard Conqueror's system prompt send format. Supports "json","markup","partial", or none. 
+
+    - Partial inserts agents like "name : text".  
+    - None leaves off the key names and sends only the text.
+    - markup makes each agent it's own turn with the current prompt format. this leaves an empty system at the begining.
+    - use "|||FORMAT:prependPrompt| persistent top system prompt" with a completion endpoint to set a system prompt when using "markup"
 
 - "`@`" executes a next turn using the assistant response as the user query. 
 
@@ -29,6 +34,8 @@ Special ||| [operators] to apply|:
 - "`]`" activates the chat history and sets this name for  user in the history. Best when chaining. 
 
 - "`;`" activates the chat history and sets this name for asstant in the history. Best when chaining. 
+
+        The chat history uses the current set prompt formatting when it is sent. This can cause unexpected output issues if the backend is using a different prompt format.
 
 Fancy |||`flags`|
 ---
