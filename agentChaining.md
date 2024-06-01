@@ -86,23 +86,57 @@ Handle % format changes first, like |||%alpaca, !name| or the format change over
 
 ; and ]
 ---
-;assistant,
+;assistant, 
+- when chaining agents, ";" doesn't apply, rename user with ">" to name the incoming response as used this turn. 
+
 ]user,
 
 ```
-|||cf, !Query Node, ;Rick's Inner thoughts, >user, ]summer, @!Rick Sanchez,@>morty,@~An adventure?, @c|  Hey lets go on an adventure, grandpa.
+|||cf, !Query Node, ;Rick's Inner thoughts, >user, ]summer, @!Rick Sanchez,@>Rick Sanchez's Inner Thoughts,@~An adventure?, @c|  Hey lets go on an adventure, grandpa.
 ```
 
 Will present the query node as a discrete turn labeled Rick's Inner thoughts in the chat log for the second turn, as well as change the original query to summer. @>morty is overwritten by ;Rick's Inner thoughts, but still changes the assistant name. 
 these activate the history, and they change the history name as it is built, allowing you to rename a response to direct the next agent's response to the content. 
+
 turn one:
->"prompt": "<|start_header_id|>system<|end_header_id|>\n\n<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n  Hey lets go on an adventure, grandpa.<|eot_id|><|start_header_id|>Query Node<|end_header_id|>\n\n"
+>"prompt": "<|start_header_id|>system<|end_header_id|>\n\n<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n  Hey lets go on an adventure, grandpa.<|eot_id|><|start_header_id|>Query Node<|end_header_id|>\n\n""
 
 turn two:
->"prompt": "<|start_header_id|>system<|end_header_id|>\n\n<|eot_id|><|start_header_id|>summer<|end_header_id|>\n\n  Hey lets go on an adventure, grandpa.<|eot_id|><|start_header_id|>Rick's Inner thoughts<|end_header_id|>\n\nAs we embark on this adventure, I must admit that I'm feeling a bit older than usual today. The journey ahead of us seems long and winding, filled with unexpected twists and turns.\n\n<|eot_id|><|start_header_id|>morty<|end_header_id|>\n\nAs we embark on this adventure, I must admit that I'm feeling a bit older than usual today. The journey ahead of us seems long and winding, filled with unexpected twists and turns.<|eot_id|><|start_header_id|>Rick Sanchez<|end_header_id|>\n\nAn adventure?"
+>"prompt": ""<|start_header_id|>system<|end_header_id|>\n\n<|eot_id|><|start_header_id|>summer<|end_header_id|>\n\n  Hey lets go on an adventure, grandpa.\n\n<|eot_id|><|start_header_id|>Rick Sanchez's Inner Thoughts<|end_header_id|>\n\nAs we embark on this adventure, I must admit that I'm feeling a bit older than usual today. The journey ahead of us seems long and winding, filled with unexpected twists and turns.<|eot_id|><|start_header_id|>Rick Sanchez<|end_header_id|>\n\nAn adventure?"
+
+Response:
+
+>Ha! There's no such thing as an adventure, Morty. There's just survival. And if you're lucky, maybe you'll find something worth surviving for. Now let's get moving before things get any worse.
 
 
- Ha! There's no such thing as an adventure, Morty. There's just survival. And if you're lucky, maybe you'll find something worth surviving for. Now let's get moving before things get any worse.
+
+Useful Prompting Strategies:
+---
+
+1.	GRADE (Goal, Request, Action, Details, Example): Structures prompts to be goal-oriented and actionable.
+2.	RODES (Role, Objective, Details, Example, Sense Check): Enhances precision and relevance with a final sense check.
+3.	Chain of Thought (CoT): Encourages step-by-step articulation of reasoning processes.
+4.	Zero-Shot and Few-Shots Learning: Prompts AI without or with minimal examples to demonstrate adaptability.
+5.	ReAct (Reason and Act): Combines reasoning and task-specific actions in one prompt.
+6.	Instruction Tuning: Fine-tunes AI on specific instructions for better direct response performance.
+7.	Interactive Prompts: Engages AI in a dynamic back-and-forth interaction to refine outputs.
+8.	TRACI (Task, Role, Audience, Create, Intent): Tailors prompts by considering task specifics and audience.
+9.	TRAACI (Task, Role, Analyze, Audience, Create, Intent): Adds an analysis step to TRACI for deeper insight.
+10.	Scaffolded Prompts: Provides a series of incremental prompts for complex or educational tasks.
+11.	SMART (Specific, Measurable, Achievable, Relevant, Timebound): Applies goal-setting principles to prompt engineering.
+12.	Prompt Chaining: Uses sequential prompts for complex or multistep tasks.
+13.	Contextual Prompting: Incorporates rich context for more accurate and relevant responses.
+14.	Contrastive Prompts: Uses contrasting examples to clarify what to do and what to avoid.
+15.	Meta Prompts: Prompts about creating or optimizing other prompts.
+16.	Dynamic Prompting: Adapts prompts based on real-time feedback or changes.
+17.	Multimodal Prompts: Uses multiple types of data inputs to enrich AI interactions.
+18.	Ethical Prompting: Ensures prompts adhere to ethical guidelines and cultural sensitivities.
+19.	Hierarchical Prompting: Structures prompts from general to specific for layered information.
+20.	Guided Imagery Prompts: Guides AI to generate detailed visual content or descriptions.
+21.	Recursive Prompts: Uses output from one prompt as input for the next to refine responses.
+22.	Adaptive Learning Prompts: Adjusts prompt complexity based on AI’s performance or user’s progress.
+23.	Cross-Modal Prompts: Transforms inputs across different modalities (e.g., text to audio).
+These summaries are designed to help you easily remember the essence of each prompting framework.
 
 
 ---
