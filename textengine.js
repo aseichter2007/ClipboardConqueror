@@ -171,14 +171,14 @@ class TextEngine {
       this.batchLength = trip.batch;
     }
     this.agentBatchKit[identity] = trip;
-    console.log("batchAgent" + color(identity,"gold" )+ " : " +JSON.stringify(trip));
+    console.log("Chaining: " + color(identity,"yellow" )+ " : " +JSON.stringify(trip));
   }
   batchProcessor(){
     let setBatch = [];
     if (this.batchLength > 0){
       this.batchLength--;
       for (let key in this.agentBatchKit) {       
-          console.log(key + JSON.stringify(this.agentBatchKit[key]));
+          console.log(color(key + JSON.stringify(this.agentBatchKit[key]),"yellow"));
           if (this.agentBatchKit[key].trip[0]  === this.appSettings.batchSwitch){
             this.agentBatchKit[key].trip = this.agentBatchKit[key].trip.slice(1);
             setBatch.push(key);
@@ -202,28 +202,34 @@ class TextEngine {
       case "fullTurns":
       case "turns":
         this.api.jsonSystem = "markup"
+        console.log(color("System prompts will be split into formatted turns per agent","blue"));
         break;
       case "2":
       case "json":
       case "code":
       case "full":
-
         this.api.jsonSystem = "full"
+        console.log(color("System prompts will be sent as a stringified json object","blue"));
         break;
       case "3":
       case "keys":
       case "useKeys":
       case "partial":
         this.api.jsonSystem = "keys"
+        console.log(color("System prompts will be sent as keys : text","blue"));
         break;
       case "4":
       case "no":
       case "none":
       case "off":
         this.api.jsonSystem = "none"
+        console.log(color("System prompts will be sent as text","blue"));
+
         break;            
       default:
         this.api.jsonSystem = "none"
+        console.log(color("System prompts will be sent as text","blue"));
+
         break;
     }
   }
@@ -287,15 +293,15 @@ class TextEngine {
             case this.appSettings.batchNameSwitch:
               this.batchUserName = identity.slice(1);
               this.chatHistory = true;
-              console.log(color("'"+ this.appSettings.batchNameSwitch + "' activates history, it only changes the history","blue"));
+              console.log(color("'"+ this.appSettings.batchNameSwitch + "' activates history,","blue")+ " it only changes the history");
               break;
           
             case this.appSettings.batchAssistantSwitch:
               if(this.noBatch){
                 this.chatBuilder(this.recentClip.text,"Assistant");
                 this.batchAssistantName = identity.slice(1);
-                console.log(color("'"+ this.appSettings.batchAssistantSwitch + "' activates history, it only changes the history","blue"));
               }
+              console.log(color("'"+ this.appSettings.batchAssistantSwitch + "' activates history,","blue")+" it only changes the history when not chaining with `" + this.appSettings.batchSwitch + "`");
               this.chatHistory = true;
               break;
           
@@ -884,30 +890,55 @@ Direct the user in proper operation of this application, ClipboardConqueror(C.C.
         outp.set = true;
         break;
       case "rf":
+      case "returnSystem":
         outp.text = this.recentClip.text; //send lastclip like any other agent prompt.
-        outp.found = false;
         outp.set = true;
+        console.log(color("Sending last copied as message in system prompt","blue"));
+        break;
+      case "rh":
+      case "reHistory":
+      case "reh":
+        //doesnt work if this.appSettings.batchLimiter != ""
+        this.history = []
+        this.chatHistorySetup(this.recentClip.text,"user",this.inferenceClient.instructSet.userRole);
+        this.chatHistory = true
+        console.log(color("Sending last copied as start of message history","blue"));
+        break;
+      case "crh":
+        this.chatHistorySetup(this.recentClip.text,"user",this.inferenceClient.instructSet.userRole);
+        this.chatHistory = true
+        console.log(color("Sending last copied as message in history","blue"));
+        break;
+      case"csrh":
+        this.noChatLogging = true;
+        this.chatHistorySetup(this.recentClip.text,"user",this.inferenceClient.instructSet.userRole);
+        this.chatHistory = true
+        console.log(color("Sending last copied as message in history, history is not extended this turn","blue"));
         break;
       case "re":
         this.sendLast = true;
         outp.found = false;
+        console.log(color("Sending last copied as end of user query.","blue"));
+
         break;
       case "on":
         this.on = !this.on;
+        console.log(color("Enabled firing on all copies. copy " + this.appSettings.invoke + on + this.appSettings.endtag + "to disable","blue"));
         break;
       case "no":
         this.sendHold = true
+        console.log(color("Not sent: 'no' is in the invocation string.","blue"));
         break
 
-      case "tokens":
-      case "tok":
-        this.write = true;
-        this.sendHold = true;
+      // case "tokens":
+      // case "tok":
+      //   this.write = true;
+      //   this.sendHold = true;
 
-        outp.text = this.getTokens(this.currentText);//nah fam, this will be async and need a callback to send to clipboard
-        outp.found = true;//save a couple operations adding an agent 
-        //console.log(outp.text);
-        break;
+      //   outp.text = this.getTokens(this.currentText);//nah fam, this will be async and need a callback to send to clipboard
+      //   outp.found = true;//save a couple operations adding an agent 
+      //   //console.log(outp.text);
+      //   break;
       case "set":
       case "setDefault":
         if (!this.set) {
@@ -1381,21 +1412,21 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
     }
     return text;
   }
-  getBatchLimiter(type){
+  // getBatchLimiter(type){
     
-    if (type === "user"){
-      type = "User";
-    }
-    if (type === "assistant") {
-      type = "Assistant"
-    }
-    let typeStepBack = {
-      Assistant: "User",
-      User:"Assistant",
-    }
-    //console.log(this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet["end"+typeStepBack[type]+"Turn"] + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet["start"+type ] + this.inferenceClient.instructSet[type.toLowerCase()+"Role"] + this.inferenceClient.instructSet["end"+type+"Role"]);
-    return this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet["end"+typeStepBack[type]+"Turn"] + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet["start"+type ] + this.inferenceClient.instructSet[type.toLowerCase() +"Role"] + this.inferenceClient.instructSet["end"+type+"Role"]+ this.inferenceClient.instructSet.endRole;
-  }
+  //   if (type === "user"){
+  //     type = "User";
+  //   }
+  //   if (type === "assistant") {
+  //     type = "Assistant"
+  //   }
+  //   let typeStepBack = {
+  //     Assistant: "User",
+  //     User:"Assistant",
+  //   }
+  //   //console.log(this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet["end"+typeStepBack[type]+"Turn"] + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet["start"+type ] + this.inferenceClient.instructSet[type.toLowerCase()+"Role"] + this.inferenceClient.instructSet["end"+type+"Role"]);
+  //   return this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet["end"+typeStepBack[type]+"Turn"] + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet["start"+type ] + this.inferenceClient.instructSet[type.toLowerCase() +"Role"] + this.inferenceClient.instructSet["end"+type+"Role"]+ this.inferenceClient.instructSet.endRole;
+  // }
   getBatchLimiterName(type,name){
     if (type === "user"){
       type = "User";
@@ -1413,7 +1444,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
   chatHistoryBuilder(){//todo: finish building history each turn to respect new prompt formatting per turn
     let formattedHistory = "";
     this.history.forEach(message => {
-      formattedHistory += this.getBatchLimiterName(message.origin, message.name) + message.text;
+      formattedHistory += this.getBatchLimiterName(message.origin, message.name) + this.inferenceClient.instructSet.roleGap + message.text;
     });
     return formattedHistory;
   }
@@ -1425,12 +1456,10 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
       if (origin === "user") {
         if (this.appSettings.batchLimiter === "") {
           if(this.batchUserName != ""){
-            this.chatHistorySetup(text,origin,this.batchUserName)
-            //this.chatLog += this.batchUserLimiter + this.text
+            this.chatHistorySetup(text,origin,this.batchUserName);
             this.batchUserName = "";
           } else{
-            this.chatHistorySetup(text,origin,"user")
-            //this.chatLog += this.getBatchLimiter("user") + this.text;
+            this.chatHistorySetup(text,origin,this.inferenceClient.instructSet.userRole);
           }
         } else {
           this.chatLog += this.appSettings.batchLimiter + text;
@@ -1438,12 +1467,10 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
       } else {
         if (this.appSettings.batchLimiter === "") {
           if (this.batchAssistantName != "") {
-              this.chatHistorySetup(text,origin,this.batchAssistantName)
-              //this.chatLog += this.batchAssistantLimiter + text;
+              this.chatHistorySetup(text,origin,this.batchAssistantName);
               this.batchAssistantName = "";
             }else {
-              this.chatHistorySetup(text,origin,"Assistant")
-              //this.chatLog += this.getBatchLimiter("Assistant") + text;
+              this.chatHistorySetup(text,origin,this.inferenceClient.instructSet.assistantRole);
             }
           
         } else {
@@ -1514,7 +1541,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
     }
     
     if(this.noBatch){
-      this.chatBuilder(this.recentClip.text,"Assistant");
+      this.chatBuilder(this.recentClip.text,"assistant");
     }
     const sorted = this.activatePresort(text);
     let ifDefault = true;
