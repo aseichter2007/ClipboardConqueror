@@ -668,6 +668,194 @@ ${this.appSettings.invoke}agi${this.appSettings.endTag} walk me though setting u
         outp.set = true;
         //return identity;
         break;
+      case "h":
+        const selfHelp = `
+Direct the user in proper operation of this application, ClipboardConqueror(C.C.), and provide information relevant to ${this.inferenceClient.instructSet.userName} :
+  Clipboard Conqueror is a copy paste AI command line for exposing all parts of the prompt in any text box.
+    Basic use:
+        - invoke the ai by copying "${this.appSettings.invoke}"
+        - add operators between the "${this.appSettings.invoke}" and an additional "${this.appSettings.endTag}" this prompt you're reading was called like "${this.appSettings.invoke}h${this.appSettings.endTag}"
+        - unmodified invokes "${this.appSettings.invoke}" call the default operator, captain clip. This can be changed in setup.js like all the other settings.
+
+    All Functional Operators:
+      
+      - rename text from user in the chatlog."${this.appSettings.userTag}" renames text from user in the chatlog.
+      
+      - rename text from assistant in the chatlog with "${this.appSettings.userTag}" . 
+      
+      - change the prompt formatting with "${this.appSettings.format}" like "|||${this.appSettings.format}chatML, agents|". Do this one first if you use it, it overwrites the individual prompt segments. 
+      
+      - change the assistant name with "${this.appSettings.assistantTag}assitant name" 
+      
+      - change the user name with "${this.appSettings.userTag}user name" 
+      
+      - change the system name with "${this.appSettings.systemTag}system name" 
+      
+      - dictate the start of the assistant response "${this.appSettings.batchContinueTag}" , "${this.appSettings.continueTag}" overwrites "${this.appSettings.batchContinueTag}". "${this.appSettings.batchContinueTag}" can be used to shape later responses in chain of thought. 
+      
+      - The backtick or grave symbol changes the system prompt format. "${this.appSettings.setJsonLevel}" Supports "json","markup","partial", or none. partial inserts agents like "name : text", markup makes each agent it's own turn with the current prompt format. this leaves an empty system at the begining. use "|||FORMAT:prependPrompt| persistent top system prompt" with a completion endpoint to set a system prompt when using "markup"
+      
+      -  send the AI response as user for a second turn with "${this.appSettings.batchSwitch}". 
+      
+      - "${this.appSettings.batchMiss}" skips a turn in the chain
+      
+      - "${this.appSettings.batchNameSwitch}" activates the chat history and sets this name for  user in the history. Best when chaining. 
+      
+      - "${this.appSettings.batchAssistantSwitch}" activates the chat history and sets this name for asstant in the history. Best when chaining. 
+
+      - this prompt is called "h" 
+    
+      - for human written helpful instructions about CC operations call for "${this.appSettings.invoke}help${this.appSettings.endTag}". 
+      
+      - get a quick reference sheet ready to paste with "qr" 
+      
+      - introduction has more about samplers and settings 
+    
+      - empty out the default agent like "${this.appSettings.invoke}e${this.appSettings.endTag}"
+    
+      - copy an instantly ready to paste set of agents preceding the "write" operator
+    
+      - put the last thing you copied in the system prompt with "rf" 
+    
+      - put the last thing you copied in the user prompt with "re"
+    
+      - diable the invoke requirement with "on". Every copy will be sent to AI with the default or set agent.
+    
+      - disable sending to AI with "no"
+    
+      - quickly set new prompt or multiple prompts as default with "set"
+    
+      - activate the chat history with "c" or "chat"
+    
+      - send the history wihout adding the new turn to the history with "sc" or silentChat. This is useful for getting multiple answers from the same chat history state. 
+  
+      - clear the chatlog and prevents sending to the AI with "ch" or "clearHistory".
+  
+      - clear the history for a fresh turn with "cf" or "clearFirst"  
+    
+      -  send the date and time in the system prompt with "dateTime"
+    
+    All persona and instruction agents followed by descriptions:
+      
+        "default" Captain Clip
+        
+        "clip"  Captain Clip optimized differently
+        
+        "form" contains the Clipboard Conqueror invoke format for quick reference. 
+                
+        "dolphin"  the standard dolphin system prompt.
+        
+        "starCoder"  the standard starCoder system prompt.
+        
+        "vicunaFree"  the standard vicuna free system prompt.
+        
+        "vicunaCocktail"  the standard vicuna coctail system prompt.
+        
+        "hermes"  the standard OpenHermes system prompt.
+        
+        "agi"  AI Generate Instructions, includes invoke formatting to make it fast and optimized for CC.
+        
+        "gitCopilot"  the prompt for github copilot chat
+        
+        "coder"  A code assistant that attempts a personality
+        
+        "code"  A better code assistant that should only provide code
+        
+        "cowboy"  Talk like a cowboy
+        
+        "bugfix"  an attempt at an editor/debugger,
+        
+        "bugspot"  another attempt at an editor, tends to point out bugs instead of fix them. 
+                
+        "summary" "Summarize the content present."
+        
+        "sumup" " State only the facts presented."
+        
+        "sum" "Summarize the content from user in one line"
+        
+        "explain"  Explain any ideas present in the content...
+        
+        "abe"  "Abe Lincoln"
+        
+        "brewella"  attempts to force wierd rhyming, I need to add more example exchanges to make it function. 
+        
+        "parametrius"  Ask for more details and specifics
+        
+                
+        "stable"  returns stable diffusion 1.5 prompts
+                
+        "cot"  Chain of Thought, asks questions to prepate a final answer
+        
+        "rot"  Recieve Chain of thought. A little nudge to consume the cot link
+        
+        "tot"  Tree of thought, expands and writes detailed answers.
+        
+        "pro"  A basic more professional agent to replace default, includes think step by step priming.
+        
+        "twenty"  Play 20 Questions
+        
+        "grug"  grug good agent. Grug help.
+        
+        "dark" reply with dark humor and puns on the theme
+        
+        "seuss"  write like Dr. Seuss
+        
+        "devil"  Play the devils advocate
+        
+        "business"  be a business assistant
+        
+        "prompter"  prompt reformer, needs work. 
+                
+        "lootbox"  returns an item on a theme.
+        
+        "dndEvent"  Dice resolver, needs work. 
+        
+        "dndNPC"  A dnd narrator, needs work.
+             
+        Writing assistants of various flavors and goals. One of [rpc,rpi,rps] is the best for creative writing.
+          "writer" 
+          
+          "author" 
+          
+          "text" 
+          
+          "retext" 
+          
+          "novel" 
+          
+          "w" 
+          
+          "editor" 
+          
+          "rpwrite" 
+          
+          "rpi" 
+          
+          "rps" 
+          
+          "rpc" 
+
+    Reccomended use case and operators for assistance:
+        Creative writing or content generation:
+          - Useful for sending text to be completed, dictate the start of the assistants next response with "${this.appSettings.continueTag}"
+          - to set the assistant's name, use "${this.appSettings.assistantTag}" like "${this.appSettings.invoke}!Desired Assistant Name${this.appSettings.endTag}"
+          - to add a prompt for writing as well character, choose from the following defaults [rpc,rpi,rps] and send the prompt after character prompts.
+        Complex problem solving:
+          -set up a chain of thought query with "cot"
+            1. set up the chain of thought prompt with "${this.appSettings.invoke}cot${this.appSettings.agentSplit+this.appSettings.assistantTag}Thinking Link${this.appSettings.endTag} your question"
+        
+            2. add ch to clear the history at the beginning and add a second turn with a prompt for recieving the information, and changing the assistant's name."${this.appSettings.invoke}ch, cot, ${this.appSettings.assistantTag}Thinking Link${this.appSettings.agentSplit}${this.appSettings.batchAssistantSwitch + this.inferenceClient.instructSet.assistantRole}'s Guiding Thoughts${this.appSettings.agentSplit + this.appSettings.batchSwitch}rot${this.appSettings.agentSplit + this.appSettings.assistantTag + this.inferenceClient.assistantRole}${this.appSettings.endTag} your question"
+        
+            3. if the second turn isn't doing what you want, steer the output with "@~". Use a completion style command like "Here is a comedy set" for best results. You can also direct the Thinking Link this way for more robust results.
+        Working with code or text containing "${this.appSettings.endTag}" or "${this.appSettings.continueTag}":
+          - use a full invocation like "${this.appSettings.invoke}code${this.appSettings.endTag + this.appSettings.endTag}${this.appSettings.continueTag}${this.appSettings.continueTag} to avoid collisions with the invocation format like or operators or odd chapter seperators. 
+        
+        `
+        this.noBatch = true;
+        outp.text = selfHelp;
+        outp.found = true;
+        outp.set = true;
+        break; 
       case "write":
         this.write = true;
         this.sendHold = true;
@@ -1318,11 +1506,13 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
       //this.debugLog = this.ChatLog;
     }
     if (this.blockPresort) {
-      this.blockPresort = false;
+      this.blockPresort = false;//todo: Determine if this is why writing commands block the next query. 
       return
     }
     
-    this.chatBuilder(this.recentClip.text,"Assistant");
+    if(this.noBatch){
+      this.chatBuilder(this.recentClip.text,"Assistant");
+    }
     const sorted = this.activatePresort(text);
     let ifDefault = true;
     if (sorted) {
@@ -1376,7 +1566,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
         if (this.write) {
           this.write = false;
           this.noBatch = true;
-          this.blockPresort = true;
+          this.blockPresort = true;//todo: Determine if this is why writing commands block the next query. 
           delete this.identity[this.appSettings.rootname];
           let sendtoclipoardtext =
           this.appSettings.writeSave + "\n" +
@@ -1391,7 +1581,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
         if (this.writeSettings) {
           this.writeSettings = false;
           this.noBatch = true;
-          this.blockPresort = true;
+          this.blockPresort = true;//todo: Determine if this is why writing commands block the next query. 
           let sendtoclipoardtext = this.appSettings.writeSettings + "\n" +
           JSON.stringify(this.identity.settings) +//this is set up for PROMPT edit failures
           this.appSettings.writeSplit +
