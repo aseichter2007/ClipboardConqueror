@@ -15,7 +15,9 @@ Clipboard Conqueror - Multiple Backend Support
   
   Ollama should work, but becuse they have a different structure for their generation parameters they must be set in setup.js and quick settings are not supported. Ollama chat doesn't spec a jinja adapter either, so prefer the completion endpoint.  Many features of Clipboard Conqueror do not work through the openAI api compatible endpoint. 
 
-  Move your favorites to the top in setup.js and invoke them by |||$| from top to |||$$$...| at bottom. Or just use the key names like `|||kobold|` or `|||tgwchat|`  
+  Move your favorites to the top in setup.js and invoke them by |||$| from top to |||$$$...| at bottom. Or use the key names like `|||kobold|` , `|||tgwchat|`, or `|||ollama|`
+
+  On backend switching, You're left talking to the last backend you accessed after one invokation. Changing backends may change the current params and overwrite settings changes like |||450,temperature:0.7|. There is a per endpoint setting to prevent this behavior.
 
   ```
   |||$|this message will go to the first configured endpoint in setup.js or 0endpoints.json if settings files are enabled

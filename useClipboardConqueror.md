@@ -57,9 +57,9 @@ There are 6 special operators for the `|||agents|` segment, that start with the 
     - "^" change params for api, overwrites current api parameter settings.
     - "`" the backtick or grave symbol changes the system prompt format. Supports "json","markup","partial", or none. 
 
-  `"%}^>!" all persist until overwritten.`  On backend switching, You're left talking to the last backend you accessed after one invokation. Additional tags to tgwui will overwrite settings changes like |||450,temperature:0.7|. there is a per backend endpoint setting to prevent this behavior.
+  `"%}^>!" all persist until overwritten.`  all valid entries for "%" and "^" can be used without the prefix operator, but will then also set endpoints, generation parameter sets, and prompt formats sharing the name. This allows quick accesss while preserving flexibility. 
 
-  - Note: "`:`", the setting break is not supported inside these operators, and will cause trouble. If you need that for your assistant name, change settinglimit or add it in setup.js promptFormats. Similar for comments.
+  - Note: "`:`", the setting break, is not supported inside these operators, and will cause trouble. If you need that for your assistant name, change settinglimit or add it to the prompt format in setup.js promptFormats. Similar for comments.
 
 >|||`json, %chatML, ! Rick, > Morty, writer, } Narrator's notes| Rick answers morty's questions.| Where are we going today, grandpa?  
 
