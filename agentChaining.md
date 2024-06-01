@@ -105,7 +105,7 @@ turn one:
 turn two:
 >"prompt": ""<|start_header_id|>system<|end_header_id|>\n\n<|eot_id|><|start_header_id|>`summer`<|end_header_id|>\n\n  Hey lets go on an adventure, grandpa.\n\n<|eot_id|><|start_header_id|>`Rick Sanchez's Inner Thoughts`<|end_header_id|>\n\nAs we embark on this adventure, I must admit that I'm feeling a bit older than usual today. The journey ahead of us seems long and winding, filled with unexpected twists and turns.<|eot_id|><|start_header_id|>`Rick Sanchez`<|end_header_id|>\n\n`An adventure?`"
 
-- note that `;Rick's Inner thoughts,` does not appear but does activate the history. When chaining, the response is always as user. 
+- note that `;Rick's Inner thoughts,` does not appear but does activate the history. When chaining, the response is always sent as user or set with ">". 
 
 Response:
 
