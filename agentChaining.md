@@ -87,22 +87,25 @@ Handle % format changes first, like |||%alpaca, !name| or the format change over
 ; and ]
 ---
 ;assistant, 
-- when chaining agents, ";" doesn't apply, rename user with ">" to name the incoming response as used this turn. 
+- when chaining agents, ";" doesn't apply, rename user with ">" to name the incoming response in the turn. 
 
 ]user,
+- changes the user name as sent in the history. Does not change the name for the current turn. 
 
-```
-|||cf, !Query Node, ;Rick's Inner thoughts, >user, ]summer, @!Rick Sanchez,@>Rick Sanchez's Inner Thoughts,@~An adventure?, @c|  Hey lets go on an adventure, grandpa.
-```
 
-Will present the query node as a discrete turn labeled Rick's Inner thoughts in the chat log for the second turn, as well as change the original query to summer. @>morty is overwritten by ;Rick's Inner thoughts, but still changes the assistant name. 
+>|||cf, !`Query Node`, ;Rick's Inner thoughts, >`user`, ]`summer`, @!`Rick Sanchez`,@>`Rick Sanchez's Inner Thoughts`,@~`An adventure?`, @c|  Hey lets go on an adventure, grandpa.
+
+
+This command set will present the query node as a discrete turn labeled Rick's Inner thoughts in the chat log for the second turn, as well as change the original query to summer. @>morty is overwritten by ;Rick's Inner thoughts, but still changes the assistant name. 
 these activate the history, and they change the history name as it is built, allowing you to rename a response to direct the next agent's response to the content. 
 
 turn one:
->"prompt": "<|start_header_id|>system<|end_header_id|>\n\n<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n  Hey lets go on an adventure, grandpa.<|eot_id|><|start_header_id|>Query Node<|end_header_id|>\n\n""
+>"prompt": "<|start_header_id|>system<|end_header_id|>\n\n<|eot_id|><|start_header_id|>`user`<|end_header_id|>\n\n  Hey lets go on an adventure, grandpa.<|eot_id|><|start_header_id|>`Query Node`<|end_header_id|>\n\n""
 
 turn two:
->"prompt": ""<|start_header_id|>system<|end_header_id|>\n\n<|eot_id|><|start_header_id|>summer<|end_header_id|>\n\n  Hey lets go on an adventure, grandpa.\n\n<|eot_id|><|start_header_id|>Rick Sanchez's Inner Thoughts<|end_header_id|>\n\nAs we embark on this adventure, I must admit that I'm feeling a bit older than usual today. The journey ahead of us seems long and winding, filled with unexpected twists and turns.<|eot_id|><|start_header_id|>Rick Sanchez<|end_header_id|>\n\nAn adventure?"
+>"prompt": ""<|start_header_id|>system<|end_header_id|>\n\n<|eot_id|><|start_header_id|>`summer`<|end_header_id|>\n\n  Hey lets go on an adventure, grandpa.\n\n<|eot_id|><|start_header_id|>`Rick Sanchez's Inner Thoughts`<|end_header_id|>\n\nAs we embark on this adventure, I must admit that I'm feeling a bit older than usual today. The journey ahead of us seems long and winding, filled with unexpected twists and turns.<|eot_id|><|start_header_id|>`Rick Sanchez`<|end_header_id|>\n\n`An adventure?`"
+
+- note that `;Rick's Inner thoughts,` does not appear but does activate the history. When chaining, the response is always as user. 
 
 Response:
 
