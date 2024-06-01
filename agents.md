@@ -1,12 +1,12 @@
 ![Clipboard Conqueror Graphic logo. The letters are clouds and buildings on a lush estate.](CCfinal.jpg)
-Clipboard Conqueror - Agents And Operators
+Clipboard Conqueror - Operators and Prompts
 =============================
 [Home](readme.md), [Choosing a model](choosingAModel.md), [Basic Use](useClipboardConqueror.md), [Prompt Formatting](promptFormatting.md), [Backend Switching](multipleEndpoints.md), [Chaining agents](agentChaining.md)
 
 ---
-Special ||| [operators] to apply|:
+Special ||| operators | to apply:
 ---
--"`]`" renames text from user in the chatlog.
+- "`]`" renames text from user in the chatlog.
 
 - "`;`" renames text from assistant in the chatlog. 
 
@@ -22,7 +22,7 @@ Special ||| [operators] to apply|:
 
 - "`" the backtick or grave symbol changes Clipboard Conqueror's system prompt send format. Supports "json","markup","partial", or none. 
 
-    - Partial inserts agents like "name : text".  
+    - Partial inserts system prompts like "name : text".  
     - None leaves off the key names and sends only the text.
     - markup makes each agent it's own turn with the current prompt format. this leaves an empty system at the begining.
     - use "|||FORMAT:prependPrompt| persistent top system prompt" with a completion endpoint to set a system prompt when using "markup"
@@ -39,7 +39,7 @@ Special ||| [operators] to apply|:
 
 Fancy |||`flags`|
 ---
-|||`Help`| Contains instructions about CC operations. 
+|||`help`| Contains instructions about CC operations. 
 
 `qr` quick reference sheet ready to paste. 
 

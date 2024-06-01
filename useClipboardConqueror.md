@@ -87,7 +87,7 @@ Settings and More!
 
 Ask Frank Drebin if he has information contained in tag "mem"
 
-- Agents, memory agents, and instructions can be combined like |||agent1,agent2|.
+- system prompts, memory prompts, and instructions can be combined like |||agent1,agent2|. prompt text is sent in order it is called 
 Three pipes, agent, one pipe. No spaces. Any agents or settings must be closed with one pipe or the names will be sent as text to the default agent (Captain Clip).
 
 ```
@@ -100,9 +100,10 @@ Three pipes, agent, one pipe. No spaces. Any agents or settings must be closed w
 ```
 - sets the temperature to 1.1. This works for any setting, e.g., top_p, min_p. supports :true :false. Overrides the params in setup.js.
 
-`setting names vary per backend you connect to.` 
+- Only persists in memory. |||settings:set| are lost when changing backends.
 
-- Only persists in memory and used for the defaultClient set in setup.js. |||settings:set| are not used for secondary endpoints used like |||tgwchat|.
+`setting names vary per inference platform you connect to.`  Backends such as ollama that tuck generation parameters down a level must change the params in setup.js, quick setting access is not supported on all backends.
+
 ```
 |||re| what is this code doing? 
 ```

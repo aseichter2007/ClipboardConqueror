@@ -23,9 +23,9 @@ If you are using local LLMs, CC is a data secure alternative integration provide
 There is a wealth of information linked below and in setup.js.
 All you really need to know is copying ||| with Clipboard Conqueror and Koboldcpp running will send any text you copy with that `|||` to local AI.
 
-When Copying code or text containing "|" symbols, you can use 5 pipes "|||||". Or change the default invoke settings. This will send the default agent with your query.
+When Copying code or text containing "|" symbols, you can use 5 pipes "|||||". Or change the default invoke settings. This will send the default system prompt with your query.
 
-to banish the default agent, invoke like "`|||e||`", or send a prompt with your query like "`|||writer|`"
+to banish the default system prompt, invoke like "`|||e||`", or send a prompt with your query like "`|||writer|`"
 
 If you are unhappy with my syntax, almost everything is configurable in setup.js. 
 
@@ -102,15 +102,15 @@ Key Features:
 --------------
 * Control every part of LLM prompts without needing to switch context to a different tab, window, or program. It works in any text box. 
 
-* Write and quickly call targeted agents for specific tasks.
+* Write and quickly call targeted system prompts for specific tasks.
 
-* Quick saving of new agents and information for later use.
+* Quick saving of new system prompts and information for later use.
 
 * Tailors text with proper formatting for precise AI responses.
 
 * Locally run large language model support with KoboldCPP for powerful, secure, text processing.
 
-* Supports multiple backends, diverse prompt configurations, and even a no code framework for prototyping chain-of-actor or chain-of-thought prompts for multi-step agent development pipelines.
+* Supports multiple backends, diverse prompt configurations, and even a no code framework for prototyping chain-of-actor or chain-of-thought prompts for multi-step development pipelines.
 
 * Supports multiple languages and contexts for diverse applications. Not all LLM models are multilingual, some configuration may be required.
 
@@ -126,7 +126,7 @@ Clipboard Conqueror makes the process of accessing an LLM simple and efficient i
 
 - Clipboard Conqueror provides a whole toolbox of predefined assistants, ready to work for you.  
 
-Save agents on the fly to store, sort, query, think, review, or just tell you jokes or anything you can ask for, really. 
+Save system prompts on the fly to store, sort, query, think, review, or just tell you jokes or anything you can ask for, really. 
 
 
 Desktop Platforms:
@@ -190,7 +190,7 @@ If you encounter any issues while using Clipboard Conqueror or have suggestions 
 
 I'm chasing a bug where after |||list| or |||agent,write| the next copy is not parsed, but is stored, preventing the same thing being copied and invoking the AI.  Workaround: copy text without an invoke to clear the stored copy and allow a "fresh" copy that will activate the parsing engine. 
 
-Saving agents like |||re,name:save|"more details" is likely to mess you up, it will save the last text you copied into "name" rather than "more details"
+Saving system prompts like |||re,name:save|"more details" is likely to mess you up, it will save the last text you copied into "name" rather than "more details"
 
 Please use Clipboard Conqueror responsibly and respect copyright and laws in your country while generating content. Misuse of this tool might lead to unintended consequences and breaches of privacy or intellectual property rights. I hold no responsibility for the data that passes through this tool on any system.  
 
