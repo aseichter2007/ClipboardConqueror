@@ -91,8 +91,8 @@
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 jsonSystem : "none",
                 url : "http://127.0.0.1:5000/v1/chat/completions",
-                config: "tgwchat",
-                autoConfigParams: false,//false prevents overriding params with |||tgwchat|
+                config: "tgwchat",//if this is the same as the key for this endpoint, autoConfigParams can be set false
+                autoConfigParams: true,//false prevents overriding params with |||tgwchat|
                 autoConfigFormat: true,//false prevents overriding prompt formatting with |||tgwchat|
                 templateStringKey: "instruction_template_str",//if present and not "" will build and send a jinja template to tgwui.
                 format: "alpaca",// endpoints must use a format matching a key in instructionFormats, overwrites current settings when chaining, etc.
@@ -205,35 +205,40 @@
                     four: "content"
                 }            
             },
-            lmstudioCompletion: {//|||$$$$$| or |||lmstudioCompletion|
-                type: "completion",
-                jsonSystem : true,
-                url : "https://localhost:1234/v1/completions/",
-                config: "lmstudio",//sets default gen parameters from below in apiParams
-                format: "alpaca",// system, key, or combined // role": "system", "content":      or      "role": key, "content":
-                //type: "none",
-                key: "no_key_needed",
-                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
-                    outpointPathSteps: 3,//key for a switch case
-                    one: "results",//results[0].text
-                    two: 0,//[0].text
-                    three: "text"//text
-                }            
-            },
+            // lmstudioCompletion: {//|||$$$$$| or |||lmstudioCompletion|
+            //     type: "completion",
+            //     jsonSystem : true,
+            //     url : "https://localhost:1234/v1/completions/",
+            //     config: "lmstudio",//sets default gen parameters from below in apiParams
+            //     format: "alpaca",// system, key, or combined // role": "system", "content":      or      "role": key, "content":
+            //     //type: "none",
+            //     key: "no_key_needed",
+            //     outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
+            //         outpointPathSteps: 3,//key for a switch case
+            //         one: "results",//results[0].text
+            //         two: 0,//[0].text
+            //         three: "text"//text
+            //     }            
+            // },
             lmstudio: {//|||$$$$$$| or |||lmstudio|
                 type: "chat",
-                buildType: "compatible",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
-                url : "https://localhost:1234/v1/chat/completions/",
+                buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
+                jsonSystem : "none",
+                url : "http://localhost:1234/v1/chat/completions/",
                 config: "lmstudio",
-                templateStringKey: "jinja",
-                format: "chatML",// system, key, or combined // role": "system", "content":      or      "role": key, "content":
+                autoConfigParams: false,
+                //templateStringKey: "jinja",
+                format: "combined",// system, key, or combined // role": "system", "content":      or      "role": key, "content":
+                autoConfigFormat: true,
                 key: "no_key_needed",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
-                    outpointPathSteps: 3,//key for a switch case
-                    one: "results",//results[0].text
+                    outpointPathSteps: 4,//key for a switch case
+                    one: "choices",//results[0].text
                     two: 0,//[0].text
-                    three: "text"//text
-                } 
+                    three: "message",//text
+                    four: "content"
+                },
+                noFormat: true
             },
             textGenWebUiCompletion: {//|||$$$$$| or |||textGenWebUi|
                 type: "completion",
@@ -689,9 +694,9 @@ function setFormats() {
         chatVicuna: {
             //todo: like [startTurn,content, endSystemTurn, endUserTurn, endTurn]
             startTurn: "",
-            endSystemTurn: "<|im_end|>\n",
-            endUserTurn: "<|im_end|>\n",
-            endAssistantTurn: "<|im_end|>\n",
+            endTurn: "<|im_end|>\n",
+            // endUserTurn: "<|im_end|>\n",
+            // endAssistantTurn: "<|im_end|>\n",
             systemRole: "SYSTEM:\n",
             userRole: "USER:\n",
             assistantRole: "ASSISTANT:\n",
@@ -1243,7 +1248,7 @@ function setParams(){
             //format: "json" forces json response format.
             //keep_alive: "5m",
             stream: false,
-            options: {
+            options: {//todo: wrangle this options nesting layer.  
                 num_keep: 5,
                 seed: 42,
                 num_predict: 100,
