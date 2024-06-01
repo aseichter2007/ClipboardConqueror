@@ -35,7 +35,7 @@ Please help me share Clipboard Conqueror with everyone.
 `Table of Contents:`
 ---
 
-[install](install.md)
+[Install](install.md)
 
 [Choosing a model](choosingAModel.md)
 
