@@ -1,7 +1,7 @@
 ![Clipboard Conqueror Graphic logo. The letters are clouds and buildings on a lush estate.](CCfinal.jpg)
 Clipboard Conqueror - Batch Chain Agents
 =============================
-[Home](readme.md), [Install](install.md), [Choosing a model](choosingAModel.md), [Basic Use](useClipboardConqueror.md), [Agents](agents.md), [Prompt Formatting](promptFormatting.md), [Backend Switching](multipleEndpoints.md), 
+[Home](readme.md), [Install](install.md), [Choosing a model](choosingAModel.md), [Basic Use](useClipboardConqueror.md), [Prompt Reference](agents.md), [Prompt Formatting](promptFormatting.md), [Backend Switching](multipleEndpoints.md), 
 
 ---
 Multi agent chaining and complex agent workflows:
@@ -144,4 +144,4 @@ These summaries are designed to help you easily remember the essence of each pro
 
 ---
 
-[Home](readme.md), [Install](install.md), [Choosing a model](choosingAModel.md), [Basic Use](useClipboardConqueror.md), [Agents](agents.md), [Prompt Formatting](promptFormatting.md), [Backend Switching](multipleEndpoints.md), 
+[Home](readme.md), [Install](install.md), [Choosing a model](choosingAModel.md), [Basic Use](useClipboardConqueror.md), [Prompt Reference](agents.md), [Prompt Formatting](promptFormatting.md), [Backend Switching](multipleEndpoints.md), 

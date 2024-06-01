@@ -2,7 +2,7 @@
 Clipboard Conqueror - General Use
 =============================
 
-[Home](readme.md), [install](install.md), [Choosing a model](choosingAModel.md), [Agents](agents.md), [Prompt Formatting](promptFormatting.md), [Backend Switching](multipleEndpoints.md), [Chaining agents](agentChaining.md)
+[Home](readme.md), [install](install.md), [Choosing a model](choosingAModel.md), [Prompt Reference](agents.md), [Prompt Formatting](promptFormatting.md), [Backend Switching](multipleEndpoints.md), [Chaining agents](agentChaining.md)
 
 Configuration:
 ---
@@ -297,4 +297,4 @@ while set ||||any| any replaces the old system instruction before agents this ti
 That ought to get you started and covers most operation. Head to [Backend Switching](multipleEndpoints.md) or [Chaining agents](agentChaining.md) for more feature explainations, or check the available default [Agents](agents.md) for explainations about each of those.
 
 ---
-[Home](readme.md), [install](install.md), [Choosing a model](choosingAModel.md), [Agents](agents.md), [Prompt Formatting](promptFormatting.md), [Backend Switching](multipleEndpoints.md), [Chaining agents](agentChaining.md)
+[Home](readme.md), [install](install.md), [Choosing a model](choosingAModel.md), [Prompt Reference](agents.md), [Prompt Formatting](promptFormatting.md), [Backend Switching](multipleEndpoints.md), [Chaining agents](agentChaining.md)

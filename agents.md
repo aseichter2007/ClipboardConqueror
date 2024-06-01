@@ -51,21 +51,28 @@ Fancy |||`flags`|
 
 `list` will instantly supply a ready to paste list of all agents like below.
 
-`rf` will put the last thing you copied at the position of rf in the system prompt. 
-
-`re` will send the last copied text after text from |||re|user  last copied text.
-
 `on` makes clipboard conqueror run every copy, no invoke required, till you toggle it off.
 
 `no` prevents sending to AI, useful for copying entire invokes, just add the flag.
 
 `set` or `setDefaultsaves` agents left of it to be added until toggled off like |||set|
 
+`rf` will put the last thing you copied at the position of rf in the system prompt. 
+
+`re` will send the last copied text after text from |||re|user  last copied text.
+
+`rh` will clear the history and start a new history with the last copied text as a message from user. 
+
 `c` or `chat` activates the history
+
+`crh` will send the last copied text into the history and activate the history this turn. 
 
 `sc` or `silentChat` sends the history wihout adding the new turn to the history. For multiple queries against the same history. 
 
+`csrh` sends last copy into the end of the history but does not add user query or assistant response to history this turn. 
+
 `ch` or `clearHistory` clears the chatlog and prevents sending to the AI.
+
 
 `cf` or `clearFirst` clears the chatlog while sending the query to the LLM.
 

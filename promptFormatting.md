@@ -1,7 +1,7 @@
 ![Clipboard Conqueror Graphic logo. The letters are clouds and buildings on a lush estate.](CCfinal.jpg)
 Clipboard Conqueror - Readme
 =============================
-[Home](readme.md), [Install](install.md), [Choosing a model](choosingAModel.md), [Basic Use](useClipboardConqueror.md), [Agents](agents.md), [Backend Switching](multipleEndpoints.md), [Chaining agents](agentChaining.md)
+[Home](readme.md), [Install](install.md), [Choosing a model](choosingAModel.md), [Basic Use](useClipboardConqueror.md), [Prompt Reference](agents.md), [Backend Switching](multipleEndpoints.md), [Chaining agents](agentChaining.md)
 
 ---
 
@@ -141,4 +141,4 @@ Similarly you can have particular names set up seperate backend destinations, or
 note: current behavior removes token markup "<|" any "|>" from the ai response to ease use of various models. For the most part monster merge models respond very well, but will markup character dialog in a way I find undesirable. Comment line 24 "text = this.removeChatML(text);" in responsengine.js to stop this behavior. Response engine is ready for function calls, let me know what would be useful.
 
 ---
-[Home](readme.md), [Install](install.md), [Choosing a model](choosingAModel.md), [Basic Use](useClipboardConqueror.md), [Agents](agents.md), [Backend Switching](multipleEndpoints.md), [Chaining agents](agentChaining.md)
+[Home](readme.md), [Install](install.md), [Choosing a model](choosingAModel.md), [Basic Use](useClipboardConqueror.md), [Prompt Reference](agents.md), [Backend Switching](multipleEndpoints.md), [Chaining agents](agentChaining.md)

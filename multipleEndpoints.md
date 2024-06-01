@@ -1,7 +1,7 @@
 ![Clipboard Conqueror Graphic logo. The letters are clouds and buildings on a lush estate.](CCfinal.jpg)
 Clipboard Conqueror - Multiple Backend Support
 =============================
-[Home](readme.md), [Install](install.md), [Choosing a model](choosingAModel.md), [Basic Use](useClipboardConqueror.md), [Agents](agents.md), [Prompt Formatting](promptFormatting.md), [Chaining agents](agentChaining.md)
+[Home](readme.md), [Install](install.md), [Choosing a model](choosingAModel.md), [Basic Use](useClipboardConqueror.md), [Prompt Reference](agents.md), [Prompt Formatting](promptFormatting.md), [Chaining agents](agentChaining.md)
 
 ---
   Switch Endpoints
@@ -41,4 +41,4 @@ Clipboard Conqueror - Multiple Backend Support
   You can safely use any other command to query sensitive data, and depending on your configuration, gpt commands can be sent locally as well. 
 
   ---
-  [Home](readme.md), [Install](install.md), [Choosing a model](choosingAModel.md), [Basic Use](useClipboardConqueror.md), [Agents](agents.md), [Prompt Formatting](promptFormatting.md), [Chaining agents](agentChaining.md)
+  [Home](readme.md), [Install](install.md), [Choosing a model](choosingAModel.md), [Basic Use](useClipboardConqueror.md), [Prompt Reference](agents.md), [Prompt Formatting](promptFormatting.md), [Chaining agents](agentChaining.md)
