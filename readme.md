@@ -179,6 +179,7 @@ Additional Resources:
 [OpenHermes 2.5 Mistral prompting ideas](https://www.reddit.com/r/LocalLLaMA/comments/18j59g1/you_are_a_helpful_ai_assistant/)
 
 [Llama 3 Quant Loss](https://github.com/matt-c1/llama-3-quant-comparison)
+
 Bug Reports and Feature Requests:
 ---------------------------------
 If CC seems hung, copy text with no invoke a couple times and try again. 
