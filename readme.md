@@ -238,30 +238,6 @@ This info belongs here somewhere.
 // Winogrande - Common sense reasoning
 // `
 
-1.	GRADE (Goal, Request, Action, Details, Example): Structures prompts to be goal-oriented and actionable.
-2.	RODES (Role, Objective, Details, Example, Sense Check): Enhances precision and relevance with a final sense check.
-3.	Chain of Thought (CoT): Encourages step-by-step articulation of reasoning processes.
-4.	Zero-Shot and Few-Shots Learning: Prompts AI without or with minimal examples to demonstrate adaptability.
-5.	ReAct (Reason and Act): Combines reasoning and task-specific actions in one prompt.
-6.	Instruction Tuning: Fine-tunes AI on specific instructions for better direct response performance.
-7.	Interactive Prompts: Engages AI in a dynamic back-and-forth interaction to refine outputs.
-8.	TRACI (Task, Role, Audience, Create, Intent): Tailors prompts by considering task specifics and audience.
-9.	TRAACI (Task, Role, Analyze, Audience, Create, Intent): Adds an analysis step to TRACI for deeper insight.
-10.	Scaffolded Prompts: Provides a series of incremental prompts for complex or educational tasks.
-11.	SMART (Specific, Measurable, Achievable, Relevant, Timebound): Applies goal-setting principles to prompt engineering.
-12.	Prompt Chaining: Uses sequential prompts for complex or multistep tasks.
-13.	Contextual Prompting: Incorporates rich context for more accurate and relevant responses.
-14.	Contrastive Prompts: Uses contrasting examples to clarify what to do and what to avoid.
-15.	Meta Prompts: Prompts about creating or optimizing other prompts.
-16.	Dynamic Prompting: Adapts prompts based on real-time feedback or changes.
-17.	Multimodal Prompts: Uses multiple types of data inputs to enrich AI interactions.
-18.	Ethical Prompting: Ensures prompts adhere to ethical guidelines and cultural sensitivities.
-19.	Hierarchical Prompting: Structures prompts from general to specific for layered information.
-20.	Guided Imagery Prompts: Guides AI to generate detailed visual content or descriptions.
-21.	Recursive Prompts: Uses output from one prompt as input for the next to refine responses.
-22.	Adaptive Learning Prompts: Adjusts prompt complexity based on AI’s performance or user’s progress.
-23.	Cross-Modal Prompts: Transforms inputs across different modalities (e.g., text to audio).
-These summaries are designed to help you easily remember the essence of each prompting framework.
 
 //todo: link assorted knowledge banks. 
 
