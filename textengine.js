@@ -291,9 +291,12 @@ class TextEngine {
               break;
           
             case this.appSettings.batchAssistantSwitch:
-              this.batchAssistantName = identity.slice(1);
+              if(this.noBatch){
+                this.chatBuilder(this.recentClip.text,"Assistant");
+                this.batchAssistantName = identity.slice(1);
+                console.log(color("'"+ this.appSettings.batchAssistantSwitch + "' activates history, it only changes the history","blue"));
+              }
               this.chatHistory = true;
-              console.log(color("'"+ this.appSettings.batchAssistantSwitch + "' activates history, it only changes the history","blue"));
               break;
           
             case this.appSettings.batchContinueTag:
