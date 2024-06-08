@@ -194,40 +194,86 @@ class InferenceClient {
     } else {
       outIdentity = this.identityStringifyNoKey(identity);
     }
+    let finalPrompt ="";
+    if (instruct.order != undefine) {
 
-    let finalPrompt =
-      instruct.bos +
-      instruct.startTurn +
-      instruct.startSystem +
-      instruct.systemRole +
-      instruct.endSystemRole +
-      instruct.endRole +
-      instruct.roleGap +
-      instruct.prependPrompt +
-      instruct.systemAfterPrepend +
-      outIdentity +
-      instruct.postPrompt +
-      instruct.memorySystem +
-      instruct.endSystemTurn +
-      instruct.endTurn +
-      instruct.startTurn +
-      instruct.startUser +
-      instruct.userRole +
-      instruct.endUserRole +
-      instruct.endRole +
-      instruct.roleGap +
-      instruct.memoryUser +
-      formattedQuery +
-      instruct.endUserTurn +
-      instruct.endTurn +
-      instruct.startTurn +
-      instruct.startAssistant +
-      instruct.assistantRole +
-      instruct.endAssistantRole +
-      instruct.endRole +
-      instruct.roleGap +
-      instruct.responseStart;
-
+      finalPrompt += instruct.bos;
+      instruct.order.forEach(segment => {
+        if (segment == "system") {
+          finalPrompt += 
+            instruct.startTurn +
+            instruct.startSystem +
+            instruct.systemRole +
+            instruct.endSystemRole +
+            instruct.endRole +
+            instruct.roleGap +
+            instruct.prependPrompt +
+            instruct.systemAfterPrepend +
+            outIdentity +
+            instruct.postPrompt +
+            instruct.memorySystem +
+            instruct.endSystemTurn +
+            instruct.endTurn;
+        } else if(segment == "user") {
+          finalPrompt += 
+            instruct.startTurn +
+            instruct.startUser +
+            instruct.userRole +
+            instruct.endUserRole +
+            instruct.endRole +
+            instruct.roleGap +
+            instruct.memoryUser +
+            formattedQuery +
+            instruct.endUserTurn +
+            instruct.endTurn;
+        }else if(segment == "assistant") {
+          formattedQuery += 
+            instruct.startTurn +
+            instruct.startAssistant +
+            instruct.assistantRole +
+            instruct.endAssistantRole +
+            instruct.endRole +
+            instruct.roleGap +
+            instruct.responseStart;
+        }
+        
+      });
+      
+    } else {
+      
+      finalPrompt =
+        instruct.bos +
+        instruct.startTurn +
+        instruct.startSystem +
+        instruct.systemRole +
+        instruct.endSystemRole +
+        instruct.endRole +
+        instruct.roleGap +
+        instruct.prependPrompt +
+        instruct.systemAfterPrepend +
+        outIdentity +
+        instruct.postPrompt +
+        instruct.memorySystem +
+        instruct.endSystemTurn +
+        instruct.endTurn +
+        instruct.startTurn +
+        instruct.startUser +
+        instruct.userRole +
+        instruct.endUserRole +
+        instruct.endRole +
+        instruct.roleGap +
+        instruct.memoryUser +
+        formattedQuery +
+        instruct.endUserTurn +
+        instruct.endTurn +
+        instruct.startTurn +
+        instruct.startAssistant +
+        instruct.assistantRole +
+        instruct.endAssistantRole +
+        instruct.endRole +
+        instruct.roleGap +
+        instruct.responseStart;
+    }
     params.prompt = finalPrompt;
     completion(api, params, this.callback, this.notify, this.handler);
   }
