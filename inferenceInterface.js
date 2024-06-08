@@ -34,6 +34,10 @@ class InferenceClient {
       if (setting.bos != undefined) {
         bos = setting.bos;
       }
+      let eos = "";
+      if(setting.eos != undefined){
+        eos = setting.eos;
+      }
       let startTurn = "";
       if (setting.startTurn != undefined) {
         startTurn = setting.startTurn;
@@ -129,6 +133,7 @@ class InferenceClient {
 
       this.instructSet = {
         bos: bos,
+        eos: eos,
         startTurn: startTurn,
         endTurn: endTurn,
         startSystem: startSystem,
@@ -171,7 +176,7 @@ class InferenceClient {
       console.log("invalid format: " + error);
     }
   }
-  completionMessageBuilder(identity, formattedQuery, params, api) {
+  completionMessageBuilder(identity, userQuery, params, api) {
     const instruct = this.instructSet;
     //console.log(JSON.stringify(this.instructSet));
     if (api.model) {
@@ -223,11 +228,11 @@ class InferenceClient {
             instruct.endRole +
             instruct.roleGap +
             instruct.memoryUser +
-            formattedQuery +
+            userQuery +
             instruct.endUserTurn +
             instruct.endTurn;
         }else if(segment == "assistant") {
-          formattedQuery += 
+          userQuery += 
             instruct.startTurn +
             instruct.startAssistant +
             instruct.assistantRole +
@@ -238,7 +243,7 @@ class InferenceClient {
         }
         
       });
-      
+      finalPrompt += instruct.eos; //this may belong up top, or responstStart may belong below this. idk, the tokenizer generally handles this.
     } else {
       
       finalPrompt =
@@ -263,7 +268,7 @@ class InferenceClient {
         instruct.endRole +
         instruct.roleGap +
         instruct.memoryUser +
-        formattedQuery +
+        userQuery +
         instruct.endUserTurn +
         instruct.endTurn +
         instruct.startTurn +
@@ -272,7 +277,8 @@ class InferenceClient {
         instruct.endAssistantRole +
         instruct.endRole +
         instruct.roleGap +
-        instruct.responseStart;
+        instruct.responseStart+
+        instruct.eos;//this might be better up one line, but should generally remain empty
     }
     params.prompt = finalPrompt;
     completion(api, params, this.callback, this.notify, this.handler);
