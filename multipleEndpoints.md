@@ -9,13 +9,13 @@ Clipboard Conqueror - Multiple Backend Support
   Clipboard Conqueror supports infinite configurable endpoints. You can add as many as you like. 
   CC supports multiple parameter sets to ease multiple backend configurations.
 
-  It can support anything that takes either a string or "messages" openAI api style input. LMstudio and Koboldcpp's openai api endpoints return cryptic errors. Something about SSLv3 and a generic bad request refusal. Any insights would be appreciated.
+  It can support anything that takes either a string or "messages" openAI api style input. 
 
   The verbosity of TGWUI leaves something to be desired. Prefer KoboldCpp because there is better indication that the query is being processed, and how much longer that might take. Feedback and issues about compatibility are appreciated.
   
   Ollama should work, but becuse they have a different structure for their generation parameters they must be set in setup.js and quick settings are not supported. Ollama chat doesn't spec a jinja adapter either, so prefer the completion endpoint.  Many features of Clipboard Conqueror do not work through the openAI api compatible endpoint. 
 
-  Move your favorites to the top in setup.js and invoke them by |||$| from top to |||$$$...| at bottom. Or use the key names like `|||kobold|` , `|||tgwchat|`, or `|||ollama|`
+  Move your favorites to the top in setup.js and invoke them by |||$| from top to |||$$$...| at bottom. Or use the key names like `|||kobold|` , `|||tgwchat|`, `|||lmstudio|` or `|||ollama|`
 
   On backend switching, You're left talking to the last backend you accessed after one invokation. Changing backends may change the current params and overwrite settings changes like |||450,temperature:0.7|. There is a per endpoint setting to prevent this behavior.
 
