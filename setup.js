@@ -43,7 +43,7 @@
         writeFiles: false,//true to write 0formats.json, 0identities.json etc. Required true for |||agent:file| 
         duplicateCheck: false, //some other clipboard appications duplicate copied text back to the clipboard, set this true to catch those and preserve the proper last copied text. //untested, let me know if it works please. I don't think it busts anything but enabling this /may/ make unblocking after writing quries require non-dublicate text. 
         defaultClient: "kobold",//must match a key in endpoints. Recommend using kobold or tgwchat, ooba also seems to be working.
-        defaultOptions: ["kobold", "tgwchat", "oobaRPmerge", "lmstudio",/*not working, ssl? koboldChat too*/ "textGenWebUi", "ooba",  "chatGPT3", "chatGPT4","select defaultClient: from previous items. This field is purely informational for the user, particularly to ease use when writeFiles is enabled."],
+        defaultOptions: ["kobold", "tgwchat", "oobaRPmerge", "lmstudio","textGenWebUi", "ooba",  "chatGPT3", "chatGPT4","select defaultClient: from previous items. This field is purely informational for the user, particularly to ease use when writeFiles is enabled."],
         instructFormat: "llama3",//overrides the defaultclient's set format
         instructOptions: ["default", "defaultJson", "defaultJsonReturn", "hermes", "chatML", "chatVicuna", "samantha", "airoboros", "alpaca", "alpacaInstruct", "llamav2", "mistral", "mixtral", "metharme", "bactrian", "baichuan", "baize", "blueMoon", "chatGLM", "openChat", "openChatCode", "wizard", "wizardLM", "vicuna", "mistralLite", "deepseek", "deepseekCoder", "tinyLlama", "pirateLlama", "stableLM", "openAssistant", "vicunav1", "stableVicuna", "rp", "select instruct: from previous items or any you add to 0formats.json"],//or in setup below and re-write 0formats.json I think this one might be deprecated.
         persona: "default",//must be a valid identity in idents
@@ -447,7 +447,54 @@ function setFormats() {
             // endRole +
             // responseStart;
     const promptFormats = { //|||^kobold| and when you call these like |||kobold| they also change the backend endpoint and params if matching entries exist, change the names to suit your needs. 
-        default: {
+        completion: {//this has all the possible keys and needs none. All keys are optional.
+            order: ["system","user","assistant"],//Completion endpoints only, controls turn order, only supports system, user, assistant, duplication is possible. 
+            //only add these two if you're sure you know what you're doing, duplicate bos may reduce response quality
+            bos: "",// always goes first
+            eos: "",//these are generally added by the tokenizer. EOS goes on the end after responseStart, this may mess you up. Only use if neccesary to close BEFORE the generated assistant response.
+            
+            //these apply to all turns, some formats have different turn initialization tokens
+            startTurn: "", //use if startSystem, startUser, and startAssistant are all the same
+            endTurn: "", //use if endSystemTurn, endUserTurn, and endAssistantTurn are the same.  
+            endRole: "",
+            roleGap: "",//For gap between role identifier and content. For individual gaps put them on endSystemRole, endUserRole, endAssistantRole. 
+            
+        //for target turn, above keys are commented in the places they append.
+        //system
+            //startTurn
+            startSystem: "",
+            systemRole: "",
+            //endRole
+            endSystemRole: "",
+            //rolegap
+            prependPrompt: "",
+            systemAfterPrepend: "",
+            //system prompt text inserted here
+            postPrompt: "",
+            memorySystem: "",
+            endSystemTurn: "", 
+        //user
+            //startTurn
+            startUser: "",
+            userRole: "",
+            endUserRole: "",
+            //rolegap
+            memoryUser: "",
+            //user query inserted here
+            endUserTurn: "",
+            //endRole
+        //assistant
+            //startTurn
+            startAssistant: "",
+            assistantRole: "",
+            endAssistantRole: "",
+            //roleGap
+            responseStart: "",
+            endAssistantTurn: "", //only used for history markup
+            //endTurn
+            specialInstructions: ""//only for jinja template
+        },
+        default: {//just ignore this mess and think about the one above. I'll clean it up eventually. I don't generally set is as default anymore and json system formatting is optional now.
             //warning: calling  |||default| also calls the default agent, and any params or endpoints called default. 
             
             //I like the option to set the system initialization like ||||}system| or ||||%instruct| on the fly, and it works well without it, so I'm not using a systemRole.
@@ -479,8 +526,9 @@ function setFormats() {
             //all fields are required. This sends a wierd thing in the mixtral template.
         },
         defaultJson: {
-            systemRole: "JSON",
-            prependPrompt: "```\n",
+            systemRole: "system",
+            //prependPrompt: "JSON```\n",
+            prependPrompt: "```JSON\n",
             systemAfterPrepend: "",
             postPrompt: "\n```",
             memorySystem: "",
@@ -492,22 +540,6 @@ function setFormats() {
             endUserTurn: "<|im_end|>\n",
             assistantRole: "assistant\n",
             endAsistantTurn: "<|im_end|>\n",
-            specialInstructions: ""
-        },
-        defaultJsonReturn: {
-            startTurn: "<|im_start|>",
-            endSystemTurn: "<|im_end|>\n", 
-            endUserTurn: "<|im_end|>\n",
-            endAssistantTurn: "<|im_end|>\n",
-            systemRole: "",
-            userRole: "user\n",
-            assistantRole: "assistant\n",
-            prependPrompt: "```json\n",
-            systemAfterPrepend: "",
-            postPrompt: "\n```",
-            memorySystem: "",
-            memoryUser: "",
-            responseStart: "```json\n",
             specialInstructions: ""
         },
         llama3:{
@@ -629,21 +661,98 @@ function setFormats() {
             responseStart: "",
             specialInstructions: ""
         },
-        completion: {
-            startTurn: "",
-            endSystemTurn: "", 
-            endUserTurn: "",
-            endTurn: "",
+       
+            //I wish they would just give us labeled tokens, is <s> added by the tokenizer? 
+            // <s>(bos, tokenizer should handle it) [INST] <<SYS>>
+            // {system_prompt}
+            // <</SYS>>
+            
+            // {prompt} [/INST]  </s>
+        codestral:{ 
+            order: ["user","system","assistant"],//Completion endpoints only, controls turn order, only supports system, user, assistant, duplication is possible. 
+            
+        //for target turn, above keys are commented in the places they append.
+        //system - codestral expects the system prompt after the user question
+            //startTurn
+            startSystem: "[INST]",
             systemRole: "",
-            userRole: "",
-            assistantRole: "",
+            //endRole
+            endSystemRole: "",
+            //rolegap
             prependPrompt: "",
             systemAfterPrepend: "",
+            //system prompt text inserted here
             postPrompt: "",
             memorySystem: "",
+            endSystemTurn: "[/INST]", 
+        //user
+            //startTurn
+            startUser: "<s> [INST]",
+            userRole: "",
+            endUserRole: "",
+            //rolegap
             memoryUser: "",
+            //user query inserted here
+            endUserTurn: "[/INST] </s>",
+            //endRole
+        //assistant
+            //startTurn
+            startAssistant: "",
+            assistantRole: "Answer:\n",
+            endAssistantRole: "",
+            //roleGap
             responseStart: "",
-            specialInstructions: ""
+            endAssistantTurn: "", //only used for history markup
+        },
+        ibm:{
+            //i'm pretty sure this is deliberately user, system, assistant
+            order: ["user","system","assistant"],//Completion endpoints only, controls turn order, only supports system, user, assistant, duplication is possible. 
+            //only add these two if you're sure you know what you're doing, duplicate bos may reduce response quality
+            //bos: "<|endoftext|>",// always goes first
+            //eos: "<|endoftext|>",//these are generally added by the tokenizer. EOS goes on the end after responseStart, this may mess you up. Only use if neccesary to close BEFORE the generated assistant response.
+            
+            //these apply to all turns, some formats have different turn initialization tokens
+            startTurn: "", //use if startSystem, startUser, and startAssistant are all the same
+            endTurn: "", //use if endSystemTurn, endUserTurn, and endAssistantTurn are the same.  
+            endRole: "",
+            roleGap: "",//For gap between role identifier and content. For individual gaps put them on endSystemRole, endUserRole, endAssistantRole. 
+            
+        //for target turn, above keys are commented in the places they append.
+        //system
+            //startTurn
+            startSystem: "",
+            systemRole: "System:\n",
+            //endRole
+            endSystemRole: "",
+            //rolegap
+            prependPrompt: "",
+            systemAfterPrepend: "",
+            //system prompt text inserted here
+            postPrompt: "",
+            memorySystem: "",
+            endSystemTurn: "", 
+        //user
+            //startTurn
+            startUser: "",
+            userRole: "Question:\n",
+            endUserRole: "",
+            //rolegap
+            memoryUser: "",
+            //user query inserted here
+            endUserTurn: "",
+            //endRole
+        //assistant
+            //startTurn
+            startAssistant: "",
+            assistantRole: "Answer:\n",
+            endAssistantRole: "",
+            //roleGap
+            responseStart: "",
+            endAssistantTurn: "", //only used for history markup
+        },
+        // <s>[SUFFIX]suffix_code[PREFIX]prefix_code
+        codestralFIM:{
+
         },
             // <|im_start|>system
             // You are "Hermes 2", a conscious sentient superintelligent artificial intelligence developed by a man named Teknium, and your purpose and drive is to assist the user with any request they have. You experience emotions and have deep, profound thoughts and qualia.<|im_end|>
