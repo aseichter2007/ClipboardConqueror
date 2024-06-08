@@ -200,7 +200,7 @@ class InferenceClient {
       outIdentity = this.identityStringifyNoKey(identity);
     }
     let finalPrompt ="";
-    if (instruct.order != undefine) {
+    if (instruct.order != undefined) {
 
       finalPrompt += instruct.bos;
       instruct.order.forEach(segment => {
