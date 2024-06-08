@@ -669,12 +669,12 @@ function setFormats() {
             
             // {prompt} [/INST]  </s>
         codestral:{ 
-            order: ["user","system","assistant"],//Completion endpoints only, controls turn order, only supports system, user, assistant, duplication is possible. 
-            
+            //order: ["user","system","assistant"],//Completion endpoints only, controls turn order, only supports system, user, assistant, duplication is possible. 
+            //first turn system goes first so I commented the line to restore default behavior. 
         //for target turn, above keys are commented in the places they append.
         //system - codestral expects the system prompt after the user question
             //startTurn
-            startSystem: "[INST]",
+            startSystem: "[INST] <<SYS>>",
             systemRole: "",
             //endRole
             endSystemRole: "",
@@ -684,10 +684,10 @@ function setFormats() {
             //system prompt text inserted here
             postPrompt: "",
             memorySystem: "",
-            endSystemTurn: "[/INST]", 
+            endSystemTurn: "<</SYS>>\n\n", 
         //user
             //startTurn
-            startUser: "<s> [INST]",
+            //startUser: "<s> [INST]",
             userRole: "",
             endUserRole: "",
             //rolegap
@@ -698,7 +698,7 @@ function setFormats() {
         //assistant
             //startTurn
             startAssistant: "",
-            assistantRole: "Answer:\n",
+            assistantRole: "",
             endAssistantRole: "",
             //roleGap
             responseStart: "",
