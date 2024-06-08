@@ -164,7 +164,7 @@ The most common issue with setup is people who expect they have node but do not.
 
 If Clipboard Conqueror seems unresponsive, close and re-launch CC.  If you are running with nodemon, type rs in the console and hit enter to restart the app.
 
-For API errors make sure Koboldcpp or your choice of backend is running, and that it is set as the defaultClient in setup.js. I always get impatient and beat the API to the ready mark. I should finish squasing the API error problems so it doesn't hang, but I gotta figure out why I can't hit LMstudio first.
+For API errors make sure Koboldcpp or your choice of backend is running, and that it is set as the defaultClient in setup.js. I always get impatient and beat the API to the ready mark.
 
 
 If CC seems hung, copy text with no invoke and try again. When using Text Generation Webui, it's can be hard to tell if it's working. Consider asking for fewer tokens until you know it's working. 
