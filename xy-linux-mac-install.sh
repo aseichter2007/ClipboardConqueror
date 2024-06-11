@@ -2,4 +2,4 @@
 npm i
 
 chmod +x xy-linux-mac-install.sh
-./xy-linux-mac-insall.sh
+./xy-linux-mac-install.sh
