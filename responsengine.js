@@ -1,7 +1,11 @@
 class ResponseEngine {
     constructor(
-        functionList =  [{start:"<|call|>", end:"<|/endCall|>", func: "call"} ], remove= /<\|[^|]*\|>/g)
-        {
+        appSettings,
+        functionList =  [{start:"<|call|>",end:"<|/endCall|>",func: "call"} ],
+        remove= /<\|[^|]*\|>/g
+    )
+    {
+        this.appSettings = appSettings;
         this.functionList= functionList;
         this.remove = remove;
     }
@@ -31,7 +35,9 @@ class ResponseEngine {
     recieveMessageFindTerminatorsAndTrim(text) {
         let totals = []
         this.callFunctions(text);
-        text = this.removeChatML(text);
+        if (this.appSettings.removeFormatting) {
+            text = this.removeChatML(text);
+        }
       
     //     let low = 100000;
     //     let LowPosition = 0
