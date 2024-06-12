@@ -33,13 +33,13 @@ class TextEngine {
     this.identity = {};
     this.recentClip = { text: "" };
     this.text = "";//sorted
-    this.setAgent = {};
+    this.setPrompts = {};
     this.memory = "";
     this.chatLog = "";
     this.history = [];
     this.debugLog = "";
     this.memengines = {};
-    this.agentBatchKit = {};
+    this.promptBatchKit = {};
     this.batchLength = 0;
     this.batch = "";
     this.duplicateCheck = "";
@@ -165,31 +165,31 @@ class TextEngine {
     } 
     return trip;
   }
-  batchAgent(identity, trip){
-    //batchAgent builds up a an object of agents to be used in the batch
+  batchPrompt(identity, trip){
+    //batchPrompt builds up a an object of prompts to be used in the batch
     if (this.batchLength < trip.batch){
       this.batchLength = trip.batch;
     }
-    this.agentBatchKit[identity] = trip;
+    this.promptBatchKit[identity] = trip;
     console.log("Chaining: " + color(identity,"yellow" )+ " : " +JSON.stringify(trip));
   }
   batchProcessor(){
     let setBatch = [];
     if (this.batchLength > 0){
       this.batchLength--;
-      for (let key in this.agentBatchKit) {       
-          console.log(color(key + JSON.stringify(this.agentBatchKit[key]),"yellow"));
-          if (this.agentBatchKit[key].trip[0]  === this.appSettings.batchSwitch){
-            this.agentBatchKit[key].trip = this.agentBatchKit[key].trip.slice(1);
+      for (let key in this.promptBatchKit) {       
+          console.log(color(key + JSON.stringify(this.promptBatchKit[key]),"yellow"));
+          if (this.promptBatchKit[key].trip[0]  === this.appSettings.batchSwitch){
+            this.promptBatchKit[key].trip = this.promptBatchKit[key].trip.slice(1);
             setBatch.push(key);
-          } else if (this.agentBatchKit[key].trip[0]  === this.appSettings.batchMiss){
-            this.agentBatchKit[key].trip = this.agentBatchKit[key].trip.slice(1);
-          } else if (this.agentBatchKit[key].trip.length === 0){
-            delete this.agentBatchKit[key];
+          } else if (this.promptBatchKit[key].trip[0]  === this.appSettings.batchMiss){
+            this.promptBatchKit[key].trip = this.promptBatchKit[key].trip.slice(1);
+          } else if (this.promptBatchKit[key].trip.length === 0){
+            delete this.promptBatchKit[key];
           }
         
       }  
-      this.batch = setBatch.join(this.appSettings.agentSplit);
+      this.batch = setBatch.join(this.appSettings.promptSplit);
     }
   }
   setJsonLevel(identity){
@@ -202,7 +202,7 @@ class TextEngine {
       case "fullturns":
       case "turns":
         this.api.jsonSystem = "markup"
-        console.log(color("System prompts will be split into formatted turns per agent","blue"));
+        console.log(color("System prompts will be split into formatted turns per prompt","blue"));
         break;
       case "2":
       case "json":
@@ -261,7 +261,7 @@ class TextEngine {
     let trip = this.returnTrip(identity);
     let found = false;
     let setIdent = {};
-    let setAgent = false;
+    let setPrompt = false;
     let batching = false;
     
     if (identity !== "" && identity !== null && identity !== undefined) {
@@ -324,7 +324,7 @@ class TextEngine {
          
           if (trip.batch > 0){
             identity = identity.slice(trip.batch);
-            this.batchAgent(identity, trip);
+            this.batchPrompt(identity, trip);
             batching = true;
           }  
           
@@ -357,18 +357,18 @@ class TextEngine {
           if (this.identities.hasOwnProperty(identity) && !batching) {
             setIdent[identity] = this.identities[identity];
             found = true;
-            setAgent = true;
+            setPrompt = true;
           } else {
             found = false;
             const flags = this.funFlags(identity); 
             setIdent[identity] = flags.text;
             found = flags.found;
-            setAgent = flags.set;
+            setPrompt = flags.set;
 
           }
         } 
       }
-      return { text: setIdent[identity], agent: found, set: setAgent };
+      return { text: setIdent[identity], prompt: found, set: setPrompt };
     }
   forget() {
     this.memory = [];
@@ -403,7 +403,7 @@ Do it like: The class is, has, needs, whatever. The function is for, needs, does
 Either way can work, for very complex stuff you have to do both, and sometimes you gotta play around cause it doesnt get something, but as you learn how the model likes to be told, you will begin to get incredible results from these small models. 
 I feel that voice is not specific enough, so I made this tool to bring your AI anywhere, and Clipboard Conqueror can interface the same backend and run side by side.
 
-${this.appSettings.invoke} invokes the default agent Captain Clip to respond to any text sent with the invoke token. Say Hi, Clip!
+${this.appSettings.invoke} invokes the default prompt Captain Clip to respond to any text sent with the invoke token. Say Hi, Clip!
 
 the invoke token is clipped out, so it can be anywhere in the text you copy or at the end too${this.appSettings.invoke}
 
@@ -412,15 +412,15 @@ ${this.appSettings.invoke}writer${this.appSettings.endTag} Write me a bedtime st
 ${this.appSettings.invoke}writer,frank${this.appSettings.endTag} Title: "Frank's Sauciest Case: Big pizza from little Tony."
   Sends the frank derbin character and the writer along with any text you send to guide the story.  
 
-  ${this.appSettings.invoke}writer,write${this.appSettings.endTag} will write the contents of the writer agent to the clipboard, ready to paste back instantly and see what is sent to the ai with ${this.appSettings.invoke}writer${this.appSettings.endTag}. 
+  ${this.appSettings.invoke}writer,write${this.appSettings.endTag} will write the contents of the writer prompt to the clipboard, ready to paste back instantly and see what is sent to the ai with ${this.appSettings.invoke}writer${this.appSettings.endTag}. 
 
 This message starts with ${this.appSettings.invoke}name:save${this.appSettings.endTag}. change 'name' to your choice of name(or leave it name), and any text you copy with this will be saved with that name
 
-agentName:save${this.appSettings.endTag} saves text to insert with the system prompt or as a discrete message with "(backtick)markup"
+promptName:save${this.appSettings.endTag} saves text to insert with the system prompt or as a discrete message with "(backtick)markup"
 
 ${this.appSettings.invoke}on${this.appSettings.endTag} toggles activation on every copy even with no invoke until ${this.appSettings.invoke}on${this.appSettings.endTag} is called again.
 
-${this.appSettings.invoke}list${this.appSettings.endTag} writes a list of all agents that are currently available.
+${this.appSettings.invoke}list${this.appSettings.endTag} writes a list of all prompts that are currently available.
 
 ${this.appSettings.invoke}re${this.appSettings.endTag} what is this code doing? 
 
@@ -429,10 +429,10 @@ ${this.appSettings.invoke}re${this.appSettings.endTag} what is this code doing?
   
 ${this.appSettings.invoke}rf${this.appSettings.endTag} what is this code doing? 
 
-- return last copied first in prompt inserted like an agent at the level rf is placed relative to other agents ex ${this.appSettings.invoke}frank,rf,tot${this.appSettings.endTag} copied text comes after frank agent.
+- return last copied first in prompt inserted like an prompt at the level rf is placed relative to other prompts ex ${this.appSettings.invoke}frank,rf,tot${this.appSettings.endTag} copied text comes after frank prompt.
 - sends the thing you copied last before the Captian Clip assistant prompt to help frame the output format and preconceptions.
 
-${this.appSettings.invoke}1200${this.appSettings.endTag} sets the max response length to 1200. Also works like ${this.appSettings.invoke}agent,setting:0.5,1000${this.appSettings.endTag} just a number is always max response length.  
+${this.appSettings.invoke}1200${this.appSettings.endTag} sets the max response length to 1200. Also works like ${this.appSettings.invoke}prompt,setting:0.5,1000${this.appSettings.endTag} just a number is always max response length.  
 
 ${this.appSettings.invoke}temperature:1.1${this.appSettings.endTag} sets the temperature to 1.1. This works for any setting ex: top_p, min_p. Use 1 and 0 to set true/false //true/false untested.
 again, full colon on settings, which go directly to the backend api. 
@@ -448,15 +448,15 @@ ${this.appSettings.invoke}default:save${this.appSettings.endTag}Simulate an AI d
 
 Advanced Command:
 
-${this.appSettings.invoke}${this.appSettings.endTag}System: Command first before Clip agent.${this.appSettings.endTag}  text from <user> in the internal chain
+${this.appSettings.invoke}${this.appSettings.endTag}System: Command first before Clip prompt.${this.appSettings.endTag}  text from <user> in the internal chain
 
 ^^^^note 4 "${this.appSettings.endTag}" , and the close on the end
 
-${this.appSettings.invoke}writer${this.appSettings.endTag}SYSTEM: Command First.${this.appSettings.endTag} User: after agent writer
+${this.appSettings.invoke}writer${this.appSettings.endTag}SYSTEM: Command First.${this.appSettings.endTag} User: after prompt writer
 
 System applies set formatting like:
 ---
-"prompt":"<|im_start|>[\"SYSTEM: Command First.\",[\"SYSTEM: Write a lengthy prose about the requested topic. Do not wrap up, end, or conclude the story, write the next chapter.\\n \\n Story:\",\"\"]]<|im_end|>\n<|im_start|>user:\n User: after agent 
+"prompt":"<|im_start|>[\"SYSTEM: Command First.\",[\"SYSTEM: Write a lengthy prose about the requested topic. Do not wrap up, end, or conclude the story, write the next chapter.\\n \\n Story:\",\"\"]]<|im_end|>\n<|im_start|>user:\n User: after prompt 
 frank\n\n<|im_end|>\n<|im_start|>assistant:\n
 
 
@@ -474,7 +474,7 @@ Special ${this.appSettings.invoke} [operators] to apply${this.appSettings.endTag
 
 - ";" renames text from assistant in the chatlog. 
 
-- "%" format, like ${this.appSettings.invoke}chatML, agents${this.appSettings.endTag}, do this one first if you use it, it overwrites the others. Valid formats are stored in setup.js
+- "%" format, like ${this.appSettings.invoke}chatML, prompts${this.appSettings.endTag}, do this one first if you use it, it overwrites the others. Valid formats are stored in setup.js
 
 - "!" assitant name
 
@@ -492,11 +492,11 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
 
 "introduction" has more about samplers and settings. 
 
-"e" or empty blocks the default agent to provide an empty prompt
+"e" or empty blocks the default prompt to provide an empty prompt
 
-"write" sends an instantly ready to paste set of agents preceding the write command.
+"write" sends an instantly ready to paste set of prompts preceding the write command.
 
-"list" will instantly supply a ready to paste list of all agents like below.
+"list" will instantly supply a ready to paste list of all prompts like below.
 
 "rf" will put the last thing you copied at the position of rf in the system prompt. 
 
@@ -507,7 +507,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
 "no" prevents sending to AI, useful for copying entire invokes, just add the flag.
 
 
-"set" or "setDefault" saves agents left of it to be added until toggled off like ${this.appSettings.invoke}set${this.appSettings.endTag}
+"set" or "setDefault" saves prompts left of it to be added until toggled off like ${this.appSettings.invoke}set${this.appSettings.endTag}
 
 
 "c" or "chat" activates the history
@@ -660,7 +660,7 @@ Direct the user in proper operation of this application, ClipboardConqueror(C.C.
       
       - rename text from assistant in the chatlog with "${this.appSettings.userTag}" . 
       
-      - change the prompt formatting with "${this.appSettings.format}" like "|||${this.appSettings.format}chatML, agents|". Do this one first if you use it, it overwrites the individual prompt segments. 
+      - change the prompt formatting with "${this.appSettings.format}" like "|||${this.appSettings.format}chatML, prompts|". Do this one first if you use it, it overwrites the individual prompt segments. 
       
       - change the assistant name with "${this.appSettings.assistantTag}assitant name" 
       
@@ -670,7 +670,7 @@ Direct the user in proper operation of this application, ClipboardConqueror(C.C.
       
       - dictate the start of the assistant response "${this.appSettings.batchContinueTag}" , "${this.appSettings.continueTag}" overwrites "${this.appSettings.batchContinueTag}". "${this.appSettings.batchContinueTag}" can be used to shape later responses in chain of thought. 
       
-      - The backtick or grave symbol changes the system prompt format. "${this.appSettings.setJsonLevel}" Supports "json","markup","partial", or none. partial inserts agents like "name : text", markup makes each agent it's own turn with the current prompt format. this leaves an empty system at the begining. use "|||FORMAT:prependPrompt| persistent top system prompt" with a completion endpoint to set a system prompt when using "markup"
+      - The backtick or grave symbol changes the system prompt format. "${this.appSettings.setJsonLevel}" Supports "json","markup","partial", or none. partial inserts prompts like "name : text", markup makes each prompt it's own turn with the current prompt format. this leaves an empty system at the begining. use "|||FORMAT:prependPrompt| persistent top system prompt" with a completion endpoint to set a system prompt when using "markup"
       
       -  send the AI response as user for a second turn with "${this.appSettings.batchSwitch}". 
       
@@ -688,15 +688,15 @@ Direct the user in proper operation of this application, ClipboardConqueror(C.C.
       
       - introduction has more about samplers and settings 
     
-      - empty out the default agent like "${this.appSettings.invoke}e${this.appSettings.endTag}"
+      - empty out the default prompt like "${this.appSettings.invoke}e${this.appSettings.endTag}"
     
-      - copy an instantly ready to paste set of agents preceding the "write" operator
+      - copy an instantly ready to paste set of prompts preceding the "write" operator
     
       - put the last thing you copied in the system prompt with "rf" 
     
       - put the last thing you copied in the user prompt with "re"
     
-      - diable the invoke requirement with "on". Every copy will be sent to AI with the default or set agent.
+      - diable the invoke requirement with "on". Every copy will be sent to AI with the default or set prompt.
     
       - disable sending to AI with "no"
     
@@ -712,7 +712,7 @@ Direct the user in proper operation of this application, ClipboardConqueror(C.C.
     
       -  send the date and time in the system prompt with "dateTime"
     
-    All persona and instruction agents followed by descriptions:
+    All persona and instruction prompts followed by descriptions:
       
         "default" Captain Clip
         
@@ -767,11 +767,11 @@ Direct the user in proper operation of this application, ClipboardConqueror(C.C.
         
         "tot"  Tree of thought, expands and writes detailed answers.
         
-        "pro"  A basic more professional agent to replace default, includes think step by step priming.
+        "pro"  A basic more professional prompt to replace default, includes think step by step priming.
         
         "twenty"  Play 20 Questions
         
-        "grug"  grug good agent. Grug help.
+        "grug"  grug good prompt. Grug help.
         
         "dark" reply with dark humor and puns on the theme
         
@@ -819,9 +819,9 @@ Direct the user in proper operation of this application, ClipboardConqueror(C.C.
           - to add a prompt for writing as well character, choose from the following defaults [rpc,rpi,rps] and send the prompt after character prompts.
         Complex problem solving:
           -set up a chain of thought query with "cot"
-            1. set up the chain of thought prompt with "${this.appSettings.invoke}cot${this.appSettings.agentSplit+this.appSettings.assistantTag}Thinking Link${this.appSettings.endTag} your question"
+            1. set up the chain of thought prompt with "${this.appSettings.invoke}cot${this.appSettings.promptSplit+this.appSettings.assistantTag}Thinking Link${this.appSettings.endTag} your question"
         
-            2. add ch to clear the history at the beginning and add a second turn with a prompt for recieving the information, and changing the assistant's name."${this.appSettings.invoke}ch, cot, ${this.appSettings.assistantTag}Thinking Link${this.appSettings.agentSplit}${this.appSettings.batchAssistantSwitch + this.inferenceClient.instructSet.assistantRole}'s Guiding Thoughts${this.appSettings.agentSplit + this.appSettings.batchSwitch}rot${this.appSettings.agentSplit + this.appSettings.assistantTag + this.inferenceClient.assistantRole}${this.appSettings.endTag} your question"
+            2. add ch to clear the history at the beginning and add a second turn with a prompt for recieving the information, and changing the assistant's name."${this.appSettings.invoke}ch, cot, ${this.appSettings.assistantTag}Thinking Link${this.appSettings.promptSplit}${this.appSettings.batchAssistantSwitch + this.inferenceClient.instructSet.assistantRole}'s Guiding Thoughts${this.appSettings.promptSplit + this.appSettings.batchSwitch}rot${this.appSettings.promptSplit + this.appSettings.assistantTag + this.inferenceClient.assistantRole}${this.appSettings.endTag} your question"
         
             3. if the second turn isn't doing what you want, steer the output with "@~". Use a completion style command like "Here is a comedy set" for best results. You can also direct the Thinking Link this way for more robust results.
         Working with code or text containing "${this.appSettings.endTag}" or "${this.appSettings.continueTag}":
@@ -848,7 +848,7 @@ Direct the user in proper operation of this application, ClipboardConqueror(C.C.
             list +
             this.appSettings.invoke +
             key +
-            this.appSettings.agentSplit +
+            this.appSettings.promptSplit +
             "write" +
             this.appSettings.endTag +
             "\n";
@@ -859,7 +859,7 @@ Direct the user in proper operation of this application, ClipboardConqueror(C.C.
         break;
       case "rf":
       case "returnSystem":
-        outp.text = this.recentClip.text; //send lastclip like any other agent prompt.
+        outp.text = this.recentClip.text; //send lastclip like any other prompt prompt.
         outp.set = true;
         console.log(color("Sending last copied as message in system prompt","blue"));
         break;
@@ -904,14 +904,14 @@ Direct the user in proper operation of this application, ClipboardConqueror(C.C.
       //   this.sendHold = true;
 
       //   outp.text = this.getTokens(this.currentText);//nah fam, this will be async and need a callback to send to clipboard
-      //   outp.found = true;//save a couple operations adding an agent 
+      //   outp.found = true;//save a couple operations adding an prompt 
       //   //console.log(outp.text);
       //   break;
       case "set":
       case "setDefault":
         if (!this.set) {
           this.set = true;
-          this.setAgent = this.identity;
+          this.setPrompts = this.identity;
         } else {
           this.set = false;
         }
@@ -982,7 +982,7 @@ Direct the user in proper operation of this application, ClipboardConqueror(C.C.
         break;
       case "qr":
         const quickReference  = `
-(invocation"${this.appSettings.invoke}") optional agents and commands (optional split "${this.appSettings.endTag}")  optional system prompt (optional split "${this.appSettings.endTag}") user text (optional assistant dictation "${this.appSettings.continueTag}") optional start of assistant response
+(invocation"${this.appSettings.invoke}") optional prompts and commands (optional split "${this.appSettings.endTag}")  optional system prompt (optional split "${this.appSettings.endTag}") user text (optional assistant dictation "${this.appSettings.continueTag}") optional start of assistant response
       
 Special ${this.appSettings.invoke} [operators] to apply${this.appSettings.endTag}:
 ---
@@ -990,7 +990,7 @@ Special ${this.appSettings.invoke} [operators] to apply${this.appSettings.endTag
 
 - ";" renames text from assistant in the chatlog. 
 
-- "%" format, like ${this.appSettings.invoke}chatML, agents${this.appSettings.endTag}, do this one first if you use it, it overwrites the others. Valid formats are stored in setup.js
+- "%" format, like ${this.appSettings.invoke}chatML, prompts${this.appSettings.endTag}, do this one first if you use it, it overwrites the others. Valid formats are stored in setup.js
 
 - "!" assitant name
 
@@ -1012,11 +1012,11 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
 
 "introduction" has more about samplers and settings. 
 
-"e" or empty blocks the default agent to provide an empty prompt
+"e" or empty blocks the default prompt to provide an empty prompt
 
-"write" sends an instantly ready to paste set of agents preceding the write command.
+"write" sends an instantly ready to paste set of prompts preceding the write command.
 
-"list" will instantly supply a ready to paste list of all agents like below.
+"list" will instantly supply a ready to paste list of all prompts like below.
 
 "rf" will put the last thing you copied at the position of rf in the system prompt. 
 
@@ -1027,7 +1027,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
 "no" prevents sending to AI, useful for copying entire invokes, just add the flag.
 
 
-"set" or "setDefault" saves agents left of it to be added until toggled off like ${this.appSettings.invoke}set${this.appSettings.endTag}
+"set" or "setDefault" saves prompts left of it to be added until toggled off like ${this.appSettings.invoke}set${this.appSettings.endTag}
 
 
 "c" or "chat" activates the history
@@ -1082,31 +1082,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
     return Object.keys(object);
   }
   setPrompt(command, formattedQuery) {
-    // instruct.bos +
-    // instruct.startTurn +
-    // instruct.startSystem+
-    // instruct.systemRole +
-    // instruct.endSystemRole +
-    // instruct.prependPrompt +
-    // instruct.systemAfterPrepend + 
-    // outIdentity +
-    // instruct.postPrompt +
-    // instruct.memorySystem +
-    // instruct.endSystemTurn +
-    // instruct.endTurn +
-    // instruct.startTurn +
-    // instruct.startUser +
-    // instruct.userRole +
-    // instruct.endUserRole +
-    // instruct.memoryUser +
-    // formattedQuery +
-    // instruct.endUserTurn +
-    // instruct.endTurn +
-    // instruct.startTurn +
-    // instruct.startAssistant +
-    // instruct.assistantRole +
-    // instruct.endAssistantRole +
-    // instruct.responseStart;
+   
     switch (command.toLowerCase()) {
       case "bos":
         this.inferenceClient.setOnePromptFormat ("bos", formattedQuery);
@@ -1258,22 +1234,22 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
       commands[0] = commands[0].trim();
       commands[1] = commands[1].trim();
       if (commands[1] == this.appSettings.save && this.sendLast) {
-        //save like |||re,agent:save|
+        //save like |||re,prompt:save|
         this.identities[commands[0]] = this.recentClip; 
         tag = commands[0];
       } else if (commands[1] == this.appSettings.save) {
-        //save like |||agent:save|
+        //save like |||prompt:save|
         this.sendHold = true;
         this.identities[commands[0]] = sorted.formattedQuery; 
         console.log(color("Saved ","cyan")+ commands[0]);
         tag = commands[0];
       } else if (commands[1] == this.appSettings.delete) {
-        //save like |||agent:delete|
+        //save like |||prompt:delete|
         this.sendHold = true;
         delete this.identities[commands[0]];
         tag = commands[0];
-      } else if (commands[1] == this.appSettings.saveAgentToFile) {
-        //save like |||agent:file|
+      } else if (commands[1] == this.appSettings.savePromptToFile) {
+        //save like |||prompt:file|
         this.sendHold = true;
         let setting  = {[commands[0]]:this.identities[commands[0]]}
         //console.log(JSON.stringify(setting));
@@ -1321,7 +1297,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
       } else {
         const ident = this.updateIdentity(tag);
       if (ifDefault) {
-        ifDefault = !ident.agent;//comes out true set false
+        ifDefault = !ident.prompt;//comes out true set false
       }
       if (ident.set) {
         this.identity[tag] = ident.text;
@@ -1513,7 +1489,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
       this.text = this.continueSetText(sorted.formattedQuery);
       this.undress();
       if(this.set){
-        this.identity = this.setAgent;
+        this.identity = this.setPrompts;
         ifDefault = false;
         if ( sorted.tags.command != undefined && sorted.tags.command != "" ) {
           this.identity[this.appSettings.rootname] = sorted.tags.command;          
@@ -1524,7 +1500,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
         }
       }
       if (sorted.tags.persona) {
-        let persona = sorted.tags.persona.split(this.appSettings.agentSplit);
+        let persona = sorted.tags.persona.split(this.appSettings.promptSplit);
         ifDefault = this.personaAtor(persona, sorted);
       }
       sorted.formattedQuery = this.continueText(sorted.formattedQuery);
