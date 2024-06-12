@@ -320,36 +320,7 @@ class TextEngine {
             break;
               // handle default case here
           }
-          // if (trip.trip[0] === this.appSettings.assistantTag){
-          //   this.setPrompt("assistantRole",identity.slice(1));
-          //   found = true;
-          // }
-          // if (trip.trip[0] === this.appSettings.userTag){
-          //   this.setPrompt("userRole",identity.slice(1));
-          // }
-          // if (trip.trip[0] === this.appSettings.systemTag) {
-          //   this.setPrompt("systemRole", identity.slice(1));
-          // }
-          // if (trip.trip[0] === this.appSettings.formatSwitch){
-          //   this.setInferenceFormat(identity.slice(1));
-          //   this.setParams(identity.slice(1));
-          // }
-          // if (trip.trip[0] === this.appSettings.batchNameSwitch){
-          //   this.batchUserName = identity.slice(1);
-          //   this.chatHistory = true;
-          //   console.log( "'"+ this.appSettings.batchNameSwitch + "' activates history, it only changes the history");
-          // }
-          // if (trip.trip[0] === this.appSettings.batchAssistantSwitch){
-          //   this.batchAssistantName = identity.slice(1);
-          //   this.chatHistory = true;
-          //   console.log( "'"+ this.appSettings.batchAssistantSwitch + "' activates history, it only changes the history");
-          // }
-          // if (trip.trip[0] === this.appSettings.batchContinueTag) {
-          //   this.setPrompt("responseStart", identity.slice(1));
-          // }
-          // if (trip.trip[0] === this.appSettings.setJsonLevel) {
-          //  this.setJsonLevel(identity);
-          // }
+       
          
           if (trip.batch > 0){
             identity = identity.slice(trip.batch);
@@ -395,9 +366,7 @@ class TextEngine {
             setAgent = flags.set;
 
           }
-        } else {
-          //this.params.max_length = parseInt(identity, 10);
-        }
+        } 
       }
       return { text: setIdent[identity], agent: found, set: setAgent };
     }
@@ -409,8 +378,7 @@ class TextEngine {
   }
 
   funFlags(flag) {
-    //need to accept temp:123
-    ///slice off 4
+  
     var outp = { text: "", found: false, set: false };
     switch (flag) {
       case "help"://left justified for formatitng when printed
