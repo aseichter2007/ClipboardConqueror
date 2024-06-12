@@ -193,13 +193,13 @@ class TextEngine {
     }
   }
   setJsonLevel(identity){
-    let trimmed = identity.slice(1).trim()
+    let trimmed = identity.slice(1).trim().toLowerCase()
    
     switch (trimmed) {
       case "1":
       case "markup":
       case "full turns":
-      case "fullTurns":
+      case "fullturns":
       case "turns":
         this.api.jsonSystem = "markup"
         console.log(color("System prompts will be split into formatted turns per agent","blue"));
@@ -213,7 +213,7 @@ class TextEngine {
         break;
       case "3":
       case "keys":
-      case "useKeys":
+      case "usekeys":
       case "partial":
         this.api.jsonSystem = "keys"
         console.log(color("System prompts will be sent as keys : text","blue"));
@@ -1317,9 +1317,6 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
       }  else if (commands[0] == this.appSettings.setInstruction) {
         this.sendHold = true;
         this.setPrompt(commands[1],sorted.formattedQuery);
-      }  else if (commands[0] == this.appSettings.setInstruction) {
-        this.sendHold = true;
-        this.setPrompt(commands[1],sorted.formattedQuery);
       }else if (!isNaN(commands[1])) {
         this.params[commands[0]] = parseFloat(commands[1]);
       } else if (commands[1] == this.appSettings.true) {
@@ -1438,7 +1435,6 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
       Assistant: "User",
       User:"Assistant",
     }
-
     return this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet["end"+typeStepBack[type]+"Turn"] + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet["start"+type ] + name + this.inferenceClient.instructSet["end"+type+"Role"] + this.inferenceClient.instructSet.endRole +this.inferenceClient.instructSet.roleGap;
   }
   chatHistoryBuilder(){//todo: finish building history each turn to respect new prompt formatting per turn
@@ -1569,7 +1565,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
         //console.log(ifDefault);
         if (ifDefault && !this.set) {
           //console.log("hit default");
-          this.identity.CaptainClip = this.identities[this.appSettings.defaultPersona];
+          this.identity.CaptainClip = this.identities[this.endpoints.persona];
           this.noBatch = true;
         }
         if (this.identity[this.appSettings.rootname] === "" && this.appSettings.clean){
