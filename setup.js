@@ -1,11 +1,11 @@
  //Hello and welkome to setup.js. This contains all the default settings for ClipboardConqueror.
  //This is all I learned about LLMs and how they work. What the settings do, instuctions, experiments, etc.
 
- //toggle word wrap following:
+ //toggle word wrap:
 
  //I cant' think of a good reason not to share my whole learning. I want to build a better world together with everyone. 
 
- //These are test bots that I am learning against to better understand how different LLMs work, how different prompts work, and how to use them.
+ //These are test prompts that I am learning against to better understand how different LLMs work, how different prompts work, and how to use them.
 
  //LLMs are basically word magic ok, like straight up magicians, I'll explain. 
 
@@ -29,13 +29,11 @@
 
  //occasionally, magician reveals his trick, or doesnt have correct hands prepared inside his coat, but the magician always does their best to fool. 
 
- //ok. so all that said, just about all of this stuff is just learning. I know joe is poor, but he is for exploring how stop starts and confusion keep to core ideas and hopefully his stutters would reveal informaiton uncertainty?  I dont think it's working as intended. I command woody and buzz similarly, testing characters for dataset knowledge. You are responsible for your use of this tool. 
-
- //A lot of this is just learning, as much is for your targeted uses and examples about how to talk to the machine and how it changes output. 
+ //A lot of this is just learning, as much is for targeted uses and examples about how to talk to the machine and how it changes output. 
 
  //Thank you for enjoying ClipboardConqueror.
 
- //Points of interest: endpoints, appSettings, promptFormats, idents.  ctrl+f is a champ. 
+ //Points of interest: endpoints, appSettings, promptFormats, idents.  ctrl+f is the champ for navigation. 
  
  function setEndpoints(){//this is where the most basic configuration is set.
      
@@ -49,7 +47,7 @@
         persona: "default",//must be a valid identity in idents
          
         //Ok it turned out that a lot of them for testing and stuff helps, so just move your favorites to the top and invoke them by $ from top to $$$... at bottom. Or just use the names like |||kobold| or |||koboldChat| 
-        endpoints:{//these are accessible by name in defaultClient or like |||$| for kobold
+        endpoints:{//these are accessible by name in defaultClient or like |||$| for kobold. There are duplicates, you're not imagining that this has become a little bit of a mess. 
             ooba: {//|||$| or |||ooba|
                 type: "completion",
                 jsonSystem: true,
@@ -166,7 +164,7 @@
                     three: "message",//text
                     four: "content"
                 },
-                noFormat: true //prevents sending jinja prompts and adapters for kobold
+                noFormat: true //prevents sending jinja templates and adapters for kobold
             },
             oobaRPmerge: {//|||$$$| or |||textGenWebUi|
                 type: "chat",
@@ -363,19 +361,11 @@
 }
 return endpoints;
 }
-function setappSettings(defaultClient, persona) {
-    const appSettings = {//left justified for consistency in settings definitions
+function setappSettings() {
+    const appSettings = {
         //this is where the invoke and Clipboard Conqueror flags and settings live.
-
-        //this needs to be more elegant. Maybe split up into multiple files with selection from endpointsKey.json
-        // leave a comment with final line number of the block where this all comes together.
-        defaultClient: defaultClient,
-   
-        
-        //defaultInstruct: "chatML", todo: add this
-        defaultPersona: persona,//is this still used?
         invoke: "|||", //could be anything # or 'AI:' whatever you want
-        endTag: "|", //samesies. its the limiter after |||: agent "|"system"|"query. This should not be the same as any below. 
+        endTag: "|", //samesies. its the limiter after |||agent "|"system"|" query. This should not be the same as any below. 
         save: "save",//like |||name:save|
         true: "true", //like |||setting:true|
         false: "false", //like |||setting:false|
@@ -394,7 +384,7 @@ function setappSettings(defaultClient, persona) {
         historyName : "continue",
         batchSwitch: "@", // like |||@agent|
         batchMiss: "#", //like |||#@agent|
-        formatSwitch: "%", //like |||%alpaca| changes the prompt format. Do this one first before !>}
+        formatSwitch: "%", //like |||%alpaca| changes only the prompt format. Do this one first before !>}
         paramSwitch: "^",
         batchLimiter: "", //if empty, will mark the continue history with full format chat turns.
         setJsonLevel: "`",//like |||`1| or |||`json| etc
@@ -417,35 +407,8 @@ function setappSettings(defaultClient, persona) {
     return appSettings;
 }
 function setFormats() {
-    
-            // bos +
-            // startTurn +
-            // startSystem+
-            // systemRole +
-            // endSystemRole +
-            // endRole +
-            // prependPrompt +
-            // systemAfterPrepend + 
-            // // // // //outIdentity +//not valid in setFormats
-            // postPrompt +
-            // memorySystem +
-            // endSystemTurn +
-            // endTurn +
-            // startTurn +
-            // startUser +
-            // userRole +
-            // endUserRole +
-            // endRole +
-            // memoryUser +
-            // // // // //formattedQuery +//not valid in setFormats
-            // endUserTurn +
-            // endTurn +
-            // startTurn +
-            // startAssistant +
-            // assistantRole +
-            // endAssistantRole +
-            // endRole +
-            // responseStart;
+    //many of these are not exatly optimally arranged, but should be correct, I added a lot more prompt format segments since I spent all day arranging these.
+
     const promptFormats = { //|||^kobold| and when you call these like |||kobold| they also change the backend endpoint and params if matching entries exist, change the names to suit your needs. 
         completion: {//this has all the possible keys and needs none. All keys are optional.
             order: ["system","user","assistant"],//Completion endpoints only, controls turn order, only supports system, user, assistant, duplication is possible. 
@@ -1308,16 +1271,16 @@ function setParams(){
             max_context_length: 8192,
             //max_context_length: 16384,
             max_length: 2000,
-            rep_pen: 1.04, //how much penealty for repetition. Will break formatting charachters "*<, etc." if set too high. WolframRavenwolf: (Joao Gante from HF) told me that it is "only applied at most once per token" within the repetition penalty range, so it doesn't matter how often the number 3 appears in the first 5 questions, as long as the repetition penalty is a "reasonable value (e.g. 1.2 or 1.3)", it won't have a negative impact on tokens the model is reasonably sure about. So for trivial math problems, and other such situations, repetition penalty is not a problem.
+            rep_pen: 1.04, //how much penalty for repetition. Will break formatting charachters "*<, etc." if set too high. WolframRavenwolf: (Joao Gante from HF) told me that it is "only applied at most once per token" within the repetition penalty range, so it doesn't matter how often the number 3 appears in the first 5 questions, as long as the repetition penalty is a "reasonable value (e.g. 1.2 or 1.3)", it won't have a negative impact on tokens the model is reasonably sure about. So for trivial math problems, and other such situations, repetition penalty is not a problem.
             rep_pen_range: 768, //
             rep_pen_slope: 0.2,
-            temperature: 1, // Temp changes scaling of final token probability, less than one makes unlikely tokens less likely, more than one makes unlikely tokens more likely. Max 2.
+            temperature: 1, // Temp changes scaling of final token probability, less than one makes unlikely tokens less likely, more than one makes unlikely tokens more likely, normalizing final probabilities.  
             dynatemp_range: 0.1,
             dynatemp_exponent: 1.0,
-            tfs: 0.97, //tail free sampling, removes unlikely tokens from possibilities by finding the platau where tokens are equally unlikely. 0.99 maximum. Higher value finds a lower, flatter plateau. Note:some reports say tfs may cause improper gendering or mixups in responses, he instead of she, his/hers, etc. 1 thread. https://www.trentonbricken.com/Tail-Free-Sampling/#summary
+            tfs: 0.97, //tail free sampling, removes unlikely tokens from possibilities by finding the platau where tokens approach equally unlikely. 0.99 maximum. Higher value finds a lower, flatter plateau. Note:some reports say tfs may cause improper gendering or mixups in responses, he instead of she, his/hers, etc. 1 thread. https://www.trentonbricken.com/Tail-Free-Sampling/#summary
             top_a: 0, //If the maximum probability is very high, fewer tokens will be kept. If the maximum probability is very close to the other probabilities, more tokens will be kept. Lowering the top-a value also makes it so that more tokens will be kept.
             top_k: 0, //discard all but top_k possible tokens. top_k: 3 means each next token comes from a max of 3 possible tokens
-            top_p: 1.0, //discard possible tokens by throwing out lest likely answers. 0.8 throws away least likeky 20%
+            top_p: 1.0, //discard possible tokens by throwing out lest likely answers. 0.8 throws away least likely 20%
             min_p: 0.1, //0.1: discard possible tokens less than 10% as likely as the most likely possible token.  If top token is 10% likely, tokens less than 1% are discarded.
             typical: 1, //this one is tricky to research. I have no idea.
             sampler_order: [6, 0, 1, 3, 4, 2, 5],//default is [6, 0, 1, 3, 4, 2, 5]
@@ -1331,7 +1294,7 @@ function setParams(){
             // mirostat_eta: 0.1,
             // guidance_scale: 1,
             use_default_badwordsids: false,
-            //negative_prompt: "porn,sex,nsfw,racism,bawdy,racy,violent", //idk if I am using this right, or whether its hooked up behind or when it will be and the right name.
+            //negative_prompt: "porn,sex,nsfw,racism,bawdy,racy,violent", //idk if I am using this right, or whether its hooked up behind or when it will be and the right name or which backends and keys.
             //banned_tokens: `["   ", "</s>", "\n# ", "\n##", "\n*{{user}} ","### Human: ", "\n\n\n", "\n{{user}}:", '\"role\":', '\"system\"', '{{user:}}>:', "###"]` //again not reall sure this is actually on
         },
         ooba: {
@@ -1353,7 +1316,7 @@ function setParams(){
             sampler_order: [6, 5, 0, 1, 3, 4, 2]
         },
         ollama: {
-            model: "llama3",//required for ollama. Can be chanded like |||model:"llama3"| while params in options are not accessible from the copy line. 
+            model: "llama3",//required for ollama. Can be changed like |||model:"llama3"| while params in options are not accessible from the copy line. 
             //format: "json" forces json response format.
             //keep_alive: "5m",
             stream: false,
@@ -1476,8 +1439,8 @@ function setParams(){
             instruction_template: "string",
             instruction_template_str: "string",
             character: "string",//from choices in
-            name1: "string",//I think the LLM
-            name2: "string",//I think the user
+            name1: "string",//I think the LLM?
+            name2: "string",//I think the user?
             context: "string",
             greeting: "string",
             //chat_template_str: "string",
@@ -1656,103 +1619,7 @@ function setParams(){
     }        
     }
     //https://huggingface.co/docs/transformers/main_classes/text_generation#transformers.GenerationConfig
-    //I think this doc is pretty much pass through compatible for oogabooga and maybe kobold and similar. untested. I've not messed with much that isn't uncommented. 
-    //not sure which of these and the proper names are implemented in the backend.
-    //  maybe kobold options? const example= {
-            //     temp: 0.7,
-            //     top_p: 0.5,
-            //     top_k: 40,
-            //     top_a: 0,
-            //     tfs: 1,
-            //     epsilon_cutoff: 0,
-            //     eta_cutoff: 0,
-            //     typical_p: 1,
-            //     rep_pen: 1.2,
-            //     rep_pen_range: 0,
-            //     no_repeat_ngram_size: 0,
-            //     penalty_alpha: 0,
-            //     num_beams: 1,
-            //     length_penalty: 1,
-            //     min_length: 0,
-            //     encoder_rep_pen: 1,
-            //     freq_pen: 0,
-            //     presence_pen: 0,
-            //     do_sample: true,
-            //     early_stopping: true,
-            //     seed: -1,
-            //     preset: 'Default',
-            //     add_bos_token: true,
-            //     stopping_strings: [],
-            //     truncation_length: 2048,
-            //     ban_eos_token: false,
-            //     skip_special_tokens: true,
-            //     streaming: false,
-            //     streaming_url: 'ws://127.0.0.1:5005/api/v1/stream',
-            //     mirostat_mode: 2,//mirostat disables top_p, top_k. It does it's own thing and kinda learns along somehow?. 
-            //     mirostat_tau: 4,
-            //     mirostat_eta: 0.1,
-            //     guidance_scale: 1,
-            //     negative_prompt: 'porn,sex,nsfw,racism,bawdy,racy',//I dont think this is implemented yet
-            //     grammar_string: '',
-            //     banned_tokens: `["   ", "</s>", "\n# ", "\n##", "\n*{{user}} ","### Human: ", "\n\n\n", "\n{{user}}:", '\"role\":', '\"system\"', '{{user:}}>:',]`
-            
-            //GenerationOptions ooogabooga textgenui:
-            //   preset: str | None = Field(default=None, description="The name of a file under text-generation-webui/presets (without the .yaml extension). The sampling parameters that get overwritten by this option are the keys in the default_preset() function in modules/presets.py.")
-            //   min_p: float = 0
-            //   dynamic_temperature: bool = False
-            //   dynatemp_low: float = 1
-            //   dynatemp_high: float = 1
-            //   dynatemp_exponent: float = 1
-            //   top_k: int = 0
-            //   repetition_penalty: float = 1
-            //   repetition_penalty_range: int = 1024
-            //   typical_p: float = 1
-            //   tfs: float = 1
-            //   top_a: float = 0
-            //   epsilon_cutoff: float = 0
-            //   eta_cutoff: float = 0
-            //   guidance_scale: float = 1
-            //   negative_prompt: str = ''
-            //   penalty_alpha: float = 0
-            //   mirostat_mode: int = 0
-            //   mirostat_tau: float = 5
-            //   mirostat_eta: float = 0.1
-            //   temperature_last: bool = False
-            //   do_sample: bool = True
-            //   seed: int = -1
-            //   encoder_repetition_penalty: float = 1
-            //   no_repeat_ngram_size: int = 0
-            //   min_length: int = 0
-            //   num_beams: int = 1
-            //   length_penalty: float = 1
-            //   early_stopping: bool = False
-            //   truncation_length: int = 0
-            //   max_tokens_second: int = 0
-            //   custom_token_bans: str = ""
-            //   auto_max_new_tokens: bool = False
-            //   ban_eos_token: bool = False
-            //   add_bos_token: bool = True
-            //   skip_special_tokens: bool = True
-            //   grammar_string: str = ""
-            
-            
-            //completionParams: //from textgenebUi
-            //  model: str | None = Field(default=None, description="Unused parameter. To change the model, use the /v1/internal/model/load endpoint.")
-            //  prompt: str | List[str]
-            //  best_of: int | None = Field(default=1, description="Unused parameter.")
-            //  echo: bool | None = False
-            //  frequency_penalty: float | None = 0
-            //  logit_bias: dict | None = None
-            //  logprobs: int | None = None
-            //  max_tokens: int | None = 16
-            //  n: int | None = Field(default=1, description="Unused parameter.")
-            //  presence_penalty: float | None = 0
-            //  stop: str | List[str] | None = None
-            //  stream: bool | None = False
-            //  suffix: str | None = None
-            //  temperature: float | None = 1
-            //  top_p: float | None = 1
-            //  user: str | None = Field(default=None, description="Unused parameter.")
+    
             return apiParams;
         }
 function setIdentities(){  //here live all the identities. Left justified for whitespace formatting
@@ -2553,22 +2420,22 @@ function setup( endPointConfig, instructions, params, identities, formats, forma
         }
     }
     try{
-        if (fileExists("./0instructions.json")){
-            instructions = require("./0instructions.json");
+        if (fileExists("./0appsettings.json")){
+            instructions = require("./0appsettings.json");
             instructions.defaultClient = endPointConfig.routes.defaultClient;//I think this is coming out of order...
             instructions.defaultPersona = endPointConfig.routes.persona;
         }
         else{
             instructions.instructions = setappSettings(endPointConfig.routes.defaultClient, endPointConfig.routes.persona);
             if (write) {
-                writeObjectToFileAsJson(instruct, '0instructions.json',fs);
+                writeObjectToFileAsJson(instruct, '0appsettings.json',fs);
             }
         }
     }catch(error){
         console.log(error);
-        instructions.instructions = setappSettings(endPointConfig.routes.defaultClient, endPointConfig.routes.persona);
+        instructions.instructions = setappSettings();
         if (write) {
-            writeObjectToFileAsJson(instructions.instructions, '0instructions.json',fs);
+            writeObjectToFileAsJson(instructions.instructions, '0appsettings.json',fs);
         }
         
     }
