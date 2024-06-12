@@ -725,6 +725,7 @@ function returnKoboldAdapter(instructionSet) {
     instructionSet.startUser +
     instructionSet.userRole +
     instructionSet.endUserRole +
+    instructionSet.endRole +
     instructionSet.memoryUser;
   const userEnd = instructionSet.endUserTurn + instructionSet.endTurn;
   const assistantStart =
