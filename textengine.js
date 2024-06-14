@@ -235,11 +235,11 @@ class TextEngine {
   }
 
   paramatron(identity){
-    //|||javascript to check if a key existss on an object.
-    if (this.apiParams.hasOwnProperty(identity.trim)) {
+    identity = identity.trim();
+    if (this.apiParams.hasOwnProperty(identity)) {
       this.setParams(identity);
     }
-    if(this.formats.hasOwnProperty(identity.trim)){
+    if(this.formats.hasOwnProperty(identity)){
       this.setInferenceFormat(identity);
       console.log("paramatronsetting format: " + JSON.stringify(this.api));
 
@@ -1507,7 +1507,7 @@ ${this.appSettings.invoke}Help${this.appSettings.endTag} Contains instructions a
       if (sorted.run || this.on) {
         //const defaultIdentity = { [this.instructions.rootname]: "" };
         //console.log(ifDefault);
-        if (ifDefault && !this.set) {
+        if (ifDefault && !this.set && sorted.tags.command != undefined && sorted.tags.command != "") {
           //console.log("hit default");
           this.identity.CaptainClip = this.identities[this.endpoints.persona];
           this.noBatch = true;
