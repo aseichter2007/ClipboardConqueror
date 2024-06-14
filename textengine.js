@@ -20,14 +20,12 @@ class TextEngine {
     this.recieveApi = recieveApi;
     this.settingSaver = settingSaver;
     this.fs = fs;
-    this.endpoints = endpoints;
-
+    this.endpoints = endpoints.endpoints;
     this.identities = identities;
     this.appSettings = instructions;
     this.notify = notify;
     this.params = apiParams.default;
     this.apiParams = apiParams.params;
-    //this.apiConfigSet = endpoints.endpoints;
     this.api = endpoints.endpoints[endpoints.defaultClient];
     this.formats = formats;
     this.identity = {};
@@ -63,49 +61,7 @@ class TextEngine {
   returnTrip(str) {
     let tripCoding = 0;
     let trip = { api: 0, batch: 0, trip: "" };
-    //|||e|convert to a switch case
     for (let i = 0; i < str.length; i++) {
-      //if (str[i] === this.appSettings.backendSwitch )  {
-      //  trip.api++;
-      //  trip.trip = trip.trip + this.appSettings.backendSwitch;
-      //  tripCoding++
-      //} else if (str[i] === this.appSettings.batchSwitch) {
-      //  trip.batch++;
-      //  trip.trip = trip.trip + this.appSettings.batchSwitch;
-      //  tripCoding++
-      //} else if(str[i] === this.appSettings.batchMiss){
-      //  trip.batch++;
-      //  trip.trip = trip.trip + this.appSettings.batchMiss;
-      //  tripCoding++
-      //} else if(str[i] === this.appSettings.formatSwitch){
-      //  trip.format++;
-      //  trip.trip = trip.trip + this.appSettings.formatSwitch;
-      //  tripCoding++
-      //} else if (str[i] === this.appSettings.assistantTag) {
-      //  trip.trip = trip.trip + this.appSettings.assistantTag;
-      //  tripCoding++
-      //} else if (str[i] === this.appSettings.userTag) {
-      //  trip.trip = trip.trip + this.appSettings.userTag;
-      //  tripCoding++
-      //} else if (str[i] === this.appSettings.systemTag) {
-      //  trip.trip = trip.trip + this.appSettings.systemTag;
-      //  tripCoding++
-      //} else if (str[i] === this.appSettings.batchNameSwitch) {
-      //  trip.trip = trip.trip + this.appSettings.batchNameSwitch;
-      //  tripCoding++
-      //} else if (str[i] === this.appSettings.batchContinueTag) {
-      //  trip.trip = trip.trip + this.appSettings.batchContinueTag;
-      //  tripCoding++
-      //} else if (str[i] === this.appSettings.batchAssistantSwitch) {
-      //  trip.trip = trip.trip + this.appSettings.batchAssistantSwitch;
-      //  tripCoding++
-      //}else if (str[i] === this.appSettings.setJsonLevel) {
-      //  trip.trip = trip.trip + this.appSettings.setJsonLevel;
-      //  tripCoding++
-      //}else if (i > tripCoding){
-      //  return trip;
-      //}
-      // }
       switch (str[i]) {
         case this.appSettings.backendSwitch:
           trip.api++;
@@ -271,8 +227,8 @@ class TextEngine {
           identity
       );
     }
-    if (this.endpoints.endpoints.hasOwnProperty(identity)) {
-      this.api = this.endpoints.endpoints[identity];
+    if (this.endpoints.hasOwnProperty(identity)) {
+      this.api = this.endpoints[identity];
       console.log(
         color("paramatron setting api: ", "yellow") + JSON.stringify(this.api)
       );
@@ -382,9 +338,9 @@ class TextEngine {
 
           if (trip.api > 0 && !batching) {
             let counter = 1; //start at one to let zero be the default
-            for (const key in this.endpoints.endpoints) {
+            for (const key in this.endpoints) {
               if (counter === trip.api) {
-                this.api = this.endpoints.endpoints[key];
+                this.api = this.endpoints[key];
                 console.log(
                   color("setting api: ", "blue") + JSON.stringify(this.api)
                 );
@@ -416,8 +372,8 @@ class TextEngine {
             }
           }
         } else {
-          //if (this.api.params != this.endpoints.endpoints[this.endpoints.defaultClient].config){
-          //this.api = this.endpoints.endpoints[this.endpoints.defaultClient];
+          //if (this.api.params != this.endpoints[this.endpoints.defaultClient].config){
+          //this.api = this.endpoints[this.endpoints.defaultClient];
           console.log(
             color("using current api: ", "green") + JSON.stringify(this.api)
           );
@@ -1253,7 +1209,7 @@ ${this.appSettings.invoke}Help${this.appSettings
   }
   checkEndpoints(identity) {
     //check if keys in this.endpoints match identity
-    const endpointKeys = this.getObjectKeys(this.endpoints.endpoints);
+    const endpointKeys = this.getObjectKeys(this.endpoints);
     //console.log(endpointKeys);
     if (endpointKeys.includes(identity)) {
       return true;
