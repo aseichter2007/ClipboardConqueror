@@ -937,12 +937,12 @@ function returnKoboldAdapter(instructionSet) {
     instructionSet.assistantRole +
     instructionSet.endAssistantRole +
     instructionSet.endRole +
-    instructionSet.roleGap;
+    instructionSet.roleGap +
+    instructionSet.responseStart;
   const assistantEnd =
     instructionSet.endAssistantRole +
     instructionSet.endAssistantTurn +
-    instructionSet.endTurn +
-    instructionSet.responseStart;
+    instructionSet.endTurn;
   return {
     system_start: systemStart,
     system_end: systemEnd,
