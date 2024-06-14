@@ -211,6 +211,36 @@ class TextEngine {
     }
   }
 
+  initialize(defaultClient,instructFormat){
+    try {
+      this.api = this.endpoints[defaultClient];
+      console.log(
+        color("Initialize api: ", "yellow") + defaultClient + ":\n" + JSON.stringify(this.api)
+      );
+      console.log(
+        color("Initialize generation parameters: ", "yellow") + this.api.params 
+      );
+      this.setParams(this.api.params)
+      console.log(
+        color("Initialize Prompt Format: ", "yellow") + JSON.stringify(instructFormat)
+      );
+      this.inferenceClient.setPromptFormat(instructFormat); 
+      if (this.api === undefined){
+        console.log(color("improper defaultClient set, defaulting to koboldcpp","red"));
+        this.api = this.endpoints.kobold;
+      }
+      if (this.params === undefined) {
+        console.log(color("improper params in " + defaultClient + " endpoint settings, defaulting to kobold","red"));
+        this.setParams("kobold");
+      }
+      if (this.inferenceClient.instructSet === undefined) {
+        console.log(color("improper name in setup.js instructFormat, defaulting to kobold","red"));
+        this.setInferenceFormat('kobold'); 
+      }
+    } catch (error) {
+      console.log(color("check setup.js, improper defaultClient: " + defaultClient + " , "+ instructFormat,"red"));
+    }
+  }
   paramatron(identity) {
     identity = identity.trim();
     if (this.apiParams.hasOwnProperty(identity)) {

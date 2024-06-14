@@ -42,7 +42,7 @@
         duplicateCheck: false, //some other clipboard appications duplicate copied text back to the clipboard, set this true to catch those and preserve the proper last copied text. //untested, let me know if it works please. I don't think it busts anything but enabling this /may/ make unblocking after writing quries require non-dublicate text. 
         defaultClient: "kobold",//must match a key in endpoints. Recommend using kobold or tgwchat, ooba also seems to be working.
         defaultOptions: ["kobold", "tgwchat", "oobaRPmerge", "lmstudio","textGenWebUi", "ooba",  "chatGPT3", "chatGPT4","select defaultClient: from previous items. This field is purely informational for the user, particularly to ease use when writeFiles is enabled."],
-        instructFormat: "llama3",//overrides the defaultclient's set format
+        instructFormat: "llama3",//overrides the defaultclient's set format for quick changing on load.
         instructOptions: ["default", "defaultJson", "defaultJsonReturn", "hermes", "chatML", "chatVicuna", "samantha", "airoboros", "alpaca", "alpacaInstruct", "llamav2", "mistral", "mixtral", "metharme", "bactrian", "baichuan", "baize", "blueMoon", "chatGLM", "openChat", "openChatCode", "wizard", "wizardLM", "vicuna", "mistralLite", "deepseek", "deepseekCoder", "tinyLlama", "pirateLlama", "stableLM", "openAssistant", "vicunav1", "stableVicuna", "rp", "select instruct: from previous items or any you add to 0formats.json"],//or in setup below and re-write 0formats.json I think this one might be deprecated.
         persona: "default",//must be a valid identity in idents, e for empty or no default system prompt. Use quick prompts or call a prompt.
          
@@ -70,7 +70,7 @@
 
                 url : "http://127.0.0.1:5001/api/v1/generate/",//Kobold Compatible api url
                 params: "kobold",//params. must match a key in apiParams. It it is the same as the endpoint, then switching endpoints will change the parameters as well
-                autoConfigParams: false,//false prevents overriding params with |||tgwchat|
+                autoConfigParams: true,//false prevents overriding params with |||tgwchat|
                 //templateStringKey: "jinja", //jinja, none or adapter, required for chat endpoints
                 format: this.instructFormat,//must be a valid instruction format from below.
                 autoConfigFormat: false,//false prevents overriding prompt formatting with |||tgwchat|
