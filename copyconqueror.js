@@ -40,7 +40,6 @@ const client = new InferenceClient(
   endPointConfig.routes
 ); //todo, this doesnt really belong like this.
 //setup default format.
-client.setPromptFormat(format.format);
 
 const sendEngine = new SendEngine(
   client,
@@ -55,6 +54,8 @@ const sendEngine = new SendEngine(
   saveSettings,
   fs
 );
+sendEngine.paramatron(endPointConfig.routes.defaultClient)
+client.setPromptFormat(format.format);
 clipboardListener.startListening();
 //cleanup listener
 process.on("SIGINT", () => {

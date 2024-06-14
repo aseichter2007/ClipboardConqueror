@@ -26,7 +26,7 @@ class TextEngine {
     this.notify = notify;
     this.params = apiParams.default;
     this.apiParams = apiParams.params;
-    this.api = endpoints.endpoints[endpoints.defaultClient];
+    this.api = {},
     this.formats = formats;
     this.identity = {};
     this.recentClip = { text: "" };
@@ -58,11 +58,6 @@ class TextEngine {
     this.noChatLogging = false;
   }
 
-  /**
-   * 
-   * @param {string} str the current called prompt command
-   * @returns an object that detects quick api endpoint settings $, the multi-inference turn length, and special operators as a string.
-   */
   returnTrip(str) {
     let tripCoding = 0;
     let trip = { api: 0, batch: 0, trip: "" };
@@ -126,27 +121,16 @@ class TextEngine {
     }
     return trip;
   }
-
-  /**
-   *The batchPrompt function is used to send a batch of prompts to an API and retrieve the responses.
-   * @param {Array} prompts - An array of prompts to be sent to the API. Each prompt should be a string.
-   * @param {string} trip - An string like #@#@! for creating.
-   * sets up this.promptBatchKit per prompt.
-   */
-  batchPrompt(prompt, trip) {
+  batchPrompt(identity, trip) {
     //batchPrompt builds up a an object of prompts to be used in the batch
     if (this.batchLength < trip.batch) {
       this.batchLength = trip.batch;
     }
-    this.promptBatchKit[prompt] = trip;
+    this.promptBatchKit[identity] = trip;
     console.log(
-      "Chaining: " + color(prompt, "yellow") + " : " + JSON.stringify(trip)
+      "Chaining: " + color(identity, "yellow") + " : " + JSON.stringify(trip)
     );
   }
-
-  /**
-   * A function to process this.promptBatchKit and assemble operators and commands to apply this turn.
-   */
   batchProcessor() {
     let setBatch = [];
     if (this.batchLength > 0) {
@@ -173,13 +157,8 @@ class TextEngine {
       this.batch = setBatch.join(this.appSettings.promptSplit);
     }
   }
-
-  /**
-   * 
-   * @param {string} setting is put through a switch case to change the api.jsonSystem setting easily with some flexibility.
-   */
-  setJsonLevel(setting) {
-    let trimmed = setting.slice(1).trim().toLowerCase();
+  setJsonLevel(identity) {
+    let trimmed = identity.slice(1).trim().toLowerCase();
 
     switch (trimmed) {
       case "1":
@@ -231,31 +210,27 @@ class TextEngine {
         break;
     }
   }
-  /**
-   * paramatron checks if the setting is a key  in params, prompt formats, or apis and applies the setting and appropriate subsettings for api changes.
-   * 
-   * @param {string} setting 
-   */
-  paramatron(setting) {
-    setting = setting.trim();
-    if (this.apiParams.hasOwnProperty(setting)) {
-      this.setParams(setting);
+
+  paramatron(identity) {
+    identity = identity.trim();
+    if (this.apiParams.hasOwnProperty(identity)) {
       console.log(
-        color("paramatron requesting params: ", "yellow") +
-          setting
+        color("paramatron requesting generation parameters: ", "yellow") +
+        identity
       );
+      this.setParams(identity);
     }
-    if (this.formats.hasOwnProperty(setting)) {
-      this.setInferenceFormat(setting);
+    if (this.formats.hasOwnProperty(identity)) {
+      this.setInferenceFormat(identity);
       console.log(
         color("paramatron requesting format: ", "yellow") +
-          setting
+          identity
       );
     }
-    if (this.endpoints.hasOwnProperty(setting)) {
-      this.api = this.endpoints[setting];
+    if (this.endpoints.hasOwnProperty(identity)) {
+      this.api = this.endpoints[identity];
       console.log(
-        color("paramatron setting api: ", "yellow") + JSON.stringify(this.api)
+        color("paramatron setting api: ", "yellow") + identity + "\n" + JSON.stringify(this.api)
       );
       if (this.api.autoConfigParams === undefined ||this.api.autoConfigParams === true) {
         console.log(
@@ -268,13 +243,12 @@ class TextEngine {
         this.api.autoConfigFormat === undefined ||
         this.api.autoConfigFormat === true
       ) {
-        this.setInferenceFormat(this.api.format); //todo I think undefined lives here on %
         console.log(
           color("paramatron requesting format: ", "red") + this.api.format);
-      }
+          this.setInferenceFormat(this.api.format); 
+        }
     }
   }
-  
   updateIdentity(identity) {
     let trip = this.returnTrip(identity);
     let found = false;
@@ -1297,7 +1271,7 @@ ${this.appSettings.invoke}Help${this.appSettings
         break;
       case "systemafterprepend":
       case "systemafter":
-      case "systemsecondline":
+      case "system2":
         this.inferenceClient.setOnePromptFormat(
           "systemAfterPrepend",
           formattedQuery
@@ -1404,7 +1378,7 @@ ${this.appSettings.invoke}Help${this.appSettings
       try {
         let set = this.formats[setting];
         console.log(
-        color("changing prompt format: ", "yellow") + JSON.stringify(set));
+        color("changing prompt format: ", "yellow") + setting + " :\n " + JSON.stringify(set));
         this.inferenceClient.setPromptFormat(set);
       } catch (error) {
         for (let key in this.formats) {
@@ -1429,7 +1403,7 @@ ${this.appSettings.invoke}Help${this.appSettings
         let set = this.apiParams[setting];
         this.params = set;
         console.log(
-          color("setting generation parameters: ", "yellow") + setting + " : " + JSON.stringify(set)
+          color("setting generation parameters: ", "yellow") + setting + " :\n " + JSON.stringify(set)
         ); 
       } catch (error) {
         let names = [];
@@ -1755,6 +1729,8 @@ ${this.appSettings.invoke}Help${this.appSettings
       }
       sorted.formattedQuery = this.continueText(sorted.formattedQuery);
       if (sorted.run || this.on) {
+        //const defaultIdentity = { [this.instructions.rootname]: "" };
+        //console.log(ifDefault);
         if (
           ifDefault &&
           !this.set &&
@@ -1805,6 +1781,7 @@ ${this.appSettings.invoke}Help${this.appSettings
             sorted.formattedQuery;
           sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, "\n");
           this.notify("Paste Ready:", sendtoclipoardtext.slice(0, 150));
+          //this.recentClip.text = sendtoclipoardtext;
           return this.sendToClipboard(sendtoclipoardtext);
         }
         if (this.writeSettings) {
@@ -1817,10 +1794,21 @@ ${this.appSettings.invoke}Help${this.appSettings
             JSON.stringify(this.identity.settings) + //this is set up for PROMPT edit failures
             this.appSettings.writeSplit +
             sorted.formattedQuery;
+          //sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, "\n");
           this.notify("Paste Response:", sendtoclipoardtext.slice(0, 150));
+          //this.recentClip.text = sendtoclipoardtext;
           return this.sendToClipboard(sendtoclipoardtext);
         }
         if (!this.sendHold) {
+          //set params for outgoing
+          //console.log("params: " + JSON.stringify(this.params));
+          // let outParams = this.params;
+          // if (this.api.params && this.apiConfigSet !== this.api.params) {
+          //   outParams = this.apiParams[this.api.params];
+          //   //todo: build whole engine to transport settings across multiple apis
+          // }
+          // console.log("outParams: " + JSON.stringify(outParams));
+          //console.log(sorted);
           console.log(color("Sending to endpoint: ", "green"));
           this.inferenceClient.send(
             this.identity,
