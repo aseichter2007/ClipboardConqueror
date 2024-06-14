@@ -54,8 +54,7 @@ const sendEngine = new SendEngine(
   saveSettings,
   fs
 );
-sendEngine.paramatron(endPointConfig.routes.defaultClient)
-client.setPromptFormat(format.format);
+sendEngine.initialize(endPointConfig.routes.defaultClient,format.format);
 clipboardListener.startListening();
 //cleanup listener
 process.on("SIGINT", () => {
