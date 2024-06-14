@@ -9,27 +9,23 @@ const fs = require('fs');
 
 //setup all settings//
 //const write = true;
-const write = false; // this value controls whether the files are written to disk.
 const endPointConfig = {};
-const instructions  ={};
+const appSettings  ={};
 const params = {}
 const identities = {};
 const formats = {};
 const format = {};
 const {setup} = require('./setup.js');
-setup( endPointConfig, instructions, params,identities, formats, format, fs, write);
+setup( endPointConfig, appSettings, params,identities, formats, format, fs, false);
 //end settings//
-const recieveEngine = new RecieveEngine();
-function testing(){//hooked into changehandler, copy to execute
-    
-}
+const recieveEngine = new RecieveEngine(appSettings);
 
 const InferenceClient = require('./inferenceInterface.js');
 const {saveSettings} = require('./settingSaver.js');
 const client = new InferenceClient( axios, recieveApiResponse, returnSummary, NotificationBell, formats.formats, params, endPointConfig.routes);//todo, this doesnt really belong like this.
 
 client.setPromptFormat(format.format);
-const sendEngine = new SendEngine(client, ncp.copy, recieveApiResponse, NotificationBell, endPointConfig.routes, identities.identities, instructions.instructions, params, formats.formats, saveSettings, fs);
+const sendEngine = new SendEngine(client, ncp.copy, recieveApiResponse, NotificationBell, endPointConfig.routes, identities.identities, appSettings.appSettings, params, formats.formats, saveSettings, fs);
 function notify(title = "Paste Ready", text = "The response is ready."){
 // Define the notification
 if (title == ''){
