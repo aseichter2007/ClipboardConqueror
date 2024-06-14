@@ -58,6 +58,11 @@ class TextEngine {
     this.noChatLogging = false;
   }
 
+  /**
+   * 
+   * @param {string} str the current called prompt command
+   * @returns an object that detects quick api endpoint settings $, the multi-inference turn length, and special operators as a string.
+   */
   returnTrip(str) {
     let tripCoding = 0;
     let trip = { api: 0, batch: 0, trip: "" };
@@ -121,16 +126,27 @@ class TextEngine {
     }
     return trip;
   }
-  batchPrompt(identity, trip) {
+
+  /**
+   *The batchPrompt function is used to send a batch of prompts to an API and retrieve the responses.
+   * @param {Array} prompts - An array of prompts to be sent to the API. Each prompt should be a string.
+   * @param {string} trip - An string like #@#@! for creating.
+   * sets up this.promptBatchKit per prompt.
+   */
+  batchPrompt(prompt, trip) {
     //batchPrompt builds up a an object of prompts to be used in the batch
     if (this.batchLength < trip.batch) {
       this.batchLength = trip.batch;
     }
-    this.promptBatchKit[identity] = trip;
+    this.promptBatchKit[prompt] = trip;
     console.log(
-      "Chaining: " + color(identity, "yellow") + " : " + JSON.stringify(trip)
+      "Chaining: " + color(prompt, "yellow") + " : " + JSON.stringify(trip)
     );
   }
+
+  /**
+   * A function to process this.promptBatchKit and assemble operators and commands to apply this turn.
+   */
   batchProcessor() {
     let setBatch = [];
     if (this.batchLength > 0) {
@@ -157,8 +173,13 @@ class TextEngine {
       this.batch = setBatch.join(this.appSettings.promptSplit);
     }
   }
-  setJsonLevel(identity) {
-    let trimmed = identity.slice(1).trim().toLowerCase();
+
+  /**
+   * 
+   * @param {string} setting is put through a switch case to change the api.jsonSystem setting easily with some flexibility.
+   */
+  setJsonLevel(setting) {
+    let trimmed = setting.slice(1).trim().toLowerCase();
 
     switch (trimmed) {
       case "1":
@@ -210,25 +231,29 @@ class TextEngine {
         break;
     }
   }
-
-  paramatron(identity) {
-    identity = identity.trim();
-    if (this.apiParams.hasOwnProperty(identity)) {
-      this.setParams(identity);
+  /**
+   * paramatron checks if the setting is a key  in params, prompt formats, or apis and applies the setting and appropriate subsettings for api changes.
+   * 
+   * @param {string} setting 
+   */
+  paramatron(setting) {
+    setting = setting.trim();
+    if (this.apiParams.hasOwnProperty(setting)) {
+      this.setParams(setting);
       console.log(
         color("paramatron requesting params: ", "yellow") +
-          identity
+          setting
       );
     }
-    if (this.formats.hasOwnProperty(identity)) {
-      this.setInferenceFormat(identity);
+    if (this.formats.hasOwnProperty(setting)) {
+      this.setInferenceFormat(setting);
       console.log(
         color("paramatron requesting format: ", "yellow") +
-          identity
+          setting
       );
     }
-    if (this.endpoints.hasOwnProperty(identity)) {
-      this.api = this.endpoints[identity];
+    if (this.endpoints.hasOwnProperty(setting)) {
+      this.api = this.endpoints[setting];
       console.log(
         color("paramatron setting api: ", "yellow") + JSON.stringify(this.api)
       );
@@ -249,6 +274,7 @@ class TextEngine {
       }
     }
   }
+  
   updateIdentity(identity) {
     let trip = this.returnTrip(identity);
     let found = false;
@@ -1225,14 +1251,15 @@ ${this.appSettings.invoke}Help${this.appSettings
       case "bos":
         this.inferenceClient.setOnePromptFormat("bos", formattedQuery);
         break;
+      case "eos":
+        this.inferenceClient.setOnePromptFormat("eso",formattedQuery);
+        break;
       case "startturn":
       case "startall":
         this.inferenceClient.setOnePromptFormat("startTurn", formattedQuery);
         break;
       case "endturn":
       case "end":
-      case "eos":
-      case "aeos":
       case "endall":
         this.inferenceClient.setOnePromptFormat("endTurn", formattedQuery);
         break;
@@ -1261,6 +1288,7 @@ ${this.appSettings.invoke}Help${this.appSettings
         this.inferenceClient.setOnePromptFormat("roleGap", formattedQuery);
         break;
       case "prepend":
+      case "prependsystem":
       case "prependprompt":
         this.inferenceClient.setOnePromptFormat(
           "prependPrompt",
@@ -1269,7 +1297,7 @@ ${this.appSettings.invoke}Help${this.appSettings
         break;
       case "systemafterprepend":
       case "systemafter":
-      case "system2":
+      case "systemsecondline":
         this.inferenceClient.setOnePromptFormat(
           "systemAfterPrepend",
           formattedQuery
@@ -1727,8 +1755,6 @@ ${this.appSettings.invoke}Help${this.appSettings
       }
       sorted.formattedQuery = this.continueText(sorted.formattedQuery);
       if (sorted.run || this.on) {
-        //const defaultIdentity = { [this.instructions.rootname]: "" };
-        //console.log(ifDefault);
         if (
           ifDefault &&
           !this.set &&
@@ -1779,7 +1805,6 @@ ${this.appSettings.invoke}Help${this.appSettings
             sorted.formattedQuery;
           sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, "\n");
           this.notify("Paste Ready:", sendtoclipoardtext.slice(0, 150));
-          //this.recentClip.text = sendtoclipoardtext;
           return this.sendToClipboard(sendtoclipoardtext);
         }
         if (this.writeSettings) {
@@ -1792,21 +1817,10 @@ ${this.appSettings.invoke}Help${this.appSettings
             JSON.stringify(this.identity.settings) + //this is set up for PROMPT edit failures
             this.appSettings.writeSplit +
             sorted.formattedQuery;
-          //sendtoclipoardtext = sendtoclipoardtext.replace(/\\n/g, "\n");
           this.notify("Paste Response:", sendtoclipoardtext.slice(0, 150));
-          //this.recentClip.text = sendtoclipoardtext;
           return this.sendToClipboard(sendtoclipoardtext);
         }
         if (!this.sendHold) {
-          //set params for outgoing
-          //console.log("params: " + JSON.stringify(this.params));
-          // let outParams = this.params;
-          // if (this.api.params && this.apiConfigSet !== this.api.params) {
-          //   outParams = this.apiParams[this.api.params];
-          //   //todo: build whole engine to transport settings across multiple apis
-          // }
-          // console.log("outParams: " + JSON.stringify(outParams));
-          //console.log(sorted);
           console.log(color("Sending to endpoint: ", "green"));
           this.inferenceClient.send(
             this.identity,
