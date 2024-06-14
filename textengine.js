@@ -22,6 +22,7 @@ class TextEngine {
     this.fs = fs;
     this.endpoints = endpoints.endpoints;
     this.identities = identities;
+    this.defaultIdentity = endpoints.persona
     this.appSettings = instructions;
     this.notify = notify;
     this.params = apiParams.default;
@@ -242,7 +243,6 @@ class TextEngine {
     }
   }
   paramatron(identity) {
-    identity = identity.trim();
     if (this.apiParams.hasOwnProperty(identity)) {
       console.log(
         color("paramatron requesting generation parameters: ", "yellow") +
@@ -280,6 +280,7 @@ class TextEngine {
     }
   }
   updateIdentity(identity) {
+    identity = identity.trim(); 
     let trip = this.returnTrip(identity);
     let found = false;
     let setIdent = {};
@@ -289,7 +290,6 @@ class TextEngine {
     if (identity !== "" && identity !== null && identity !== undefined) {
       if (identity) {
         if (Number.isNaN(Number(identity))) {
-          identity = identity.trim(); //|||convert this to a switch case:
           switch (trip.trip[0]) {
             case this.appSettings.assistantTag:
               this.setPrompt("assistantRole", identity.slice(1));
@@ -382,7 +382,7 @@ class TextEngine {
                     color("quick setting params: ", "red") +
                       JSON.stringify(this.api.params)
                   );
-                  this.setParams(this.formats[this.api.params]);
+                  this.setParams(this.api.params);
                 }
                 if (
                   this.api.autoConfigFormat === undefined ||
@@ -1759,16 +1759,14 @@ ${this.appSettings.invoke}Help${this.appSettings
       }
       sorted.formattedQuery = this.continueText(sorted.formattedQuery);
       if (sorted.run || this.on) {
-        //const defaultIdentity = { [this.instructions.rootname]: "" };
-        //console.log(ifDefault);
+        
         if (
           ifDefault &&
           !this.set &&
-          sorted.tags.command != undefined &&
-          sorted.tags.command != ""
+          (sorted.tags.command != undefined ||
+          sorted.tags.command === "")
         ) {
-          //console.log("hit default");
-          this.identity.CaptainClip = this.identities[this.endpoints.persona];
+          this.identity[this.endpoints.persona] = this.identities[this.defaultIdentity];
           this.noBatch = true;
         }
         if (
