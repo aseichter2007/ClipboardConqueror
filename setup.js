@@ -38,7 +38,7 @@
  function setEndpoints(){//this is where the most basic configuration is set.
      
     const endpoints = { 
-        writeFiles: false,//true to write 0formats.json, 0identities.json etc. Required true for |||prompt:file| 
+        writeFiles: false,//true to write 0formats.json, 0prompts.json etc. Required true for |||prompt:file| 
         duplicateCheck: false, //some other clipboard appications duplicate copied text back to the clipboard, set this true to catch those and preserve the proper last copied text. //untested, let me know if it works please. I don't think it busts anything but enabling this /may/ make unblocking after writing quries require non-dublicate text. 
         defaultClient: "kobold",//must match a key in endpoints. Recommend using kobold or tgwchat, ooba also seems to be working.
         defaultOptions: ["kobold", "tgwchat", "oobaRPmerge", "lmstudio","textGenWebUi", "ooba",  "chatGPT3", "chatGPT4","select defaultClient: from previous items. This field is purely informational for the user, particularly to ease use when writeFiles is enabled."],
@@ -52,7 +52,7 @@
                 type: "completion",
                 jsonSystem: true,
                 url : "http://127.0.0.1:5000/v1/completions",
-                config: "ooba",
+                params: "ooba",
                 templateStringKey: "instruction_template_str",
                 format: "llama3",//completion endpoints must use a format matching a key in instructionFormats
                 key: "no_key_needed",
@@ -69,10 +69,10 @@
                 //buildType: "unused",
 
                 url : "http://127.0.0.1:5001/api/v1/generate/",//Kobold Compatible api url
-                config: "kobold",//params. must match a key in apiParams. It it is the same as the endpoint, then switching endpoints will change the parameters as well
+                params: "kobold",//params. must match a key in apiParams. It it is the same as the endpoint, then switching endpoints will change the parameters as well
                 autoConfigParams: false,//false prevents overriding params with |||tgwchat|
                 //templateStringKey: "jinja", //jinja, none or adapter, required for chat endpoints
-                format: "llama3",//must be a valid instruction format from below.
+                format: this.instructFormat,//must be a valid instruction format from below.
                 autoConfigFormat: false,//false prevents overriding prompt formatting with |||tgwchat|
                 //objectReturnPath: "data.results[0].text"  This is set up in outpoint
                 key: "no_key_needed",
@@ -89,7 +89,7 @@
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 jsonSystem : "none",
                 url : "http://127.0.0.1:5000/v1/chat/completions",
-                config: "tgwchat",//if this is the same as the key for this endpoint, autoConfigParams can be set false
+                params: "tgwchat",//if this is the same as the key for this endpoint, autoConfigParams can be set false
                 autoConfigParams: true,//false prevents overriding params with |||tgwchat|
                 autoConfigFormat: true,//false prevents overriding prompt formatting with |||tgwchat|
                 templateStringKey: "instruction_template_str",//if present and not "" will build and send a jinja template to tgwui.
@@ -110,7 +110,7 @@
                 //buildType: "unused",
 
                 url : "http://127.0.0.1:11434/api/generate",//Kobold Compatible api url
-                config: "ollama",//params. must match a key in apiParams. It it is the same as the endpoint, then switching endpoints will change the parameters as well
+                params: "ollama",//params. must match a key in apiParams. It it is the same as the endpoint, then switching endpoints will change the parameters as well
                 autoConfigParams: false,//false prevents overriding params with |||tgwchat|
                 //templateStringKey: "jinja", //jinja, none or adapter, required for chat endpoints
                 format: "llama3",//must be a valid instruction format from below.
@@ -130,7 +130,7 @@
                 buildType: "combined",
 
                 url : "http://localhost:11434/api/chat",//Kobold Compatible api url
-                config: "ollama",//params. must match a key in apiParams. It it is the same as the endpoint, then switching endpoints will change the parameters as well
+                params: "ollama",//params. must match a key in apiParams. It it is the same as the endpoint, then switching endpoints will change the parameters as well
                 autoConfigParams: false,//false prevents overriding params with |||tgwchat|
                 //templateStringKey: "jinja", //jinja, none or adapter, required for chat endpoints
                 format: "llama3",//must be a valid instruction format from below.
@@ -149,7 +149,7 @@
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "http://127.0.0.1:5000/v1/chat/completions",
-                config: "TGWopenAICompletions",
+                params: "TGWopenAICompletions",
                 autoConfigParams: true,//false prevents overriding params with |||tgwchat|
                 autoConfigFormat: true,//false prevents overriding prompt formatting with |||tgwchat|
 
@@ -168,9 +168,9 @@
             },
             oobaRPmerge: {//|||$$$| or |||textGenWebUi|
                 type: "chat",
-                buildType: "compatible",
+                buildType: "combined",
                 url : "http://127.0.0.1:5000/v1/chat/completions",
-                config: "oobarpmerge",
+                params: "oobarpmerge",
                 autoConfigParams: true,//false prevents overriding params with |||tgwchat|
                 autoConfigFormat: true,//false prevents overriding prompt formatting with |||tgwchat|
 
@@ -188,12 +188,14 @@
             },
             koboldChat: {//|||$$$$| or just ||| with matching defaultClient or |||koboldChat|
                 type: "chat",
-                buildType: "compatible",//combined, compatible, system, or key, required in chat completion mode. key is experimental and not reccommended.
-                url : "http://127.0.0.1:5001/v1/chat/generate/",
-                config: "kobold",//must match a key in apiParams
+                buildType: "combined",//combined, compatible, system, or key, required in chat completion mode. key is experimental and not reccommended.
+                url : "http://127.0.0.1:5001/v1/chat/completions/",
+                params: "kobold",//must match a key in apiParams
+                autoConfigParams : true,
                 //templateStringKey: "jinja", //jinja, none or adapter, required for chat endpoints
                 koboldAdapter: true,//true to send custom prompt formatting to kobold openAI api
-                format: "combined",//system, combined, or key in chat mode. Key is experimental, it should send prompts as their roles. I think I am making a mistake, but as Ms. Frizzle says...
+                format: "chatML",
+                autoConfigFormat: true,
                 key: "no_key_needed",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
                     outpointPathSteps: 4,//key for a switch case
@@ -203,31 +205,32 @@
                     four: "content"
                 }            
             },
-            // lmstudioCompletion: {//|||$$$$$| or |||lmstudioCompletion|
-            //     type: "completion",
-            //     jsonSystem : true,
-            //     url : "https://localhost:1234/v1/completions/",
-            //     config: "lmstudio",//sets default gen parameters from below in apiParams
-            //     format: "alpaca",// system, key, or combined // role": "system", "content":      or      "role": key, "content":
-            //     //type: "none",
-            //     key: "no_key_needed",
-            //     outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
-            //         outpointPathSteps: 3,//key for a switch case
-            //         one: "results",//results[0].text
-            //         two: 0,//[0].text
-            //         three: "text"//text
-            //     }            
-            // },
-            lmstudio: {//|||$$$$$$| or |||lmstudio|
+            lmstudio: {//|||$$$$$| or |||lmstudio|
+                type: "completion",
+                jsonSystem : true,
+                url : "http://localhost:1234/v1/completions/",
+                params: "lmstudio",//sets default gen parameters from below in apiParams
+                autoConfigParams: true,
+                format: "chatML",// system, key, or combined // role": "system", "content":      or      "role": key, "content":
+                autoConfigFormat: true,
+                key: "no_key_needed",
+                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 3,//key for a switch case
+                    one: "choices",//results[0].text
+                    two: 0,//[0].text
+                    three: "text"//text
+                }            
+            },
+            lmstudioChat: {//|||$$$$$$| or |||lmstudioChat|
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 jsonSystem : "none",
                 url : "http://localhost:1234/v1/chat/completions/",
-                config: "lmstudio",
+                params: "lmstudio",
                 autoConfigParams: false,
                 //templateStringKey: "jinja",
-                format: "combined",// system, key, or combined // role": "system", "content":      or      "role": key, "content":
-                autoConfigFormat: true,
+                format: "chatML",// system, key, or combined // role": "system", "content":      or      "role": key, "content":
+                autoConfigFormat: false,
                 key: "no_key_needed",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
                     outpointPathSteps: 4,//key for a switch case
@@ -242,7 +245,7 @@
                 type: "completion",
                 jsonSystem : true,
                 url : "http://127.0.0.1:5000/v1/completions",//this only returns 16 characters, and that seems unavoidable.
-                config: "TGWopenAICompletions",
+                params: "TGWopenAICompletions",
                 
                 format: "defaultJson",//completion endpoints must use a format matching a key in instructionFormats
                 key: "no_key_needed",
@@ -258,7 +261,7 @@
                 type: "completion",
                 jsonSystem: true,
                 url : "http://127.0.0.1:5000/v1/completions",
-                config: "ooba",
+                params: "ooba",
                 templateStringKey: "instruction_template_str",
                 format: "llama3",//completion endpoints must use a format matching a key in instructionFormats
                 key: "no_key_needed",
@@ -272,7 +275,7 @@
             davinci: {//|||$$$$$$$| or |||davinci|
                 type: "completion",
                 url : "https://api.openai.com/v1/completions",
-                config: "openAiCompletions",
+                params: "openAiCompletions",
                 templateStringKey: "jinja",
                 format: "combined", //system, key or combined.
                 key: "ex-Your_openAi_Api_Key_here",
@@ -290,7 +293,7 @@
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 
                 url : "https://api.openai.com/v1/chat/completions",
-                config: "openai",
+                params: "openai",
                 templateStringKey: "jinja",
                 format: "openai", //system, key or combined.
                 key: "ex-Your_openAi_Api_Key_here",
@@ -308,7 +311,7 @@
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "https://api.openai.com/v1/chat/completions",
-                config: "openai",
+                params: "openai",
                 templateStringKey: "jinja",
                 format: "openai", //system, key or combined are valid for chat.
                 key: "ex-Your_openAi_Api_Key_here",
@@ -325,7 +328,7 @@
                 type: "chat",
                 buildType: "system",
                 url : "http://127.0.0.1:5001/v1/chat/generate/",
-                config: "kobold",//must match a key in apiParams
+                params: "kobold",//must match a key in apiParams
                 templateStringKey: "jinja",
                 format: "system",
                 key: "no_key_needed",
@@ -342,7 +345,7 @@
                 type: "chat",
                 buildType: "key",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "http://localhost:5001/v1/chat/completions/",
-                config: "kobold",//must match a key in apiParams
+                params: "kobold",//must match a key in apiParams
                 templateStringKey: "jinja",
                 format: "default",//key, system, or combined in chat mode
                 key: "no_key_needed",
@@ -1626,7 +1629,7 @@ function setParams(){
 function setIdentities(){  //here live all the identities. Left justified for whitespace formatting
 const idents = {
     //left justified for ` string formatting
-    //add more at need, delete 0identities.json to write changes to file.
+    //add more at need, delete 0prompts.json to write changes to file.
 
 e:"",
 user:"user is Tony. Tony likes programming, thinking about how to make new things, and dreams of building a place where anyone can go and learn anything and build with any tool, anytime. Like a makerspace and library combined. Tony designed and coded, not necessarily in that order, Clipboard Conqueror. Tony is struggling to find work in this wild world. He just wants to code the thing, finding work is exhausting. Tony has worked in many fields, nuclear power, education, and foundry are just a sample. Tony wrote about 90% of this mess, and LLMs filled a few gaps."
@@ -2463,20 +2466,20 @@ function setup( endPointConfig, appSettings, params, identities, formats, format
         }
     }
     try{
-        if (fileExists("./0identities.json")){
-            identities.identities = require('./0identities.json');
+        if (fileExists("./0prompts.json")){
+            identities.identities = require('./0prompts.json');
         }
         else{
             identities.identities = setIdentities();
             if (write) {
-                writeObjectToFileAsJson(identities.identities, '0identities.json',fs);
+                writeObjectToFileAsJson(identities.identities, '0prompts.json',fs);
             }
         }
     }catch(error){
         console.log(error);
         identities.identities = setIdentities();
         if (write) {
-        writeObjectToFileAsJson(idents, '0identities.json',fs);
+        writeObjectToFileAsJson(idents, '0prompts.json',fs);
         }
     }
     try {
