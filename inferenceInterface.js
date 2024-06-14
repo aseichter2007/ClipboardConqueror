@@ -4,7 +4,7 @@ class InferenceClient {
   constructor(
     handler,
     recieveApiResponse,
-    returnSummary,
+    //returnSummary,
     notify,
     instructionFormats,
     parameters,
@@ -12,7 +12,7 @@ class InferenceClient {
   ) {
     this.handler = handler;
     this.callback = recieveApiResponse;
-    this.returnSummary = returnSummary;
+    //this.returnSummary = returnSummary;
     this.notify = notify;
     this.instructSet = {};
     this.instructionFormats = instructionFormats;
@@ -22,12 +22,59 @@ class InferenceClient {
     this.lastOutpoint = "";
     this.storeparams = parameters.default;
   }
+
+  /**
+   * Sets a specific prompt format segment for the inference interface.
+   *
+   * @param {string} setting - The name of the prompt format setting to be updated.
+   * @param {string} value - The new value for the specified prompt format setting.
+   */
   setOnePromptFormat(setting, value) {
     this.instructSet[setting] = value;
   }
+
+  /**
+   * Sets the generation parameters stored in inference interface.
+   * 
+   * @param {*} params 
+   */
   setParams(params){
     this.parameters = params;
   }
+  
+  /**
+   * Sets the prompt format for the inference interface.
+   *
+   * @param {Object} setting - An object containing the settings for the prompt format.
+   * @param {string} [setting.bos] - The beginning of sentence token.
+   * @param {string} [setting.eos] - The end of sentence token.
+   * @param {string} [setting.startTurn] - The token to start a conversation turn.
+   * @param {string} [setting.endTurn] - The token to end a conversation turn.
+   * @param {string} [setting.startSystem] - The token to start a system message.
+   * @param {string} [setting.startUser] - The token to start a user message.
+   * @param {string} [setting.startAssistant] - The token to start an assistant message.
+   * @param {string} [setting.endSystemTurn] - The token to end a system message turn.
+   * @param {string} [setting.endUserTurn] - The token to end a user message turn.
+   * @param {string} [setting.endAssistantTurn] - The token to end an assistant message turn.
+   * @param {string} [setting.systemRole] - The role of the system.
+   * @param {string} [setting.endSystemRole] - The token to end the system role.
+   * @param {string} [setting.userRole] - The role of the user.
+   * @param {string} [setting.endUserRole] - The token to end the user role.
+   * @param {string} [setting.endRole] - The token to end any role.
+   * @param {string} [setting.roleGap] - The gap between roles.
+   * @param {string} [setting.endUserRole] - The token to end the user role.
+   * @param {string} [setting.assistantRole] - The role of the assistant.
+   * @param {string} [setting.endAssistantRole] - The token to end the assistant role.
+   * @param {string} [setting.prependPrompt] - The prompt to prepend to the conversation.
+   * @param {string} [setting.systemAfterPrepend] - The system message after the prepend prompt.
+   * @param {string} [setting.postPrompt] - The prompt to append to the conversation.
+   * @param {string} [setting.memorySystem] - The system memory.
+   * @param {string} [setting.memoryUser] - The user memory.
+   * @param {string} [setting.responseStart] - The token to start the assistant's response.
+   * @param {string} [setting.specialInstructions] - Special instructions for the conversation.
+   *
+   * @throws {Error} If an invalid key is used in the setting object.
+   */
   setPromptFormat(setting) {
     try {
       let bos = "";
@@ -167,8 +214,13 @@ class InferenceClient {
     }
     console.log("prompt format set: " + JSON.stringify(this.instructSet));
   }
-  //|||code|instead of destructruing, take each value and check if it's undefined, as is done to the bos value.
 
+ /**
+  * Sets the instruction format by name..
+  *
+  * @param {string} format - The format to be set for the instruction set.
+  * @throws {Error} If the provided format is invalid.
+  */
   setFormat(format) {
     try {
       this.instructSet = this.instructionFormats[format];
@@ -176,6 +228,15 @@ class InferenceClient {
       console.log("invalid format: " + error);
     }
   }
+  /**
+   * Builds a completion message for the given identity, user query, parameters, and API.
+   *
+   * @param {Object} identity - The identity object containing system information.
+   * @param {string} userQuery - The user's query or input.
+   * @param {Object} params - The parameters object to be modified with the final prompt.
+   * @param {Object} api - The API object containing additional configuration options.
+   * @returns {void}
+   */
   completionMessageBuilder(identity, userQuery, params, api) {
     const instruct = this.instructSet;
     //console.log(JSON.stringify(this.instructSet));
@@ -284,13 +345,15 @@ class InferenceClient {
     completion(api, params, this.callback, this.notify, this.handler);
   }
 
+  /**
+   * Sends a message to a message builder based on the API configuration.
+   *
+   * @param {string} identity - The identity of the sender.
+   * @param {string} text - The text of the message.
+   * @param {Object} params - The parameters for the message.
+   * @param {Object} api - The API configuration.
+   */
   send(identity, text, params, api) {
-    //console.log("send: " + JSON.stringify(api));
-    //console.log("params: " + JSON.stringify(params));
-    // if (this.lastOutpoint !== api.config) {
-    //   this.lastOutpoint = api.config;
-      
-    // }
     if (api.type === "completion") {
       this.completionMessageBuilder(identity, text, params, api);
     } else if (api.type === "chat") {
@@ -300,23 +363,31 @@ class InferenceClient {
         this.messageSystemBuilder(identity, text, params, api);
       } else if (api.buildType === "combined") {
         this.messageOneSystemBuilder(identity, text, params, api);
-      } else if (api.buildType === "compatible") {
-        generateCompletion(
-          api,
-          identity,
-          text,
-          this.instructSet,
-          params,
-          this.callback,
-          this.notify,
-          this.handler
-        );
-      } else {
+      }
+      //  else if (api.buildType === "compatible") {
+      //   generateCompletion(
+      //     api,
+      //     identity,
+      //     text,
+      //     this.instructSet,
+      //     params,
+      //     this.callback,
+      //   );
+      //}
+       else {
         this.basicMessageBuilder(identity, text, params, api);
       }
     }
   }
 
+  /**
+   * Builds a message object for a chatbot interaction. Sends the built message object to chat().
+   *
+   * @param {Object} identity - The identity of the chatbot.
+   * @param {string} user - The user's message.
+   * @param {Object} params - Additional parameters for the chatbot.
+   * @param {Object} api - The API object containing the model.
+   */
   messageBuilder(identity, user, params, api) {
     if (api.model) {
       params.model = api.model;
@@ -344,6 +415,15 @@ class InferenceClient {
       this.handler
     );
   }
+
+  /**
+   * Builds multiple message system prompts. Sends the built message object to chat().
+   *
+   * @param {Object} identity - The identity object containing various keys.
+   * @param {string} message - The user message to be included in the conversation.
+   * @param {Object} params - Additional parameters for the message system.
+   * @param {Object} api - The API object that may contain a model property.
+   */
   messageSystemBuilder(identity, message, params, api) {
     if (api.model) {
       params.model = api.model;
@@ -371,6 +451,15 @@ class InferenceClient {
       this.handler
     );
   }
+
+  /**
+   * Builds one system message prompt combining all identities. Sends the built message object to chat().
+   *
+   * @param {Object} identity - The identity object containing various keys.
+   * @param {string} message - The user message to be included in the conversation.
+   * @param {Object} params - Additional parameters for the message system.
+   * @param {Object} api - The API object that may contain a model property.
+   */
   messageOneSystemBuilder(identity, message, params, api) {
     if (api.model !== undefined) {
       params.model = api.model;
@@ -412,6 +501,15 @@ class InferenceClient {
       this.handler
     );
   }
+
+  /**
+   * Builds a basic system and user message object. Sends the built message object to chat().
+   *
+   * @param {Object} identity - The identity object containing various keys.
+   * @param {string} message - The user message to be included in the conversation.
+   * @param {Object} params - Additional parameters for the message system.
+   * @param {Object} api - The API object that may contain a model property.
+   */
   basicMessageBuilder(identity, message, params, api) {
     if (api.model !== undefined) {
       params.model = api.model;
@@ -431,6 +529,13 @@ class InferenceClient {
       this.handler
     );
   }
+
+  /**
+   * Generates a system prompt based on the provided identity object.
+   *
+   * @param {Object} identity - An object containing roles and their descriptions.
+   * @returns {string} - A string representing the system prompt.
+   */
   systemPromptBuilder(identity) {
     let secretIdentity = "";
     for (const key in identity) {
@@ -448,6 +553,18 @@ class InferenceClient {
 
     return secretIdentity;
   }
+
+  /**
+ * Converts an identity object into a string representation.
+ *
+ * This function iterates over the properties of the given identity object and constructs
+ * a string where each property is represented as "key : value". The properties are separated
+ * by a space and a roleGap string is appended at the end. The roleGap string is assumed to be
+ * a property of the inferenceInterface object.
+ *
+ * @param {Object} identity - The identity object to be converted into a string.
+ * @returns {string} A string representation of the identity object.
+ */
   identityStringifier(identity) {
     let secretIdentity = "";
     for (const key in identity) {
@@ -456,6 +573,15 @@ class InferenceClient {
     }
     return secretIdentity;
   }
+
+  /**
+   * This function takes an object as input, where each key-value pair represents a part of a secret identity.
+   * It concatenates all the values in the object into a single string, separating each value with a role gap.
+   * This function does not include the keys in the concatenated string.
+   *
+   * @param {Object} identity - An object where each key-value pair represents a part of a secret identity.
+   * @returns {string} A string that represents the concatenated secret identity.
+   */
   identityStringifyNoKey(identity) {
     let secretIdentity = "";
     for (const key in identity) {
@@ -464,6 +590,22 @@ class InferenceClient {
     return secretIdentity;
   }
 }
+
+/**
+ * Function to handle chat completion using a specified openai compatible API.
+ *
+ * @async
+ * @function chat
+ * @param {Object} api - The API configuration object.
+ * @param {Array} messages - The array of messages to send to the API.
+ * @param {String} promptFormat - The format of the prompt.
+ * @param {Object} params - The parameters to send to the API.
+ * @param {Function} callback - The callback function to handle the API response.
+ * @param {Function} notify - The notification function.
+ * @param {Object} handler - The object handling the API request.
+ * @throws {Error} Throws an error if there is an issue with the API request or response.
+ * @returns {Promise<void>}
+ */
 async function chat(
   api,
   messages,
@@ -483,9 +625,6 @@ async function chat(
       }
     }
     console.log("sending to completion api: " + api.url);
-
-    //messages = JSON.stringify(messages)
-    //console.log("messages: " + messages);
     params.messages = messages;
     const config = {
       method: "POST",
@@ -497,9 +636,6 @@ async function chat(
       },
       data: params
     };
-    //const outprompt = JSON.stringify({...params,...prompt})
-    //const outprompt = {...params,...prompt}
-    //console.log("outprompt: "+ outprompt);
     handler
       .request(config)
       .then(response => {
@@ -507,20 +643,33 @@ async function chat(
           //notify("api error: ", response.statusText);
           console.log("completion api error: " + response.statusText);
         }
-        //console.log(response.data);
         const output = outPointer(api.outpoint, response.data); // response.json();
         callback(output);
       })
       .catch(error => {
-        console.log(error);
-        //parse the error message
-        const message = error.response.data;
-        console.log(message);
+        try {
+          console.log(error);          
+        } catch (error) {
+          console.log("error recieving api error.");
+        }
       });
   } catch (error) {
     console.log(error);
   }
 }
+
+/**
+ * Makes a completion request to the specified API with the given parameters.
+ *
+ * @async
+ * @function completion
+ * @param {Object} api - The API object containing the URL and key for the completion request.
+ * @param {Object} params - The parameters to be sent with the completion request.
+ * @param {Function} callback - The callback function to be called with the output of the completion request.
+ * @param {Function} notify - The function to be called for notifications (not used in this function).
+ * @param {Object} handler - The object handling the HTTP request.
+ * @throws {Error} If there is an error in the completion API request.
+ */
 async function completion(api, params, callback, notify, handler) {
   try {
     console.log("sending to completion api: " + api.url);
@@ -535,20 +684,49 @@ async function completion(api, params, callback, notify, handler) {
         data: JSON.stringify(params)
       })
       .then(response => {
-        if (!response.ok === "OK") {
-          console.log("completion api error: " + response.statusText);
+        try { 
+          if (!response.ok === "OK") {
+            console.log("completion api error: " + response.statusText);
+          }
+          //console.log(response.data);
+          const output = outPointer(api.outpoint, response.data);
+          callback(output);
+        } catch (error) {
+          console.log(error);
+          console.log("make sure outpoint is configured for this api");
         }
-        //console.log(response.data);
-        const output = outPointer(api.outpoint, response.data);
-        callback(output);
       })
       .catch(error => {
-        console.log(error);
+        try {
+          console.log(error);
+        } catch (error) {
+          console.log("error recieving api error");
+        }
       });
   } catch (error) {
     console.error("Error in completion API:", error);
   }
 }
+
+/**
+ * Retrieves a nested value from a data object based on the provided outpoint.
+ *
+ * @param {Object} outpoint - An object containing the path to the desired value.
+ * @param {number} outpoint.outpointPathSteps - The number of steps in the path.
+ * @param {string|number} outpoint.one - The first key or index in the path.
+ * @param {string|number} [outpoint.two] - The second key or index in the path.
+ * @param {string|number} [outpoint.three] - The third key or index in the path.
+ * @param {string|number} [outpoint.four] - The fourth key or index in the path.
+ * @param {string|number} [outpoint.five] - The fifth key or index in the path.
+ * @param {string|number} [outpoint.six] - The sixth key or index in the path.
+ * @param {string|number} [outpoint.seven] - The seventh key or index in the path.
+ * @param {string|number} [outpoint.eight] - The eighth key or index in the path.
+ * @param {string|number} [outpoint.nine] - The ninth key or index in the path.
+ * @param {string|number} [outpoint.ten] - The tenth key or index in the path.
+ * @param {Object} data - The data object from which to retrieve the value.
+ * @returns {*} The nested value from the data object.
+ * @throws {Error} If the outpointPathSteps value is greater than 10.
+ */
 function outPointer(outpoint, data) {
   try {
     switch (outpoint.outpointPathSteps) {
@@ -610,6 +788,13 @@ function outPointer(outpoint, data) {
     );
   }
 }
+
+/**
+ * JinjaFormatter is a function that formats a given instruction set into a Jinja template string.
+ * The function takes an instruction set as an argument and returns a string that can be used as a template for Text Generation WebUI openAI chat api.
+ * @param {object} instructionSet - An object containing the instruction set to be formatted.
+ * @returns {string} - A Jinja template string.
+ */
 function JinjaFormatter(instructionSet) {
   return (
     `|-
@@ -661,7 +846,8 @@ function JinjaFormatter(instructionSet) {
     instructionSet.endAssistantRole +
     instructionSet.endRole +
     instructionSet.roleGap +
-    `' + message['content'] + '` +// instructionSet.responseStart+ //maybe here... nope, it isn't sending correctly.
+    // instructionSet.responseStart+ //maybe here... 
+    `' + message['content'] + '` +
     instructionSet.endAssistantTurn +
     instructionSet.endTurn +
     `' -}}
@@ -682,27 +868,44 @@ function JinjaFormatter(instructionSet) {
   `
   );
 }
-// instruction_template: |-
-//   {%- set ns = namespace(found=false) -%}
-//   {%- for message in messages -%}
-//       {%- if message['role'] == 'system' -%}
-//           {%- set ns.found = true -%}
-//       {%- endif -%}
-//   {%- endfor -%}
-//   {%- for message in messages %}
-//       {%- if message['role'] == 'system' -%}
-//           {{- '<|im_start|>system\n' + message['content'].rstrip() + '<|im_end|>\n' -}}
-//       {%- else -%}
-//           {%- if message['role'] == 'user' -%}
-//               {{-'<|im_start|>user\n' + message['content'].rstrip() + '<|im_end|>\n'-}}
-//           {%- else -%}
-//               {{-'<|im_start|>assistant\n' + message['content'] + '<|im_end|>\n' -}}
-//           {%- endif -%}
-//       {%- endif -%}
-//   {%- endfor -%}
-//   {%- if add_generation_prompt -%}
-//       {{-'<|im_start|>assistant\n'-}}
-//   {%- endif -%}
+
+/**
+ * Returns a Kobold adapter object based on the provided instruction set.
+ *
+ * The Kobold adapter object contains the following properties:
+ * - system_start: The start of a system message.
+ * - system_end: The end of a system message.
+ * - user_start: The start of a user message.
+ * - user_end: The end of a user message.
+ * - assistant_start: The start of an assistant message.
+ * - assistant_end: The end of an assistant message.
+ *
+ * @param {Object} instructionSet - An object containing instructions for the adapter.
+ * @param {string} instructionSet.bos - The beginning of a sentence.
+ * @param {string} instructionSet.startTurn - The start of a turn in the conversation.
+ * @param {string} instructionSet.startSystem - The start of a system message.
+ * @param {string} instructionSet.systemRole - The role of the system in the conversation.
+ * @param {string} instructionSet.endSystemRole - The end of the system role.
+ * @param {string} instructionSet.endRole - The end of a role in the conversation.
+ * @param {string} instructionSet.roleGap - The gap between roles.
+ * @param {string} instructionSet.prependPrompt - The prompt to prepend to the system message.
+ * @param {string} instructionSet.systemAfterPrepend - The system message after the prepend prompt.
+ * @param {string} instructionSet.postPrompt - The prompt to append to the system message.
+ * @param {string} instructionSet.memorySystem - The system's memory in the conversation.
+ * @param {string} instructionSet.endSystemTurn - The end of a system turn.
+ * @param {string} instructionSet.endTurn - The end of a turn in the conversation.
+ * @param {string} instructionSet.startUser - The start of a user message.
+ * @param {string} instructionSet.userRole - The role of the user in the conversation.
+ * @param {string} instructionSet.endUserRole - The end of the user role.
+ * @param {string} instructionSet.memoryUser - The user's memory in the conversation.
+ * @param {string} instructionSet.endUserTurn - The end of a user turn.
+ * @param {string} instructionSet.startAssistant - The start of an assistant message.
+ * @param {string} instructionSet.assistantRole - The role of the assistant in the conversation.
+ * @param {string} instructionSet.endAssistantRole - The end of the assistant role.
+ * @param {string} instructionSet.endAssistantTurn - The end of an assistant turn.
+ * @param {string} instructionSet.responseStart - The start of the assistant's response.
+ * @returns {Object} A Kobold adapter object.
+ */
 function returnKoboldAdapter(instructionSet) {
   //should be recieved into params.adapter
   const systemStart =
@@ -749,60 +952,70 @@ function returnKoboldAdapter(instructionSet) {
     assistant_end: assistantEnd
   };
 }
-async function generateCompletion(
-  api,
-  identity,
-  text,
-  instructions,
-  params,
-  callback,
-  notify,
-  handler
-) {
-  if (api.noFormat == undefined || api.noFormat == false) {
-    if (api.templateStringKey != undefined && api.templateStringKey != "") {
-      params[api.templateStringKey] = JinjaFormatter(promptFormat);
-    }
-    if (api.koboldAdapter != undefined && api.koboldAdapter != false) {
-      params.koboldAdapter = returnKoboldAdapter(promptFormat);
-    }
-  }
-  try {
-    const url = api.url;
-    //console.log(apiKey, identity, formattedQuery, params, apiUrl, model);
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${api.key}`
-    };
-    const stringifidentity = JSON.stringify(identity);
-    const prompt = {
-      model: api.model,
-      messages: [
-        { role: "system", content: stringifidentity }, //does this order matter? do the roles matter in the back end? is that useful for naming the system or tracking multiple characters?
-        { role: "user", content: text }
-      ],
-      stream: false
-    };
-    const outprompt = { ...params, ...prompt };
-    const response = await fetch(url, {
-      method: "POST",
-      headers,
-      body: JSON.stringify(outprompt)
-    });
-    const jsonResponse = await response.json();
-    //console.log("response: "+JSON.stringify(jsonResponse));
-    if (!response.ok) {
-      console.log(
-        `Request failed with status ${response.status}: ${jsonResponse.error
-          .message}`
-      );
-    }
-    //console.log("2nd end response: "+JSON.stringify( jsonResponse.choices[0].message.content));
-    callback(jsonResponse.choices[0].message.content);
-  } catch (error) {
-    console.log(error);
-    //notify("error:", JSON.stringify(error));
-  }
-}
+
+// /**
+//  * Generates a completion for the given text using the specified API, identity, instructions, and parameters.
+//  *
+//  * @param {Object} api - The API configuration object.
+//  * @param {Object} identity - The identity object.
+//  * @param {string} text - The input text for which completion is to be generated.
+//  * @param {string} instructions - The instructions for generating the completion.
+//  * @param {Object} params - The additional parameters for the API request.
+//  * @param {Function} callback - The callback function to be called with the generated completion.
+//  * @returns {Promise<void>} - A promise that resolves when the completion is generated.
+//  */
+// async function generateCompletion( //this is a duplicate function, todo:sort that out. it's labeled compatible in send()
+//   api,
+//   identity,
+//   text,
+//   instructions,
+//   params,
+//   callback,
+//   ) {
+//   if (api.noFormat == undefined || api.noFormat == false) {
+//     if (api.templateStringKey != undefined && api.templateStringKey != "") {
+//       params[api.templateStringKey] = JinjaFormatter(instructions);
+//     }
+//     if (api.koboldAdapter != undefined && api.koboldAdapter != false) {
+//       params.koboldAdapter = returnKoboldAdapter(instructions);
+//     }
+//   }
+//   try {
+//     const url = api.url;
+//     //console.log(apiKey, identity, formattedQuery, params, apiUrl, model);
+//     const headers = {
+//       "Content-Type": "application/json",
+//       Authorization: `Bearer ${api.key}`
+//     };
+//     const stringifidentity = JSON.stringify(identity);
+//     const prompt = {
+//       model: api.model,
+//       messages: [
+//         { role: "system", content: stringifidentity }, //does this order matter? do the roles matter in the back end? is that useful for naming the system or tracking multiple characters?
+//         { role: "user", content: text }
+//       ],
+//       stream: false
+//     };
+//     const outprompt = { ...params, ...prompt };
+//     const response = await fetch(url, {
+//       method: "POST",
+//       headers,
+//       body: JSON.stringify(outprompt)
+//     });
+//     const jsonResponse = await response.json();
+//     //console.log("response: "+JSON.stringify(jsonResponse));
+//     if (!response.ok) {
+//       console.log(
+//         `Request failed with status ${response.status}: ${jsonResponse.error
+//           .message}`
+//       );
+//     }
+//     //console.log("2nd end response: "+JSON.stringify( jsonResponse.choices[0].message.content));
+//     callback(jsonResponse.choices[0].message.content);
+//   } catch (error) {
+//     console.log(error);
+//     //notify("error:", JSON.stringify(error));
+//   }
+// }
 
 module.exports = InferenceClient;
