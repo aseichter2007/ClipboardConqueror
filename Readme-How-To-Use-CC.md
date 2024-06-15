@@ -13,11 +13,14 @@ Clipboard Conqueror - General Use
 
 `~~~` is only supported on completion endpoints but is always available and will cause issued when used with a chat api. (text after disappears into the void.)
 
+>|||code|`|` 
+
+By sending a second pipe "|" on the end, you can avoid trouble  with "||" OR operators or loose pipes in the text.
 
 ## Using Clipboard Conqueror:
 
 1. Enter `|||` followed by your request or command. Pipe `|` can be typed by pressing `shift + backslash` (above enter, left of enter for European layouts).
-2. Copy the text to your clipboard. After a few moments, you should get a notification and the response is ready to paste:
+2. Copy the text. After a few moments, you should get a notification and the response is ready to paste:
 ```
 ||| "Ahoy Captain, open the airlock, we're coming aboard the Clipboard Conqueror"
 ```
@@ -149,10 +152,6 @@ The file command saves that prompt to the 0prompts.json file. Currently only sup
 
 File will write 0prompts.json if it doesn't exist. 
 
-
->|||code|`|` 
-
-By sending a second pipe "|" on the end, you avoid collisionss with "||" OR operators or loose pipes in the text. Alternatively, you could change the invoke delimiter in setup.js (instruct.endTag)
 
 Currently after using a command that writes data from the application,"`|||list|`", "`|||prompt,write|`", "`|||help|`", "`|||introduction|`", or "`|||dw|`" `you must copy twice` before it sends to the LLM.
 
