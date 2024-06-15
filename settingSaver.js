@@ -7,7 +7,7 @@ function saveSettings(setting,identities,target,notify,fs) {
   // Step 2: Load the existing settings from the file if they exist
   try {
     
-    savedSettings = require('./0identities.json')
+    savedSettings = require('./0prompts.json')
     savedSettings = { ...savedSettings, ...setting };//|||what happens if a key in settings is the same as a key in savedSettings?
     fs.writeFileSync(target, JSON.stringify(savedSettings));
     console.log("0identies.json updated.");
