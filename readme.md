@@ -1,84 +1,72 @@
-![Clipboard Conqueror Graphic logo. The letters are clouds and buildings on a lush estate.](CCfinal.jpg)
-Clipboard Conqueror - Readme
-=============================
-[Install](install.md), [Choosing a model](choosingAModel.md), [Basic Use](useClipboardConqueror.md), [Prompt Reference](agents.md), [Prompt Formatting](promptFormatting.md), [Backend Switching](multipleEndpoints.md), [Chaining agents](agentChaining.md)
+# Clipboard Conqueror: Your Personal AI Copilot
 
----
+Welcome to Clipboard Conqueror, a powerful tool that brings the power of Artificial Intelligence to your fingertips. Whether you're a developer, writer, student, or just someone who loves to explore, Clipboard Conqueror is here to help.
 
-Clipboard Conqueror is a multi-platform omnipresent copilot alternative. Currently requiring a kobold united or openAI compatible back end, this software brings powerful LLM based tools to any text field, the universal copilot you deserve. It simply works anywhere. No need to sign in, no required key. 
+![Clipboard Conqueror Logo](CCfinal.jpg)
 
+[Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-inferenceChaining.md), [Setup.js](Readme-Setup.md)
 
+## What is Clipboard Conqueror?
 
-*Special thank you to the creators of KoboldAi, KoboldCPP, Meta, openAi, and the communities that made all this possible to figure out. 
+Clipboard Conqueror is a copy paste Large Language Model interface that works as a personal universal copilot. It simply works anywhere. No need to sign in, no required keys. CC allows you to leverage cutting-edge Artificial Intelligence models to enhance your productivity and creativity. Almost everything is configurable.
 
+With Clipboard Conqueror, you can simply copy three pipes "`|||`" and a question or command, and it will generate a response into the clipboard that you can paste directly into any text field.
 
-Pipe in Clipboard Conqueror to leverage cutting edge Artificial Intelligence.
+Clipboard Conqueror works out of the box with [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/), [Text Generation WebUI](https://github.com/oobabooga/text-generation-webui), [Ollama](https://www.ollama.com), [LMStudio](https://lmstudio.ai), or [OpenAI's API](https://platform.openai.com/docs/overview) if you put your key into the appropriate [endpoints](https://github.com/aseichter2007/ClipboardConqueror/blob/99ec81cf95b6263b3e201b47c81192c14b38e7e5/setup.js#L299) in setup.js
 
-Invoke it by copying three pipes and a question or command:  `||| "your request"` 
+## Key Features
 
-Local LLMs will produce a response, paste it directly wherever you want.
+### Summon any text right where you need it.
 
-If you are using local LLMs, CC is a data secure alternative integration provided you trust whatever backend solution you use.   
+- **Control Every Part of LLM Prompts:** Manage and customize every aspect of your AI without leaving your current workspace.
 
-There is a wealth of information linked below and in setup.js.
-All you really need to know is copying ||| with Clipboard Conqueror and Koboldcpp running will send any text you copy with that `|||` to local AI.
+- **Quickly Prototype Prompts:** Test and refine your prompts quickly for deployment in production environments.
 
-When Copying code or text containing "|" symbols, you can use 5 pipes "|||||". Or change the default invoke settings. This will send the default system prompt with your query.
+- **Locally Run Models:** Trust your data with locally run models that do not phone home or report any metrics.
 
-to banish the default system prompt, invoke like "`|||e||`", or send a prompt with your query like "`|||writer|`"
+- **Supports Multiple Inference Endpoints:** Flexiblly interface with your favorite inference engine.
 
-If you are unhappy with my syntax, almost everything is configurable in setup.js. 
+- **No-code Multi-hop Inference Framework** Prepare powerful chain-of-inference prompts for superior responses or prototype workflows for use in multi-step agentic frameworks.
 
+- **Desktop Platforms** Clipboard Conqueror is designed to work seamlessly across multiple desktop platforms including Windows, macOS, and Linux. It has been gently tested to ensure stability and compatibility.
 
-Please help me share Clipboard Conqueror with everyone. 
+- **OpenAI Compatible** local inference engines are not strictly required to use Clipboard Conqueror, it works against ChatGPT API and other internet inference sources.
 
-`Table of Contents:`
----
+- CC provides a whole toolbox of predefined and targeted assistants, ready to work for you. 
 
-[Install](install.md)
-
-[Choosing a model](choosingAModel.md)
-
-[Basic Use](useClipboardConqueror.md)
-
-[Operators and Prompts](agents.md)
-
-[Prompt Formatting](promptFormatting.md)
-
-[Backend Switching](multipleEndpoints.md)
-
-[Chaining agents](agentChaining.md)
-
-Copy, Conquer, Paste.
---------
-
-I solemnly promise that this application and at least one compatible backend will function in the absence of internet connectivity.
-One of my design inspirations for this application is to spread LLM models to as many computers as possible. I want to ensure at least one intact system is recovered by future archaeologists, an incredible time capsule of culture, science, and data.  We should be sending intelligent boxes to deep space too. Our Knowledge and posterity must not go to waste. 
-
-I've been looking for work all year and getting nothing but scams and my hopes up.
-Please, if you get good use from this application, especially in a commercial setting, consider subscribing to my kofi, or hiring me. I'm a new father and not having stable income is just frying my brain. 
-``````
-patreon.com/ClipboardConqueror
-
-ko-fi.com/aseichter2007
-
-|||make these links in markup for a .md file
-``````
-Captain Clip: Here are the links formatted as Markdown for a .md file:
-
-1. [Patreon](https://patreon.com/ClipboardConqueror)
-2. [Ko-fi](https://ko-fi.com/aseichter2007)
-
-I have provided the tools to supply your own custom always ready assitant in any application on your terms. You tip your delivery guy, please drop a coin for your coder, it will really help my family.
-
-    BTC: 0x92cB00214fd137E73Fa85eE80e04232D8b14Ea5a
-
-    DOGE: bc1qu0zp2y8gwmqelmq5radscdltjxy23t4u0rfx6s
+- Save system prompts on the fly to draft, define, translate, think, review, or tell jokes. 
 
 
----
+## Getting Started
+
+1. [Installing Clipboard Conqueror](Readme-Install.md)
+2. [Choosing a Model](Readme-Choosing-A-Model.md)
+3. [Basic Use](Readme-How-To-Use-CC.md)
+4. [Prompt Reference](Readme-Prompt-Reference.md)
+5. [Prompt Formatting](Readme-Prompt-Formatting.md)
+6. [API Switching](Readme-Endpoints.md)
+7. [Chain of Inference](Readme-inferenceChaining.md)
+8. [Setup.js](Readme-Setup.md)
+
+
+## Additional Resources
+
+- [Prompt Tower](https://github.com/backnotprop/prompt-tower)
+
+  This VSCode extension is excellent for building and arranging code prompts, and works seamlessly with CC, just add an invocation to the top of the prompt tower and click Copy Prompt. 
+
+- [Toggle Design Mode Bookmarklet](https://www.reddit.com/r/bookmarklets/comments/d8pqe2/toggle_design_mode/)
+
+  Morph the web on demand as you browse.
+- [Unofficial Kobold Guide and Model Suggestions](https://docs.google.com/document/d/1I1r-NGIxo3Gt0gfOeqJkTxTQEgPQKmy7UZR5wh_aZlY/edit?pli=1)
+- [AMD GPU Resources](https://llm-tracker.info/howto/AMD-GPUs)
+- [The Hitchhiker's Guide to LLMs](https://osanseviero.github.io/hackerllama/blog/posts/hitchhiker_guide/)
+- [LLMs: How Do They Work?](https://bbycroft.net/llm)
+- [OpenHermes 2.5 Mistral Prompting Ideas](https://www.reddit.com/r/LocalLLaMA/comments/18j59g1/you_are_a_helpful_ai_assistant/)
+- [Llama 3 Quant Loss](https://github.com/matt-c1/llama-3-quant-comparison)
+
+## Videos
 Quick Start Jam, Reccomended:
----
 
 [![YouTube Video](https://i.ytimg.com/vi/fcM8dDtVTYQ/hqdefault.jpg)](https://youtu.be/fcM8dDtVTYQ)
 
@@ -86,140 +74,54 @@ Quick demo:
 
 [![YouTube Video](https://i.ytimg.com/vi/n8tQJlne3qs/hqdefault.jpg)](https://youtu.be/n8tQJlne3qs)
 
-
-
 Using Clipboard Conqueror to mutate content, and Installation: 
 
 
 [![Youtube Video](https://i.ytimg.com/vi/NqnpBi0MHsc/hqdefault.jpg)](https://youtu.be/NqnpBi0MHsc)
 
 
- - *note in this video I mention context leaking with Context Shift, that was my mistake, for a bit I had a bug where re was persisting unexpectedly. 
+ - *note in this video I mention context leaking with Context Shift, that was my mistake, for a bit I had a bug where |||re| was persisting unexpectedly. 
 
+## Support the Developer, Please!
 
----
-Key Features:
---------------
-* Control every part of LLM prompts without needing to switch context to a different tab, window, or program. It works in any text box. 
+I would very much appreciate a donation or a job under a good senior dev, and am open to consultation. Send me an [email](mailto:aseichter2007@gmail.com?subject=I%20have%20an%20offer%20you%20might%20be%20interested%20in.&body=Hello%2C%20I%20am%20reaching%20out%20to%20inquire%20about%20contracting%20your%20services%20for) if I can help you in any way.
 
-* Write and quickly call targeted system prompts for specific tasks.
+- [Patreon](https://patreon.com/ClipboardConqueror)
 
-* Quick saving of new system prompts and information for later use.
+- [Ko-fi](https://ko-fi.com/aseichter2007)
 
-* Tailors text with proper formatting for precise AI responses.
+or coin: 
+- BTC: bc1qqpfndachfsdgcc4xxtnc5pnk8y58zjzaxavu27
+- DOGE: D7JQNfq2ybDSorYjP7xS2U4hs8PD2UUroY
 
-* Locally run large language model support with KoboldCPP for powerful, secure, text processing.
+If CC really gets rolling and meets my financial needs, I will host a dedicated cluster of my own to ensure free LLM access for anyone on secure and transparent terms with any excess.
 
-* Supports multiple backends, diverse prompt configurations, and even a no code framework for prototyping chain-of-actor or chain-of-thought prompts for multi-step development pipelines.
+## Contact
 
-* Supports multiple languages and contexts for diverse applications. Not all LLM models are multilingual, some configuration may be required.
+For bug reports, feature requests, or any other inquiries, please contact me at [clipboard.aseichter2007@gmail.com](mailto:clipboard.aseichter2007@gmail.com?subject=I%20have%20a%20problem%20or%20feature%20request%20regarding%20Clipboard%20Conqueror&body=Hello%2C%0AI%20am%20trying%20to%20%5Bgoal%5D%0A%0Abut%20instead%20%5Bproblem%5D%0A) or open an issue on GitHub.  
 
----
-Productivity:
--------------
-Clipboard Conqueror makes the process of accessing an LLM simple and efficient in any workspace.
+If you have a good idea for adding a proper gui to CC, fork it and show me how it's done. I'd like to avoid a heavy web framework.
 
-- Quickly prototype prompts for producuction environments, great for testing errata quickly. 
-- Locally run models can be trusted with private data and do not phone home or report any metrics. Local LLMS can be private and secure. 
+## Acknowlegements
 
-- Proofread documents, test explanations, get feedback, find inspiration, or just run a game of dungeons and dragons with your friends.
+I'd like to give a special  thank you to the creators of KoboldAi, KoboldCPP, Meta, ClosedAi, and the communities that made all this possible to figure out. 
 
-- Clipboard Conqueror provides a whole toolbox of predefined assistants, ready to work for you.  
-
-Save system prompts on the fly to store, sort, query, think, review, or just tell you jokes or anything you can ask for, really. 
-
-
-Desktop Platforms:
---------------------
-Clipboard Conqueror is designed to work seamlessly across multiple desktop platforms including Windows, macOS, and Linux. It has been gently tested to ensure stability and compatibility.
-
---------
-OpenAi Compatible 
------
-  Put your key into the apropriate endpoints in setup.js and invoke with |||chatGPT3| or change the default in 0endpoints.json. |||chatGPT4| will hit turbo with defaults, change the target model in 0endpoints.json or setup.js.  Default behavior does not write the .json settings files.
-
-  Kobold or other local inference engines are not strictly required to use Clipboard Conqueror, but it requires paid openAi api credit to access ChatGPT. OpenAi access has been included to ensure anyone can master prompting with my tools, on any hardware.  If CC really gets rolling and meets my needs, I will host a dedicated cluster of my own to ensure free access for anyone on secure and transparent terms, with the excess. AI will change everything at an incredible rate, everyone deserves the best tools we can get our hands on in these trying times. 
-
----
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aseichter2007/ClipboardConqueror&type=Date)](https://star-history.com/#aseichter2007/ClipboardConqueror&Date)
 
-
----
-[Install Clipboard Conqueror](install.md)
----
-Begin elevated computeration. 
-
-
-Linux/Mac Notes. 
-----
-  The notification when generation finished workes but there may be no audible sound. This is a limitation of the fallbaack notification system "Growl"
-
-
-
-
-
-[Prompt Tower](https://github.com/backnotprop/prompt-tower)
----
-This VSCode extension is excellent for building code prompts, and works seamlessly with CC, just add your invocation to the top of the prompt tower and click Copy Prompt. 
-
----
-Additional Resources:
----
-
-[A bookmarklet to toggle design mode on any browser](https://www.reddit.com/r/bookmarklets/comments/d8pqe2/toggle_design_mode/)
-
-[AMD GPU resources](https://llm-tracker.info/howto/AMD-GPUs)
-
-[The HitchHiker's guide to LLMs](https://osanseviero.github.io/hackerllama/blog/posts/hitchhiker_guide/)
-
-[LLMs, how do they work?](https://bbycroft.net/llm) this is a cool visualization of how the machine does the magic.
-
-[OpenHermes 2.5 Mistral prompting ideas](https://www.reddit.com/r/LocalLLaMA/comments/18j59g1/you_are_a_helpful_ai_assistant/)
-
-[Llama 3 Quant Loss](https://github.com/matt-c1/llama-3-quant-comparison)
-
-Bug Reports and Feature Requests:
----------------------------------
-If CC seems hung, copy text with no invoke a couple times and try again. 
-
-If CC is batching more than you expect, you're missing a "," in your command. 
-
-If you encounter any issues while using Clipboard Conqueror or have suggestions for future improvements, please report them via github or email me at "clipboard.aseichter2007@gmail.com" I will work diligently to address and resolve any concerns.
-
-I'm chasing a bug where after |||list| or |||agent,write| the next copy is not parsed, but is stored, preventing the same thing being copied and invoking the AI.  Workaround: copy text without an invoke to clear the stored copy and allow a "fresh" copy that will activate the parsing engine. 
-
-Saving system prompts like |||re,name:save|"more details" is likely to mess you up, it will save the last text you copied into "name" rather than "more details"
-
-Please use Clipboard Conqueror responsibly and respect copyright and laws in your country while generating content. Misuse of this tool might lead to unintended consequences and breaches of privacy or intellectual property rights. I hold no responsibility for the data that passes through this tool on any system.  
-
-
-Project License:
---
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-Additional Terms:
-
-While the MIT License permits free use, modification, and distribution, I kindly request that you refrain from creating works containing my verbatim code without permission from the original author (aseichter2007). In part because it's terrible code. You're welcome to bits of it, but please don't distribute it in full as your own work. If you have any inquiries regarding modifications or feature requests, please contact me at clipboard.aseichter2007@gmail.com or open an issue.
-
-Your understanding and respect for these terms are appreciated.
-
-If Clipboard Conqueror is helping you get paid, I would very much appreciate a donation.
-
-
----
 Large Language Models:
 ---
 
-LLMs are powerful tools but it's important to understand how they work. The input text is vectorized and put through matrix transformations and a big complex vector is built, and then each word is added to that vector as it is chosen in turn one at a time, with some randomity to get better speech flavor, until the next probable token is a stop token or max length is exceeded.
+### Every LLM is a little different, it takes some time to get used to how each model should be talked to for the best results. 
 
-In an LLM every word is a cloud of numbers that represent how that token relates to other words and phrase structures. By turning words into numbers, we can then beat them with math and determine which numbers probably are appropriate to go next.
+LLMs are powerful tools but it's important to understand how they work. The input text is vectorized and put through matrix multiplications and a big complex vector is built up. Then each word is added to that vector as it is chosen in turn one at a time, with some randomity to get better speech flavor, until the next probable token is a stop token or max length is exceeded.
+
+In an LLM every word is a cloud of numbers that represent how that token relates to other words, concepts or phrase structures. By turning words into numbers, we can then beat them with math and determine which numbers probably are appropriate to go next.
 
 It doesn't really reason, it doesn't really think, it amplifies patterns and guesses using probabilities and random, each next word chosen with such accuracy and literate complexity that kind of functionally it simulates having thought.  An important note: LLMs return a list of probable tokens and their probability, and after the LLM has done the math, one word is selected by user set rules from the returned set.  
 
-LLM models don't make the choice, sampling happens after and then the machine is asked for the next tokens to choose from, ev-ery -to-ke-n - however the words are sliced.
+LLM models don't make the choice, sampling happens after they do the magic, and then the machine is asked for the next tokens to choose from, ev-ery -to-ke-n - however the words are sliced.
 
 It's weird, but they have no state, it's data-crunch-out every word in turn, no real consideration. 
 
@@ -228,68 +130,15 @@ Use them effectively within their limits to succeed in 2024.
 You can go find the right data and paste the text at an LLM and it can use that data, but no LLM should be trusted implicitly, just as a first resort, right here aboard the Clipboard Conqueror.
 
 
-This info belongs here somewhere.
-// GSM8K is a dataset of 8.5K high-quality linguistically diverse grade school math word problems created by human problem writers
+## License
 
-// HellaSwag is the large language model benchmark for commonsense reasoning.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-// Truful QA: is a benchmark to measure whether a language model is truthful in generating answers to questions.
+## Disclaimer
 
-// Winogrande - Common sense reasoning
-// `
+Please use Clipboard Conqueror responsibly and respect copyright and laws in your country while generating content. Misuse of this tool might lead to unintended consequences and breaches of privacy or intellectual property rights. I hold no responsibility for the data that passes through this tool on any system.
 
+[Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-inferenceChaining.md), [Setup.js](Readme-Setup.md)
 
-//todo: link assorted knowledge banks. 
-
-
-dev:
----
-https://www.npmjs.com/package/keypress
-
-
-//access clipboard//done
-//access api//done
-//format query in optimal programmable format//done
-//get tags for agent and memory//done
-//use tags to fetch desired set//done
-//setup special flag handler for command flags with no associated memory.//done
- I thing I have a bug to sort yet though, it exposes itself once in a while and I think it's here. 
-//todo: notification instead of sound effects//done
-//todo: finish saving objects to memory//done
-//fast switch instruction sets //done
-//todo: group chain interacting so you can batch like |||@summary,@writer|//done, way cooler than that.
-//really waffling, its simply good like >user: //todo: per character rolling memory to allow more natural exchanges and enable rp.//decline for now. I should do a proper conversation builder.//done, |||c,@c|
-
-//todo: openAI client, probably migrate a ton of logic out of textengine and into koboldinterface.js to make them interchangeable. //half bugged SSL and I havent found the right answer to inform me what I am missing. 
-
-//todo: keyboard binding to activate ai on last clip without prompt. //maybe paid, I don't want to make it too easy to do all the linkedin tests, and a ready line to copy is the same.//done, |||on| //multiplatform esc key reading is tricker than I expected. 
-
-//todo: /api/extra/abort on esc and return //waiting on backends coalesing and a good doc for openAI compatibles. also reading esc key is tricker than I expected, gotta find the right thing.
-
-//todo: implement insertion after cursor and response streaming. //this would be easy in windows if I wasnt hung up on multiplatform support. 
-
-//todo text to speech agent that can interact with the clipboard contents. //waiting on upstream that runs on my hardware without dinkin around or enough generosity to set up a closet server or at least new hard drives, I'm too full to experiment with a new OS. //kobold now supports llava and SD. I gotta find enough peace to rewrite this entire app in c# to support audio and images.
-
-//decline: use case? I guess return tokens like |||tokens| so you can see if it will fit... ok. undecline: todo: /api/extra/generate/check  //return in progress, useful for vlarge gens on slow mode
-//todo: /api/extra/tokencount //should run against entered data and updates should be shown after setting mem or agent and on final send. //I'm gonna wait and do this after I figure out more completion backends and make it work for oogabooga and others.
-
-
-//todo: implement some kind of update check and notification.//half, update bat.
-
-
-//todo: savesettings and getsettings. overwrite settings like |||settings,write| to paste ' |||settings,save| `{ the settings serialized json }` ' which can be edited in place and copied to save the settings. //partial, agent save is pretty ready to pass in the right stuff, I just need to do the bits to make it go.
-
-//todo: write agents or custom settings to file. //partial, agents, no settings writing yet.
-
-//todo: settings bulk in and out //partial, prompt format switching is in, needs instructions switching to support more completion backends. 
-
-//todo: build agent portal with easy to copy and use workflow. 
-//todo: mystery agent of the day. vulnerability: the description is visible in the kobold terminal
-//does anyone really want this?
-
-
-//todo: Implement FunkyTown, you kids will never guess what this does. 
-
----
-[Install](install.md), [Choosing a model](choosingAModel.md), [Basic Use](useClipboardConqueror.md), [Prompt Reference](agents.md), [Prompt Formatting](promptFormatting.md), [Backend Switching](multipleEndpoints.md), [Chaining agents](agentChaining.md)
-
+I solemnly promise that this application and at least one compatible backend will function in the absence of internet connectivity.
+One of my design inspirations for this application is to spread LLM models to as many computers as possible. I want to ensure at least one intact system is recovered by future archaeologists, a time capsule of culture, science, and data.  We should be sending intelligent boxes to deep space too. Our knowledge and posterity must not go to waste. 

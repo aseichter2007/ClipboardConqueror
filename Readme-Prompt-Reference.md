@@ -1,7 +1,7 @@
 ![Clipboard Conqueror Graphic logo. The letters are clouds and buildings on a lush estate.](CCfinal.jpg)
 Clipboard Conqueror - Operators and Prompts
 =============================
-[Home](readme.md), [Choosing a model](choosingAModel.md), [Basic Use](useClipboardConqueror.md), [Prompt Formatting](promptFormatting.md), [Backend Switching](multipleEndpoints.md), [Chaining agents](agentChaining.md)
+[Home](readme.md), [Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-inferenceChaining.md), [Setup.js](Readme-Setup.md)
 
 ---
 Special ||| operators | to apply:
@@ -10,7 +10,7 @@ Special ||| operators | to apply:
 
 - "`;`" renames text from assistant in the chatlog. 
 
-- "`%`" format, like |||%chatML, agents|, do this one first if you use it, it overwrites the others. Valid formats are stored in setup.js
+- "`%`" format, like |||%chatML, prompts|, do this one first if you use it, it overwrites the others. Valid formats are stored in setup.js
 
 - "`!`" assitant name
 
@@ -22,10 +22,11 @@ Special ||| operators | to apply:
 
 - "`" the backtick or grave symbol changes Clipboard Conqueror's system prompt send format. Supports "json","markup","partial", or none. 
 
-    - Partial inserts system prompts like "name : text".  
-    - None leaves off the key names and sends only the text.
-    - markup makes each agent it's own turn with the current prompt format. this leaves an empty system at the begining.
-    - use "|||FORMAT:prependPrompt| persistent top system prompt" with a completion endpoint to set a system prompt when using "markup"
+    - `markup` makes each prompt it's own turn with the current prompt format. this leaves an empty system at the begining.
+    - `json` sends a stringified json with a key for each prompt.
+    - `Partial` inserts system prompts like "name : text".  
+    - `None` leaves off the key names and sends only the text. None is the default.
+    - use "|||FORMAT:prependPrompt| persistent top system prompt" with a completion endpoint to set a system prompt when using "markup". This is overwritten when changing prompt formats. 
 
 - "`@`" executes a next turn using the assistant response as the user query. 
 
@@ -33,9 +34,9 @@ Special ||| operators | to apply:
 
 - "`]`" activates the chat history and sets this name for  user in the history. Best when chaining. 
 
-- "`;`" activates the chat history and sets this name for asstant in the history. Best when chaining. 
+- "`;`" activates the chat history and sets this name for asstant in the history. Use `>` when chaining inference. 
 
-        The chat history uses the current set prompt formatting when it is sent. This can cause unexpected output issues if the backend is using a different prompt format.
+>The chat history uses the current set prompt formatting when it is sent. This can cause unexpected output issues if the backend is using a different prompt format.
 
 Fancy |||`flags`|
 ---
@@ -45,17 +46,17 @@ Fancy |||`flags`|
 
 `introduction` has more about samplers and settings. 
 
-`e` or empty blocks the default agent to provide an empty prompt
+`e` or empty blocks the default prompt to provide an empty prompt. Doesn't apply to |||prompts,set|
 
-`write` sends an instantly ready to paste set of agents preceding the write command.
+`write` sends an instantly ready to paste set of prompts preceding the write command.
 
-`list` will instantly supply a ready to paste list of all agents like below.
+`list` will instantly supply a ready to paste list of all prompts like below.
 
 `on` makes clipboard conqueror run every copy, no invoke required, till you toggle it off.
 
 `no` prevents sending to AI, useful for copying entire invokes, just add the flag.
 
-`set` or `setDefaultsaves` agents left of it to be added until toggled off like |||set|
+`set` or `setDefault` saves Promptss left of it to be included in the system prompt until toggled off like |||set|. Set prompts are not changed with |||e|
 
 `rf` will put the last thing you copied at the position of rf in the system prompt. 
 
@@ -84,13 +85,13 @@ Fancy |||`flags`|
 
 `dateTime` sends the date and time in the system prompt at the position you send it.
 
-Noteworthy Agents:
+Noteworthy Prompts:
 ---
-The following definitions live toward the bottom of setup.js. If you set writeFiles = true, the files written override the definitions in setup.js, so you can enable files and then save your prompts like |||name:save| then |||name:file| to save the agent to disk and protecting against overwriting your work.
+The following definitions live toward the bottom of setup.js. If you set writeFiles = true, the files written override the definitions in setup.js, so you can enable files and then save your prompts like |||name:save| then |||name:file| to save the prompt to disk and protecting against overwriting your work.
 
 - |||`agi`|"AI Generate Instructions" will help you execute any operation you ask for help with. Captain Clip does well too, but this is based on the kobold agi script and is superior to a simple ask. 
 
-- |||`stable`| will write you an image prompt for use in stable diffusion automatic 1111
+- |||`stable`| will write you an image prompt for use in stable diffusion automatic 1111 for SD 1.5 models
 This identity and some other cards were found on chub.ai, some are my own or significant customizations, or simply found out in the web.
 
 - |||`tot`|"tree of thought" will expand and include near concepts, questions, or ideas to produce a more comprehensive solution
@@ -197,11 +198,11 @@ Copy and paste the following lines to show the full prompt quickly.
 
 |||`tot`,write| Tree of thought, expands and writes detailed answers.
 
-|||`pro`,write| A basic more professional agent to replace default, includes think step by step priming.
+|||`pro`,write| A basic more professional prompt to replace Captain Clip, includes think step by step priming.
 
 |||`twenty`,write| Play 20 Questions
 
-|||`grug`,write| grug good agent. Grug help.
+|||`grug`,write| grug good prompt. Grug help.
 
 |||dark,write| reply with dark humor and puns on the theme
 
@@ -233,9 +234,7 @@ Copy and paste the following lines to show the full prompt quickly.
 
 |||`prompter`,write| prompt reformer, needs work. 
 
-|||`sellin`,write| Contains info about Clipboard Conqueror operations. 
-
-|||`lootbox`,write| returns an item on a theme.
+|||`lootbox`,write| returns a magic item on a theme.
 
 |||`dndEvent`,write| Dice resolver, needs work. 
 
@@ -243,11 +242,11 @@ Copy and paste the following lines to show the full prompt quickly.
 
 |||`plotSummarize`,write|
 
-|||`hand`,write| Mockup to control a robot hand, maybe tests physical awareness of a model. Maybe.
+|||`hand`,write| Mockup to control a robot hand, maybe tests physical body awareness of a model. Maybe.
 
 |||`search`,write| A few minutes of trying to call tools, needs work, not really suitable for this style of interface, it should happen during inference on the backend. (stream = false)  I think textgenwebui has add ons.
 
  _______
 
 
-[Home](readme.md), [Choosing a model](choosingAModel.md), [Basic Use](useClipboardConqueror.md), [Prompt Formatting](promptFormatting.md), [Backend Switching](multipleEndpoints.md), [Chaining agents](agentChaining.md)
+[Home](readme.md), [Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-inferenceChaining.md), [Setup.js](Readme-Setup.md)
