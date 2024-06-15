@@ -122,7 +122,7 @@ Set endpoints persist until changed and can overwrite generation parameters
 
 **jsonSystem** : "none", markup,full,keys,none. Completion and chat combined only //full sends JSON.Stringify(allSetPrompts) into the system prompt.  keys sends the contents like key : content \n\n key2 : ... markup makes each prompt it's own chat message, none sends only the prompt text.
 
-**textHandle**: "inputs", Replaces the "prompt" key with this value at the top level of params. Completion only till I spot a chat endpoint that doesn't use "messages" or someone asks for it.
+**textHandle**: "inputs", Replaces the "prompt" key with this value. Completion only till I spot a chat endpoint that doesn't use "messages" or someone asks for it.
 
 **paramPath**: "options", sets up the generation parameters key for APIs that nest the parameters down a level like Ollama and Lorax
 

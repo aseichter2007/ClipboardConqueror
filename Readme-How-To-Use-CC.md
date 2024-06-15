@@ -101,7 +101,7 @@ Any prompts or settings must be closed with one pipe or the names will be sent a
 
 - Only persists in memory. |||settings:set| are lost when changing backends or parameter sets.
 
-`setting names vary per inference platform you connect to.`
+`setting names vary per inference platform you connect to.` Reference the docs for the API for the correct keys.
 
 ```
 |||re| what is this code doing? 
