@@ -62,7 +62,7 @@ Talk to AI Anywhere:
  ``` 
 Have fun and remember you can always ask for `|||help|` or `|||qr|` for a quick review of common Clipboard Conqueror functions, or try `|||h| How can I do x with Clipboard Conqueror?` to use the experimental conversational help. The performance will depend on your model, and it needs some more tuning before I will say it works.
 
-Once you have everything working, head to [Basic Use](useClipboardConqueror.md).
+Once you have everything working, head to [Basic Use](Readme-How-To-Use-CC.md).
 
 ---
 
