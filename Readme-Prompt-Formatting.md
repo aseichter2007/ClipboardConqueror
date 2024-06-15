@@ -1,7 +1,7 @@
 ![Clipboard Conqueror Graphic logo. The letters are clouds and buildings on a lush estate.](CCfinal.jpg)
 Clipboard Conqueror - Readme
 =============================
-[Home](readme.md), [Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Prompt Reference](Readme-Prompt-Reference.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-inferenceChaining.md), [Setup.js](Readme-Setup.md)
+[Home](readme.md), [Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Prompt Reference](Readme-Prompt-Reference.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-Inference-Chaining.md), [Setup.js](Readme-Setup.md)
 ---
 
 The chat history uses the current set prompt formatting when it is sent. This can cause unexpected output issues if an openAI api endpoint is using a different prompt format.
@@ -145,4 +145,4 @@ note: current default behavior removes token markup "<|" any "|>" from the ai re
 
 
 ---
-[Home](readme.md), [Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Prompt Reference](Readme-Prompt-Reference.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-inferenceChaining.md), [Setup.js](Readme-Setup.md)
+[Home](readme.md), [Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Prompt Reference](Readme-Prompt-Reference.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-Inference-Chaining.md), [Setup.js](Readme-Setup.md)

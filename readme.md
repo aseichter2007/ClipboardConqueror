@@ -4,7 +4,7 @@ Welcome to Clipboard Conqueror, a powerful tool that brings the power of Artific
 
 ![Clipboard Conqueror Logo](CCfinal.jpg)
 
-[Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-inferenceChaining.md), [Setup.js](Readme-Setup.md)
+[Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-Inference-Chaining.md), [Setup.js](Readme-Setup.md)
 
 ## What is Clipboard Conqueror?
 
@@ -45,7 +45,7 @@ Clipboard Conqueror works out of the box with [KoboldCPP](http://www.github.com/
 4. [Prompt Reference](Readme-Prompt-Reference.md)
 5. [Prompt Formatting](Readme-Prompt-Formatting.md)
 6. [API Switching](Readme-Endpoints.md)
-7. [Chain of Inference](Readme-inferenceChaining.md)
+7. [Chain of Inference](Readme-Inference-Chaining.md)
 8. [Setup.js](Readme-Setup.md)
 
 
@@ -138,7 +138,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 Please use Clipboard Conqueror responsibly and respect copyright and laws in your country while generating content. Misuse of this tool might lead to unintended consequences and breaches of privacy or intellectual property rights. I hold no responsibility for the data that passes through this tool on any system.
 
-[Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-inferenceChaining.md), [Setup.js](Readme-Setup.md)
+[Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-Inference-Chaining.md), [Setup.js](Readme-Setup.md)
 
 I solemnly promise that this application and at least one compatible backend will function in the absence of internet connectivity.
 One of my design inspirations for this application is to spread LLM models to as many computers as possible. I want to ensure at least one intact system is recovered by future archaeologists, a time capsule of culture, science, and data.  We should be sending intelligent boxes to deep space too. Our knowledge and posterity must not go to waste. 
