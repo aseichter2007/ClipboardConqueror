@@ -340,7 +340,7 @@ ollama: {
 - //format: "json" forces json response format from the inference API. I think it's just an easy apply grammar setting.
 - keep_alive: "5m", how long to keep the model in memory, default is 5 minutes
 - stream: false,
-- options: { 
+- [options](https://github.com/aseichter2007/ClipboardConqueror/blob/3c878c068ddd2a1dcd58ba92bdceade9f91d7e70/setup.js#L1327): { 
     - num_keep: 5,
     - seed: 42,
     - num_predict: 100,
