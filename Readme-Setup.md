@@ -122,6 +122,12 @@ Set endpoints persist until changed and can overwrite generation parameters
 
 **jsonSystem** : "none", markup,full,keys,none. Completion and chat combined only //full sends JSON.Stringify(allSetPrompts) into the system prompt.  keys sends the contents like key : content \n\n key2 : ... markup makes each prompt it's own chat message, none sends only the prompt text.
 
+**textHandle**: "inputs", Replaces the "prompt" key with this value at the top level of params. Completion only till I spot a chat endpoint that doesn't use "messages" or someone asks for it.
+
+**paramPath**: "options", sets up the generation parameters key for APIs that nest the parameters down a level like Ollama and Lorax
+
+**maxReturnTokensKey**: "max_new_tokens", Set this to enable quick request length like |||500| for endpoints that use different names for the requested tokens like Ollama. This is required for endpoints that use paramPath.
+
 **buildType**: unused for completion, combined should be used for chat, the others are experimental. options combined, system, or key
 
 **url** : "http://127.0.0.1:5001/api/v1/generate/", then endpoint url.
@@ -269,6 +275,7 @@ The following is in the order that each is appended in a turn with the default s
 **specialInstructions**: "" only for jinja template
 
 ## examples: 
+- note: order of keys doesn't matter. It will get where it belongs if you use the right keys.
 
 ### Llama 3:
 - startTurn: "<|start_header_id|>",
@@ -294,7 +301,7 @@ The following is in the order that each is appended in a turn with the default s
 
 ## Generation Parameters 
 
-Different inference apis may have different key names and requirements. Notably Kobold uses `max_length` while TextGenWebUi uses `max_tokens` to define the maximum response length. You may need to reference the docs for your chosen inference server to determine the correct parameter keys. 
+Different inference apis may have different key names and requirements. Notably Kobold uses `max_length` while TextGenWebUi uses `max_tokens` to define the maximum response length. You may need to reference the docs for your chosen inference server to determine the correct parameter keys. The required keys may also change between completion and openai chat endpoints on the same inference server. 
 
 Clipboard Conqueror should work with any inference API, or as many parameter sets as you care to define for quick swapping.
 
@@ -331,48 +338,8 @@ Clipboard Conqueror should work with any inference API, or as many parameter set
  
  }
 
-## Ollama puts generation parameters under options:
 
-Because of this, quick setting options are not currently supported, like "|||top_k:15|" they have to be changed in setup.js
 
-ollama: {
-- model: "llama3",//required for ollama. Can be changed like |||model:"llama3"| while params in options are not accessible from the copy line. 
-- //format: "json" forces json response format from the inference API. I think it's just an easy apply grammar setting.
-- keep_alive: "5m", how long to keep the model in memory, default is 5 minutes
-- stream: false,
-- [options](https://github.com/aseichter2007/ClipboardConqueror/blob/3c878c068ddd2a1dcd58ba92bdceade9f91d7e70/setup.js#L1327): { 
-    - num_keep: 5,
-    - seed: 42,
-    - num_predict: 100,
-    - top_k: 20,
-    - top_p: 0.9,
-    - tfs_z: 0.5,
-    - typical_p: 0.7,
-    - repeat_last_n: 33,
-    - temperature: 0.8,
-    - repeat_penalty: 1.2,
-    - presence_penalty: 1.5,
-    - frequency_penalty: 1.0,
-    - mirostat: 1,
-    - mirostat_tau: 0.8,
-    - mirostat_eta: 0.6,
-    - penalize_newline: true,
-    - stop: ["\n", "user:"],
-    - numa: false,
-    - num_ctx: 1024,
-    - num_batch: 2,
-    - num_gpu: 1,
-    - main_gpu: 0,
-    - low_vram: false,
-    - f16_kv: true,
-    - vocab_only: false,
-    - use_mmap: true,
-    - use_mlock: false,
-    - num_thread: 8
-
-        }
-
-    },
 
 ---
 [Home](readme.md), [Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-Inference-Chaining.md)
