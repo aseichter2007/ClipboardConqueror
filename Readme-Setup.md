@@ -108,7 +108,7 @@ Define new system prompts in [idents](https://github.com/aseichter2007/Clipboard
 **persona**: "default", must be a valid identity key in [idents](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L1759) set as "e" for empty or no default system prompt. 
     
 
-## [**endpoints.endpoints**](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L552):{
+## [**endpoints.endpoints**](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L52):{
 
 - some of these keys are optional or unused depending on the type of endpoint.
 
