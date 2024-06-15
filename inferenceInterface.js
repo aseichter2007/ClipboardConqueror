@@ -78,103 +78,103 @@ class InferenceClient {
   setPromptFormat(setting) {
     try {
       let bos = "";
-      if (setting.bos != undefined) {
+      if (setting.hasOwnProperty("bos")) {
         bos = setting.bos;
       }
       let eos = "";
-      if(setting.eos != undefined){
+      if(setting.hasOwnProperty("eos")){
         eos = setting.eos;
       }
       let startTurn = "";
-      if (setting.startTurn != undefined) {
+      if (setting.hasOwnProperty("startTurn")) {
         startTurn = setting.startTurn;
       }
       let endTurn = "";
-      if (setting.endTurn != undefined) {
+      if (setting.hasOwnProperty("endTurn")) {
         endTurn = setting.endTurn;
       }
       let startSystem = "";
-      if (setting.startSystem != undefined) {
+      if (setting.hasOwnProperty("startSystem")) {
         startSystem = setting.startSystem;
       }
       let startUser = "";
-      if (setting.startUser != undefined) {
+      if (setting.hasOwnProperty("startUser")) {
         startUser = setting.startUser;
       }
       let startAssistant = "";
-      if (setting.startAssistant != undefined) {
+      if (setting.hasOwnProperty("startAssistant")) {
         startAssistant = setting.startAssistant;
       }
       let endSystemTurn = "";
-      if (setting.endSystemTurn != undefined) {
+      if (setting.hasOwnProperty("endSystemTurn")) {
         endSystemTurn = setting.endSystemTurn;
       }
       let endUserTurn = "";
-      if (setting.endUserTurn != undefined) {
+      if (setting.hasOwnProperty("endUserTurn")) {
         endUserTurn = setting.endUserTurn;
       }
       let endAssistantTurn = "";
-      if (setting.endAssistantTurn != undefined) {
+      if (setting.hasOwnProperty("endAssistantTurn")) {
         endAssistantTurn = setting.endAssistantTurn;
       }
       let systemRole = "";
-      if (setting.systemRole != undefined) {
+      if (setting.hasOwnProperty("systemRole")) {
         systemRole = setting.systemRole;
       }
       let endSystemRole = "";
-      if (setting.endUserRole != undefined) {
+      if (setting.hasOwnProperty("endUserRole")) {
         endSystemRole = setting.endSystemRole;
       }
       let userRole = "";
-      if (setting.userRole != undefined) {
+      if (setting.hasOwnProperty("userRole")) {
         userRole = setting.userRole;
       }
       let endRole = "";
-      if (setting.endRole != undefined) {
+      if (setting.hasOwnProperty("endRole")) {
         endRole = setting.endRole;
       }
       let roleGap = "";
-      if (setting.roleGap != undefined) {
+      if (setting.hasOwnProperty("roleGap")) {
         roleGap = setting.roleGap;
       }
       let endUserRole = "";
-      if (setting.endUserRole != undefined) {
+      if (setting.hasOwnProperty("endUserRole")) {
         endUserRole = setting.endUserRole;
       }
       let assistantRole = "";
-      if (setting.assistantRole != undefined) {
+      if (setting.hasOwnProperty("assistantRole")) {
         assistantRole = setting.assistantRole;
       }
       let endAssistantRole = "";
-      if (setting.endAssistantRole != undefined) {
+      if (setting.hasOwnProperty("endAssistantRole")) {
         endAssistantRole = setting.endAssistantRole;
       }
       let prependPrompt = "";
-      if (setting.prependPrompt != undefined) {
+      if (setting.hasOwnProperty("prependPrompt")) {
         prependPrompt = setting.prependPrompt;
       }
       let systemAfterPrepend = "";
-      if (setting.systemAfterPrepend != undefined) {
+      if (setting.hasOwnProperty("systemAfterPrepend")) {
         systemAfterPrepend = setting.systemAfterPrepend;
       }
       let postPrompt = "";
-      if (setting.postPrompt != undefined) {
+      if (setting.hasOwnProperty("postPrompt")) {
         postPrompt = setting.postPrompt;
       }
       let memorySystem = "";
-      if (setting.memorySystem != undefined) {
+      if (setting.hasOwnProperty("memorySystem")) {
         memorySystem = setting.memorySystem;
       }
       let memoryUser = "";
-      if (setting.memoryUser != undefined) {
+      if (setting.hasOwnProperty("memoryUser")) {
         memoryUser = setting.memoryUser;
       }
       let responseStart = "";
-      if (setting.responseStart != undefined) {
+      if (setting.hasOwnProperty("responseStart")) {
         responseStart = setting.responseStart;
       }
       let specialInstructions = "";
-      if (setting.specialInstructions != undefined) {
+      if (setting.hasOwnProperty("specialInstructions")) {
         specialInstructions = setting.specialInstructions;
       }
 
@@ -245,7 +245,7 @@ class InferenceClient {
     }
 
     let outIdentity = ""; //identityStringifyNoKey(identity);
-    if (api.jsonSystem != undefined) {
+    if (api.hasOwnProperty("jsonSystem")) {
       if (api.jsonSystem === "full") {
         outIdentity = JSON.stringify(identity);
       } else if (api.jsonSystem === "keys") {
@@ -261,7 +261,7 @@ class InferenceClient {
       outIdentity = this.identityStringifyNoKey(identity);
     }
     let finalPrompt ="";
-    if (instruct.order != undefined) {
+    if (instruct.hasOwnProperty("order")) {
 
       finalPrompt += instruct.bos;
       instruct.order.forEach(segment => {
@@ -341,7 +341,11 @@ class InferenceClient {
         instruct.responseStart+
         instruct.eos;//this might be better up one line, but should generally remain empty
     }
-    params.prompt = finalPrompt;
+    if (api.hasOwnProperty("textHandle") && api.textHandle !== "") {
+      params[api.textHandle] = finalPrompt;
+    } else {
+      params.prompt = finalPrompt;
+    }
     completion(api, params, this.callback, this.notify, this.handler);
   }
 
@@ -466,7 +470,7 @@ class InferenceClient {
     }
     //for key in identity
     let outIdentity = ""; //identityStringifyNoKey(identity);
-    if (api.jsonSystem != undefined) {
+    if (api.hasOwnProperty("jsonSystem")) {
       if (api.jsonSystem === "full") {
         outIdentity = JSON.stringify(identity);
       } else if (api.jsonSystem === "keys") {
@@ -617,10 +621,10 @@ async function chat(
 ) {
   try {
     if (api.noFormat == undefined || api.noFormat == false) {
-      if (api.templateStringKey != undefined && api.templateStringKey != "") {
+      if (api.hasOwnProperty("templateStringKey") && api.templateStringKey != "") {
         params[api.templateStringKey] = JinjaFormatter(promptFormat);
       }
-      if (api.koboldAdapter != undefined && api.koboldAdapter != false) {
+      if (api.hasOwnProperty("koboldAdapter") && api.koboldAdapter != false) {
         params.koboldAdapter = returnKoboldAdapter(promptFormat);
       }
     }

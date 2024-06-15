@@ -63,7 +63,7 @@
                     three: "text"//text
                 } 
             },
-            kobold:{ //|||$| or just ||| with matching defaultClient or |||kobold|
+            kobold:{ //|||$$| or just ||| with matching defaultClient or |||kobold|
                 type: "completion",// completion or chat, completion allows CC to control the formatting completely.
                 jsonSystem : "none",//markup,full,keys,none//completion and chat combined only //full sends JSON.Stringify into the system prompt.  keys sends the contents like key : content \n\n key2 : ... markup makes each prompt it's own chat message, none sends only the prompt text.
                 //buildType: "unused",
@@ -108,7 +108,8 @@
                 type: "completion",// completion or chat, completion allows CC to control the formatting completely.
                 jsonSystem : "none",//markup,full,keys,none//completion and chat combined only //full sends JSON.Stringify into the system prompt.  keys sends the contents like key : content \n\n key2 : ... markup makes each prompt it's own chat message, none sends only the prompt text.
                 //buildType: "unused",
-
+                paramPath: "options",
+                maxReturnTokensKey: "num_predict", //I think this is the right key, I don't use Ollama.
                 url : "http://127.0.0.1:11434/api/generate",//Kobold Compatible api url
                 params: "ollama",//params. must match a key in apiParams. It it is the same as the endpoint, then switching endpoints will change the parameters as well
                 autoConfigParams: false,//false prevents overriding params with |||tgwchat|
@@ -124,11 +125,34 @@
                     three: "text"//text
                 }            
             },
+            lorax:{
+                type: "completion",// completion or chat, completion allows CC to control the formatting completely.
+                jsonSystem : "none",//markup,full,keys,none//completion and chat combined only //full sends JSON.Stringify into the system prompt.  keys sends the contents like key : content \n\n key2 : ... markup makes each prompt it's own chat message, none sends only the prompt text.
+                //buildType: "unused",
+                textHandle: "inputs",// replaces the "prompt" key with this value at the top level of params.
+                paramPath: "parameters",
+                maxReturnTokensKey: "max_new_tokens", //needed because lorax needs paramPath
+                url : "http://127.0.0.1:5001/api/v1/generate/",//Kobold Compatible api url
+                params: "lorax",//params. must match a key in apiParams. It it is the same as the endpoint, then switching endpoints will change the parameters as well
+                autoConfigParams: true,//false prevents overriding params with |||tgwchat|
+                //templateStringKey: "jinja", //jinja, none or adapter, required for chat endpoints
+                format: this.instructFormat,//must be a valid instruction format from below.
+                autoConfigFormat: false,//false prevents overriding prompt formatting with |||tgwchat|
+                //objectReturnPath: "data.results[0].text"  This is set up in outpoint
+                key: "no_key_needed",
+                outpoint: {//choices[0].text choices is one, [second sends a number], text is the end.
+                    outpointPathSteps: 3,//key for a nifty switch case to get the response
+                    one: "results",//results[0].text. keys must be lowercase numbers up to ten like one two three four...
+                    two: 0,//[0].text
+                    three: "text"//text
+                },
+            },
             ollamaChat:{ 
                 type: "chat",// completion or chat, completion allows CC to control the formatting completely.
                 jsonSystem : "none",//markup,full,keys,none//completion and chat combined only //full sends JSON.Stringify into the system prompt.  keys sends the contents like key : content \n\n key2 : ... markup makes each prompt it's own chat message, none sends only the prompt text.
                 buildType: "combined",
-
+                paramPath: "options",
+                maxReturnTokensKey: "num_predict",
                 url : "http://localhost:11434/api/chat",//Kobold Compatible api url
                 params: "ollama",//params. must match a key in apiParams. It it is the same as the endpoint, then switching endpoints will change the parameters as well
                 autoConfigParams: false,//false prevents overriding params with |||tgwchat|
@@ -305,7 +329,8 @@
                     two: 0,//[0].text
                     three: "message",//text
                     four: "content"
-                }  
+                },
+                noFormat: true
             },
             chatGPT4: {//|||$$$$$$$$$| or |||chatGPT4|
                 type: "chat",
@@ -322,7 +347,8 @@
                     two: 0,//[0].text
                     three: "message",//text
                     four: "content"
-                } 
+                },
+                noFormat: true
             },
             koboldSysChat: {//|||$$$$$$$$$$| or just ||| with matching defaultClient or |||koboldSysChat|
                 type: "chat",
@@ -358,10 +384,9 @@
                 } 
             },
                 //add more here, invoke with more $$$$ or directly by key.
-            },  
-//base settings. I should maybe split this off into a separate file.
+        },  
 
-}
+    }
 return endpoints;
 }
 function setappSettings() {
@@ -1361,6 +1386,12 @@ function setParams(){
             temperature: 1,
             stream : false
             //todo: figure out this api
+        },
+        lorax:{
+            parameters: {
+                max_new_tokens: 64,
+                adapter_id: "vineetsharma/qlora-adapter-Mistral-7B-Instruct-v0.1-gsm8k"
+            }
         },
         openai: {
             max_tokens : 2000,

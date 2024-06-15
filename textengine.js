@@ -1495,30 +1495,39 @@ ${this.appSettings.invoke}Help${this.appSettings
           this.sendHold = true;
           this.setPrompt(commands[1], sorted.formattedQuery);
         } else if (!isNaN(commands[1])) {
-          this.params[commands[0]] = parseFloat(commands[1]);
+          //this.params[commands[0]] = parseFloat(commands[1]);
+          this.paramSetter(commands[0],parseFloat(commands[1]))
         } else if (commands[1] == this.appSettings.true) {
-          this.params[commands[0]] = true;
+          //this.params[commands[0]] = true;
+          this.paramSetter(commands[0], true);
         } else if (commands[1] == this.appSettings.false) {
-          this.params[commands[0]] = false;
+          //this.params[commands[0]] = false;
+          this.paramSetter(commands[0], false);
         } else {
-          this.params[commands[0]] = commands[1];
+          //this.params[commands[0]] = commands[1];
+          this.paramSetter(commands[0], commands[1]);
+
         }
       } else {
         //if
         if (!isNaN(tag)) {
           //if params contains a key called max_length
-          if (this.params.max_length) {
-            this.params.max_length = parseInt(tag); //todo: eliminate magic keys like max_length to fully support any completion backend.
-          } else if (this.params.max_tokens) {
-            // if params has a key called max_tokens
-            this.params.max_tokens = parseInt(tag);
-          } else if (this.params.max_new_tokens) {
-            this.params.max_new_tokens = parseInt(tag);
-          } else {
-            console.log(
-              color("no max_length or max_tokens in params: ", "red") +
-                JSON.stringify(this.params)
-            );
+          if (this.api.hasOwnProperty(this.api.maxReturnTokensKey) && this.api.maxReturnTokensKey !== "") {
+            this.paramSetter(this.api.maxReturnTokensKey,parseInt(tag));
+          } else{
+            if (this.params.hasOwnProperty("max_length")) {
+              this.params.max_length = parseInt(tag); 
+            } else if (this.params.max_tokens) {
+              // if params has a key called max_tokens
+              this.params.max_tokens = parseInt(tag);
+            } else if (this.params.hasOwnProperty("max_new_tokens")) {
+              this.params.max_new_tokens = parseInt(tag);
+            } else {
+              console.log(
+                color("no max_length or max_tokens in params: ", "red") +
+                  JSON.stringify(this.params)
+              );
+            }
           }
         } else if (tag === this.appSettings.setParams) {
           this.sendHold = true;
@@ -1538,6 +1547,13 @@ ${this.appSettings.invoke}Help${this.appSettings
       }
     });
     return ifDefault;
+  }
+  paramSetter(name,setting){
+    if (this.api.hasOwnProperty(paramPath) && this.api.paramPath !== "") {
+      this.params[this.api.paramPath][name] = setting
+    } else {
+      this.params[name]= setting
+    }
   }
   pickupFormat(setting) {
     console.log("hit pickup format: " + setting);
@@ -1682,7 +1698,7 @@ ${this.appSettings.invoke}Help${this.appSettings
     //todo: fix this.
 
     console.log(color("Tags : ", "purple") + tags);
-    if (tags.command != undefined && tags.command != "" && tags.command != "") {
+    if (tags.hasOwnProperty("command") && tags.command != "" && tags.command != "") {
       let splitCommand = tags.command.split(this.appSettings.quickPromptLimit);
       if ((splitCommand.length = 1)) {
         return 0;
@@ -1743,11 +1759,11 @@ ${this.appSettings.invoke}Help${this.appSettings
       if (this.set) {
         this.identity = this.setPrompts;
         ifDefault = false;
-        if (sorted.tags.command != undefined && sorted.tags.command != "") {
+        if (sorted.tags.hasOwnProperty("command") && sorted.tags.command != "") {
           this.identity[this.appSettings.rootname] = sorted.tags.command;
         }
       } else {
-        if (sorted.tags.command != undefined && sorted.tags.command != "") {
+        if (sorted.tags.hasOwnProperty("command") && sorted.tags.command != "") {
           this.identity[this.appSettings.rootname] = sorted.tags.command; //send ||||this text over if it exists|
         }
       }
@@ -1761,7 +1777,7 @@ ${this.appSettings.invoke}Help${this.appSettings
         if (
           ifDefault &&
           !this.set &&
-          (sorted.tags.command != undefined ||
+          (!sorted.tags.hasOwnProperty("command") ||
           sorted.tags.command === "")
         ) {
           this.identity[this.endpoints.persona] = this.identities[this.defaultIdentity];
