@@ -101,7 +101,7 @@ Any prompts or settings must be closed with one pipe or the names will be sent a
 
 - Only persists in memory. |||settings:set| are lost when changing backends or parameter sets.
 
-`setting names vary per inference platform you connect to.`  Backends such as ollama that tuck generation parameters down a level must change the params in setup.js, quick setting access is not supported on all backends.
+`setting names vary per inference platform you connect to.`
 
 ```
 |||re| what is this code doing? 
