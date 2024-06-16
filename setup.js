@@ -155,7 +155,7 @@
                 maxReturnTokensKey: "num_predict",
                 url : "http://localhost:11434/api/chat",//Kobold Compatible api url
                 params: "ollama",//params. must match a key in apiParams. It it is the same as the endpoint, then switching endpoints will change the parameters as well
-                autoConfigParams: false,//false prevents overriding params with |||tgwchat|
+                autoConfigParams: true,//false prevents overriding params with |||tgwchat|
                 //templateStringKey: "jinja", //jinja, none or adapter, required for chat endpoints
                 format: "llama3",//must be a valid instruction format from below.
                 autoConfigFormat: false,//false prevents overriding prompt formatting with |||tgwchat|
@@ -1388,6 +1388,7 @@ function setParams(){
             //todo: figure out this api
         },
         lorax:{
+            stream : false,// does this go here or down a level?
             parameters: {
                 max_new_tokens: 64,
                 adapter_id: "vineetsharma/qlora-adapter-Mistral-7B-Instruct-v0.1-gsm8k"
