@@ -1512,7 +1512,7 @@ ${this.appSettings.invoke}Help${this.appSettings
         //if
         if (!isNaN(tag)) {
           //if params contains a key called max_length
-          if (this.api.hasOwnProperty(this.api.maxReturnTokensKey) && this.api.maxReturnTokensKey !== "") {
+          if (this.api.hasOwnProperty("maxReturnTokensKey") && this.api.maxReturnTokensKey !== "") {
             this.paramSetter(this.api.maxReturnTokensKey,parseInt(tag));
           } else{
             if (this.params.hasOwnProperty("max_length")) {
@@ -1549,7 +1549,7 @@ ${this.appSettings.invoke}Help${this.appSettings
     return ifDefault;
   }
   paramSetter(name,setting){
-    if (this.api.hasOwnProperty(paramPath) && this.api.paramPath !== "") {
+    if (this.api.hasOwnProperty("paramPath") && this.api.paramPath !== "") {
       this.params[this.api.paramPath][name] = setting
     } else {
       this.params[name]= setting
