@@ -1345,7 +1345,7 @@ function setParams(){
             sampler_order: [6, 5, 0, 1, 3, 4, 2]
         },
         ollama: {
-            model: "llama3",//required for ollama. Can be changed like |||model:"llama3"| while params in options are not accessible from the copy line. 
+            model: "llama3",//required for ollama. Can be changed like |||model:llama3| while params in options are not accessible from the copy line. 
             //format: "json" forces json response format.
             //keep_alive: "5m",
             stream: false,
