@@ -1310,7 +1310,10 @@ function setFormats() {
             finalprompt: "",
             responseStart: "",
             specialInstructions: ""
-        }
+        },
+        openai:{
+            //openAi doesn't expose the prompt template. Not all features are supported with chat messsages endpoints.
+        },
 
         //add more...
     };
