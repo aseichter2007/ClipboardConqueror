@@ -1457,56 +1457,63 @@ ${this.appSettings.invoke}Help${this.appSettings
       if (commands.length === 2) {
         commands[0] = commands[0].trim();
         commands[1] = commands[1].trim();
-        if (commands[1] == this.appSettings.save && this.sendLast) {
-          //save like |||re,prompt:save|
-          this.identities[commands[0]] = this.recentClip;
-          tag = commands[0];
-        } else if (commands[1] == this.appSettings.save) {
-          //save like |||prompt:save|
-          this.sendHold = true;
-          this.identities[commands[0]] = sorted.formattedQuery;
-          console.log(color("Saved ", "cyan") + commands[0]);
-          tag = commands[0];
-        } else if (commands[1] == this.appSettings.delete) {
-          //save like |||prompt:delete|
-          this.sendHold = true;
-          delete this.identities[commands[0]];
-          tag = commands[0];
-        } else if (commands[1] == this.appSettings.savePromptToFile) {
-          //save like |||prompt:file|
-          this.sendHold = true;
-          let setting = { [commands[0]]: this.identities[commands[0]] };
-          //console.log(JSON.stringify(setting));
-          this.settingSaver(
-            setting,
-            this.identities,
-            "0prompts.json",
-            this.notify,
-            this.fs
-          ); //todo: fix this magic string.
-          tag = commands[0];
-        } else if (
-          commands[0] == this.appSettings.setPromptFormat &&
-          this.appSettings.save == commands[1]
-        ) {
-          this.sendHold = true;
-          this.pickupFormat(sorted.formattedQuery);
-        } else if (commands[0] == this.appSettings.setInstruction) {
-          this.sendHold = true;
-          this.setPrompt(commands[1], sorted.formattedQuery);
-        } else if (!isNaN(commands[1])) {
-          //this.params[commands[0]] = parseFloat(commands[1]);
-          this.paramSetter(commands[0],parseFloat(commands[1]))
-        } else if (commands[1] == this.appSettings.true) {
-          //this.params[commands[0]] = true;
-          this.paramSetter(commands[0], true);
-        } else if (commands[1] == this.appSettings.false) {
-          //this.params[commands[0]] = false;
-          this.paramSetter(commands[0], false);
+        if (commands[1] === "" || commands[1]===undefined || commands[0].includes(' ')) {
+          const ident = this.updateIdentity(tag);
+          if (ifDefault) {
+            ifDefault = !ident.prompt; //comes out true set false
+          }
         } else {
-          //this.params[commands[0]] = commands[1];
-          this.paramSetter(commands[0], commands[1]);
+          if (commands[1] == this.appSettings.save && this.sendLast) {
+            //save like |||re,prompt:save|
+            this.identities[commands[0]] = this.recentClip;
+            tag = commands[0];
+          } else if (commands[1] == this.appSettings.save) {
+            //save like |||prompt:save|
+            this.sendHold = true;
+            this.identities[commands[0]] = sorted.formattedQuery;
+            console.log(color("Saved ", "cyan") + commands[0]);
+            tag = commands[0];
+          } else if (commands[1] == this.appSettings.delete) {
+            //save like |||prompt:delete|
+            this.sendHold = true;
+            delete this.identities[commands[0]];
+            tag = commands[0];
+          } else if (commands[1] == this.appSettings.savePromptToFile) {
+            //save like |||prompt:file|
+            this.sendHold = true;
+            let setting = { [commands[0]]: this.identities[commands[0]] };
+            //console.log(JSON.stringify(setting));
+            this.settingSaver(
+              setting,
+              this.identities,
+              "0prompts.json",
+              this.notify,
+              this.fs
+            ); //todo: fix this magic string.
+            tag = commands[0];
+          } else if (
+            commands[0] == this.appSettings.setPromptFormat &&
+            this.appSettings.save == commands[1]
+          ) {
+            this.sendHold = true;
+            this.pickupFormat(sorted.formattedQuery);
+          } else if (commands[0] == this.appSettings.setInstruction) {
+            this.sendHold = true;
+            this.setPrompt(commands[1], sorted.formattedQuery);
+          } else if (!isNaN(commands[1])) {
+            //this.params[commands[0]] = parseFloat(commands[1]);
+            this.paramSetter(commands[0],parseFloat(commands[1]))
+          } else if (commands[1] == this.appSettings.true) {
+            //this.params[commands[0]] = true;
+            this.paramSetter(commands[0], true);
+          } else if (commands[1] == this.appSettings.false) {
+            //this.params[commands[0]] = false;
+            this.paramSetter(commands[0], false);
+          } else {
+            //this.params[commands[0]] = commands[1];
+            this.paramSetter(commands[0], commands[1]);
 
+          }
         }
       } else {
         //if
