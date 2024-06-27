@@ -9,7 +9,7 @@ Most of these settings can not overlap. If they do, Clipboard Conqueror may not 
 
 Define new system prompts in [idents](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L1759). These should be strings and use unique key names. (key : "text")
 
-The default system prompt is defined under [persona](https://github.com/aseichter2007/ClipboardConqueror/blob/376700c3fa1d52659c09315010949b20e807dd83/setup.js#L47)
+The default system prompt is defined under [persona](https://github.com/aseichter2007/ClipboardConqueror/blob/376700c3fa1d52659c09315010949b20e807dd83/setup.js#L47), and |||anyPrompt, !anyname| both prevent sending the set persona this query.
 
 [**appSettings**](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L366) = {
 - all these keys are required to be present.
