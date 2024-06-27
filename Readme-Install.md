@@ -38,7 +38,8 @@ Node Monitor or "nodemon" detects file changes in the directory and restarts CC 
 
 Linux/Mac Notes: 
 ----
-  The notification when generation is finished works but there may be no audible sound. This is a limitation of the fallbaack notification system "Growl".
+  - macOS: 10.8 or higher should support native notifications with sound. Earlier versions fallback to Growl with no sound support.
+  - Linux: There is no notification sound support. This is a limitation of both NotifySend and Growl.
 
 ### Troubleshooting:
 

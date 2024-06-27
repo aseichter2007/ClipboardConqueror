@@ -24,7 +24,7 @@ Clipboard Conqueror works out of the box with [KoboldCPP](http://www.github.com/
 
 - **Locally Run Models:** Trust your data with locally run models that do not phone home or report any metrics.
 
-- **Supports Multiple Inference Endpoints:** Flexiblly interface with your favorite inference engine.
+- **Supports Multiple Inference Endpoints:** Flexibly interface with your favorite inference engines.
 
 - **No-code Multi-hop Inference Framework** Prepare powerful chain-of-inference prompts for superior responses or prototype workflows for use in multi-step agentic frameworks.
 
