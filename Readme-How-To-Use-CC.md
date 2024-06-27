@@ -55,7 +55,7 @@ There are 6 special operators for the `|||prompts and commands|` segment, that s
   ### "%}^>!" all persist until overwritten or the prompt format is changed.  
   all valid entries for "%" and "^" can be used without the prefix operator, but will then also set endpoints, generation parameter sets, prompt formats, and prompts sharing the same name. This allows quick and complete configuration while preserving flexibility. 
 
-  - Note: "`:`", the setting break, is only supported in these operators if there is a space between words, or `:` is directly on the end, and will attempt to create generation parameter settings when used like `|||!Cowboy:Friends|` will not work as intended and isn't realy a good prompt change anyway, use `|||!Cowboy and Friends:|` to avoid assigning settings instead of changing the assistant name.
+  - Note: "`:`", the setting break, is only supported in these operators if there is a space between words, or `:` is directly on the end, and will attempt to create generation parameter settings when used like `|||!Cowboy:Friends, otherPrompt|`. This will not work as intended and will create a generation parameter setting Cowboy:"Friends", use `|||!Cowboy and Friends:, prompt|` to avoid assigning settings instead of changing the assistant name in the prompt format. 
 
 >grandpa? |||`json, %chatML, ! Rick, > Morty, writer, } Narrator's notes| Rick answers morty's questions.| Where are we going today,  
 
