@@ -49,7 +49,7 @@ There are 6 special operators for the `|||prompts and commands|` segment, that s
   - "!" assitant name
   - ">" user name
   - "}" system name
-  - "~" start of assistant response, "~~~" overwrites "~".
+  - "\~" start of assistant response, "~~~" overwrites "\~".
   - "`" the backtick or grave symbol changes the system prompt format. Supports "json","markup","partial", or none. 
 
   ### "%}^>!" all persist until overwritten or the prompt format is changed.  
