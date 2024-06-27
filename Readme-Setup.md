@@ -9,6 +9,8 @@ Most of these settings can not overlap. If they do, Clipboard Conqueror may not 
 
 Define new system prompts in [idents](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L1759). These should be strings and use unique key names. (key : "text")
 
+The default system prompt is defined under [persona](https://github.com/aseichter2007/ClipboardConqueror/blob/376700c3fa1d52659c09315010949b20e807dd83/setup.js#L47)
+
 [**appSettings**](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L366) = {
 - all these keys are required to be present.
 
@@ -105,7 +107,7 @@ Define new system prompts in [idents](https://github.com/aseichter2007/Clipboard
 
 **instructOptions**: This is a comment to aid editing inside the json files when writeFiles is set true. It is never referenced in the software.
 
-**persona**: "default", must be a valid identity key in [idents](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L1759) set as "e" for empty or no default system prompt. "pro" is a cleaner more professional prompt that thinks step by step. 
+**[persona](https://github.com/aseichter2007/ClipboardConqueror/blob/376700c3fa1d52659c09315010949b20e807dd83/setup.js#L47)**: "default", must be a valid identity key in [idents](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L1759) set as "e" for empty or no default system prompt. "pro" is a cleaner more professional prompt that thinks step by step. 
     
 
 ## [**endpoints.endpoints**](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L52):{
