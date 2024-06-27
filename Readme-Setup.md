@@ -105,7 +105,7 @@ Define new system prompts in [idents](https://github.com/aseichter2007/Clipboard
 
 **instructOptions**: This is a comment to aid editing inside the json files when writeFiles is set true. It is never referenced in the software.
 
-**persona**: "default", must be a valid identity key in [idents](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L1759) set as "e" for empty or no default system prompt. 
+**persona**: "default", must be a valid identity key in [idents](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L1759) set as "e" for empty or no default system prompt. "pro" is a cleaner more professional prompt that thinks step by step. 
     
 
 ## [**endpoints.endpoints**](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L52):{
