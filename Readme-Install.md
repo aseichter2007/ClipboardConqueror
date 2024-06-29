@@ -11,13 +11,15 @@ Clipboard Conqueror - Installation:
 
 1. **Install Node.js**: If you don't have Node.js installed, visit the official [Node.js website](https://nodejs.org/) and download the installer that corresponds to your operating system. Follow the on-screen prompts to complete the installation.
 
-2. **Choose a Backend**: Clipboard Conqueror is most powerful with [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/), [Text Generation WebUI](https://github.com/oobabooga/text-generation-webui), [Ollama](https://www.ollama.com), or [LMStudio](https://lmstudio.ai) or any inference supplier via  completion endpoints. Any openAI compatible API should work fine, but may not support all features of Clipboard Conqueror.
+2. **Choose an Inference Server**: Clipboard Conqueror is most powerful with [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/), [Text Generation WebUI](https://github.com/oobabooga/text-generation-webui), [Ollama](https://www.ollama.com), or [LMStudio](https://lmstudio.ai) or any inference supplier via  completion endpoints. Any openAI compatible API should work fine, but may not support all features of Clipboard Conqueror.
 
-3. **Download a Model**: I recommend [Llama 3 GGUFs](https://huggingface.co/bartowski/Meta-Llama-3-8B-Instruct-GGUF). Choose a model that fits in your RAM with at least 2GB extra for context ingestion and basic Windows stuff. (4k context is generally around 1 GB)
+3. If you encounter errors running your chosen inference server, you may need the [Nvidia Cuda Toolkit](https://developer.nvidia.com/cuda-downloads)
 
-4. Run and test your backend of choice with your chosen model to verify that everything is working correctly.
+4. **Download a Model**: I recommend [Llama 3 GGUFs](https://huggingface.co/bartowski/Meta-Llama-3-8B-Instruct-GGUF). Choose a model that fits in your RAM with at least 2GB extra for context ingestion and basic Windows stuff. (4k context is generally around 1 GB)
 
-5. [**Download Clipboard Conqueror**](https://github.com/aseichter2007/ClipboardConqueror/archive/refs/heads/main.zip) from this repository and unzip it.
+5. Run and test your backend of choice with your chosen model to verify that everything is working correctly.
+
+6. [**Download Clipboard Conqueror**](https://github.com/aseichter2007/ClipboardConqueror/archive/refs/heads/main.zip) from this repository and unzip it.
 
 ### Install Dependancies:
 
