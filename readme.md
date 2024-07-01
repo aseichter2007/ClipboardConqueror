@@ -58,6 +58,7 @@ Clipboard Conqueror works out of the box with [KoboldCPP](http://www.github.com/
 - [Toggle Design Mode Bookmarklet](https://www.reddit.com/r/bookmarklets/comments/d8pqe2/toggle_design_mode/)
 
   Morph the web on demand as you browse.
+- [Effects of Basic Sampling Parameters](https://artefact2.github.io/llm-sampling/index.xhtml)
 - [Unofficial Kobold Guide and Model Suggestions](https://docs.google.com/document/d/1I1r-NGIxo3Gt0gfOeqJkTxTQEgPQKmy7UZR5wh_aZlY/edit?pli=1)
 - [AMD GPU Resources](https://llm-tracker.info/howto/AMD-GPUs)
 - [The Hitchhiker's Guide to LLMs](https://osanseviero.github.io/hackerllama/blog/posts/hitchhiker_guide/)
