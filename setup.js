@@ -477,8 +477,8 @@ function setFormats() {
             //startTurn
             startSystem: "",
             systemRole: "",
-            //endRole
             endSystemRole: "",
+            //endRole
             //rolegap
             prependPrompt: "",
             systemAfterPrepend: "",
@@ -491,16 +491,17 @@ function setFormats() {
             startUser: "",
             userRole: "",
             endUserRole: "",
+            //endRole
             //rolegap
             memoryUser: "",
             //user query inserted here
             endUserTurn: "",
-            //endRole
         //assistant
             //startTurn
             startAssistant: "",
             assistantRole: "",
             endAssistantRole: "",
+            //endRole
             //roleGap
             responseStart: "",
             endAssistantTurn: "", //only used for history markup
@@ -641,7 +642,7 @@ function setFormats() {
         {{ user_message_2 }}<|eot_id|><|start_header_id|>assistant<|end_header_id|>
          */
         llama3SystemCompletion:{
-            bos: "<|begin_of_text|>:",
+            bos: "<|begin_of_text|>",
             startTurn: "<|start_header_id|>",
             endSystemTurn: "<|eot_id|>", 
             endUserTurn: "<|eot_id|>",
@@ -674,6 +675,47 @@ function setFormats() {
             responseStart: "",
             specialInstructions: ""
         },
+        gemmachat:{
+            startUser : "<start_of_turn>",
+            endUserTurn: "<end_of_turn>",
+            startAssistant: "<start_of_turn>",
+            endAssistantTurn: "<end_of_turn>",
+            userRole: "user\n",
+            assistantRole :"model\n",
+        },
+        gemmasystem:{
+            startTurn:"<start_of_turn>",
+            endTurn: "<end_of_turn>",
+            systemRole: "instructions for model",//this is my own thought and experimental
+            userRole: "user",
+            assistantRole :"model",
+            roleGap: "\n"
+        },
+        phi3mini:{
+            userRole: "<|user|>\n",
+            assistantRole :"<|assistant|>\n",
+            endUserTurn: "<end_of_turn>",
+            startAssistant: "<|end|>",
+            endAssistantTurn: "<|end|>",
+        },
+        phi3small:{
+            startSystem:"<|endoftext|>",
+            userRole: "<|endoftext|><|user|>\n",
+            assistantRole :"<|assistant|>\n",
+            endUserTurn: "<end_of_turn>",
+            startAssistant: "<|end|>",
+            endAssistantTurn: "<|end|>",
+        },
+        phi3system:{
+            startSystem:"<|endoftext|>",
+            //systemRole: "Instruction:"//maybe this will work better
+            userRole: "<|user|>\n",
+            assistantRole :"<|assistant|>\n",
+            endUserTurn: "<end_of_turn>",
+            startAssistant: "<|end|>",
+            endAssistantTurn: "<|end|>",
+        },
+
        
             //I wish they would just give us labeled tokens, is <s> added by the tokenizer? 
             // <s>(bos, tokenizer should handle it) [INST] <<SYS>>
