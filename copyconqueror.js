@@ -86,22 +86,19 @@ function notify(title = "Paste Ready", text = "The response is ready.") {
   if (text == "") {
     text = "The response was blank.";
   }
-
+  
   const notification = {
     title: title,
     message: text,
     icon: "./icon.jpg", // Optional
-    sound: true // Optional, plays a sound with the notification
+    sound: true, // Optional, plays a sound with the notification
+    wait: false
     //looping: false,
-    //I have a hypothesis that on linux we need to specify a sound file.
-    //audio_src: 'ms-winsoundevent:Notification.sms', //I think this is only for windows phone, also, I think my access is one layer out, I may have to dig into my dependancy.
+    //there is no support for notification sounds on linux. 
   };
-  // Display the notification
   notifier.notify(notification, function(err, response) {
-    // Handle errors or response if needed
     if (err) {
       console.log(err);
-      //maybe someone on linux will get an error back now.
     }
   });
 }
