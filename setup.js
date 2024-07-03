@@ -300,7 +300,6 @@
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "https://api.01.ai/v1/chat/completions",
-                //headers: [["anthropic-version", "2023-06-01"]],//if you really wanted, you could put your key in here.
                 params: "openai",
                 templateStringKey: "jinja",
                 format: "openai", //system, key or combined.
@@ -313,9 +312,9 @@
                 basePrompt: "",//I don't think I use this. //Todo: figure out if I use this. 
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
                     outpointPathSteps: 4,//key for a switch case
-                    one: "choices",//results[0].text
-                    two: 0,//[0].text
-                    three: "message",//text
+                    one: "choices",
+                    two: 0,
+                    three: "message",
                     four: "content"
                 },
                 noFormat: true
@@ -325,22 +324,20 @@
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "https://api.fireworks.ai/inference/v1/chat/completions",
-                //headers: [["anthropic-version", "2023-06-01"]],//if you really wanted, you could put your key in here.
                 params: "openai",
                 templateStringKey: "jinja",
                 format: "openai", //system, key or combined.
                 authHeader: "Authorization",
                 authHeaderSecondary: "Bearer ",
                 key: "Your-Fireworks-Key-Here",
-                //model: "accounts/fireworks/models/",//this overrides models set like '|||model:"gpt-3.5-turbo"|'
                 //model: "accounts/fireworks/models/mixtral-8x22b-instruct",
                 model: "accounts/fireworks/models/yi-large",
                 basePrompt: "",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
                     outpointPathSteps: 4,//key for a switch case
-                    one: "choices",//results[0].text
-                    two: 0,//[0].text
-                    three: "message",//text
+                    one: "choices",
+                    two: 0,
+                    three: "message",
                     four: "content"
                 },
                 noFormat: true
@@ -348,24 +345,21 @@
             fireworks:{//|||fireworks|
                 //this one is giving me gibberish back, but it's connecting. 
                 type: "completion",
-                //buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "https://api.fireworks.ai/inference/v1/completions",
-                //headers: [["anthropic-version", "2023-06-01"]],//if you really wanted, you could put your key in here.
                 params: "openai",
                 templateStringKey: "jinja",
                 format: "openai", //system, key or combined.
                 authHeader: "Authorization",
                 authHeaderSecondary: "Bearer ",
                 key: "Your-Fireworks-Key-Here",
-                //model: "accounts/fireworks/models/",//this overrides models set like '|||model:"gpt-3.5-turbo"|'
                 //model: "accounts/fireworks/models/mixtral-8x22b-instruct",
                 model: "accounts/fireworks/models/yi-large",
                 basePrompt: "",
-                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
-                    outpointPathSteps: 3,//key for a switch case
-                    one: "choices",//results[0].text
-                    two: 0,//[0].text
-                    three: "text",//text
+                outpoint: {
+                    outpointPathSteps: 3,
+                    one: "choices",
+                    two: 0,
+                    three: "text",
                 },
                 noFormat: true
             },
