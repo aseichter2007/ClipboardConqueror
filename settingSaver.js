@@ -11,11 +11,11 @@ function saveSettings(setting,identities,target,notify,fs) {
   } catch (err) {
     try {    
       notify("file doesn't exist, writing:", err.message);
-      console.log(`file doesn't exist, writings: ${err.message}`);
+      console.log(`file doesn't exist, writing: ${err.message}`);
       fs.writeFileSync(target, JSON.stringify(identities));
       console.log("0identies.json written.");
     } catch (error) {
-      console.log("error writing " + target);
+      console.log("error writing " + target + " : " + error);
 
     }
   }
