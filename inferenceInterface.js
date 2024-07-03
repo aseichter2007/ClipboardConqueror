@@ -663,16 +663,22 @@ async function chat(
     handler
       .request(config)
       .then(response => {
-        if (!response.ok === "OK") {
-          //notify("api error: ", response.statusText);
-          console.log("Chat api error: " + response.statusText);
+        try {
+          if (!response.ok === "OK") {
+            //notify("api error: ", response.statusText);
+            console.log("Chat api error: " + response.statusText);
+          }
+          const output = outPointer(api.outpoint, response.data); // response.json();
+          callback(output);
+        } catch (error) {
+          console.log(JSON.stringify(response));
+          console.log(error);
+          console.log(error.response.data.error);  
         }
-        const output = outPointer(api.outpoint, response.data); // response.json();
-        callback(output);
       })
       .catch(error => {
         try {
-          //console.log(error);        
+          console.log(error);        
           console.log(error.response.data.error);  
         } catch (error) {
           console.log("error recieving api error.");
