@@ -86,7 +86,8 @@ function notify(title = "Paste Ready", text = "The response is ready.") {
   if (text == "") {
     text = "The response was blank.";
   }
-  
+  title = removeNullBytes(title);
+  text = removeNullBytes(text);
   const notification = {
     title: title,
     message: text,
@@ -101,6 +102,10 @@ function notify(title = "Paste Ready", text = "The response is ready.") {
       console.log(err);
     }
   });
+}
+function removeNullBytes(str) {
+  // Replace null bytes (represented as \u0000 in JavaScript) with an empty string
+  return str.replace(/\u0000/g, '');
 }
 // function returnSummary(text){
 //this is intended for automatic history condensation. It's currently out of scope.
