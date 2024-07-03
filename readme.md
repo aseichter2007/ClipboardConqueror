@@ -12,7 +12,7 @@ Clipboard Conqueror is a copy paste Large Language Model interface that works as
 
 With Clipboard Conqueror, you can simply copy three pipes "`|||`" and a question or command, and it will generate a response into the clipboard that you can paste directly into any text field.
 
-Clipboard Conqueror works out of the box with [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/), [Text Generation WebUI](https://github.com/oobabooga/text-generation-webui), [Ollama](https://www.ollama.com), [LMStudio](https://lmstudio.ai), or [OpenAI's API](https://platform.openai.com/docs/overview) if you put your key into the appropriate [endpoints](https://github.com/aseichter2007/ClipboardConqueror/blob/99ec81cf95b6263b3e201b47c81192c14b38e7e5/setup.js#L299) in setup.js
+Clipboard Conqueror works out of the box with [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/), [Text Generation WebUI](https://github.com/oobabooga/text-generation-webui), [Ollama](https://www.ollama.com), [LMStudio](https://lmstudio.ai). It works with [OpenAI's API](https://platform.openai.com/docs/overview), [Claude](https://docs.anthropic.com/en/docs/about-claude/models), [Fireworks](https://fireworks.ai/), and [01.AI](https://platform.01.ai/), if you put your key into the appropriate [endpoints](https://github.com/aseichter2007/ClipboardConqueror/blob/99ec81cf95b6263b3e201b47c81192c14b38e7e5/setup.js#L299) in setup.js
 
 ## Key Features
 
