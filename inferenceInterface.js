@@ -486,10 +486,14 @@ class InferenceClient {
       outIdentity = this.identityStringifyNoKey(identity);
     }
     let messages = [];
-    messages.push({
-      role: "system",
-      content: outIdentity
-    });
+    if(api.hasOwnProperty("systemLocation")){
+      //this is gonna mess with the history I cludged in. 
+    }else{
+      messages.push({
+        role: "system",
+        content: outIdentity
+      });
+    }
     messages.push({
       role: "user",
       content: message
@@ -502,7 +506,8 @@ class InferenceClient {
       params,
       this.callback,
       this.notify,
-      this.handler
+      this.handler,
+      outIdentity
     );
   }
 
@@ -617,7 +622,8 @@ async function chat(
   params,
   callback,
   notify,
-  handler
+  handler,
+  identity = ""
 ) {
   try {
     if (api.noFormat == undefined || api.noFormat == false) {
@@ -630,29 +636,44 @@ async function chat(
     }
     console.log("sending to completion api: " + api.url);
     params.messages = messages;
+    
+    const headers = {"Content-Type":"application/json"};
+    if (api.hasOwnProperty("headers")) {
+      api.headers.forEach(head => {
+        headers[head[0]] = head[1]
+      });
+    }
+    if (api.hasOwnProperty("authHeader")) {
+      if (api.hasOwnProperty("authHeaderSecondary")){
+        headers[api.authHeader] = api.authHeaderSecondary + api.key;
+      }else{
+        headers[api.authHeader] = api.key;
+      }
+    }
     const config = {
       method: "POST",
       url: api.url,
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Bearer ${api.key}`
-      },
+      headers: headers,
       data: params
     };
+    if (api.hasOwnProperty("systemLocation")) {
+      config.data.system = identity
+    }
+    console.log("outgoing request: "+ JSON.stringify(config));
     handler
       .request(config)
       .then(response => {
         if (!response.ok === "OK") {
           //notify("api error: ", response.statusText);
-          console.log("completion api error: " + response.statusText);
+          console.log("Chat api error: " + response.statusText);
         }
         const output = outPointer(api.outpoint, response.data); // response.json();
         callback(output);
       })
       .catch(error => {
         try {
-          console.log(error);          
+          //console.log(error);        
+          console.log(error.response.data.error);  
         } catch (error) {
           console.log("error recieving api error.");
         }

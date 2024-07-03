@@ -312,15 +312,38 @@
                     three: "text"//text
                 }
             },  
+            claude35sonnett:{//|||$$$$$$$$| or |||chatGPT3|
+                type: "chat",
+                buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
+                url : "https://api.anthropic.com/v1/messages",
+                headers: [["anthropic-version", "2023-06-01"]],//if you really wanted, you could put your key in here.
+                params: "openai",
+                systemLocation: "top",// I just check if this key is present. the content doesn't matter.
+                templateStringKey: "jinja",
+                format: "openai", //system, key or combined.
+                authHeader: "x-api-key",
+                key: "Your-Anthropic-key-here",
+                model: "claude-3-5-sonnet-20240620",//this overrides models set like '|||model:"gpt-3.5-turbo"|'
+                error: "message",
+                basePrompt: "",
+                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 3,//key for a switch case
+                    one: "content",//results[0].text
+                    two: 0,//[0].text
+                    three: "text",//text
+                },
+                noFormat: true
+            },
             chatGPT3: {//|||$$$$$$$$| or |||chatGPT3|
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
-                
                 url : "https://api.openai.com/v1/chat/completions",
                 params: "openai",
                 templateStringKey: "jinja",
                 format: "openai", //system, key or combined.
                 key: "ex-Your_openAi_Api_Key_here",
+                authHeader:"Authorization",
+                authHeaderSecondary: "Bearer ",
                 model: "gpt-3.5-turbo",//this overrides models set like '|||model:"gpt-3.5-turbo"|'
                 basePrompt: "",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
@@ -340,6 +363,8 @@
                 templateStringKey: "jinja",
                 format: "openai", //system, key or combined are valid for chat.
                 key: "ex-Your_openAi_Api_Key_here",
+                authHeader:"Authorization",
+                authHeaderSecondary: "Bearer ",
                 model: "gpt-4o",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
                     outpointPathSteps: 4,//key for a switch case
@@ -358,6 +383,8 @@
                 templateStringKey: "jinja",
                 format: "openai", //system, key or combined are valid for chat.
                 key: "ex-Your_openAi_Api_Key_here",
+                authHeader:"Authorization",
+                authHeaderSecondary: "Bearer ",
                 model: "gpt-4-turbo",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
                     outpointPathSteps: 4,//key for a switch case
