@@ -341,7 +341,13 @@ class InferenceClient {
         instruct.responseStart+
         instruct.eos;//this might be better up one line, but should generally remain empty
     }
-    if (api.hasOwnProperty("textHandle") && api.textHandle !== "") {
+    if (api.hasOwnProperty("promptLocation") && api.promptLocation !== "") {
+      if (api.hasOwnProperty("textHandle") && api.textHandle !== "") {
+        params[api.promptLocation][api.textHandle] = finalPrompt;
+      } else{
+        params[api.promptLocation] = finalPrompt;
+      }
+    } else if (api.hasOwnProperty("textHandle") && api.textHandle !== "") {
       params[api.textHandle] = finalPrompt;
     } else {
       params.prompt = finalPrompt;
@@ -704,16 +710,31 @@ async function chat(
 async function completion(api, params, callback, notify, handler) {
   try {
     console.log("sending to completion api: " + api.url);
+    const headers = {"Content-Type":"application/json"};
+    if (api.hasOwnProperty("headers")) {
+      api.headers.forEach(head => {
+        headers[head[0]] = head[1]
+      });
+    }
+    if (api.hasOwnProperty("authHeader")) {
+      if (api.hasOwnProperty("authHeaderSecondary")){
+        headers[api.authHeader] = api.authHeaderSecondary + api.key;
+      }else{
+        headers[api.authHeader] = api.key;
+      }
+    }
+    const config = {
+      method: "POST",
+      url: api.url,
+      headers: headers,
+      data: params
+    };
+    if (api.hasOwnProperty("systemLocation")) {
+      config.data.system = identity
+    }
     const response = await handler
-      .request(api.url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${api.key}`
-        },
-        data: JSON.stringify(params)
-      })
+      .request(api.url, config,
+       )
       .then(response => {
         try { 
           if (!response.ok === "OK") {
