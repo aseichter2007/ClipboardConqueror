@@ -319,7 +319,48 @@
                 },
                 noFormat: true
             },
-
+            openrouter: {//|||$$$$$$$$| or |||chatGPT3|
+                type: "chat",
+                buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
+                url : "https://openrouter.ai/api/v1/chat/completions ",
+                params: "openai",
+                templateStringKey: "jinja",
+                format: "openai", //system, key or combined.
+                key: "ex-Your_OpenRouter_Key_here",
+                authHeader:"Authorization",
+                authHeaderSecondary: "Bearer ",
+                model: "openai/gpt-3.5-turbo",//this overrides models set like '|||model:"gpt-3.5-turbo"|'
+                basePrompt: "",
+                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 4,//key for a switch case
+                    one: "choices",//results[0].text
+                    two: 0,//[0].text
+                    three: "message",//text
+                    four: "content"
+                },
+                noFormat: true
+            },
+            anyscale: {//|||$$$$$$$$| or |||chatGPT3|
+                type: "chat",
+                buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
+                url : "https://api.endpoints.anyscale.com/v1/chat/completions",
+                params: "openai",
+                templateStringKey: "jinja",
+                format: "openai", //system, key or combined.
+                key: "ex-Your_Anyscale_Key_here",
+                authHeader:"Authorization",
+                authHeaderSecondary: "Bearer ",
+                model: "mistralai/Mistral-7B-Instruct-v0.1",//this overrides models set like '|||model:"gpt-3.5-turbo"|'
+                basePrompt: "",
+                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 4,//key for a switch case
+                    one: "choices",//results[0].text
+                    two: 0,//[0].text
+                    three: "message",//text
+                    four: "content"
+                },
+                noFormat: true
+            },
             fireworkschat:{//|||$$$$$$$$| or |||fireworkschat|
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
@@ -331,7 +372,28 @@
                 authHeaderSecondary: "Bearer ",
                 key: "Your-Fireworks-Key-Here",
                 //model: "accounts/fireworks/models/mixtral-8x22b-instruct",
-                model: "accounts/fireworks/models/yi-large",
+                model: "accounts/yi-01-ai/models/yi-large",
+                basePrompt: "",//I don't think I use this. //Todo: figure out if I use this. 
+                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 4,//key for a switch case
+                    one: "choices",
+                    two: 0,
+                    three: "message",
+                    four: "content"
+                },
+                noFormat: true
+            },
+            together:{// |||together|
+                type: "chat",
+                buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
+                url : "https://api.together.xyz/v1/chat/completions",
+                params: "openai",
+                templateStringKey: "jinja",
+                format: "openai", //system, key or combined.
+                authHeader: "Authorization",
+                authHeaderSecondary: "Bearer ",
+                key: "Your-Together-Key-Here",
+                model: "meta-llama/Llama-3-8b-chat-hf",
                 basePrompt: "",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
                     outpointPathSteps: 4,//key for a switch case
@@ -339,6 +401,29 @@
                     two: 0,
                     three: "message",
                     four: "content"
+                },
+                noFormat: true
+            },
+            replicate:{//|||replicate| this one has a wierd api setup. I'm not that confident this works. 
+                //As models can take several seconds or more to run, the output will not be available immediately. To get the final result of the prediction you should either provide a webhook HTTPS URL for us to call when the results are ready, or poll the get a prediction endpoint until it has finished.
+
+                //I probably need additional code to get the result of the prediction. If someone actualy needs this working, open an issue and I'll work it out. Till then, CC is local first.
+                type: "completion",
+                url : "https://api.replicate.com/v1/predictions",
+                textHandle: "text",
+                promptLocation: "input",
+                params: "openai",
+                templateStringKey: "jinja",
+                format: "openai", //system, key or combined.
+                headers: [["version", "Your model version code here"]],//this might belong inside the params so that it goes top level in data. I'm sure actually, but 
+                authHeader: "Authorization",
+                authHeaderSecondary: "Bearer  ",
+                key: "Your-Replicate-Key-Here",
+                model: "replicate/hello-world",
+                basePrompt: "",
+                outpoint: {
+                    outpointPathSteps: 1,
+                    one: "output",
                 },
                 noFormat: true
             },
@@ -379,6 +464,26 @@
                     three: "text"//text
                 }
             },  
+            groq: {//|||$$$$$$$$$| or |||chatGPT4|
+                type: "chat",
+                buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
+                url : "https://api.groq.com/openai/v1/chat/completions",
+                params: "openai",
+                templateStringKey: "jinja",
+                format: "openai",
+                key: "ex-Your_Groq_Key_here",
+                authHeader:"Authorization",
+                authHeaderSecondary: "Bearer ",
+                model: "llama3-8b-8192",
+                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 4,//key for a switch case
+                    one: "choices",//results[0].text
+                    two: 0,//[0].text
+                    three: "message",//text
+                    four: "content"
+                },
+                noFormat: true
+            },
             claude35sonnett:{//|||$$$$$$$$| or |||chatGPT3|
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
@@ -428,7 +533,7 @@
                 url : "https://api.openai.com/v1/chat/completions",
                 params: "openai",
                 templateStringKey: "jinja",
-                format: "openai", //system, key or combined are valid for chat.
+                format: "openai", 
                 key: "ex-Your_openAi_Api_Key_here",
                 authHeader:"Authorization",
                 authHeaderSecondary: "Bearer ",
@@ -448,7 +553,7 @@
                 url : "https://api.openai.com/v1/chat/completions",
                 params: "openai",
                 templateStringKey: "jinja",
-                format: "openai", //system, key or combined are valid for chat.
+                format: "openai",
                 key: "ex-Your_openAi_Api_Key_here",
                 authHeader:"Authorization",
                 authHeaderSecondary: "Bearer ",
@@ -495,10 +600,46 @@
                     four: "content"
                 } 
             },
-                //add more here, invoke with more $$$$ or directly by key.
+            vllmchat:{
+                type: "chat",
+                //jsonSystem: "none", //default is none, will use none if missing
+                buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
+                jsonSystem : "none",
+                url : "http://localhost:8000/v1/chat/completions",
+                params: "vllm",//if this is the same as the key for this endpoint, autoConfigParams can be set false
+                autoConfigParams: true,//false prevents overriding params with |||tgwchat|
+                autoConfigFormat: true,//false prevents overriding prompt formatting with |||tgwchat|
+                templateStringKey: "chat_template",//if present and not "" will build and send a jinja template to tgwui.
+                format: "alpaca",// endpoints must use a format matching a key in instructionFormats, overwrites current settings when chaining, etc.
+                key: "no_key_needed",
+                model: "unused",
+                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 4,//key for a switch case
+                    one: "choices",//results[0].text
+                    two: 0,//[0].text
+                    three: "message",//text
+                    four: "content"
+                },
+            },
             vllm:{
-                
-            }
+                //you're going to need this to configure this one right https://github.com/PygmalionAI/aphrodite-engine/wiki/2.-Usage
+                type: "completion",
+                jsonSystem: true,
+                url : "http://127.0.0.1:8000/v1/completions",
+                params: "kobold",
+                //params: "openai",
+                templateStringKey: "instruction_template_str",
+                format: "llama3",//completion endpoints must use a format matching a key in instructionFormats
+                key: "no_key_needed",
+                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 3,//key for a switch case
+                    one: "choices",//results[0].text
+                    two: 0,//[0].text
+                    three: "text"//text
+                } 
+            },
+                //add more here, invoke with more $$$$ or directly by key.
+
         },  
 
     }
@@ -1631,6 +1772,160 @@ function setParams(){
                 //grammar_string: ""
                 
             },
+            vllm:{
+                stream:false,
+                best_of: 1,//Optional[int] = None
+                use_beam_search: false,//Optional[bool] = False
+                //top_k: Optional[int] = -1
+                min_p: 0.15//Optional[float] = 0.0
+                //repetition_penalty: //Optional[float] = 1.0
+                //length_penalty: Optional[float] = 1.0
+                //early_stopping: Optional[bool] = False
+                //ignore_eos: Optional[bool] = False
+                //min_tokens: Optional[int] = 0
+                //stop_token_ids: Optional[List[int]] = Field(default_factory=list)
+                //skip_special_tokens: Optional[bool] = True
+                //spaces_between_special_tokens: Optional[bool] = True
+                /*    echo: Optional[bool] = Field(
+                        default=False,
+                        description=(
+                            "If true, the new message will be prepended with the last message "
+                            "if they belong to the same role."),
+                    )
+                    add_generation_prompt: Optional[bool] = Field(
+                        default=True,
+                        description=
+                        ("If true, the generation prompt will be added to the chat template. "
+                        "This is a parameter used by chat template in tokenizer config of the "
+                        "model."),
+                    )
+                    add_special_tokens: Optional[bool] = Field(
+                        default=False,
+                        description=(
+                            "If true, special tokens (e.g. BOS) will be added to the prompt "
+                            "on top of what is added by the chat template. "
+                            "For most models, the chat template takes care of adding the "
+                            "special tokens so this should be set to False (as is the "
+                            "default)."),
+                    )
+                    documents: Optional[List[Dict[str, str]]] = Field(
+                        default=None,
+                        description=
+                        ("A list of dicts representing documents that will be accessible to "
+                        "the model if it is performing RAG (retrieval-augmented generation)."
+                        " If the template does not support RAG, this argument will have no "
+                        "effect. We recommend that each document should be a dict containing "
+                        "\"title\" and \"text\" keys."),
+                    )
+                    chat_template: Optional[str] = Field(
+                        default=None,
+                        description=(
+                            "A Jinja template to use for this conversion. "
+                            "If this is not passed, the model's default chat template will be "
+                            "used instead."),
+                    )
+                    chat_template_kwargs: Optional[Dict[str, Any]] = Field(
+                        default=None,
+                        description=("Additional kwargs to pass to the template renderer. "
+                                    "Will be accessible by the chat template."),
+                    )
+                    include_stop_str_in_output: Optional[bool] = Field(
+                        default=False,
+                        description=(
+                            "Whether to include the stop string in the output. "
+                            "This is only applied when the stop or stop_token_ids is set."),
+                    )
+                    guided_json: Optional[Union[str, dict, BaseModel]] = Field(
+                        default=None,
+                        description=("If specified, the output will follow the JSON schema."),
+                    )
+                    guided_regex: Optional[str] = Field(
+                        default=None,
+                        description=(
+                            "If specified, the output will follow the regex pattern."),
+                    )
+                    guided_choice: Optional[List[str]] = Field(
+                        default=None,
+                        description=(
+                            "If specified, the output will be exactly one of the choices."),
+                    )
+                    guided_grammar: Optional[str] = Field(
+                        default=None,
+                        description=(
+                            "If specified, the output will follow the context free grammar."),
+                    )
+                    guided_decoding_backend: Optional[str] = Field(
+                        default=None,
+                        description=(
+                            "If specified, will override the default guided decoding backend "
+                            "of the server for this specific request. If set, must be either "
+                            "'outlines' / 'lm-format-enforcer'"))
+                    guided_whitespace_pattern: Optional[str] = Field(
+                        default=None,
+                        description=(
+                            "If specified, will override the default whitespace pattern "
+                            "for guided json decoding."))
+                */
+            },
+            vllmCompletions:{
+                stream: false,
+                use_beam_search: false,//Optional[bool] = False
+                //top_k: Optional[int] = -1
+                min_p: 0.15//Optional[float] = 0.0
+                //repetition_penalty: Optional[float] = 1.0
+                //length_penalty: Optional[float] = 1.0
+                //early_stopping: Optional[bool] = False
+                //stop_token_ids: Optional[List[int]] = Field(default_factory=list)
+                //ignore_eos: Optional[bool] = False
+                //min_tokens: Optional[int] = 0
+                //skip_special_tokens: Optional[bool] = True
+                //spaces_between_special_tokens: Optional[bool] = True
+                //truncate_prompt_tokens: Optional[Annotated[int, Field(ge=1)]] = None
+                /*    include_stop_str_in_output: Optional[bool] = Field(
+                        default=False,
+                        description=(
+                            "Whether to include the stop string in the output. "
+                            "This is only applied when the stop or stop_token_ids is set."),
+                    )
+                    response_format: Optional[ResponseFormat] = Field(
+                        default=None,
+                        description=
+                        ("Similar to chat completion, this parameter specifies the format of "
+                        "output. Only {'type': 'json_object'} or {'type': 'text' } is "
+                        "supported."),
+                    )
+                    guided_json: Optional[Union[str, dict, BaseModel]] = Field(
+                        default=None,
+                        description=("If specified, the output will follow the JSON schema."),
+                    )
+                    guided_regex: Optional[str] = Field(
+                        default=None,
+                        description=(
+                            "If specified, the output will follow the regex pattern."),
+                    )
+                    guided_choice: Optional[List[str]] = Field(
+                        default=None,
+                        description=(
+                            "If specified, the output will be exactly one of the choices."),
+                    )
+                    guided_grammar: Optional[str] = Field(
+                        default=None,
+                        description=(
+                            "If specified, the output will follow the context free grammar."),
+                    )
+                    guided_decoding_backend: Optional[str] = Field(
+                        default=None,
+                        description=(
+                            "If specified, will override the default guided decoding backend "
+                            "of the server for this specific request. If set, must be one of "
+                            "'outlines' / 'lm-format-enforcer'"))
+                    guided_whitespace_pattern: Optional[str] = Field(
+                        default=None,
+                        description=(
+                            "If specified, will override the default whitespace pattern "
+                            "for guided json decoding."))
+                */
+            },
         TGWopenAiChat:{
             //messages: [{}],
             model: "unused",
@@ -1827,7 +2122,7 @@ function setParams(){
             max_tokens: 2048,
             max_new_tokens: 5000,
             max_length: 8192
-    }        
+        }        
     }
     //https://huggingface.co/docs/transformers/main_classes/text_generation#transformers.GenerationConfig
     
