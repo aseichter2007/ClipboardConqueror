@@ -464,7 +464,7 @@
                     three: "text"//text
                 }
             },  
-            groq: {//|||$$$$$$$$$| or |||chatGPT4|
+            groq: {//|||groq|
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "https://api.groq.com/openai/v1/chat/completions",
