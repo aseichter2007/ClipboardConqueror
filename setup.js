@@ -281,7 +281,7 @@
                 } 
             },
             
-            tgw: {//|||$$$$$| or |||textGenWebUi|
+            tgw: {//|||$$$$$| or |||tgw|
                 type: "completion",
                 jsonSystem: true,
                 url : "http://127.0.0.1:5000/v1/completions",
@@ -296,7 +296,7 @@
                     three: "text"//text
                 } 
             },
-            zeroone:{//|||$$$$$$$$| or |||chatGPT3|
+            zeroone:{//||zeroone|
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "https://api.01.ai/v1/chat/completions",
@@ -319,7 +319,7 @@
                 },
                 noFormat: true
             },
-            openrouter: {//|||$$$$$$$$| or |||chatGPT3|
+            openrouter: {//|||openrouter|
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "https://openrouter.ai/api/v1/chat/completions ",
@@ -340,7 +340,7 @@
                 },
                 noFormat: true
             },
-            anyscale: {//|||$$$$$$$$| or |||chatGPT3|
+            anyscale: {//|||anyscale|
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "https://api.endpoints.anyscale.com/v1/chat/completions",
@@ -361,7 +361,7 @@
                 },
                 noFormat: true
             },
-            fireworkschat:{//|||$$$$$$$$| or |||fireworkschat|
+            fireworkschat:{//|||fireworkschat|
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "https://api.fireworks.ai/inference/v1/chat/completions",
@@ -448,7 +448,7 @@
                 },
                 noFormat: true
             },
-            davinci: {//|||$$$$$$$| or |||davinci|
+            davinci: {//|||davinci|
                 type: "completion",
                 url : "https://api.openai.com/v1/completions",
                 params: "openAiCompletions",
@@ -484,7 +484,7 @@
                 },
                 noFormat: true
             },
-            claude35sonnett:{//|||$$$$$$$$| or |||chatGPT3|
+            claude35sonnett:{//|||claude35sonnett|
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "https://api.anthropic.com/v1/messages",
@@ -506,7 +506,7 @@
                 },
                 noFormat: true
             },
-            chatGPT3: {//|||$$$$$$$$| or |||chatGPT3|
+            chatGPT3: {//|||chatGPT3|
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "https://api.openai.com/v1/chat/completions",
@@ -527,7 +527,7 @@
                 },
                 noFormat: true
             },
-            chatgpt4o: {
+            chatgpt4o: {///|||chatgpt4o|
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "https://api.openai.com/v1/chat/completions",
@@ -547,7 +547,7 @@
                 },
                 noFormat: true
             },
-            chatGPT4: {//|||$$$$$$$$$| or |||chatGPT4|
+            chatGPT4: {//|||chatGPT4|
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "https://api.openai.com/v1/chat/completions",
