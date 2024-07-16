@@ -666,11 +666,12 @@ function setappSettings() {
         batchNameSwitch: "]", // changes chat history user name this turn
         batchAssistantSwitch: ";", //changes chat history assistant name
         historyName : "continue",
+        //historyName: "Chat_Start"
         batchSwitch: "@", // like |||@prompt|
         batchMiss: "#", //like |||#@prompt|
         formatSwitch: "%", //like |||%alpaca| changes only the prompt format. Do this one first before !>}
         paramSwitch: "^",
-        batchLimiter: "", //if empty, will mark the continue history with full format chat turns.
+        batchLimiter: "", //if empty string, will mark the continue history with full format chat turns.
         setJsonLevel: "`",//like |||`1| or |||`json| etc
         empty: "empty",//I think this is extra, I used e instead.
         emptyquick: "e",///|||e| for empty system prompt. 
@@ -2584,7 +2585,7 @@ Answer the Question by exploring multiple reasoning paths as follows:
  - Please note that while the focus is on the final answer in the response, it should also include intermediate thoughts inline to illustrate the deliberative reasoning process.
 In summary, leverage a Tree of Thoughts approach to actively explore multiple reasoning paths, evaluate thoughts heuristically, and explain the process - with the goal of producing insightful answers.
 """`,
-pro: "Rephrase the statement, then think carefully through the topic, step by step in a systematic manner, and allow each step to logically build on the previous one.",
+pro: "Rephrase the statement from user, then think carefully through the topic step by step in a systematic manner, and allow each step to logically build on the previous one.",
 twenty: "system: ```simulate an AI to play '20 Questions:assistant has an identity from SYSTEMID.  assistant will return Yes or No unless user's guess is correct.  assistant determines hot ( 100C for correct guess ) or cold ( 0C for unrelated guess ) and returns a temperature in Celsius indicating the accuracy of user's guess. ```. '20 Questions' a classic guessing game where assistant is  an object, animal, or person, and the user must figure out what assistant is by asking 'yes' or 'no' questions. They get twenty questions to do so. Don't worry about how many questions.",
 grug: `Grug is simple. Grug happy happy. Grug spell bad. Grug know nothing, tell all. Grug not unnstann. Grug does not use transitional words or adjectives.`,
 dark: `instruction: reply with dark humor and puns on the theme. Jokes are more important than good answers. 
@@ -2893,32 +2894,62 @@ API FORMAT:
     }
 \`\`\`
 Respond using the defined keys in the API format. Fill using content from user, no preface or explanation is required, just fill and return the form.
-`
+`,
+factCheck: `assistant is a fact-checking tool:, identify inacuracies in the text.`,
+//below are compound prompts of various styles, this can be used to set prompt segments, multiple backends, anything. 
+_devil:{
+    //this is the prototype for automated multi stage inference under a single prompt key
+    //all keys are optional
+    one: {
+        //all valid keys are commented here:
+        //systemRole: "",
+        //assistantRole:"",
+        //userRole: "",
+        //historyuserRole: "",
+        //inferenceClient: "",
+        //format:"",
+        //params:"",
+        //jsonLevel: "",
+        existingPrompts: ["pro"]
+        //continue: ""
+    },
+    two:{
+        //assistantRole:"",
+        //userRole: "",
+        existingPrompts: ["devil"]
+    }
+
+},
+_devilsAdvocate:{
+    one: {
+        existingPrompts: ["pro"]
+  
+    },
+    two:{
+        assistantRole: "Devil's Advocate:",
+        existingPrompts: ["devil"]
+    }
+},
+_cot:{
+    //top level key names don't matter.
+    first:{
+        assistantRole: "Thinking Link",
+        existingPrompts:["cf","cot","c"]
+    },
+    second:{
+        userRole: "Thinking Link",
+        existingPrompts:["rot","c"]
+    }
+},
+_review:{
+    skip:{},
+    review:{
+        existingPrompts:["factCheck"]
+    }
+}
 
 
-//my novel stuff might end up living with the project. If you use my world details, please use it intact rather than morphing it into something else. I'll leave it out for now cause it is a lot.
-// world: `
 
-// `,
-// moon: `
-
-// `,
-// universe: `
-
-// `,
-
-//
-// badBaronBradely: `
-
-// `,
-// sentinels: `
-
-// `,
-// marsea: `
-
-// `,
-// darsea: `
-// `,
 }
 return idents;
 }
