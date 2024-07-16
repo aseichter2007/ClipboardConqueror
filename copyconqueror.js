@@ -4,6 +4,7 @@ const notifier = require("node-notifier");
 const axios = require("axios");
 const SendEngine = require("./textengine.js");
 const RecieveEngine = require("./responsengine.js");
+
 const fs = require("fs");
 //const path = require("path");
 
@@ -94,7 +95,6 @@ function notify(title = "Paste Ready", text = "The response is ready.") {
     icon: "./icon.jpg", // Optional
     sound: true, // Optional, plays a sound with the notification
     wait: false
-    //looping: false,
     //there is no support for notification sounds on linux. 
   };
   notifier.notify(notification, function(err, response) {
