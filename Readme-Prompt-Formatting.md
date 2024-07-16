@@ -85,7 +85,7 @@ Set Individual Prompt Segments:
 
 - "`~`" start of assistant response, "~~~" overwrites "~". "~" can be chained to shape later responses
  
-
+> note: some links in these files are permanent links the code locations in the github repository, but because of their nature they link to old versions. Don't pay too much attention to line numbers, but they should help orient you when you are looking at the source code on your computer.
 ### Explicit prompt settings prevent sending to AI when used:
 
 ```

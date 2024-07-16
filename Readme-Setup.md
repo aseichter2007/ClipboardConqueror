@@ -5,6 +5,8 @@ Clipboard Conqueror - Understanding setup.js
 
 
 ### Clipboard Conqueror specific invoke and operator settings are defined in [appSettings](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L366)
+- note: some links in these files are permanent links the code locations in the github repository, but because of their nature they link to old versions. Don't pay too much attention to line numbers, but they should help orient you when you are looking at the up to date source code on your computer.
+
 Most of these settings can not overlap. If they do, Clipboard Conqueror may not function properly.
 
 Define new system prompts in [idents](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L1759). These should be strings and use unique key names. (key : "text")
