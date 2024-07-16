@@ -1,4 +1,3 @@
-const saveSettings = require("./settingSaver");
 
 class TextEngine {
   constructor(
@@ -57,6 +56,7 @@ class TextEngine {
     this.blockPresort = false;
     this.preserveLastCopy = false;
     this.noChatLogging = false;
+    this.ifDefault = true;
   }
 
   returnTrip(str) {
@@ -121,6 +121,85 @@ class TextEngine {
       }
     }
     return trip;
+  }
+  identityHandler(identity) {
+    const ident = this.updateIdentity(identity);
+          if (ident.set) {
+            if (this.ifDefault) {//only if true
+              this.ifDefault = !ident.found; //comes out true set false
+            }
+            this.identity[identity] = ident.text;
+            console.log("Setting prompt: " + color(identity, "green"));
+          }
+  }
+  compoundPromptHandler(identity){
+      //iterate over the object keys
+      let count = 0;
+      for (const key in identity) {
+        let tripcode = ""
+        for (let index = 1; index < count; index++) {
+          tripcode += this.appSettings.batchMiss;
+        }
+        if (count > 0) {
+          tripcode += this.appSettings.batchSwitch;
+        }
+        //check if key is present in nested object
+        if (identity[key].hasOwnProperty("inferenceClient")) {
+          this.identityHandler(tripcode +this.appSettings.inferenceClient+ identity[key].inferenceClient)
+          console.log(color("Setting up Compound Prompt: " + key+ " ","yellow") + tripcode +this.appSettings.inferenceClient+ identity[key].inferenceClient);
+        }
+        if (identity[key].hasOwnProperty("params")) {
+          this.identityHandler(tripcode +this.appSettings.paramSwitch+ identity[key].params)
+          console.log(color("Setting up Compound Prompt: " + key+ " ","yellow") + tripcode +this.appSettings.paramSwitch+ identity[key].params);
+        }
+        if (identity[key].hasOwnProperty("format")) {
+          this.identityHandler(tripcode +this.appSettings.formatSwitch+ identity[key].params)
+          console.log(color("Setting up Compound Prompt: " + key+ " ","yellow") + tripcode +this.appSettings.formatSwitch+ identity[key].params);
+        }
+        if (identity[key].hasOwnProperty("jsonLevel")) {
+          this.identityHandler(tripcode +this.appSettings.setJsonLevel+ identity[key].params)
+          console.log(color("Setting up Compound Prompt: " + key+ " ","yellow") + tripcode +this.appSettings.setJsonLevel+ identity[key].params);
+        }
+        if (identity[key].hasOwnProperty("systemRole")) {
+          this.identityHandler(tripcode +this.appSettings.systemTag + identity[key].systemRole)
+          console.log(color("Setting up Compound Prompt: " + key+ " ","yellow") + tripcode +this.appSettings.systemTag + identity[key].systemRole);
+        }
+        if (identity[key].hasOwnProperty("assistantRole")) {
+          this.identityHandler(tripcode +this.appSettings.assistantTag+ identity[key].assistantRole)
+          console.log(color("Setting up Compound Prompt: " + key+ " ","yellow") + tripcode +this.appSettings.assistantTag+ identity[key].assistantRole);
+        }
+        if (identity[key].hasOwnProperty("userRole")) {
+          this.identityHandler(tripcode +this.appSettings.userTag + identity[key].userRole)
+          console.log(color("Setting up Compound Prompt: " + key+ " ","yellow") + tripcode +this.appSettings.userTag + identity[key].userRole);
+        }
+        if (identity[key].hasOwnProperty("historyUserRole")) {
+          this.identityHandler(tripcode +this.appSettings.batchNameSwitch + identity[key].historyUserRole)
+          console.log(color("Setting up Compound Prompt: " + key+ " ","yellow") + tripcode +this.appSettings.batchNameSwitch + identity[key].historyUserRole);
+        }
+        if (identity[key].hasOwnProperty("continue")) {
+          this.identityHandler(tripcode +this.appSettings.batchContinueTag+ identity[key].continue)
+          console.log(color("Setting up Compound Prompt: " + key+ " ","yellow") + tripcode +this.appSettings.batchContinueTag+ identity[key].continue);
+        }
+        if (identity[key].hasOwnProperty("existingPrompts")) {
+          console.log(color("existing prompts","yellow") + JSON.stringify(identity[key].existingPrompts));
+          identity[key].existingPrompts.forEach((prompt) => {
+            //console.log(color("existing prompt progres:","yellow")+prompt );
+              if(this.identities.hasOwnProperty(prompt)){
+                this.identityHandler(tripcode + prompt)
+                console.log(color("Setting up Compound Prompt: " + key + " ","yellow") + tripcode + prompt);
+              } else {
+                let flags = this.funFlags(prompt);
+                if (!flags.work) {
+                  console.log(color("error building compound prompt: ","red") + "bad existing prompt key ("+prompt+"), check the spelling in the existingPrompt key under setup.js");
+                }else{
+                  console.log(color("Setting up Compound Prompt: " + key + " ","yellow") + tripcode + prompt);
+
+                }
+              }
+            })
+        }
+        count++;
+      }
   }
   batchPrompt(identity, trip) {
     //batchPrompt builds up a an object of prompts to be used in the batch
@@ -409,21 +488,26 @@ class TextEngine {
           );
           //}
         }
-
         if (this.identities.hasOwnProperty(identity) && !batching) {
           setIdent[identity] = this.identities[identity];
-          found = true;
-          setPrompt = true;
+          if (typeof setIdent[identity] === "string") {
+            setPrompt = true
+            found = true
+          } else {
+            this.compoundPromptHandler(setIdent[identity]);
+            setPrompt = true
+            found = true
+          }
         } else {
           found = false;
-          const flags = this.funFlags(identity);
+          let flags = this.funFlags(identity);
           setIdent[identity] = flags.text;
           found = flags.found;
           setPrompt = flags.set;
         }
       }
     }
-    return { text: setIdent[identity], prompt: found, set: setPrompt };
+    return { text: setIdent[identity], found:found, set: setPrompt };
   }
   forget() {
     this.memory = [];
@@ -433,7 +517,7 @@ class TextEngine {
   }
 
   funFlags(flag) {
-    var outp = { text: "", found: false, set: false };
+    var outp = { text: "", found: false, set: false, work: false };
     switch (flag) {
       case "help": //left justified for formatitng when printed
         const intro = `
@@ -734,6 +818,7 @@ ${this.appSettings.invoke}agi${this.appSettings
         outp.text = identity;
         outp.found = true;
         outp.set = true;
+        outp.work = true;
         //return identity;
         break;
       case "h":
@@ -987,6 +1072,7 @@ Reccomended use case and operators for assistance:
       case "returnSystem":
         outp.text = this.recentClip.text; //send lastclip like any other prompt prompt.
         outp.set = true;
+        outp.work = true;
         console.log(
           color("Sending last copied as message in system prompt", "blue")
         );
@@ -1005,6 +1091,7 @@ Reccomended use case and operators for assistance:
         console.log(
           color("Sending last copied as start of message history", "blue")
         );
+        outp.work = true;
         break;
       case "crh":
         this.chatHistorySetup(
@@ -1032,6 +1119,7 @@ Reccomended use case and operators for assistance:
         break;
       case "re":
         this.sendLast = true;
+        outp.work = true;
         outp.found = false;
         console.log(color("Sending last copied as end of user query.", "blue"));
 
@@ -1073,20 +1161,20 @@ Reccomended use case and operators for assistance:
         } else {
           this.set = false;
         }
+        outp.work = true;
         break;
       case "e":
       case "empty":
         outp.text = "";
         outp.found = true;
         outp.set = true;
+        outp.work = true;
         break;
       case "c":
       case "chat":
       case "useHistory":
         this.chatHistory = true;
-        /* 
-        
-        */
+        outp.work = true;
         break;
       case "sc":
       case "silentChat":
@@ -1094,6 +1182,7 @@ Reccomended use case and operators for assistance:
       case "ghostChat":
         this.chatHistory = true;
         this.noChatLogging = true;
+        outp.work = true;
         break;
       case "clearHistory":
       case "ch":
@@ -1104,11 +1193,13 @@ Reccomended use case and operators for assistance:
         this.chatLog = "";
         this.history = [];
         this.sendHold = true;
+        outp.work = true;
         break;
       case "cf":
       case "clearFirst":
         this.chatLog = "";
         this.history = [];
+        outp.work = true;
         break;
       case "d":
       case "debug":
@@ -1125,6 +1216,7 @@ Reccomended use case and operators for assistance:
       case "cd":
       case "clearDebug":
         this.debugLog = "";
+        outp.work = true;
         break;
       case "agi":
       case "default":
@@ -1449,19 +1541,16 @@ ${this.appSettings.invoke}Help${this.appSettings
       console.log("format not found");
     }
   }
-  personaAtor(persona, sorted, ifDefault) {
+  personaAtor(persona, sorted) {
     persona.forEach(tag => {
       tag = tag.trim();
       let commands = tag.split(this.appSettings.settinglimit);
-      console.log("persona/flag: " + color(commands, "green"));
+      console.log("prompt/flag: " + color(commands, "green"));
       if (commands.length === 2) {
         commands[0] = commands[0].trim();
         commands[1] = commands[1].trim();
         if (commands[1] === "" || commands[1]===undefined || commands[0].includes(' ')) {
-          const ident = this.updateIdentity(tag);
-          if (ifDefault) {
-            ifDefault = !ident.prompt; //comes out true set false
-          }
+          this.identityHandler(tag);
         } else {
           if (commands[1] == this.appSettings.save && this.sendLast) {
             //save like |||re,prompt:save|
@@ -1543,17 +1632,10 @@ ${this.appSettings.invoke}Help${this.appSettings
           this.sendHold = true;
           this.setInferenceFormat(sorted.formattedQuery);
         } else {
-          const ident = this.updateIdentity(tag);
-          if (ifDefault) {
-            ifDefault = !ident.prompt; //comes out true set false
-          }
-          if (ident.set) {
-            this.identity[tag] = ident.text;
-          }
+          this.identityHandler(tag)
         }
       }
     });
-    return ifDefault;
   }
   paramSetter(name,setting){
     if (this.api.hasOwnProperty("paramPath") && this.api.paramPath !== "") {
@@ -1605,21 +1687,7 @@ ${this.appSettings.invoke}Help${this.appSettings
     }
     return text;
   }
-  // getBatchLimiter(type){
-
-  //   if (type === "user"){
-  //     type = "User";
-  //   }
-  //   if (type === "assistant") {
-  //     type = "Assistant"
-  //   }
-  //   let typeStepBack = {
-  //     Assistant: "User",
-  //     User:"Assistant",
-  //   }
-  //   //console.log(this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet["end"+typeStepBack[type]+"Turn"] + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet["start"+type ] + this.inferenceClient.instructSet[type.toLowerCase()+"Role"] + this.inferenceClient.instructSet["end"+type+"Role"]);
-  //   return this.inferenceClient.instructSet.endTurn + this.inferenceClient.instructSet["end"+typeStepBack[type]+"Turn"] + this.inferenceClient.instructSet.startTurn + this.inferenceClient.instructSet["start"+type ] + this.inferenceClient.instructSet[type.toLowerCase() +"Role"] + this.inferenceClient.instructSet["end"+type+"Role"]+ this.inferenceClient.instructSet.endRole;
-  // }
+  
   getBatchLimiterName(type, name) {
     if (type === "user") {
       type = "User";
@@ -1759,13 +1827,13 @@ ${this.appSettings.invoke}Help${this.appSettings
       this.chatBuilder(this.recentClip.text, "assistant");
     }
     const sorted = this.activatePresort(text);
-    let ifDefault = true;
+    this.ifDefault = true;
     if (sorted) {
       this.text = this.continueSetText(sorted.formattedQuery);
       this.undress();
       if (this.set) {
         this.identity = this.setPrompts;
-        ifDefault = false;
+        this.ifDefault = false;
         if (sorted.tags.hasOwnProperty("command") && sorted.tags.command != "") {
           this.identity[this.appSettings.rootname] = sorted.tags.command;
         }
@@ -1776,18 +1844,14 @@ ${this.appSettings.invoke}Help${this.appSettings
       }
       if (sorted.tags.persona) {
         let persona = sorted.tags.persona.split(this.appSettings.promptSplit);
-        ifDefault = this.personaAtor(persona, sorted);
+        this.personaAtor(persona, sorted);
       }
       sorted.formattedQuery = this.continueText(sorted.formattedQuery);
       if (sorted.run || this.on) {
-        
-        if (
-          ifDefault &&
-          !this.set &&
-          (!sorted.tags.hasOwnProperty("command") ||
-          sorted.tags.command === "")
+        if (this.ifDefault && !this.set && (!sorted.tags.hasOwnProperty("command") || sorted.tags.command === "")
         ) {
-          this.identity[this.endpoints.persona] = this.identities[this.defaultIdentity];
+          console.log(color("Sending default identity: ","green")+ this.defaultIdentity);
+          this.identity[this.defaultIdentity] = this.identities[this.defaultIdentity];
           this.noBatch = true;
         }
         if (
