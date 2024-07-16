@@ -42,41 +42,7 @@ This is exemplary; character is not a default prompt. Captain Clip will respond.
 ```
 Here we have set the assistant name to Frank, by prepending the desired name with an exclaimaiton point, as well as included his character card. Llama-3 is particularly good with the assistant name set. Set names persist until changed or CC is restarted. 
 
-There are 6 special operators for the `|||prompts and commands|` segment, that start with the symbol, and end with the next comma ",".
 
-  - "%" format, like |||%chatML, prompts|, do this one first if you use it, it overwrites the others. Valid formats are stored in setup.js
-  - "^" change params for api, overwrites current api parameter settings.
-  - "!" assitant name
-  - ">" user name
-  - "}" system name
-  - "\~" start of assistant response, "~~~" overwrites "\~" this turn only.
-  - "`" the backtick or grave symbol changes the system prompt format. Supports "json","markup","partial", or none. 
-
-  ### "%}^>!" all persist until overwritten or the prompt format is changed.  
-  all valid entries for "%" and "^" can be used without the prefix operator, but will then also set endpoints, generation parameter sets, prompt formats, and prompts sharing the same name. This allows quick and complete configuration while preserving flexibility. 
-
-  - Note: "`:`", the setting break, is only supported in these operators if there is a space between words, or `:` is directly on the end, and will attempt to create generation parameter settings when used like `|||!Cowboy:Friends, otherPrompt| query`. This will not work as intended and will create a generation parameter setting { Cowboy:"Friends" }, use `|||!Cowboy and Friends:, prompt| query`, or `|||!Cowboy:, prompts|` to avoid creating temporary settings instead of changing the desired segment of the prompt format. 
-
->grandpa? |||`json, %chatML, ! Rick, > Morty, writer, } Narrator's notes| Rick answers morty's questions.| Where are we going today,  
-
-This query is formatted like:
-
->"prompt": "<|im_start|>` Narrator's notes`\n{\"system\":\"` Rick answers morty's questions`.\",\"`writer`\":\"Write a lengthy prose about user's topic. Do not wrap up, end, or conclude the narrative, write the next chapter.\\n \\n\"}<|im_end|>\n<|im_start|> `Morty`\\n Where are we going today,\n`grandpa? `<|im_end|>\n<|im_start|> `Rick`\n"
-
-  
-  Clipboard Conqueror arranges the data to assemble a complex query. 
-
-  ```
-  Anywhere. |||`none, } set system name, >set user name, ! set assistant name | quick prompt | each change the corresponding portion of the prompt ~~~ Clipboard Conqueror is ready to completely control any LLM! ~~~ for complete control.
-  ```
-    - ~~~ sets text after the "~~~" to the start of the assistant reply for this turn only. 
-
->"prompt": "<|im_start|> `set system name`\n `quick prompt` \n<|im_end|>\n<|im_start|>`set user name`\n each change the corresponding portion of the prompt  `for complete control.`\\n`Anywhere.` <|im_end|>\n<|im_start|> `set assistant name`\n Clipboard Conqueror is ready to completely control any LLM!"
-
-
-
-Settings and More!
----
 ```
 |||frank,mem|Frank, how many fingers am I holding up?
 ```
@@ -89,6 +55,8 @@ Three pipes, prompts, one pipe, user query.
 
 Any prompts or settings must be closed with one pipe or the names will be sent as text with the default prompt (Captain Clip).
 
+Settings and More!
+---
 ```
 |||2700| write a long story bout a picture of a story where an artist draws a picture of a story about an artist being written by an author
 ```
@@ -285,6 +253,39 @@ while set ||||any| any replaces the old quick prompt this time only.
 - again note 4 pipes before system insert. 
 
 ---
+
+There are 6 special operators for the `|||prompts and commands|` segment, that start with the symbol, and end with the next comma ",".
+
+  - "%" format, like |||%chatML, prompts|, do this one first if you use it, it overwrites the others. Valid formats are stored in setup.js
+  - "^" change params for api, overwrites current api parameter settings.
+  - "!" assitant name
+  - ">" user name
+  - "}" system name
+  - "\~" start of assistant response, "~~~" overwrites "\~" this turn only.
+  - "`" the backtick or grave symbol changes the system prompt format. Supports "json","markup","partial", or none. 
+
+  ### "%}^>!" all persist until overwritten or the prompt format is changed.  
+  all valid entries for "%" and "^" can be used without the prefix operator, but will then also set endpoints, generation parameter sets, prompt formats, and prompts sharing the same name. This allows quick and complete configuration while preserving flexibility. 
+
+  - Note: "`:`", the setting break, is only supported in these operators if there is a space between words, or `:` is directly on the end, and will attempt to create generation parameter settings when used like `|||!Cowboy:Friends, otherPrompt| query`. This will not work as intended and will create a generation parameter setting { Cowboy:"Friends" }, use `|||!Cowboy and Friends:, prompt| query`, or `|||!Cowboy:, prompts|` to avoid creating temporary settings instead of changing the desired segment of the prompt format. 
+
+>grandpa? |||`json, %chatML, ! Rick, > Morty, writer, } Narrator's notes| Rick answers morty's questions.| Where are we going today,  
+
+This query is formatted like:
+
+>"prompt": "<|im_start|>` Narrator's notes`\n{\"system\":\"` Rick answers morty's questions`.\",\"`writer`\":\"Write a lengthy prose about user's topic. Do not wrap up, end, or conclude the narrative, write the next chapter.\\n \\n\"}<|im_end|>\n<|im_start|> `Morty`\\n Where are we going today,\n`grandpa? `<|im_end|>\n<|im_start|> `Rick`\n"
+
+  
+Clipboard Conqueror arranges the data to assemble a complex query. 
+
+```
+Anywhere. |||`none, } set system name, >set user name, ! set assistant name | quick prompt | each change the corresponding portion of the prompt ~~~ Clipboard Conqueror is ready to completely control any LLM! ~~~ for complete control.
+```
+- \~~~ sets text after the "\~~~" to the start of the assistant reply for this turn only. 
+
+>"prompt": "<|im_start|> `set system name`\n `quick prompt` \n<|im_end|>\n<|im_start|>`set user name`\n each change the corresponding portion of the prompt  `for complete control.`\\n`Anywhere.` <|im_end|>\n<|im_start|> `set assistant name`\n Clipboard Conqueror is ready to completely control any LLM!"
+
+
 
 That ought to get you started and covers most operation. Head to [API Switching](Readme-Endpoints.md) or [Chaining Inference](Readme-inferenceChaining.md) for more feature explainations, or check the available default [prompts](Readme-Prompt-Reference.md) for explainations.
 

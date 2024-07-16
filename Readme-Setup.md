@@ -9,8 +9,64 @@ Most of these settings can not overlap. If they do, Clipboard Conqueror may not 
 
 Define new system prompts in [idents](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L1759). These should be strings and use unique key names. (key : "text")
 
-The default system prompt is defined under [persona](https://github.com/aseichter2007/ClipboardConqueror/blob/376700c3fa1d52659c09315010949b20e807dd83/setup.js#L47), and |||anyPrompt, !anyname| both prevent sending the set persona this query.
+`|||terminator:save|assistant takes on the role, personality and mannerisms of the Terminator.`
 
+is equivalent to adding: `terminator: "assistant takes on the role, personality and mannerisms of the Terminator."` to setup.js.
+
+`|||terminator:file|` will write the prompt to disk.
+
+use it like: `|||terminator| Will you be back?`
+
+The default system prompt is defined under [persona](https://github.com/aseichter2007/ClipboardConqueror/blob/376700c3fa1d52659c09315010949b20e807dd83/setup.js#L47), and |||anyValidPrompt, !anyname| both prevent sending the set default persona this query.
+
+
+Don't be too intimidated when changing the code or json files, all the settings are simple [objects](https://www.w3schools.com/js/js_objects.asp). `{key: "string value", key2: "another string"}`. In the context of programming, text is usually stored as strings defined by "" quotes, '' apostrophes, or `` grave symbols. Its only intimidating if you're not used to it.
+
+**Complex Prompt Definitions:**
+---
+
+Prompts defined as objects must folow this format:
+
+***_nameYourPrompt***: { 
+- the key name doesn't have to start with an underscore, but it helps keep them distinct from standard prompts. You do you. 
+
+**one**: { define the first turn of a complex prompt. You can have multiple turns that run in sequence. See **two** below.
+- Top level object keys don't matter and can be named anything. They are shown in the console though.
+
+Below are the valid key names for setting up a complex prompt. All keys are optional, an empty object will allow the first turn to run as normal. This is useful to keep things simple when setting up a response review prompt.
+
+- **systemRole**: "", equivalent to |||}name| These change the respective role names.
+
+- **assistantRole**:"", |||!name|
+
+- **userRole**: "", |||>name|
+
+- **historyuserRole**: "", Changes the previous turn's username, see the "]" operator
+
+- **inferenceClient**: "", Must match a key in [endpoints.endpoints](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L52)
+
+- **format**:"", Must be a valid format key in [promptFormats](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L449)
+
+- **params**:"", Must match a key in [apiParams](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L1301). It it is the same as the endpoint, then switching endpoints will change the parameters as well
+
+- **jsonLevel**: "", markup,full,keys,none. Default: none. Completion and chat combined endpoints only. full sends JSON.Stringify(allSetPrompts) into the system prompt.  keys sends the contents like key : content \n\n key2 : ... markup makes each prompt it's own chat message with the key name as the role, none sends only the prompt text.
+
+- **existingPrompts**: ["use", "valid", "prompt"], names. To send a new custom prompt, you must first create a standard text string prompt. Send as many as you like. Equivalent to |||use,valid,prompt|
+
+- **continue**: "", define the start of the assistant response, uses the ~ operator
+
+}, close the object, don't forget a comma.
+
+**two**:{ The second turn has the same valid keys as **one**. The sequence continues to **n** as needed.
+        
+- **existingPrompts**: ["second", "Turn", "Prompts"],
+    
+},
+
+**n**:{} add as many inference turns as you like.
+
+Settings:
+---
 [**appSettings**](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L366) = {
 - all these keys are required to be present.
 

@@ -100,7 +100,14 @@ This identity and some other cards were found on chub.ai, some are my own or sig
 
 - `cot,@rot` Chain of Thought and Recieve Thougtht prompts ask guiding questions surrounding the topic to provide a robust answer, and then resolve those questions in the final response, producing a superior result.
 
+- `_cot` compresses this into one step
+
 - |||`pro`| A more professional, less piratey assistant for professional tasks. 
+
+- |||`devil`| is a useful devil's advocate prompt that will challenge your assertions.
+
+- |||`_devil`| is a two step prompt combining pro and devil in a two stage multi-inference prompt. It provides and contrasts detailed answers. 
+
 
 - |||`business`| a calculating business mogul. I havent this one much. 
 

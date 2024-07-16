@@ -118,7 +118,7 @@ Response:
 
 >Ha! There's no such thing as an adventure, Morty. There's just survival. And if you're lucky, maybe you'll find something worth surviving for. Now let's get moving before things get any worse.
 
-
+### See [Setup.js](Readme-Setup.md) to learn how to compress complex prompts into one keyword like |||_cot|
 
 Useful Prompting Strategies:
 ---
