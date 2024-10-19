@@ -170,7 +170,7 @@ Settings:
 
 ## [**endpoints.endpoints**](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L52):{
 
-- some of these keys are optional or unused depending on the type of endpoint.
+- some of these keys are optional or unused depending on the type of endpoint. The prescence of some keys will change the request message strucure to match various api requirements. 
 
 Move your favorite endpoints to the top and invoke them by $ from top to $$$... at bottom.
 
@@ -194,19 +194,37 @@ Set endpoints persist until changed and can overwrite generation parameters
 
 **params**: "kobold", sets the generation parameters. must match a key in [apiParams](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L1301). It it is the same as the endpoint, then switching endpoints will change the parameters as well
 
-**autoConfigParams**: false, false prevents overriding params with |||tgwchat|
+**autoConfigParams**: false, false prevents overriding params with |||tgwchat| omitted = true, used to suppress param changes when switching endpoints
+
+**paramPath**: "string", changes how the parameters are nested to the query. Ollama puts all parameters under "options" and Lorax puts them under "parameters" for example
+
+**maxReturnTokensKey**: "num_predict", When present the string in this key is used to define the key used in the request for the max return tokens. |||500| If omitted the key is looked for in the params object from common request formats. 
 
 **templateStringKey**: "instruction_template_str", if present and not an empty string (""), sends a jinja template under this defined key name in the request. If ommited no jinja is sent. 
 
 **format**: "llama3", must be a valid instruction format from [promptFormats](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L449).
 
-**autoConfigFormat**: false, false prevents overriding prompt formatting with |||kobold| ommited = true
+**autoConfigFormat**: false, false prevents overriding prompt formatting with |||kobold| ommited = true, used to suppress prompt format changes when switching endpoints
 
-**key**: "optional authentication key for web api access. put your openAI key here and send to the openAI url to use ChatGPT apis",
+**textHandle**: "text". changes the key used to send the prompt. Completion via replicate reqires text: {{prompt}} rather than prompt: {{prompt}}. This is used when the endpoint does not use the default prompt key "prompt". I can't remember if it can also change the "messages" key in chat endpoints.//ToDo: figure this out
 
-**noFormat**: true, prevents sending the jinja template or kobold adapter, this breaks many features that change the prompt format such as `!>}%` operators. omitted = false.
+**systemLocation**: "any/unused", Currently the prescence of this key will send the system promps at the top level of the request instead of as  messages in the chat endpoint. Required for anthropic api.
 
-**model*:  "optional model name sent with the params, overwrites model field if set in [apiParams](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L1301).
+**noFormat**: true, prevents sending the jinja template or kobold adapter, this breaks many features that change the prompt format such as `!>}%` operators. omitted = false. used to suppress param changes when switching endpoints and comply with strict request formatting.
+
+**model**:  optional model name sent with the params, overwrites model field if set in [apiParams](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L1301).
+
+**authHeader**: "Authorization", optional authentication header for web api access.
+
+**authHeaderSecondary**: "Bearer " optional secondary authentication header for web api access.,
+
+**key**: "optional API authentication key for web api access. put your openAI key here and send to the openAI url to use ChatGPT apis",
+
+Together these two authHeader options work together with the API key to create a single authorization header (Header{Authorization: Bearer Key})
+
+**headers** [["key","value"],["key","value"]], optional headers for web api access, an array of key value pairs for custom headers. If you want, define your key in here. Example: [["X-Custom-Header", "Custom-Value"], ["Accept", "application/json"]].
+
+**error**: "message", defines the response error text key to help verbosity of api errors. 
 
 ### outpoint: {
 
