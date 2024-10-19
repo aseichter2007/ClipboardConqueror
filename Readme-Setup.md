@@ -69,6 +69,8 @@ Below are the valid key names for setting up a complex prompt. All keys are opti
 
 **n**:{} add as many inference turns as you like.
 
+}, don't forget to close the encompassimg  object. Congratulations, you'v'e set up a new complex or multistage prompt
+
 Settings:
 ---
 [**appSettings**](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L366) = {
