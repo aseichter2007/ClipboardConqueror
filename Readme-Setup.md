@@ -11,18 +11,20 @@ Most of these settings can not overlap. If they do, Clipboard Conqueror may not 
 
 Define new system prompts in [idents](https://github.com/aseichter2007/ClipboardConqueror/blob/a926ac45bd4a1d93f214cfa3000f77a99741545e/setup.js#L1759). These should be strings and use unique key names. (key : "text")
 
-`|||terminator:save|assistant takes on the role, personality and mannerisms of the Terminator.`
+`|||terminator:save|assistant takes on the role, personality and mannerisms of the Terminator as played by Danny Devito.`
 
-is equivalent to adding: `terminator: "assistant takes on the role, personality and mannerisms of the Terminator."` to setup.js.
+is equivalent to adding: `terminator: "assistant takes on the role, personality and mannerisms of the Terminator as played by Danny Devito."` to setup.js. though :save is less permanent and does not persist after restarting Clipboard Conqueror.
 
-`|||terminator:file|` will write the prompt to disk.
+`|||terminator:file|` will write the prompt to disk.  Once the 0prompts.json file exists, it overrides changes to idientities in setup.js
 
 use it like: `|||terminator| Will you be back?`
 
 The default system prompt is defined under [persona](https://github.com/aseichter2007/ClipboardConqueror/blob/376700c3fa1d52659c09315010949b20e807dd83/setup.js#L47), and |||anyValidPrompt, !anyname| both prevent sending the set default persona this query.
 
 
-Don't be too intimidated when changing the code or json files, all the settings are simple [objects](https://www.w3schools.com/js/js_objects.asp). `{key: "string value", key2: "another string"}`. In the context of programming, text is usually stored as strings defined by "" quotes, '' apostrophes, or `` grave symbols. Its only intimidating if you're not used to it.
+Don't be too intimidated when changing the code or json files, all the settings are simple [objects](https://www.w3schools.com/js/js_objects.asp). `{key: "string value", key2: "this text is another string"}`. There are numbers in the params, which are even simpler. `{number: 123}`
+
+In the context of programming, text is usually stored as strings defined by "" quotes, '' apostrophes, or `` grave symbols. Its only intimidating if you're not used to it. Worst case you can download the zip again and start over. You can also try asking me if you're unsure about anything.
 
 **Complex Prompt Definitions:**
 ---
