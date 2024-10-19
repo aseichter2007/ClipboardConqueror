@@ -1711,7 +1711,6 @@ ${this.appSettings.invoke}Help${this.appSettings
     );
   }
   chatHistoryBuilder() {
-    //todo: finish building history each turn to respect new prompt formatting per turn
     let formattedHistory = "";
     this.history.forEach(message => {
       formattedHistory +=
@@ -1952,7 +1951,7 @@ ${this.appSettings.invoke}Help${this.appSettings
       //todo: fix this so it works better
       this.notify(
         "Not Sent:",
-        "too many " + this.appSettings.invoke + ". max 2."
+        "too many '" + this.appSettings.invoke + "'. max 2."
       );
       this.sendHold = true;
       //this.noBatch = true;
