@@ -12,7 +12,24 @@ Clipboard Conqueror is a copy paste Large Language Model interface that works as
 
 With Clipboard Conqueror, you can simply copy three pipes "`|||`" and a question or command, and it will generate a response into the clipboard that you can paste directly into any text field.
 
-Clipboard Conqueror works out of the box with [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/), [Text Generation WebUI](https://github.com/oobabooga/text-generation-webui), [Ollama](https://www.ollama.com), [LMStudio](https://lmstudio.ai). It works with [OpenAI's API](https://platform.openai.com/docs/overview), [Claude](https://docs.anthropic.com/en/docs/about-claude/models), [Groq](https://groq.com/), [Anyscale](https://www.anyscale.com/), [Fireworks](https://fireworks.ai/), [Openrouter](https://openrouter.ai/), [Together](https://www.together.ai/), and [01.AI](https://platform.01.ai/), if you put your key into the appropriate [endpoints](https://github.com/aseichter2007/ClipboardConqueror/blob/99ec81cf95b6263b3e201b47c81192c14b38e7e5/setup.js#L299) in setup.js
+Clipboard Conqueror works out of the box with 
+[KoboldCPP](http://www.github.com/LostRuins/koboldcpp/),
+ [Text Generation WebUI](https://github.com/oobabooga/text-generation-webui),
+ [Ollama](https://www.ollama.com),
+ [LMStudio](https://lmstudio.ai)<sup>*closed source</sup>
+
+ These local inference servers are generally considered secure and reliable. They do not require an internet connection or any sensitive data to be sent to the cloud.
+
+CC works online via: 
+[01.AI](https://platform.01.ai/)
+[Anyscale](https://www.anyscale.com/)
+[Claude](https://docs.anthropic.com/en/docs/about-claude/models)
+[Fireworks](https://fireworks.ai/)
+[Groq](https://groq.com/)
+[Novita](https://novita.ai/)
+[OpenAI's API](https://platform.openai.com/docs/overview)
+[Openrouter](https://openrouter.ai/)
+[Together](https://www.together.ai/) if you put your key into the appropriate [endpoints](https://github.com/aseichter2007/ClipboardConqueror/blob/6e5a09613a27007ae2cf928fceeee3b7c77a2143/setup.js#L310) in setup.js
 
 ## Key Features
 
@@ -65,6 +82,7 @@ Clipboard Conqueror works out of the box with [KoboldCPP](http://www.github.com/
 - [LLMs: How Do They Work?](https://bbycroft.net/llm)
 - [OpenHermes 2.5 Mistral Prompting Ideas](https://www.reddit.com/r/LocalLLaMA/comments/18j59g1/you_are_a_helpful_ai_assistant/)
 - [Llama 3 Quant Loss](https://github.com/matt-c1/llama-3-quant-comparison)
+- [Visual Guide to Quantization](https://newsletter.maartengrootendorst.com/p/a-visual-guide-to-quantization)
 
 ## Videos
 Quick Start Jam, Reccomended:
@@ -85,7 +103,7 @@ Using Clipboard Conqueror to mutate content, and Installation:
 
 ## Support the Developer, Please!
 
-I would very much appreciate a donation or a job under a good senior dev, and am open to consultation. Send me an [email](mailto:aseichter2007@gmail.com?subject=I%20have%20an%20offer%20you%20might%20be%20interested%20in.&body=Hello%2C%20I%20am%20reaching%20out%20to%20inquire%20about%20contracting%20your%20services%20for) if I can help you in any way.
+I would very much appreciate a donation and am open to prompt engineering consultation on Fridays. Send me an [email](mailto:aseichter2007@gmail.com?subject=I%20have%20an%20offer%20you%20might%20be%20interested%20in.&body=Hello%2C%20I%20am%20reaching%20out%20to%20inquire%20about%20contracting%20your%20services%20for) if I can help you in any way.
 
 - [Patreon](https://patreon.com/ClipboardConqueror)
 
