@@ -373,7 +373,7 @@ class InferenceClient {
         this.messageSystemBuilder(identity, text, params, api);
       } else if (api.buildType === "combined") {
         this.messageOneSystemBuilder(identity, text, params, api);
-      } else if (api.buildType === "systemuserstream") {
+      } else if (api.buildType === "systemusers") {
         this.messageSystemBuilder(identity, text, params, api);
       }
       //  else if (api.buildType === "compatible") {
