@@ -43,7 +43,7 @@
         defaultClient: "kobold",//must match a key in endpoints. Recommend using kobold or tgwchat, ooba also seems to be working.
         defaultOptions: ["kobold", "tgwchat", "oobaRPmerge", "lmstudio","textGenWebUi", "ooba",  "chatGPT3", "chatGPT4","select defaultClient: from previous items. This field is purely informational for the user, particularly to ease use when writeFiles is enabled."],
         instructFormat: "llama3",//overrides the defaultclient's set format for quick changing on load.
-        instructOptions: ["default", "defaultJson", "defaultJsonReturn", "hermes", "chatML", "chatVicuna", "samantha", "airoboros", "alpaca", "alpacaInstruct", "llamav2", "mistral", "mixtral", "metharme", "bactrian", "baichuan", "baize", "blueMoon", "chatGLM", "openChat", "openChatCode", "wizard", "wizardLM", "vicuna", "mistralLite", "deepseek", "deepseekCoder", "tinyLlama", "pirateLlama", "stableLM", "openAssistant", "vicunav1", "stableVicuna", "rp", "select instruct: from previous items or any you add to 0formats.json"],//or in setup below and re-write 0formats.json I think this one might be deprecated.
+        instructOptions: ["default", "defaultJson", "llama3","defaultJsonReturn", "hermes", "chatML", "chatVicuna", "samantha", "airoboros", "alpaca", "alpacaInstruct", "llamav2", "mistral", "mixtral", "metharme", "bactrian", "baichuan", "baize", "blueMoon", "chatGLM", "openChat", "openChatCode", "wizard", "wizardLM", "vicuna", "mistralLite", "deepseek", "deepseekCoder", "tinyLlama", "pirateLlama", "stableLM", "openAssistant", "vicunav1", "stableVicuna", "rp", "select instruct: from previous items or any you add to 0formats.json"],//or in setup below and re-write 0formats.json I think this one might be deprecated.
         persona: "default",//must be a valid identity in idents, e for empty or no default system prompt. Using quick prompts or calling a saved or pre-defined prompt will override persona this query. 
          
         //Ok it turned out that a lot of them for testing and stuff helps, so just move your favorites to the top and invoke them by $ from top to $$$... at bottom. Or just use the names like |||kobold| or |||koboldChat| 
@@ -674,7 +674,7 @@
                 url : "http://127.0.0.1:8000/v1/completions",
                 params: "kobold",
                 //params: "openai",
-                templateStringKey: "instruction_template_str",
+                //templateStringKey: "instruction_template_str",
                 format: "llama3",//completion endpoints must use a format matching a key in instructionFormats
                 key: "no_key_needed",
                 outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
