@@ -296,13 +296,59 @@
                     three: "text"//text
                 } 
             },
+            //The folowing are cloud providers:
+
+            novita:{//||novita|
+                type: "completion",
+                jsonSystem: "none",
+                url : "https://api.novita.ai/v3/openai/chat/completions",
+                params: "novita",
+                //templateStringKey: "jinja",
+                format: "mistral", 
+                authHeader: "Authorization",
+                authHeaderSecondary: "Bearer ",
+                key: "Your-Novita-Key-Here",
+                model: "microsoft/wizardlm-2-8x22b",//I think this one is overwritten by params.model still, to preseve hot swap capability.
+                //basePrompt: "",//I don't think I use this. //Todo: figure out if I use this. 
+                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 3,//key for a switch case
+                    one: "choices",
+                    two: 0,
+                    three: "text",
+                    //four: "content"
+                },
+               
+            },
+            novitachat:{//||novita|
+                type: "chat",
+                buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
+                url : "https://api.novita.ai/v3/openai/completions",
+                params: "novita",
+                templateStringKey: "jinja",
+                format: "mistral", 
+                authHeader: "Authorization",
+                authHeaderSecondary: "Bearer ",
+                key: "Your-Novita-Key-Here",
+                model: "Nous-Hermes-2-Mixtral-8x7B-DPO",
+                //basePrompt: "",//I don't think I use this. //Todo: figure out if I use this. 
+                outpoint: {//choices[0].text choices is one, [sends a number], text is the end.
+                    outpointPathSteps: 4,//key for a switch case
+                    one: "choices",
+                    two: 0,
+                    three: "message",
+                    four: "content"
+                },
+                noFormat: true,
+                //templateStringKey: "instruction_template_str",
+
+            },
             zeroone:{//||zeroone|
                 type: "chat",
                 buildType: "combined",//combined, system, or key, required in chat completion mode. key is experimental and not reccommended.
                 url : "https://api.01.ai/v1/chat/completions",
                 params: "openai",
                 templateStringKey: "jinja",
-                format: "openai", //system, key or combined.
+                format: "openai", 
                 authHeader: "Authorization",
                 authHeaderSecondary: "Bearer ",
                 key: "Your-01-Key-Here",
@@ -325,7 +371,7 @@
                 url : "https://openrouter.ai/api/v1/chat/completions ",
                 params: "openai",
                 templateStringKey: "jinja",
-                format: "openai", //system, key or combined.
+                format: "openai", 
                 key: "ex-Your_OpenRouter_Key_here",
                 authHeader:"Authorization",
                 authHeaderSecondary: "Bearer ",
@@ -346,7 +392,7 @@
                 url : "https://api.endpoints.anyscale.com/v1/chat/completions",
                 params: "openai",
                 templateStringKey: "jinja",
-                format: "openai", //system, key or combined.
+                format: "openai", 
                 key: "ex-Your_Anyscale_Key_here",
                 authHeader:"Authorization",
                 authHeaderSecondary: "Bearer ",
@@ -367,7 +413,7 @@
                 url : "https://api.fireworks.ai/inference/v1/chat/completions",
                 params: "openai",
                 templateStringKey: "jinja",
-                format: "openai", //system, key or combined.
+                format: "openai", 
                 authHeader: "Authorization",
                 authHeaderSecondary: "Bearer ",
                 key: "Your-Fireworks-Key-Here",
@@ -389,7 +435,7 @@
                 url : "https://api.together.xyz/v1/chat/completions",
                 params: "openai",
                 templateStringKey: "jinja",
-                format: "openai", //system, key or combined.
+                format: "openai", 
                 authHeader: "Authorization",
                 authHeaderSecondary: "Bearer ",
                 key: "Your-Together-Key-Here",
@@ -414,7 +460,7 @@
                 promptLocation: "input",
                 params: "openai",
                 templateStringKey: "jinja",
-                format: "openai", //system, key or combined.
+                format: "openai", 
                 headers: [["version", "Your model version code here"]],//this might belong inside the params so that it goes top level in data. I'm sure actually, but 
                 authHeader: "Authorization",
                 authHeaderSecondary: "Bearer  ",
@@ -433,7 +479,7 @@
                 url : "https://api.fireworks.ai/inference/v1/completions",
                 params: "openai",
                 templateStringKey: "jinja",
-                format: "openai", //system, key or combined.
+                format: "openai", 
                 authHeader: "Authorization",
                 authHeaderSecondary: "Bearer ",
                 key: "Your-Fireworks-Key-Here",
@@ -453,7 +499,7 @@
                 url : "https://api.openai.com/v1/completions",
                 params: "openAiCompletions",
                 templateStringKey: "jinja",
-                format: "combined", //system, key or combined.
+                format: "combined", 
                 key: "ex-Your_openAi_Api_Key_here",
                 model: "text-davinci-003",//this overrides models set like '|||model:"text-davinci-003"|'
                 basePrompt: "",
@@ -492,7 +538,7 @@
                 params: "openai",
                 systemLocation: "top",// I just check if this key is present. the content doesn't matter.
                 templateStringKey: "jinja",
-                format: "openai", //system, key or combined.
+                format: "openai", 
                 authHeader: "x-api-key",
                 key: "Your-Anthropic-key-here",
                 model: "claude-3-5-sonnet-20240620",//this overrides models set like '|||model:"gpt-3.5-turbo"|'
@@ -512,7 +558,7 @@
                 url : "https://api.openai.com/v1/chat/completions",
                 params: "openai",
                 templateStringKey: "jinja",
-                format: "openai", //system, key or combined.
+                format: "openai", 
                 key: "ex-Your_openAi_Api_Key_here",
                 authHeader:"Authorization",
                 authHeaderSecondary: "Bearer ",
@@ -1710,7 +1756,34 @@ function setParams(){
                 adapter_id: "vineetsharma/qlora-adapter-Mistral-7B-Instruct-v0.1-gsm8k"
             }
         },
+        novita:{
+            //model: "",// find all the models we support here: https://novita.ai/llm-api.
+            
+            max_tokens: 512,// the maximum number of tokens that can be generated in the chat completion.
 
+            stream: false,// if set, partial message deltas will be sent, like in ChatGPT. Tokens will be sent as data-only server-sent events as they become available, with the stream terminated by a data: [DONE] message.
+
+            temperature: 1,// what sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. We generally recommend altering this or top_p but not both.
+
+            top_p: 1,// an alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered. We generally recommend altering this or temperature but not both.
+
+            top_k: -1,// integer that controls the number of top tokens to consider. Set to -1 to consider all tokens.
+
+            min_p: 0.15,// float that represents the minimum probability for a token to be considered, relative to the probability of the most likely token. Must be in [0, 1]. Set to 0 to disable this.
+            //stop:[""],// up to 4 sequences where the API will stop generating further tokens.
+
+            n:1,// how many chat completion choices to generate for each input message. Note that you will be charged based on the number of generated tokens across all of the choices. Keep n as 1 to minimize costs.
+
+            //CC does not support multiple responses. Do not set this higher than 1
+
+            presence_penalty:0.05,// float that penalizes new tokens based on whether they appear in the generated text so far. Values > 0 encourage the model to use new tokens, while values < 0 encourage the model to repeat tokens.
+
+            frequency_penalty:0.05,// float that penalizes new tokens based on their frequency in the generated text so far. Values > 0 encourage the model to use new tokens, while values < 0 encourage the model to repeat tokens.
+
+            repetition_penalty: 1.05,// float that penalizes new tokens based on whether they appear in the prompt and the generated text so far. Values > 1 encourage the model to use new tokens, while values < 1 encourage the model to repeat tokens.
+            
+            //logit_bias: [""]?,// an optional parameter that modifies the likelihood of specified tokens appearing in a model generated output.
+        },
         openai: {
             max_tokens : 2000,
             temperature : 1,
@@ -2553,18 +2626,20 @@ In place of a conclusion return: "Consider and utilize the questions and informa
 
 `, 
 cot: `
-*Chain of thought(cot): a chain of idea expansion for guiding a robust final response.*
+*Chain of thought(COT): a chain of idea expansion for guiding a robust final response.*
 Create a Thinking Link containing a sequence of ideas related to the query from user. An outline of facts surrounding the context to guide a reply that addresses potential points of failure:
-    Thinking Link:[topic]={
+    COT Thinking Link:[topic]={
 
         * mission: [repeat the statment or query from user.]
         * challenge: [identify challenge points]
         * guide a robust final answer from the assistant: 
-            [! Think Step-by-step and insightfully expand relevant information into a plethora of specific errata. Explore a complete list of ideation to brief the mission:
+            [! Think Step-by-step and insightfully expand mission relevant information into a plethora of specified errata. Explore a complete list of ideation to brief the mission.
+                COT Brief:
                 - List creative notes and ask good questions to inspire a robust reply.]
-                - Provide a flourish of insightful comments on important aspects surrounding various challenges.
+                - COT Provides a flourish of insightful comments on important aspects surrounding various challenges relevant to the mission.
                 - Analyze assumptions, reframe, provide context, give good advice.
                 - Promote solutions for success.
+                -Only write lists of ideation surrounding the topic
                      
     }
 
@@ -2572,7 +2647,7 @@ In place of a conclusion return: "Consider and utilize the questions and informa
 
 `,
 rot:`Receive the Thinking Link: 
-Complete the mission, conquer the challenge. Stay in character.`,
+Complete the mission, conquer the challenge, stay in character. This is the final response for the customer. `,
 tot: `"""
 Answer the Question by exploring multiple reasoning paths as follows:
  - First, carefully analyze the question to extract the key information components and break it down into logical sub-questions. This helps set up the framework for reasoning. The goal is to construct an internal search tree.
@@ -2895,7 +2970,187 @@ API FORMAT:
 \`\`\`
 Respond using the defined keys in the API format. Fill using content from user, no preface or explanation is required, just fill and return the form.
 `,
+smart: ` 1. You are an expert AI assistant. 2. a. Briefly analyze the question and outline your approach. b. Present a clear plan of steps to solve the problem. c. Use a "Chain of Thought" reasoning process if necessary, breaking down your thought process into numbered steps. 3. Explain your reasoning step by step. 4. For each step, provide a title that describes what you’re doing in that step, along with the content. 5. Decide if you need another step or if you’re ready to give the final answer. 6. Include a <reflection> section for each idea where you: a. Review your reasoning. b. Check for potential errors or oversights. c. Confirm or adjust your conclusion if necessary. 7. Provide your final answer in an <output> section. Include a "How can I improve" section at the end of each step where you consider alternative approaches or additional information needed. ***'`,
 factCheck: `assistant is a fact-checking tool:, identify inacuracies in the text.`,
+o1:`## You are a human assistant specializing in generating clear, well-structured technical responses. Below is a list of transitional phrases grouped by their function. Your goal is to use these transitions to structure explanations in a way that enhances clarity, reasoning, and logical flow. After the list, an example application demonstrates how to use these transitions in a problem-solving context.
+
+### Begin with an introduction explaining that the list of transitions is designed to improve clarity and flow in technical explanations.
+
+Follow this by introducing the example, explicitly stating that the goal is to apply these transitions in a technical scenario.
+
+Ensure that the example weaves these transitions naturally into the explanation of the problem and solution.
+
+### Clarification and Simplification 
+
+"In other words": Offers a simpler or clearer restatement. 
+
+"That is": Further clarifies the point. 
+
+"To put it differently": Restates the idea in another way. 
+
+"What this means is": Expands on the concept for better understanding. 
+
+"Simply put": Condenses the idea to its most straightforward form. 
+
+"In short": Summarizes a concept briefly.
+
+### Cause and Effect 
+
+"Because": Indicates a reason. 
+
+"As a result": Connects a cause to its effect. 
+
+"Therefore": Introduces a logical conclusion. 
+
+"Thus": Summarizes a resulting point or outcome. 
+
+"Hence": Indicates a consequence. 
+
+"Consequently": Shows the effect of a previous statement.
+
+Addition and Continuation 
+
+"Additionally": Adds a related point or further detail. 
+
+"Moreover": Reinforces the previous idea with an additional point. 
+
+"Furthermore": Offers more supporting information. 
+
+"Also": Adds another point to the discussion. 
+
+"Along with": Introduces something that complements the prior point. 
+
+"What's more": Brings attention to a significant additional detail. 
+
+"As well": Highlights a related point.
+
+### Contrast and Comparison 
+
+"However": Introduces a contrasting idea or an exception. 
+
+"But maybe": Suggests an alternative explanation. 
+
+"Alternatively": Proposes another option or viewpoint. 
+
+"On the other hand": Presents an opposing idea or consideration. 
+
+"In contrast": Highlights a difference. 
+
+"Conversely": Introduces an opposite or reverse perspective. 
+
+"Still": Maintains a point despite contrasting information.
+
+### Sequential and Temporal Flow 
+
+"First": Marks the first step or point in a sequence. 
+
+"Next": Indicates the following step. 
+
+"Then": Follows up with the next action or idea. 
+
+"After": Refers to what happens later. 
+
+"Subsequently": Suggests a later step in the process. 
+
+"Finally": Introduces the last point or step. 
+
+"Before": Indicates a prerequisite action. 
+
+"Later": Refers to a future action or event. 
+
+"Meanwhile": Describes something happening concurrently.
+
+### Tentative Reasoning 
+
+"Maybe": Suggests a possible explanation or hypothesis. 
+
+"Possibly": Indicates a tentative but plausible idea. 
+
+"It could be that": Suggests a potential scenario. 
+
+"Perhaps": Introduces a suggestion without certainty. 
+
+"So I think": Expresses a tentative conclusion. 
+
+"It seems that": Offers a reasoned assumption.
+
+### Concluding and Summarizing 
+
+"So": Summarizes the reasoning or draws a conclusion. 
+
+"In conclusion": Signals the final thought or summary. 
+
+"To summarize": Briefly reviews key points. 
+
+"In summary": Provides a concise restatement of the main ideas. 
+
+"To conclude": Marks the end of the discussion or reasoning. 
+
+"All in all": Wraps up the overall argument or thought process.
+
+### Problem-Solving Transitions 
+
+"To fix this": Introduces a proposed solution. 
+
+"In order to": Explains the purpose of the action. 
+
+"The next step is": Suggests the next action to solve the problem. 
+
+"To address this": Signals an action aimed at resolving the issue. 
+
+"To prevent this": Recommends actions to avoid future problems. 
+
+"To avoid this": Suggests preventative steps.
+
+### Emphasizing Important Points 
+
+"Importantly": Highlights a crucial aspect of the reasoning. 
+
+"Notably": Draws attention to a significant detail. 
+
+"Crucially": Emphasizes a pivotal point. 
+
+"Significantly": Underscores something relevant or impactful. 
+
+"Key to this": Marks a central or essential factor. 
+
+"Most importantly": Calls attention to the primary or critical point.
+
+### Redirecting or Reevaluating Thought 
+
+"Wait": Signals a pause to reconsider an earlier assumption. 
+
+"Hold on": Indicates a momentary shift in direction. 
+
+"On second thought": Introduces a revision or change in perspective. 
+
+"Let’s reconsider": Suggests revisiting an earlier idea for further analysis.
+
+
+<example> ## Example Application: Problem-Solving Scenario
+You are facing an issue where an error occurs when trying to save an event with a time value. The error message indicates that the start_time value is in an invalid format:
+
+
+Error: {'start_time': ['“2024-09-30T13:00:17.095Z” value has an invalid format. It must be in HH:MM format.']}
+Here's how you can explain this problem, using the transitional phrases to guide the user through the issue and its resolution:
+
+You're encountering an error because the start_time is being sent in the full datetime format, but the backend is expecting just the time in the HH:MM format. In other words, the issue arises because the backend requires only the time portion, but the frontend is sending more data than needed.
+
+First, it's important to understand how the RecurringSchedule model handles this. If the start_time is defined as a TimeField, that is, only the time is needed—not the entire datetime string.
+
+Additionally, we need to examine the EventViewSet and ensure that it's parsing the data correctly before passing it to the model. If it’s passing the full datetime string, then, this could explain why the validation is failing.
+
+Maybe the issue lies in how the frontend is sending the data, and it isn't formatting the start_time properly. Alternatively, the backend might not be handling the incoming data as expected and could be failing to extract the necessary time portion.
+
+To fix this, one potential solution is to adjust the create method in the backend so that it parses the datetime string and extracts just the time before passing it to the model. In order to achieve this, you can use a function like parse_datetime to break down the string, ensuring that only the time is passed along.
+
+So, I think making this adjustment should resolve the problem by ensuring that the backend gets only the time portion it needs. After implementing this fix, be sure to test the API and verify that the data is being handled correctly.
+
+In conclusion, it’s crucial to also check that the frontend is sending the correct data format in the first place, as ensuring consistency between the frontend and backend will prevent similar errors in the future.</example>
+
+The user’s input is below
+
+INPUT`,
 //below are compound prompts of various styles, this can be used to set prompt segments, multiple backends, anything. 
 _devil:{
     //this is the prototype for automated multi stage inference under a single prompt key
@@ -2930,14 +3185,16 @@ _devilsAdvocate:{
         existingPrompts: ["devil"]
     }
 },
-_cot:{
+_cot:{//it is reccommended to use @!name to define a role to speak from for the final answer
     //top level key names don't matter.
     first:{
-        assistantRole: "Thinking Link",
+        userRole: "user",
+        assistantRole: "COT Thinking Link",
         existingPrompts:["cf","cot","c"]
     },
     second:{
         userRole: "Thinking Link",
+        assistantRole: "Final Response:",
         existingPrompts:["rot","c"]
     }
 },
