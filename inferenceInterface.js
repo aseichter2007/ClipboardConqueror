@@ -373,6 +373,8 @@ class InferenceClient {
         this.messageSystemBuilder(identity, text, params, api);
       } else if (api.buildType === "combined") {
         this.messageOneSystemBuilder(identity, text, params, api);
+      } else if (api.buildType === "systemuserstream") {
+        this.messageSystemBuilder(identity, text, params, api);
       }
       //  else if (api.buildType === "compatible") {
       //   generateCompletion(
@@ -389,7 +391,52 @@ class InferenceClient {
       }
     }
   }
-
+ /**
+   * Builds a message object for a chatbot interaction. Sends the built message object to chat().
+   *
+   * @param {Object} identity - The identity of the chatbot.
+   * @param {string} user - The user's message.
+   * @param {Object} params - Additional parameters for the chatbot.
+   * @param {Object} api - The API object containing the model.
+   */
+ messageSystemBuilder(identity, user, params, api) {
+  if (api.model) {
+    params.model = api.model;
+  }
+  let messaged = [];
+  let count = 0;
+  for (let key in identity) {
+    if (count === 0) {
+      messaged.push({
+        role: "system", 
+        content: identity[key],
+        name: this.instructSet.systemRole
+      });
+    } else {
+      messaged.push({
+        role: "user", 
+        content: identity[key],
+        name: this.instructSet.userRole
+      });
+    }
+    count++;
+  }
+  messaged.push({
+    role: "user",
+    content: user,
+    name: this.instructSet.systemRole
+  });
+  //messaged = JSON.stringify(messaged);
+  chat(
+    api,
+    messaged,
+    this.instructSet,
+    params,
+    this.callback,
+    this.notify,
+    this.handler
+  );
+}
   /**
    * Builds a message object for a chatbot interaction. Sends the built message object to chat().
    *
@@ -406,13 +453,15 @@ class InferenceClient {
 
     for (let key in identity) {
       messaged.push({
-        role: key, //I thihnk this is a bad path.
-        content: identity[key]
+        role: "user", 
+        content: identity[key],
+        name: this.instructSet.userRole
       });
     }
     messaged.push({
       role: "user",
-      content: user
+      content: user,
+      name: this.instructSet.systemRole
     });
     //messaged = JSON.stringify(messaged);
     chat(
@@ -443,12 +492,14 @@ class InferenceClient {
       let ident = identity[key]; //identity[key];
       messages.push({
         role: "system",
-        content: JSON.stringify(ident)
+        content: JSON.stringify(ident),
+        name: this.instructSet.systemRole
       });
     }
     messages.push({
       role: "user",
-      content: message
+      content: message,
+      name: this.instructSet.userRole
     });
     //messages = JSON.stringify(messages);
     chat(
@@ -497,12 +548,14 @@ class InferenceClient {
     }else{
       messages.push({
         role: "system",
-        content: outIdentity
+        content: outIdentity,
+        name: this.instructSet.systemRole
       });
     }
     messages.push({
       role: "user",
-      content: message
+      content: message,
+      name: this.instructSet.userRole
     });
     //messages = JSON.stringify(messages);
     chat(
