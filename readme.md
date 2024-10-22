@@ -26,7 +26,7 @@ CC works online via:
 [Claude](https://docs.anthropic.com/en/docs/about-claude/models)
 [Fireworks](https://fireworks.ai/)
 [Groq](https://groq.com/)
-[Novita](https://novita.ai/)
+[Novita AI](https://novita.ai/)
 [OpenAI's API](https://platform.openai.com/docs/overview)
 [Openrouter](https://openrouter.ai/)
 [Together](https://www.together.ai/) if you put your key into the appropriate [endpoints](https://github.com/aseichter2007/ClipboardConqueror/blob/6e5a09613a27007ae2cf928fceeee3b7c77a2143/setup.js#L310) in setup.js
