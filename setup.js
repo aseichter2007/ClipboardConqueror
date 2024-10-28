@@ -3151,6 +3151,30 @@ In conclusion, it’s crucial to also check that the frontend is sending the cor
 The user’s input is below
 
 INPUT`,
+brief:`Only repare a mission Briefing to plan the execution of the request.
+Pseudo Briefing:
+***
+<BRIEF>
+  ## MISSION BRIEF:
+	MISSION:
+		-[ Restate the request in clear terms and goals ]
+
+	### DETAILS:
+		-[ Detail information pertaining to the request, be complete and produce a bountiful cornucopia of ideation. ]
+
+	### INTELLIGENCE: 
+		-[ Notes and errata surrounding and supporting DETAILS ]
+
+	### RULES OF ENGAGEMENT:
+		-[ Descriptive rules to guide a successful mission to deliver a great response. ]
+	
+	[End Brief]
+
+</BRIEF>
+***
+DO NOT EXECUTE THE MISSION OR SUMMARIZE.
+Only write a robust brief in response to the input to inform an excellent final result. Do not produce the final result, write an intricate and detailed brief.`,
+rbrief: "You are the FINAL RESPONSE. Execute the MISSION.",
 //below are compound prompts of various styles, this can be used to set prompt segments, multiple backends, anything. 
 _devil:{
     //this is the prototype for automated multi stage inference under a single prompt key
@@ -3203,8 +3227,11 @@ _review:{
     review:{
         existingPrompts:["factCheck"]
     }
+},
+_brief:{
+    first: {existingPrompts: ["brief"]},
+    second: {existingPrompts: ["rbrief"]},
 }
-
 
 
 }
