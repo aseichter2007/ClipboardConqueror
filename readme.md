@@ -13,23 +13,25 @@ Clipboard Conqueror is a copy paste Large Language Model interface that works as
 With Clipboard Conqueror, you can simply copy three pipes "`|||`" and a question or command, and it will generate a response into the clipboard that you can paste directly into any text field.
 
 Clipboard Conqueror works out of the box with 
-[KoboldCPP](http://www.github.com/LostRuins/koboldcpp/),
- [Text Generation WebUI](https://github.com/oobabooga/text-generation-webui),
- [Ollama](https://www.ollama.com),
- [LMStudio](https://lmstudio.ai)<sup>*closed source</sup>
+- [KoboldCPP](http://www.github.com/LostRuins/koboldcpp/),
+- [Text Generation WebUI](https://github.com/oobabooga/text-generation-webui),
+- [Ollama](https://www.ollama.com),
+- [LMStudio](https://lmstudio.ai)<sup>*closed source</sup>
 
- These local inference servers are generally considered secure and reliable. They do not require an internet connection or any sensitive data to be sent to the cloud.
+ These local inference servers are generally considered secure and reliable, and can be invoked simply like "|||ollama|" or "|||tgw|". They do not require an internet connection or any sensitive data to be sent on the network. Clipboard Conqeror is very configurable and should be compatibe with any inference server.
 
 CC works online via: 
-[01.AI](https://platform.01.ai/)
-[Anyscale](https://www.anyscale.com/)
-[Claude](https://docs.anthropic.com/en/docs/about-claude/models)
-[Fireworks](https://fireworks.ai/)
-[Groq](https://groq.com/)
-[Novita AI](https://novita.ai/model-api/product/llm-api?utm_source=ClipboardConqueror&utm_medium=github_readme&utm_campaign=link)
-[OpenAI's API](https://platform.openai.com/docs/overview)
-[Openrouter](https://openrouter.ai/)
-[Together](https://www.together.ai/) if you put your key into the appropriate [endpoints](https://github.com/aseichter2007/ClipboardConqueror/blob/6e5a09613a27007ae2cf928fceeee3b7c77a2143/setup.js#L310) in setup.js
+- [Novita AI](https://novita.ai/model-api/product/llm-api?utm_source=ClipboardConqueror&utm_medium=github_readme&utm_campaign=link)
+- [01.AI](https://platform.01.ai/)
+- [Anyscale](https://www.anyscale.com/)
+- [Claude](https://docs.anthropic.com/en/docs/about-claude/models)
+- [Fireworks](https://fireworks.ai/)
+- [Groq](https://groq.com/)
+- [OpenAI's API](https://platform.openai.com/docs/overview)
+- [Openrouter](https://openrouter.ai/)
+- [Together](https://www.together.ai/) 
+
+Put your key into the appropriate [endpoint.key](https://github.com/aseichter2007/ClipboardConqueror/blob/6e5a09613a27007ae2cf928fceeee3b7c77a2143/setup.js#L310) in setup.js.
 
 ## Key Features
 
@@ -54,6 +56,7 @@ CC works online via:
 - Save system prompts on the fly to draft, define, translate, think, review, or tell jokes. 
 
 
+
 ## Getting Started
 
 1. [Installing Clipboard Conqueror](Readme-Install.md)
@@ -65,6 +68,9 @@ CC works online via:
 7. [Chain of Inference](Readme-Inference-Chaining.md)
 8. [Setup.js](Readme-Setup.md)
 
+
+## Privacy Policy
+Clipboard Conqueror does not collect any metrics or send any data behind the scenes. When used with local LLMs, no data leaves the local machine. When used with online APIs, please refer to the privacy policy of your chosen host.
 
 ## Additional Resources
 
