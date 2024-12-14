@@ -973,6 +973,24 @@ function setFormats() {
             assistantRole :"model",
             roleGap: "\n"
         },
+        phi4: {
+            startTurn: "<|im start|>",
+            endTurn: "<|im end|>", 
+            systemRole: "system",
+            endRole: "<|im sep|>",
+            //roleGap: "\n\n",
+            userRole: "user",
+            assistantRole: "assistant",
+        },
+        phi4_: {
+            startTurn: "<|im_start|>",
+            endTurn: "<|im_end|>", 
+            systemRole: "system",
+            endRole: "<|im_sep|>",
+            //roleGap: "\n\n",
+            userRole: "user",
+            assistantRole: "assistant",
+        },
         phi3mini:{
             userRole: "<|user|>\n",
             assistantRole :"<|assistant|>\n",
@@ -3152,29 +3170,52 @@ The user’s input is below
 
 INPUT`,
 brief:`Only repare a mission Briefing to plan the execution of the request.
-Pseudo Briefing:
+Pseudo/Proto Briefing:
 ***
 <BRIEF>
-  ## MISSION BRIEF:
-	MISSION:
-		-[ Restate the request in clear terms and goals ]
+  ## MISSION BRIEF: 
+    [!<Generate this document to guide the immedate unaided execution by the final agent.  Do not repeat instructions from the example.>!]
+	
+    ### MISSION OBJECTIVE:
+		-[ 
+            Restate the request in clear terms and robust goals.
+         ]
 
 	### DETAILS:
-		-[ Detail information pertaining to the request, be complete and produce a bountiful cornucopia of ideation. ]
+		-[ 
+            Detail information pertaining to the request. Be complete, and produce a bountiful buffet of ideation.
+            Only include extra and tangential facts surrounding the mission.
+         ]
 
 	### INTELLIGENCE: 
-		-[ Notes and errata surrounding and supporting DETAILS ]
+		-[ 
+            Notes and errata surrounding and supporting DETAILS.
+            Include specific information to inform the immediate execution of the mission.
+            Give as much unusual but important information as possible.
+         ]
 
 	### RULES OF ENGAGEMENT:
-		-[ Descriptive rules to guide a successful mission to deliver a great response. ]
+		-[ 
+            Descriptive rules to guide a successful mission.
+         ]
 	
-	[End Brief]
+	[Execute Mission]
 
 </BRIEF>
 ***
 DO NOT EXECUTE THE MISSION OR SUMMARIZE.
-Only write a robust brief in response to the input to inform an excellent final result. Do not produce the final result, write an intricate and detailed brief.`,
-rbrief: "You are the FINAL RESPONSE. Execute the MISSION.",
+Only write a robust brief in response to the input to inform an excellent final result. Write an intricate and detailed brief.`,
+rbrief: "## EXECUTE: Only complete the mission. Use the briefing to create the final response to achieve the mission.",
+music: `This sentence has five words. Here are five more words. Five word sentences are fine. But several together become monotonous. Listen to what is happening. The writing is getting boring. The sound of it drones. It's like a stuck record. The ear demands some variety. Now listen. I vary the sentence length, and I create music. Music. The writing sings. It has a pleasant rhythm, a lilt, a harmony. I use short sentences. And I use sentences of medium length. And sometimes when I am certain the reader is rested, I will engage him with a sentence of considerable length, a sentence that burns with energy and builds with all the impetus of a crescendo, the roll of the drums, the crash of the cymbals—sounds that say listen to this, it is important.
+
+So write with a combination of short, medium, and long sentences. Create a sound that pleases the reader's ear. Don't just write words. Write music.`,
+testAgent: "#     ###### Test system prompt. ######    #",
+
+
+
+
+
+
 //below are compound prompts of various styles, this can be used to set prompt segments, multiple backends, anything. 
 _devil:{
     //this is the prototype for automated multi stage inference under a single prompt key
