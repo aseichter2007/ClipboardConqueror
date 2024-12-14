@@ -1015,8 +1015,40 @@ function setFormats() {
             startAssistant: "<|end|>",
             endAssistantTurn: "<|end|>",
         },
-
-       
+        exaone:{
+            startTurn: "[|",
+            endRole: "|]",
+            endSystemTurn: "[|endofturn|]", 
+            endUserTurn: "",
+            endAssistantTurn: "[|endofturn|]",
+            systemRole: "system",
+            userRole: "user",
+            assistantRole: "assistant",
+            //prependPrompt: "You are EXAONE model from LG AI Research, a helpful assistant.",
+            systemAfterPrepend: "",
+            postPrompt: "",
+            memorySystem: "",
+            memoryUser: "",
+            responseStart: "",
+            specialInstructions: ""
+        },
+        exaonep:{
+            startTurn: "[|",
+            endRole: "|]",
+            endSystemTurn: "[|endofturn|]", 
+            endUserTurn: "",
+            endAssistantTurn: "[|endofturn|]",
+            systemRole: "system",
+            userRole: "user",
+            assistantRole: "assistant",
+            prependPrompt: "You are EXAONE model from LG AI Research, a helpful assistant.",
+            systemAfterPrepend: "",
+            postPrompt: "",
+            memorySystem: "",
+            memoryUser: "",
+            responseStart: "",
+            specialInstructions: ""
+        },
             //I wish they would just give us labeled tokens, is <s> added by the tokenizer? 
             // <s>(bos, tokenizer should handle it) [INST] <<SYS>>
             // {system_prompt}
