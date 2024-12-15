@@ -973,7 +973,7 @@ function setFormats() {
             assistantRole :"model",
             roleGap: "\n"
         },
-        phi4: {
+        phi4no_: {
             startTurn: "<|im start|>",
             endTurn: "<|im end|>", 
             systemRole: "system",
@@ -982,7 +982,7 @@ function setFormats() {
             userRole: "user",
             assistantRole: "assistant",
         },
-        phi4_: {
+        phi4: {
             startTurn: "<|im_start|>",
             endTurn: "<|im_end|>", 
             systemRole: "system",
@@ -1032,7 +1032,7 @@ function setFormats() {
             responseStart: "",
             specialInstructions: ""
         },
-        exaonep:{
+        exaonelg:{
             startTurn: "[|",
             endRole: "|]",
             endSystemTurn: "[|endofturn|]", 
