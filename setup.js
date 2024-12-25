@@ -3339,7 +3339,7 @@ Provide a thorough analysis of your subject's impacts, including:
 4. Unintended consequences
 5. Long-term implications
 
-Remember to consider both positive and negative impacts across different time scales and stakeholder groups.`, //Credit: Kai_ThoughtArchitect
+Remember to consider both positive and negative impacts across different time scales and stakeholder groups.`, //Credit: Kai_ThoughtArchitect  https://www.reddit.com/user/Kai_ThoughtArchitect/
 
 
 
