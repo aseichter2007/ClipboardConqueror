@@ -1,13 +1,4 @@
-const clipboardListener = require("clipboard-event");
-const ncp = require("copy-paste");
-const notifier = require("node-notifier");
-const axios = require("axios");
-const SendEngine = require("./textengine.js");
-const RecieveEngine = require("./responsengine.js");
-
 const fs = require("fs");
-//const path = require("path");
-
 //setup all settings//
 //const write = true;
 const endPointConfig = {};
@@ -27,7 +18,22 @@ setup(
   fs,
   false
 );
+const escapeReadkey = endPointConfig.routes.escapeReadkey;
+const notifyme = endPointConfig.routes.notifications;
+console.log("" + escapeReadkey + notifyme);
 //end settings//
+const ncp = require("copy-paste");
+const clipboardListener = require("clipboard-event");
+const notifier = require("node-notifier");
+const axios = require("axios");
+const SendEngine = require("./textengine.js");
+const RecieveEngine = require("./responsengine.js");
+const { GlobalKeyboardListener } = require('node-global-key-listener');
+const keyListener = new GlobalKeyboardListener();
+
+
+//const path = require("path");
+
 const recieveEngine = new RecieveEngine(appSettings);
 
 const InferenceClient = require("./inferenceInterface.js");
@@ -55,6 +61,7 @@ const sendEngine = new SendEngine(
   saveSettings,
   fs
 );
+//sendEngine.runTests(); //Todo, finish test thing.
 sendEngine.initialize(endPointConfig.routes.defaultClient,format.format);
 clipboardListener.startListening();
 //cleanup listener
@@ -80,28 +87,30 @@ process.on("SIGTERM", () => {
  * @returns {void}
  */
 function notify(title = "Paste Ready", text = "The response is ready.") {
-  // Define the notification
-  if (title == "") {
-    title = "empty response";
-  }
-  if (text == "") {
-    text = "The response was blank.";
-  }
-  title = removeNullBytes(title);
-  text = removeNullBytes(text);
-  const notification = {
-    title: title,
-    message: text,
-    icon: "./icon.jpg", // Optional
-    sound: true, // Optional, plays a sound with the notification
-    wait: false
-    //there is no support for notification sounds on linux. 
-  };
-  notifier.notify(notification, function(err, response) {
-    if (err) {
-      console.log(err);
+  if (notifyme) {
+    // Define the notification
+    if (title == "") {
+      title = "empty response";
     }
-  });
+    if (text == "") {
+      text = "The response was blank.";
+    }
+    title = removeNullBytes(title);
+    text = removeNullBytes(text);
+    const notification = {
+      title: title,
+      message: text,
+      icon: "./icon.jpg", // Optional
+      sound: true, // Optional, plays a sound with the notification
+      wait: false
+      //there is no support for notification sounds on linux. 
+    };
+    notifier.notify(notification, function(err, response) {
+      if (err) {
+        console.log(err);
+      }
+    });
+  }
 }
 function removeNullBytes(str) {
   // Replace null bytes (represented as \u0000 in JavaScript) with an empty string
@@ -121,11 +130,17 @@ function removeNullBytes(str) {
  * @returns {void}
  */
 function recieveApiResponse(text) {
+  sendEngine.reqCount--, 
   text = text.replace(/\\n/g, "\n"); //change \n to newlines for output
   notify("Paste Response:", text);
   sendEngine.blockPresort = true;
   sendEngine.recentClip.text = text;
-  ncp.copy(recieveEngine.recieveMessageFindTerminatorsAndTrim(text));
+
+  setTimeout(() => {// Code to execute after delay
+    ncp.copy(recieveEngine.recieveMessageFindTerminatorsAndTrim(text));
+    sendEngine.delay = 0;
+  }, sendEngine.delay);
+
 }
 clipboardListener.on("change", () => {
   ncp.paste(clipboardChangeHandler);
@@ -147,6 +162,30 @@ function clipboardChangeHandler(err, text) {
   }
   sendEngine.setupforAi(text);
 }
+function abortGeneration(){
+  if (sendEngine.reqCount>0) {
+    sendEngine.delay = appSettings.abortDelay;
+    console.log('ESC pressed - aborting generation');
+    client.abortGen(sendEngine.api);
+  }  
+}
+
+if (escapeReadkey) { 
+  try {
+    keyListener.addListener(function (e) {
+      const pressedKey = e.name || e.vKey;
+      //console.log(`Key pressed: ${pressedKey}`);
+      
+      if (e.state === 'DOWN' && e.name === 'ESCAPE') {
+        abortGeneration()
+      }
+    });
+    console.log('Listening for keystrokes... Press ESC abort generation.');
+  } catch (err) {
+    console.error('Keyboard listener error:', err);
+  }
+}
+  
 
 /**
  * This function takes a string and a color as arguments, and returns the string with the specified color.
