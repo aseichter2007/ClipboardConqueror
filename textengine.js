@@ -44,6 +44,8 @@ class TextEngine {
     this.batchAssistantName = "";
     this.batchUserName = "";
     this.copyResponse = "";
+    this.reqCount = 0;
+    this.delay = 0;
     this.set = false;
     this.chatHistory = false;
     this.document = false;
@@ -235,6 +237,8 @@ class TextEngine {
         }
       }
       this.batch = setBatch.join(this.appSettings.promptSplit);
+    } else {
+      this.promptBatchKit = {};
     }
   }
   setJsonLevel(identity) {
@@ -1796,6 +1800,9 @@ ${this.appSettings.invoke}Help${this.appSettings
   }
   setupforAi(text) {
     //console.log(this.batchDocument);
+    if (this.reqCount>0) {
+      return console.log(color("generation already in progress","red"));
+    }
     if (this.endpoints.duplicateCheck) {
       if (this.duplicateCheck == text) {
         this.sendHold = true;
@@ -1922,12 +1929,15 @@ ${this.appSettings.invoke}Help${this.appSettings
           // console.log("outParams: " + JSON.stringify(outParams));
           //console.log(sorted);
           console.log(color("Sending to endpoint: ", "green"));
+          
+          this.reqCount++;
           this.inferenceClient.send(
             this.identity,
             sorted.formattedQuery,
             this.params,
             this.api
-          );
+          )
+          ;
         } else {
           this.sendHold = false;
         }
@@ -2026,7 +2036,69 @@ ${this.appSettings.invoke}Help${this.appSettings
     }
     return output;
   }
+
+  //tests
+  runTests(){
+    testprint(test(`${this.appSettings.invoke}${this.appSettings.formatSwitch}llama3${this.appSettings.promptSplit}testAgent${this.appSettings.promptSplit}${this.appSettings.assistantTag}test name${this.appSettings.promptSplit} ${this.appSettings.userTag}test user${this.appSettings.promptSplit} ${this.appSettings.batchContinueTag}test completion${this.appSettings.endTag}test quick prompt${this.appSettings.endTag} user text `,"<|im_start...",this.setupforAi));
+  
+  }
 }
+function test(input, expected, callback) {
+  let output = callback(input);
+  if(output === expected){
+    return {input: input, expected: expected, output: output, result: "pass"}
+  }
+  else{
+    const tested = compareator(output, expected)
+    return {input: input, output: output, expected: expected, test: false }
+  }
+}
+function compareator(output, expected){
+  //this javascript function returns a string with the differences higlighted in red using the color() function and spaces replaced by █ for easier reading. It also returns a boolean indicating whether the strings are equal or not.
+    let isEqual = true;
+    var colorstring = "";
+    if(output.length !== expected.length) {
+       console.log(color("UNEQUAL LENGTH", "red"));
+       if (output.length > expected.length) {
+        console.log("Input longer");
+       } else{
+        console.log("Expected longer");
+      } 
+    }
+    for (let index = 0; index < output.length; index++) {
+      if (index === expected.length) {
+
+        break;
+      }
+      const inchar = output[index];
+      const exchar = expected[index];
+      if (inchar === exchar){
+        colorstring = colorstring + inchar;
+      }else{
+        if (inchar === ' '){
+          colorstring = colorstring + "█";
+        } else if (inchar === '\n'){
+          colorstring = colorstring + color("/n", "red");
+        }  else {
+          colorstring = colorstring + color(inchar, "red"); 
+          isEqual = false;
+        }
+      }
+    };
+   console.log(colorstring);
+   return { test: isEqual, result: colorstring }
+}
+
+function testprint(input, test, output, colorstring){
+  if (test) {
+    console.log(color("Test Passed: ", "green") + input + color(":","green") + output);
+  }
+  else {
+    console.log(color("Test Failed: ", "red") + colorstring)
+  }
+
+}
+//style
 function color(text, color) {
   switch ((text, color)) {
     case "red":
