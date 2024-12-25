@@ -657,6 +657,11 @@ class InferenceClient {
     }
     return secretIdentity;
   }
+  abortGen(api){
+    if (api.hasOwnProperty("abort")) {
+      abortGeneration(api.abort,this.handler)
+    }
+  }
 }
 
 /**
@@ -719,6 +724,7 @@ async function chat(
       config.data.system = identity
     }
     console.log("outgoing request: "+ JSON.stringify(config));
+    
     handler
       .request(config)
       .then(response => {
@@ -812,6 +818,24 @@ async function completion(api, params, callback, notify, handler) {
     console.error("Error in completion API:", error);
   }
 }
+async function abortGeneration(abort, axiosInstance, genkey = null) {
+  try {
+    const payload = genkey ? { genkey } : {};
+    const response = await axiosInstance.post(abort, payload);
+    if (response.data.success) {
+      console.log('Generation successfully aborted.');
+    } else {
+      console.warn('Failed to abort generation. Response:', response.data);
+    }
+  } catch (error) {
+    console.error('Error while aborting generation:', error.message);
+  }
+};
+
+// Example usage:
+// const axios = require('axios');
+// const axiosInstance = axios.create({ baseURL: 'http://localhost:5001' });
+// abortGeneration(axiosInstance);
 
 /**
  * Retrieves a nested value from a data object based on the provided outpoint.
