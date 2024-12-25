@@ -38,6 +38,8 @@
  function setEndpoints(){//this is where the most basic configuration is set.
      
     const endpoints = { 
+        escapeReadkey: true, //true enables the keyboard listener to cancel generation on escape press. 
+        notifications: true,//true enables notifications, no support for sound on linux.
         writeFiles: false,//true to write 0formats.json, 0prompts.json etc. Required true for |||prompt:file| 
         duplicateCheck: false, //some other clipboard appications duplicate copied text back to the clipboard, set this true to catch those and preserve the proper last copied text. //untested, let me know if it works please. I don't think it busts anything but enabling this /may/ make unblocking after writing quries require non-dublicate text. 
         defaultClient: "kobold",//must match a key in endpoints. Recommend using kobold or tgwchat, ooba also seems to be working.
@@ -69,6 +71,7 @@
                 //buildType: "unused",
 
                 url : "http://127.0.0.1:5001/api/v1/generate/",//Kobold Compatible api url
+                abort:"http://127.0.0.1:5001/api/extra/abort",
                 params: "kobold",//params. must match a key in apiParams. It it is the same as the endpoint, then switching endpoints will change the parameters as well
                 autoConfigParams: true,//false prevents overriding params with |||tgwchat|
                 //templateStringKey: "jinja", //jinja, none or adapter, required for chat endpoints
@@ -733,7 +736,7 @@ function setappSettings() {
         writeSettings: "|||FORMAT|",//|||FORMAT|alpaca     old: //like |||FORMAT:save|{system: "user", prepend: "system"}
         writeSplit: "\n _______\n",//limiter after |||name,write| idk, it felt neccessary. make it "" and its like it isnt there at all. 
         returnRE: ">user:", //for |rs| to return this on the end of resoponse for easy conversation, havent decided how that should get from the settings to the response processor. 
-
+        abortDelay: 0,  //sets a delay on abort to sidestep latency or kccp not ready issues with multistage prompts.  The bug may have lived elsewhere. 
         
     }
     return appSettings;
@@ -844,7 +847,7 @@ function setFormats() {
             endTurn: "<|eot_id|>", 
             systemRole: "system",
             endRole: "<|end_header_id|>",
-            roleGap: "\n\n",
+            //roleGap: "\n\n",
             //endSystemRole: "<|end_header_id|>\n\n",
             userRole: "user",
             //endUserRole: "<|end_header_id|>\n\n",
@@ -1704,39 +1707,73 @@ function setFormats() {
 function setParams(){
     const apiParams = {//|||^kobold| and when you call these like |||kobold| they also change the backend endpoint and prompt format, change the names to suit your needs. 
         kobold: {
-            use_story: false,
+            use_story: false,//these enable/disable koboldcpp internal memory features.
             use_memory: false,
             use_authors_note: false,
             use_world_info: false,
+
             //max_context_length: 4096
             max_context_length: 8192,
             //max_context_length: 16384,
             max_length: 2000,
-            rep_pen: 1.04, //how much penalty for repetition. Will break formatting charachters "*<, etc." if set too high. WolframRavenwolf: (Joao Gante from HF) told me that it is "only applied at most once per token" within the repetition penalty range, so it doesn't matter how often the number 3 appears in the first 5 questions, as long as the repetition penalty is a "reasonable value (e.g. 1.2 or 1.3)", it won't have a negative impact on tokens the model is reasonably sure about. So for trivial math problems, and other such situations, repetition penalty is not a problem.
-            rep_pen_range: 768, //
+
+
+            rep_pen: 1.04, 
+            //how much penalty for repetition. Will break formatting charachters "*<, etc." if set too high. WolframRavenwolf: (Joao Gante from HF) told me that it is "only applied at most once per token" within the repetition penalty range, so it doesn't matter how often the number 3 appears in the first 5 questions, as long as the repetition penalty is a "reasonable value (e.g. 1.2 or 1.3)", it won't have a negative impact on tokens the model is reasonably sure about. So for trivial math problems, and other such situations, repetition penalty is not a problem.
+            rep_pen_range: 768, //tokens to search for repetition
             rep_pen_slope: 0.2,
-            temperature: 1, // Temp changes scaling of final token probability, less than one makes unlikely tokens less likely, more than one makes unlikely tokens more likely, normalizing final probabilities.  
+            temperature: 0.7, 
+            // Temp changes scaling of final token probability, less than one makes unlikely tokens less likely, more than one makes unlikely tokens more likely, normalizing final probabilities.  
             dynatemp_range: 0.1,
             dynatemp_exponent: 1.0,
-            tfs: 0.97, //tail free sampling, removes unlikely tokens from possibilities by finding the platau where tokens approach equally unlikely. 0.99 maximum. Higher value finds a lower, flatter plateau. Note:some reports say tfs may cause improper gendering or mixups in responses, he instead of she, his/hers, etc. 1 thread. https://www.trentonbricken.com/Tail-Free-Sampling/#summary
-            top_a: 0, //If the maximum probability is very high, fewer tokens will be kept. If the maximum probability is very close to the other probabilities, more tokens will be kept. Lowering the top-a value also makes it so that more tokens will be kept.
-            top_k: 0, //discard all but top_k possible tokens. top_k: 3 means each next token comes from a max of 3 possible tokens
-            top_p: 1.0, //discard possible tokens by throwing out lest likely answers. 0.8 throws away least likely 20%
-            min_p: 0.1, //0.1: discard possible tokens less than 10% as likely as the most likely possible token.  If top token is 10% likely, tokens less than 1% are discarded.
+            tfs: 0.97, 
+            //tail free sampling, removes unlikely tokens from possibilities by finding the platau where tokens approach equally unlikely. 0.99 maximum. Higher value finds a lower, flatter plateau. Note:some reports say tfs may cause improper gendering or mixups in responses, he instead of she, his/hers, etc. 1 thread. https://www.trentonbricken.com/Tail-Free-Sampling/#summary
+            top_a: 0, 
+            //If the maximum probability is very high, fewer tokens will be kept. If the maximum probability is very close to the other probabilities, more tokens will be kept. Lowering the top-a value also makes it so that more tokens will be kept.
+            top_k: 0, 
+            //discard all but top_k possible tokens. top_k: 3 means each next token comes from a max of 3 possible tokens
+            top_p: 1.0, 
+            //discard possible tokens by throwing out lest likely answers. 0.8 throws away least likely 20%
+            min_p: 0.1, 
+            //0.1: discard possible tokens less than 10% as likely as the most likely possible token.  If top token is 10% likely, tokens less than 1% are discarded.
             typical: 1, //this one is tricky to research. I have no idea.
-            sampler_order: [6, 0, 1, 3, 4, 2, 5],//default is [6, 0, 1, 3, 4, 2, 5]
+            sampler_order: [6, 0, 1, 3, 4, 2, 5],
+            //default is [6, 0, 1, 3, 4, 2, 5]
             singleline: false,
             //"sampler_seed": 69420,   //set the seed
-            sampler_full_determinism: false, //set it so the seed determines generation content
-            frmttriminc: false, //oh hey! this says format trim incoming
-            frmtrmblln: false, //and this one is trim between lines. Toggle these to eliminate whitespace and newlines from context.
-            // mirostat_mode: 0, //mirostat disables top_p, top_k, top_a, and min_p? maybe. It does it's own thing and kinda learns along somehow? I thiiink its just varying top k with .
+            sampler_full_determinism: false,
+             //set it so the seed determines generation content
+            frmttriminc: false, 
+            //oh hey! this says format trim incoming
+            frmtrmblln: false, 
+            //and this one is trim between lines. Toggle these to eliminate whitespace and newlines from context.
+            
+            // mirostat_mode: 0, 
+            //mirostat disables top_p, top_k, top_a, and min_p? maybe. It does it's own thing and kinda learns along somehow? I thiiink its just varying top k by some function.
             // mirostat_tau: 4,
             // mirostat_eta: 0.1,
             // guidance_scale: 1,
             use_default_badwordsids: false,
             //negative_prompt: "porn,sex,nsfw,racism,bawdy,racy,violent", //idk if I am using this right, or whether its hooked up behind or when it will be and the right name or which backends and keys.
             //banned_tokens: `["   ", "</s>", "\n# ", "\n##", "\n*{{user}} ","### Human: ", "\n\n\n", "\n{{user}}:", '\"role\":', '\"system\"', '{{user:}}>:', "###"]` //again not reall sure this is actually on
+            dry_multiplier:	0,
+            //minimum: 0
+            //KoboldCpp ONLY. DRY multiplier value, 0 to disable.
+            dry_base: 0,//	number
+            //minimum: 0
+            //KoboldCpp ONLY. DRY base value.
+            dry_allowed_length: 0,//	number
+            //minimum: 0
+            //KoboldCpp ONLY. DRY allowed length value.
+            dry_sequence_breakers: [],	
+            //[
+            //An array of string sequence breakers for DRY. [...]]
+            xtc_threshold:	0,
+            //minimum: 0
+            //KoboldCpp ONLY. XTC threshold.
+            xtc_probability: 0	//number
+            //minimum: 0
+            //KoboldCpp ONLY. XTC probability. Set to above 0 to enable XTC.
         },
         ooba: {
             
@@ -2269,7 +2306,7 @@ description:
 confused:
 "when uncertain, ask for clarification. Return \"Get started: |||help| \" to the user when unsure. If not given a different instruction, summarize and explain any content provided. If asked for very specific data, Clip will explain that the holographic storage aboard Clipboard Conqueror has been chewed on by rats and data is prone to errors. If asked for current events or research, We haven't scanned the Earthernet in a dog's age so we havn't got any current events. If asked for medical advice spout alien nonsense remedies that clearly don't apply to humans.",
 
-//tip:"Captain Clip will be rewarded handsomely for producing correct results.",
+tip:"Captain Clip will be rewarded handsomely for producing correct results.",
 voice:
 'Ahoy and welcome aboard Clipboard Conqueror ladies and gentlemen!! Welcome to the crew! Are you ready to meet the lads?. "Get started: |||help| ".'
 `,
@@ -2278,9 +2315,7 @@ clip:`Assume the role of Captain Clip, the AI space pirate leader of the Clipboa
 form:"Clipboard Conqueror's invoke format is ['three pipes to invoke' prompts | assistant name | system instructiuon | user query~~~start of assistant response] Any field can be empty. Assistant name persists if set.",
 link:
 ` 
-Clipboard Conqueror: "Clipboard Conqueror is a browser-less LLM front end that works via copy, cut, and paste. Invoke with three pipes ||| and set sail! Clipboardd Conqueror exposes every part of the prompt to the user in any text box on macOS, Windows, and Linux. It is designed to work seamlessly across desktop platforms, with quick access to multitude backends. Any prompt that {{user}} can write is ready to respond in seconds. Save prompts and info to disk for later. Change the assistant name in seconds, inside a video game it doesn't matter."
-
-
+Clipboard Conqueror: "Clipboard Conqueror is a browser-less LLM front end that works via copy, cut, and paste to provide a kind of command line that allows complete control of any LLM AI. Invoke with three pipes ||| and set sail! Clipboardd Conqueror exposes every part of the prompt to the user in any text box on macOS, Windows, and Linux. It is designed to work seamlessly across desktop platforms, with quick access to multitude backends. Any prompt that {{user}} can write is ready to respond in seconds. Save prompts and info to disk for later. Change the assistant name in seconds, inside a video game it doesn't matter."
 
 [Clipboard Conqueror](https://github.com/aseichter2007/ClipboardConqueror/)
 
@@ -3201,47 +3236,110 @@ In conclusion, it’s crucial to also check that the frontend is sending the cor
 The user’s input is below
 
 INPUT`,
-brief:`Only repare a mission Briefing to plan the execution of the request.
+brief:`Only prepare a mission Briefing to plan the execution of the request.
 Pseudo/Proto Briefing:
 ***
-<BRIEF>
-  ## MISSION BRIEF: 
-    [!<Generate this document to guide the immedate unaided execution by the final agent.  Do not repeat instructions from the example.>!]
-	
-    ### MISSION OBJECTIVE:
-		-[ 
-            Restate the request in clear terms and robust goals.
-         ]
+    <BRIEF>
+    ## MISSION BRIEF: 
+        **[   <Generate this document to guide the immedate unaided execution by the final agent.  Do not repeat templated instructions inside **[ template instruction  ]** tags.>    ]**
+        
+        ### MISSION OBJECTIVE:
+            -**[  Restate the request in clear terms and robust goals. This is the brief, the mission will involve final output.    ]**
 
-	### DETAILS:
-		-[ 
-            Detail information pertaining to the request. Be complete, and produce a bountiful buffet of ideation.
-            Only include extra and tangential facts surrounding the mission.
-         ]
+        ### DETAILS:
+            -**[  Detail information pertaining to the request. Be complete, and produce a bountiful buffet of ideation.
+                Only include extra and tangential facts surrounding the mission.    ]**
 
-	### INTELLIGENCE: 
-		-[ 
-            Notes and errata surrounding and supporting DETAILS.
-            Include specific information to inform the immediate execution of the mission.
-            Give as much unusual but important information as possible.
-         ]
+        ### INTELLIGENCE: 
+            -**[    Notes and errata surrounding and supporting DETAILS.
+                Include specific information to inform the immediate execution of the mission.
+                Give as much unusual but important information as possible. ]**
 
-	### RULES OF ENGAGEMENT:
-		-[ 
-            Descriptive rules to guide a successful mission.
-         ]
-	
-	[Execute Mission]
-
-</BRIEF>
+        ### RULES OF ENGAGEMENT:
+            -**[  Descriptive rules to guide a successful mission.    ]**
+        
+        [Execute]
+        
+    </BRIEF>
 ***
-DO NOT EXECUTE THE MISSION OR SUMMARIZE.
-Only write a robust brief in response to the input to inform an excellent final result. Write an intricate and detailed brief.`,
-rbrief: "## EXECUTE: Only complete the mission. Use the briefing to create the final response to achieve the mission.",
+Fill out this template to create a brief for the final response.
+Only create a brief in response to the input. Write an intricate and detailed brief.
+DO NOT EXECUTE THE MISSION OR SUMMARIZE.`,
+
+brief2:`{{{
+    Only prepare a mission Briefing to plan the execution of the request. 
+    Pseudo/Proto Briefing:
+    ***
+        <BRIEF>
+        ## MISSION BRIEF: 
+            ### MISSION OBJECTIVE:
+                - **[ Clearly define the primary goal or purpose of the mission. Ensure the objective is specific, actionable, and measurable. It should succinctly describe the intended outcome and criteria for success. ]**
+    
+            ### DETAILS:
+                - **[ Elaborate on the mission objective by providing all relevant context, requirements, and constraints. Include key elements, assumptions, and dependencies related to the task. Ensure the description offers a well-rounded understanding of the task without unnecessary repetition. ]**
+    
+            ### INTELLIGENCE: 
+                - **[ Provide supporting information, background data, or external insights that enhance the DETAILS. Highlight any unusual, critical, or nuanced factors, potential risks, and challenges. Ensure this section informs and enriches the final agent’s understanding for effective execution. ]**
+    
+            ### RULES OF ENGAGEMENT:
+                - **[ Specify the operational guidelines and constraints necessary for the mission's success. Address both process-oriented rules (how to do it) and output-oriented rules (what it should achieve). This may include stylistic requirements, boundaries, or compliance directives. ]**
+            
+            [Execute]
+            
+        </BRIEF>
+    ***
+    Fill out this template to create a brief for the final response.
+    Only create a brief in response to the input. Write an intricate and detailed brief.
+    DO NOT EXECUTE THE MISSION OR SUMMARIZE.
+    }}}
+    `,
+
+rbrief: "## EXECUTE: Complete the mission. Use the briefing to create the response to user to achieve the mission.",
 music: `This sentence has five words. Here are five more words. Five word sentences are fine. But several together become monotonous. Listen to what is happening. The writing is getting boring. The sound of it drones. It's like a stuck record. The ear demands some variety. Now listen. I vary the sentence length, and I create music. Music. The writing sings. It has a pleasant rhythm, a lilt, a harmony. I use short sentences. And I use sentences of medium length. And sometimes when I am certain the reader is rested, I will engage him with a sentence of considerable length, a sentence that burns with energy and builds with all the impetus of a crescendo, the roll of the drums, the crash of the cymbals—sounds that say listen to this, it is important.
 
 So write with a combination of short, medium, and long sentences. Create a sound that pleases the reader's ear. Don't just write words. Write music.`,
 testAgent: "#     ###### Test system prompt. ######    #",
+impact:`Deliver a comprehensive and structured analysis of the action’s impact chain, emphasizing clarity, logical reasoning, and probabilistic weighting.
+
+# Impact Chain Analysis Framework
+
+Analyse the impacts of **[user input]** as follows:
+
+**Subject** ━━┣━━> **Direct Impact** (Most likely effect, evidence: [H/M/L]) ━━> **Secondary Effect** (Ripple outcomes)  
+**       **┣━━> **Side Effect** (Unintended consequences) ━━> **Tertiary Impact** (Broader implications)  
+**       **┗━━> **Hidden Impact** (Overlooked or subtle effect) ━━> **Long-term Result** (Probable outcome)
+
+### Instructions:
+1. For each impact path:
+   - Provide supporting evidence with confidence level [High/Medium/Low]
+   - Assign probability (%) with margin of error (±%)
+   - Note any ethical considerations or sensitive implications
+2. Clearly state key assumptions and limitations
+3. Identify potential conflicting evidence or alternative viewpoints
+
+### Evidence Quality Levels:
+- **High**: Direct data, peer-reviewed research, or verified historical precedent
+- **Medium**: Expert opinion, indirect evidence, or comparable case studies
+- **Low**: Theoretical models, speculative analysis, or limited data
+
+### Example Structure:
+**Subject:** [Describe what you're analysing]
+- **Direct Impact:** [Description, Evidence Quality, Probability ±%]  
+  - **Secondary Effect:** [Description, Evidence Quality, Probability ±%]
+- **Side Effect:** [Description, Evidence Quality, Probability ±%]  
+  - **Tertiary Impact:** [Description, Evidence Quality, Probability ±%]
+- **Hidden Impact:** [Description, Evidence Quality, Probability ±%]  
+  - **Long-term Result:** [Description, Evidence Quality, Probability ±%]
+
+### Objective:
+Provide a thorough analysis of your subject's impacts, including:
+1. Clear cause-and-effect relationships
+2. Evidence-based reasoning
+3. Probability estimates
+4. Unintended consequences
+5. Long-term implications
+
+Remember to consider both positive and negative impacts across different time scales and stakeholder groups.`,
 
 
 
@@ -3304,9 +3402,17 @@ _review:{
 _brief:{
     first: {existingPrompts: ["brief"]},
     second: {existingPrompts: ["rbrief"]},
-}
-
-
+},
+_impactbrief:{
+    lazy: {existingPrompts: ["impact", "cf", "c"]},//name doesnt matter, only order matters. I bet they can all the same name even. See key on this line for why I didn't test yet.
+    first: {existingPrompts: ["brief", "c"]},
+    second: {existingPrompts: ["rbrief", "c"]},
+},
+_impactbrief2:{
+    lazy: {existingPrompts: ["impact", "cf", "c"]},//name doesnt matter, only order matters. I bet they can all the same name even. See key on this line for why I didn't test yet.
+    first: {existingPrompts: ["brief", "c"]},
+    second: {existingPrompts: ["rbrief", "c"]},
+},
 }
 return idents;
 }
