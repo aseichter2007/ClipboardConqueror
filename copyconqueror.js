@@ -180,7 +180,7 @@ if (escapeReadkey) {
         abortGeneration()
       }
     });
-    console.log('Listening for keystrokes... Press ESC abort generation.');
+    console.log('Listening for Escape key... Press ESC to abort generation.');
   } catch (err) {
     console.error('Keyboard listener error:', err);
   }
