@@ -157,6 +157,10 @@ Settings:
 ---
 - all these keys are required to be present.
 
+**escapeReadkey**: true, true enables the keyboard listener to cancel generation on escape press. 
+        
+**notifications**: true, true enables notifications, no support for sound on linux.
+
 **writeFiles**: false, true to write 0formats.json, 0prompts.json etc.  |||name:file| will write 0prompts.json and it will then be used while present even if this is set false.
 
 **duplicateCheck**: false, some other clipboard applications duplicate copied text back to the clipboard, set this true to catch those and preserve the proper last copied text.  Clipboard Conqueror should work seamlessly alongside any other program with the right settings. 
