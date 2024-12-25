@@ -97,7 +97,7 @@ This identity and some other cards were found on chub.ai, some are my own or sig
 
 - |||`tot`|"tree of thought" will expand and include near concepts, questions, or ideas to produce a more comprehensive solution
 
-- |||impact| for understanding the ripple effects of any action or decision.
+- |||`impact`| for understanding the ripple effects of any action or decision.
 
 - |||`rpi`| writes a well crafted character response.
 
@@ -141,6 +141,8 @@ Copy and paste the following lines to show the full prompt quickly.
 |||`vicunaCocktail`,write| the standard vicuna coctail system prompt.
 
 |||`hermes`,write| the standard OpenHermes system prompt.
+
+|||`impact`| for understanding the ripple effects of any action or decision.
 
 |||`agi`,write| AI Generate Instructions, includes invoke formatting to make it fast and optimized for CC.
 
