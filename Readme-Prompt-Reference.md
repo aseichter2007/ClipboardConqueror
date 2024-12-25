@@ -89,6 +89,7 @@ Noteworthy Prompts:
 ---
 The following definitions live toward the bottom of setup.js. If you set writeFiles = true, the files written override the definitions in setup.js, so you can enable files and then save your prompts like |||name:save| then |||name:file| to save the prompt to disk and protecting against overwriting your work.
 
+
 - |||`agi`|"AI Generate Instructions" will help you execute any operation you ask for help with. Captain Clip does well too, but this is based on the kobold agi script and is superior to a simple ask. 
 
 - |||`stable`| will write you an image prompt for use in stable diffusion automatic 1111 for SD 1.5 models
@@ -96,11 +97,17 @@ This identity and some other cards were found on chub.ai, some are my own or sig
 
 - |||`tot`|"tree of thought" will expand and include near concepts, questions, or ideas to produce a more comprehensive solution
 
-- |||`rpi`| writes a well crafted character respons.
+- |||impact| for understanding the ripple effects of any action or decision.
 
-- `cot,@rot` Chain of Thought and Recieve Thougtht prompts ask guiding questions surrounding the topic to provide a robust answer, and then resolve those questions in the final response, producing a superior result.
+- |||`rpi`| writes a well crafted character response.
 
-- `_cot` compresses this into one step
+- |||`cot,@rot`| Chain of Thought and Recieve Thougtht prompts ask guiding questions surrounding the topic to provide a robust answer, and then resolve those questions in the final response, producing a superior result.
+
+- |||`_cot`| compresses this into one step
+
+- |||`_brief`| A better? chain of thought prompt.
+
+- |||`impactbrief`| a three stage prompt that includes impact as a first step before _brief
 
 - |||`pro`| A more professional, less piratey assistant for professional tasks. 
 
