@@ -167,7 +167,10 @@ function abortGeneration(){
     sendEngine.delay = appSettings.abortDelay;
     console.log('ESC pressed - aborting generation');
     client.abortGen(sendEngine.api);
-  }  
+  } else {
+    console.log("No generation in progress to abort. Press ESC after starting a generation to abort.");
+
+  }
 }
 
 if (escapeReadkey) { 
