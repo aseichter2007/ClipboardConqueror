@@ -659,7 +659,7 @@ class InferenceClient {
   }
   abortGen(api){
     if (api.hasOwnProperty("abort")) {
-      abortGeneration(api.abort,this.handler)
+      abortGeneration(api.abort,this.handler, api.genkey)
     }
   }
 }

@@ -38,6 +38,7 @@
  function setEndpoints(){//this is where the most basic configuration is set.
      
     const endpoints = { 
+        gentest: true, //true keeps track of when there is a live request to the inference server and prevents sending an abort call with no generation from CC on the server.
         escapeReadkey: true, //true enables the keyboard listener to cancel generation on escape press. 
         notifications: true,//true enables notifications, no support for sound on linux.
         writeFiles: false,//true to write 0formats.json, 0prompts.json etc. Required true for |||prompt:file| 
@@ -72,6 +73,7 @@
 
                 url : "http://127.0.0.1:5001/api/v1/generate/",//Kobold Compatible api url
                 abort:"http://127.0.0.1:5001/api/extra/abort",
+                genkey: "SecretClip",
                 params: "kobold",//params. must match a key in apiParams. It it is the same as the endpoint, then switching endpoints will change the parameters as well
                 autoConfigParams: true,//false prevents overriding params with |||tgwchat|
                 //templateStringKey: "jinja", //jinja, none or adapter, required for chat endpoints
@@ -699,6 +701,7 @@ function setappSettings() {
         //this is where the invoke and Clipboard Conqueror flags and settings live.
         invoke: "|||", //could be anything # or 'AI:' whatever you want
         endTag: "|", //samesies. its the limiter after |||prompt|quick system| query. This should not be the same as any below. 
+        comment: "<",//single chr only
         save: "save",//like |||name:save|
         true: "true", //like |||setting:true|
         false: "false", //like |||setting:false|
@@ -3401,6 +3404,10 @@ _review:{
 },
 _brief:{
     first: {existingPrompts: ["brief"]},
+    second: {existingPrompts: ["rbrief"]},
+},
+_brief2:{
+    first: {existingPrompts: ["brief2"]},
     second: {existingPrompts: ["rbrief"]},
 },
 _impactbrief:{
