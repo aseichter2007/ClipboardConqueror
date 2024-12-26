@@ -820,7 +820,7 @@ async function completion(api, params, callback, notify, handler) {
 }
 async function abortGeneration(abort, axiosInstance, genkey = null) {
   try {
-    const payload = genkey ? { genkey } : {};
+    const payload = genkey ? { genkey: genkey } : {};
     const response = await axiosInstance.post(abort, payload);
     if (response.data.success) {
       console.log('Generation successfully aborted.');

@@ -39,7 +39,8 @@
      
     const endpoints = { 
         gentest: true, //true keeps track of when there is a live request to the inference server and prevents sending an abort call with no generation from CC on the server.
-        escapeReadkey: true, //true enables the keyboard listener to cancel generation on escape press. 
+        escapeReadkey: true,
+        readCtrlAltC: true, //true enables the keyboard listener to cancel generation on escape press. 
         notifications: true,//true enables notifications, no support for sound on linux.
         writeFiles: false,//true to write 0formats.json, 0prompts.json etc. Required true for |||prompt:file| 
         duplicateCheck: false, //some other clipboard appications duplicate copied text back to the clipboard, set this true to catch those and preserve the proper last copied text. //untested, let me know if it works please. I don't think it busts anything but enabling this /may/ make unblocking after writing quries require non-dublicate text. 

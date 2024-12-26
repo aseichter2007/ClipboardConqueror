@@ -20,6 +20,7 @@ setup(
 );
 const escapeReadkey = endPointConfig.routes.escapeReadkey;
 const notifyme = endPointConfig.routes.notifications;
+const readCtrlAltC = endPointConfig.routes.readCtrlAltC;
 console.log("" + escapeReadkey + notifyme);
 //end settings//
 const ncp = require("copy-paste");
@@ -173,20 +174,44 @@ function abortGeneration(){
   }
 }
 
-if (escapeReadkey) { 
-  try {
-    keyListener.addListener(function (e) {
-      const pressedKey = e.name || e.vKey;
-      //console.log(`Key pressed: ${pressedKey}`);
-      
+try {
+  const keyStates = {
+    ctrl: false,
+    alt: false,
+    c: false,
+  };
+  
+  keyListener.addListener(function (e) {
+    const pressedKey = e.name || e.vKey;
+    if (escapeReadkey) { 
       if (e.state === 'DOWN' && e.name === 'ESCAPE') {
         abortGeneration()
       }
-    });
-    console.log('Listening for Escape key... Press ESC to abort generation.');
-  } catch (err) {
+    }
+    if (readCtrlAltC) {
+      
+      // Update key states based on key events
+      if (e.state === "DOWN") {
+        if (e.name === "LEFT CTRL" || e.name === "RIGHT CTRL") keyStates.ctrl = true;
+        if (e.name === "LEFT ALT" || e.name === "RIGHT ALT") keyStates.alt = true;
+        if (e.name === "C") keyStates.c = true;
+      } else if (e.state === "UP") {
+        if (e.name === "LEFT CTRL" || e.name === "RIGHT CTRL") keyStates.ctrl = false;
+        if (e.name === "LEFT ALT" || e.name === "RIGHT ALT") keyStates.alt = false;
+        if (e.name === "C") keyStates.c = false;
+      }
+      
+      // Check for the Ctrl+Alt+C combination
+      if (keyStates.ctrl && keyStates.alt && keyStates.c) {
+        console.log(color("Sending last copy only. Copy |||Your Prompts,set| to define system prompts other than default", "yellow")
+      );
+      sendEngine.setupforAi(sendEngine.appSettings.invoke + "re" + sendEngine.appSettings.endTag);
+      }      
+    }
+  });    
+  console.log('Listening for Escape key... Press ESC to abort generation.');
+} catch (err) {
     console.error('Keyboard listener error:', err);
-  }
 }
   
 
