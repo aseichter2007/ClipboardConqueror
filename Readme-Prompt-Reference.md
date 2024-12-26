@@ -6,6 +6,8 @@ Clipboard Conqueror - Operators and Prompts
 ---
 Special ||| operators | to apply:
 ---
+- "`<`" comment equivalent to // in javascript or # in python
+
 - "`]`" renames text from user in the chatlog.
 
 - "`;`" renames text from assistant in the chatlog. 
@@ -75,7 +77,7 @@ Fancy |||`flags`|
 `ch` or `clearHistory` clears the chatlog and prevents sending to the AI.
 
 
-`cf` or `clearFirst` clears the chatlog while sending the query to the LLM.
+`cf` or `clearFirst` clears the chatlog and activates the history.
 
 `d` or `debug` The last cleared history is stored here till CC is restarted or you clear again
 
