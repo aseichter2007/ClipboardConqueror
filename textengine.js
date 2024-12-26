@@ -208,6 +208,7 @@ class TextEngine {
     if (this.batchLength < trip.batch) {
       this.batchLength = trip.batch;
     }
+    
     this.promptBatchKit[identity] = trip;
     console.log(
       "Chaining: " + color(identity, "yellow") + " : " + JSON.stringify(trip)
@@ -1081,7 +1082,7 @@ Reccomended use case and operators for assistance:
           color("Sending last copied as message in system prompt", "blue")
         );
         break;
-      case "rh":
+      case "rh"://clears the history and sends the last copy as a message in the chat history.
       case "reHistory":
       case "reh":
         //doesnt work if this.appSettings.batchLimiter != ""
@@ -1180,7 +1181,7 @@ Reccomended use case and operators for assistance:
         this.chatHistory = true;
         outp.work = true;
         break;
-      case "sc":
+      case "sc"://chats against the current history without adding to the history
       case "silentChat":
       case "silentContinue":
       case "ghostChat":
@@ -1188,7 +1189,7 @@ Reccomended use case and operators for assistance:
         this.noChatLogging = true;
         outp.work = true;
         break;
-      case "clearHistory":
+      case "clearHistory"://clear the history without 
       case "ch":
       case "cc":
       case "clearC":
@@ -1201,6 +1202,7 @@ Reccomended use case and operators for assistance:
         break;
       case "cf":
       case "clearFirst":
+        this.chatHistory = true;
         this.chatLog = "";
         this.history = [];
         outp.work = true;
@@ -1245,26 +1247,28 @@ Reccomended use case and operators for assistance:
 Special ${this.appSettings.invoke} [operators] to apply${this.appSettings
           .endTag}:
 ---
--"]" renames text from user in the chatlog.
+-"${this.appSettings.comment}" comments an operator
 
-- ";" renames text from assistant in the chatlog. 
+-"${this.appSettings.batchNameSwitch}" renames text from user in the chatlog.
 
-- "%" format, like ${this.appSettings.invoke}chatML, prompts${this.appSettings
+- "${this.appSettings.batchAssistantSwitch}" renames text from assistant in the chatlog. 
+
+- "${this.appSettings.formatSwitch}" format, like ${this.appSettings.invoke}chatML, prompts${this.appSettings
           .endTag}, do this one first if you use it, it overwrites the others. Valid formats are stored in setup.js
 
-- "!" assitant name
+- "${this.appSettings.assistantTag}" assitant name
 
-- ">" user name
+- "${this.appSettings.userTag}" user name
 
-- "}" system name
+- "${this.appSettings.systemTag }" system name
 
-- "~" start of assistant response, "~~~" overwrites "~". 
+- "${this.appSettings.batchContinueTag}" start of assistant response, "${this.appSettings.continueTag}" overwrites "~". 
 
-- "\`" the backtick or grave symbol changes the system json level. Supports "json","markup","partial", or none. 
+- "${this.appSettings.setJsonLevel}" the backtick or grave symbol changes the system json level. Supports "json","markup","partial", or none. 
 
-- "@" executes a batch
+- "${this.appSettings.batchSwitch}" executes a batch
 
-- "#" skips a batch
+- "${this.appSettings.batchMiss}" skips a batch
 
 Fancy ${this.appSettings.invoke}flags${this.appSettings.endTag}
 ---
@@ -1273,7 +1277,7 @@ ${this.appSettings.invoke}Help${this.appSettings
 
 "introduction" has more about samplers and settings. 
 
-"e" or empty blocks the default prompt to provide an empty prompt
+"${this.appSettings.emptyquick}" or ${this.appSettings.empty} blocks the default prompt to provide an empty prompt
 
 "write" sends an instantly ready to paste set of prompts preceding the write command.
 
@@ -1289,8 +1293,7 @@ ${this.appSettings.invoke}Help${this.appSettings
 "no" prevents sending to AI, useful for copying entire invokes, just add the flag.
 
 
-"set" or "setDefault" saves prompts left of it to be added until toggled off like ${this
-          .appSettings.invoke}set${this.appSettings.endTag}
+"set" or "setDefault" saves prompts left of it to be added until toggled off like ${this.appSettings.invoke}set${this.appSettings.endTag}
 
 
 "c" or "chat" activates the history
@@ -1302,7 +1305,7 @@ ${this.appSettings.invoke}Help${this.appSettings
 "ch" or "clearHistory" clears the chatlog and prevents sending to the AI.
 
 
-"cf" or "clearFirst" clears the chatlog while sending the query to the LLM.
+"cf" or "clearFirst" clears the chatlog.
 
 
 "d" or "debug" The last cleared history is stored here till CC is restarted or you clear again
@@ -1550,65 +1553,66 @@ ${this.appSettings.invoke}Help${this.appSettings
       tag = tag.trim();
       let commands = tag.split(this.appSettings.settinglimit);
       console.log("prompt/flag: " + color(commands, "green"));
-      if (commands.length === 2) {
-        commands[0] = commands[0].trim();
-        commands[1] = commands[1].trim();
-        if (commands[1] === "" || commands[1]===undefined || commands[0].includes(' ')) {
-          this.identityHandler(tag);
-        } else {
-          if (commands[1] == this.appSettings.save && this.sendLast) {
-            //save like |||re,prompt:save|
-            this.identities[commands[0]] = this.recentClip;
-            tag = commands[0];
-          } else if (commands[1] == this.appSettings.save) {
-            //save like |||prompt:save|
-            this.sendHold = true;
-            this.identities[commands[0]] = sorted.formattedQuery;
-            console.log(color("Saved ", "cyan") + commands[0]);
-            tag = commands[0];
-          } else if (commands[1] == this.appSettings.delete) {
-            //save like |||prompt:delete|
-            this.sendHold = true;
-            delete this.identities[commands[0]];
-            tag = commands[0];
-          } else if (commands[1] == this.appSettings.savePromptToFile) {
-            //save like |||prompt:file|
-            this.sendHold = true;
-            let setting = { [commands[0]]: this.identities[commands[0]] };
-            //console.log(JSON.stringify(setting));
-            this.settingSaver(
-              setting,
-              this.identities,
-              "0prompts.json",
-              this.notify,
-              this.fs
-            ); //todo: fix this magic string.
-            tag = commands[0];
-          } else if (
-            commands[0] == this.appSettings.setPromptFormat &&
-            this.appSettings.save == commands[1]
-          ) {
-            this.sendHold = true;
-            this.pickupFormat(sorted.formattedQuery);
-          } else if (commands[0] == this.appSettings.setInstruction) {
-            this.sendHold = true;
-            this.setPrompt(commands[1], sorted.formattedQuery);
-          } else if (!isNaN(commands[1])) {
-            //this.params[commands[0]] = parseFloat(commands[1]);
-            this.paramSetter(commands[0],parseFloat(commands[1]))
-          } else if (commands[1] == this.appSettings.true) {
-            //this.params[commands[0]] = true;
-            this.paramSetter(commands[0], true);
-          } else if (commands[1] == this.appSettings.false) {
-            //this.params[commands[0]] = false;
-            this.paramSetter(commands[0], false);
-          } else {
-            //this.params[commands[0]] = commands[1];
-            this.paramSetter(commands[0], commands[1]);
-
+      if (commands[0][0]!=this.appSettings.comment) {
+        if (commands.length === 2 ) {              
+              commands[0] = commands[0].trim();
+              commands[1] = commands[1].trim();
+            if (commands[1] === "" || commands[1]===undefined || commands[0].includes(' ')) {
+                this.identityHandler(tag);    
+            } else {
+              if (commands[1] == this.appSettings.save && this.sendLast) {
+                //save like |||re,prompt:save|
+                this.identities[commands[0]] = this.recentClip;
+                tag = commands[0];
+              } else if (commands[1] == this.appSettings.save) {
+                //save like |||prompt:save|
+                this.sendHold = true;
+                this.identities[commands[0]] = sorted.formattedQuery;
+                console.log(color("Saved ", "cyan") + commands[0]);
+                tag = commands[0];
+            } else if (commands[1] == this.appSettings.delete) {
+              //save like |||prompt:delete|
+              this.sendHold = true;
+              delete this.identities[commands[0]];
+              tag = commands[0];
+            } else if (commands[1] == this.appSettings.savePromptToFile) {
+              //save like |||prompt:file|
+              this.sendHold = true;
+              let setting = { [commands[0]]: this.identities[commands[0]] };
+              //console.log(JSON.stringify(setting));
+              this.settingSaver(
+                setting,
+                this.identities,
+                "0prompts.json",
+                this.notify,
+                this.fs
+              ); //todo: fix this magic string.
+              tag = commands[0];
+            } else if (
+              commands[0] == this.appSettings.setPromptFormat &&
+              this.appSettings.save == commands[1]
+            ) {
+              this.sendHold = true;
+              this.pickupFormat(sorted.formattedQuery);
+            } else if (commands[0] == this.appSettings.setInstruction) {
+              this.sendHold = true;
+              this.setPrompt(commands[1], sorted.formattedQuery);
+            } else if (!isNaN(commands[1])) {
+              //this.params[commands[0]] = parseFloat(commands[1]);
+              this.paramSetter(commands[0],parseFloat(commands[1]))
+            } else if (commands[1] == this.appSettings.true) {
+              //this.params[commands[0]] = true;
+              this.paramSetter(commands[0], true);
+            } else if (commands[1] == this.appSettings.false) {
+              //this.params[commands[0]] = false;
+              this.paramSetter(commands[0], false);
+            } else {
+              //this.params[commands[0]] = commands[1];
+              this.paramSetter(commands[0], commands[1]);
+              
+            }
           }
-        }
-      } else {
+        } else {
         //if
         if (!isNaN(tag)) {
           //if params contains a key called max_length
@@ -1625,7 +1629,7 @@ ${this.appSettings.invoke}Help${this.appSettings
             } else {
               console.log(
                 color("no max_length or max_tokens in params: ", "red") +
-                  JSON.stringify(this.params)
+                JSON.stringify(this.params)
               );
             }
           }
@@ -1638,6 +1642,7 @@ ${this.appSettings.invoke}Help${this.appSettings
         } else {
           this.identityHandler(tag)
         }
+      }
       }
     });
   }
@@ -1800,8 +1805,10 @@ ${this.appSettings.invoke}Help${this.appSettings
   }
   setupforAi(text) {
     //console.log(this.batchDocument);
-    if (this.reqCount>0) {
-      return console.log(color("generation already in progress","red"));
+    if (this.endpoints.gentest === true) {
+      if (this.reqCount>0) {
+        return console.log(color("generation already in progress","red"));
+      }
     }
     if (this.endpoints.duplicateCheck) {
       if (this.duplicateCheck == text) {
@@ -1851,6 +1858,9 @@ ${this.appSettings.invoke}Help${this.appSettings
       if (sorted.tags.persona) {
         let persona = sorted.tags.persona.split(this.appSettings.promptSplit);
         this.personaAtor(persona, sorted);
+        if (sorted.tags.persona.length > 3) {
+          console.log("The format level, set like " + this.appSettings.invoke + this.appSettings.setJsonLevel+ " markup, json, or partial can help to keep prompts distinct. Markup uses full chat turns, partial is like 'promptname:' ");          
+        }
       }
       sorted.formattedQuery = this.continueText(sorted.formattedQuery);
       if (sorted.run || this.on) {
@@ -1940,6 +1950,9 @@ ${this.appSettings.invoke}Help${this.appSettings
           ;
         } else {
           this.sendHold = false;
+        }
+        if (this.batchLength === 0) {
+          this.promptBatchKit={};
         }
       }
     }
