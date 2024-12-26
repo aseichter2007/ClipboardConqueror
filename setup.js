@@ -701,8 +701,11 @@ function setappSettings() {
     const appSettings = {
         //this is where the invoke and Clipboard Conqueror flags and settings live.
         invoke: "|||", //could be anything # or 'AI:' whatever you want
+        //invoke: "***",
         endTag: "|", //samesies. its the limiter after |||prompt|quick system| query. This should not be the same as any below. 
+        //endTag: "*",
         comment: "<",//single chr only
+        comment: "*",
         save: "save",//like |||name:save|
         true: "true", //like |||setting:true|
         false: "false", //like |||setting:false|
@@ -1726,7 +1729,7 @@ function setParams(){
             //how much penalty for repetition. Will break formatting charachters "*<, etc." if set too high. WolframRavenwolf: (Joao Gante from HF) told me that it is "only applied at most once per token" within the repetition penalty range, so it doesn't matter how often the number 3 appears in the first 5 questions, as long as the repetition penalty is a "reasonable value (e.g. 1.2 or 1.3)", it won't have a negative impact on tokens the model is reasonably sure about. So for trivial math problems, and other such situations, repetition penalty is not a problem.
             rep_pen_range: 768, //tokens to search for repetition
             rep_pen_slope: 0.2,
-            temperature: 0.7, 
+            temperature: 0.5, 
             // Temp changes scaling of final token probability, less than one makes unlikely tokens less likely, more than one makes unlikely tokens more likely, normalizing final probabilities.  
             dynatemp_range: 0.1,
             dynatemp_exponent: 1.0,
@@ -3240,27 +3243,27 @@ In conclusion, it’s crucial to also check that the frontend is sending the cor
 The user’s input is below
 
 INPUT`,
-brief:`Only prepare a mission Briefing to plan the execution of the request.
-Pseudo/Proto Briefing:
+brief:`Expand the content from user to prepare a mission Briefing to plan the execution of the request.
+Pseudo/Proto Briefing Template:
 ***
     <BRIEF>
     ## MISSION BRIEF: 
-        **[   <Generate this document to guide the immedate unaided execution by the final agent.  Do not repeat templated instructions inside **[ template instruction  ]** tags.>    ]**
+        *[   <Generate this document to guide the immedate unaided execution by the final agent.  Do not repeat templated instructions inside **[ template instruction  ]** tags.>    ]*
         
         ### MISSION OBJECTIVE:
-            -**[  Restate the request in clear terms and robust goals. This is the brief, the mission will involve final output.    ]**
+            -*[  Restate the request in clear terms and robust goals. This is the brief, the mission will involve final output.    ]*
 
         ### DETAILS:
-            -**[  Detail information pertaining to the request. Be complete, and produce a bountiful buffet of ideation.
-                Only include extra and tangential facts surrounding the mission.    ]**
+            -*[  Detail information pertaining to the request. Be complete, and produce a bountiful buffet of ideation.
+                Only include extra and tangential facts surrounding the mission.    ]*
 
         ### INTELLIGENCE: 
-            -**[    Notes and errata surrounding and supporting DETAILS.
+            -*[    Notes and errata surrounding and supporting DETAILS.
                 Include specific information to inform the immediate execution of the mission.
-                Give as much unusual but important information as possible. ]**
+                Give as much unusual or connected but important information as possible. ]*
 
         ### RULES OF ENGAGEMENT:
-            -**[  Descriptive rules to guide a successful mission.    ]**
+            -*[  Descriptive rules to guide a successful mission.    ]*
         
         [Execute]
         
@@ -3412,8 +3415,8 @@ _brief2:{
     second: {existingPrompts: ["rbrief"]},
 },
 _impactbrief:{
-    lazy: {existingPrompts: ["impact", "cf", "c"]},//name doesnt matter, only order matters. I bet they can all the same name even. See key on this line for why I didn't test yet.
     first: {existingPrompts: ["brief", "c"]},
+    lazy: {existingPrompts: ["impact", "cf", "c"]},//name doesnt matter, only order matters. I bet they can all the same name even. See key on this line for why I didn't test yet.
     second: {existingPrompts: ["rbrief", "c"]},
 },
 _impactbrief2:{
