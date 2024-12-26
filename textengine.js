@@ -1266,9 +1266,11 @@ Special ${this.appSettings.invoke} [operators] to apply${this.appSettings
 
 - "${this.appSettings.setJsonLevel}" the backtick or grave symbol changes the system json level. Supports "json","markup","partial", or none. 
 
-- "${this.appSettings.batchSwitch}" executes a batch
+- "${this.appSettings.batchSwitch}" executes on a turn
 
-- "${this.appSettings.batchMiss}" skips a batch
+- "${this.appSettings.batchMiss}" skips that prompt for the turn.
+
+"${this.appSettings.batchSwitch}" and "${this.appSettings.batchMiss}" are clipped like punch tape each turn to produce the next turn instruction.
 
 Fancy ${this.appSettings.invoke}flags${this.appSettings.endTag}
 ---
@@ -1318,8 +1320,8 @@ ${this.appSettings.invoke}Help${this.appSettings
 "dateTime" sends the date and time in the system prompt at the position you send it.
 
         `;
-        this.write = true;
-        this.sendHold = true;
+        //this.write = true;
+        //this.sendHold = true;
         this.noBatch = true;
 
         //this.nicereturn = true;
