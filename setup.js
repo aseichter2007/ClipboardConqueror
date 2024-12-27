@@ -74,7 +74,7 @@
 
                 url : "http://127.0.0.1:5001/api/v1/generate/",//Kobold Compatible api url
                 abort:"http://127.0.0.1:5001/api/extra/abort",
-                genkey: "SecretClip",
+                //genkey: "SecretClip",
                 params: "kobold",//params. must match a key in apiParams. It it is the same as the endpoint, then switching endpoints will change the parameters as well
                 autoConfigParams: true,//false prevents overriding params with |||tgwchat|
                 //templateStringKey: "jinja", //jinja, none or adapter, required for chat endpoints
