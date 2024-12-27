@@ -32,6 +32,7 @@ class TextEngine {
     this.recentClip = { text: "" };
     this.text = ""; //sorted
     this.setPrompts = {};
+    this.setNow=false;
     this.memory = "";
     this.chatLog = "";
     this.history = [];
@@ -1135,7 +1136,7 @@ Reccomended use case and operators for assistance:
           color(
             "Enabled firing on all copies. copy " +
               this.appSettings.invoke +
-              on +
+              "on" +
               this.appSettings.endtag +
               "to disable",
             "blue"
@@ -1163,6 +1164,7 @@ Reccomended use case and operators for assistance:
         if (!this.set) {
           this.set = true;
           this.setPrompts = this.identity;
+          this.setNow = true;
         } else {
           this.set = false;
         }
@@ -1270,7 +1272,7 @@ Special ${this.appSettings.invoke} [operators] to apply${this.appSettings
 
 - "${this.appSettings.batchMiss}" skips that prompt for the turn.
 
-"${this.appSettings.batchSwitch}" and "${this.appSettings.batchMiss}" are clipped like punch tape each turn to produce the next turn instruction.
+"${this.appSettings.batchSwitch}" and "${this.appSettings.batchMiss}" are clipped like punch tape each turn to produce the next turn instruction. ${this.appSettings.batchMiss+this.appSettings.batchMiss+this.appSettings.batchSwitch}c would enable the chat history on only he 4th turn.
 
 Fancy ${this.appSettings.invoke}flags${this.appSettings.endTag}
 ---
@@ -1846,17 +1848,17 @@ ${this.appSettings.invoke}Help${this.appSettings
     if (sorted) {
       this.text = this.continueSetText(sorted.formattedQuery);
       this.undress();
-      if (this.set) {
-        this.identity = this.setPrompts;
-        this.ifDefault = false;
-        if (sorted.tags.hasOwnProperty("command") && sorted.tags.command != "") {
-          this.identity[this.appSettings.rootname] = sorted.tags.command;
-        }
-      } else {
-        if (sorted.tags.hasOwnProperty("command") && sorted.tags.command != "") {
-          this.identity[this.appSettings.rootname] = sorted.tags.command; //send ||||this text over if it exists|
-        }
-      }
+      // if (this.set) {
+      //   this.identity = this.setPrompts;
+      //   this.ifDefault = false;
+      //   if (sorted.tags.hasOwnProperty("command") && sorted.tags.command != "") {
+      //     this.identity[this.appSettings.rootname] = sorted.tags.command;
+      //   }
+      // } else {
+      //   if (sorted.tags.hasOwnProperty("command") && sorted.tags.command != "") {
+      //     this.identity[this.appSettings.rootname] = sorted.tags.command; //send ||||this text over if it exists|
+      //   }
+      // }
       if (sorted.tags.persona) {
         let persona = sorted.tags.persona.split(this.appSettings.promptSplit);
         this.personaAtor(persona, sorted);
@@ -1885,6 +1887,17 @@ ${this.appSettings.invoke}Help${this.appSettings
         if (this.identity.hasOwnProperty(this.appSettings.empty)) {
           delete this.identity[this.appSettings.empty];
         }
+        if (this.setNow && sorted.tags.hasOwnProperty("command") && sorted.tags.command !== "") {
+          let setCommand= {}
+          setCommand[this.appSettings.rootname] = sorted.tags.command;
+          setCommand = {...setCommand, ...this.setPrompts};
+          this.setPrompts = setCommand;
+        }
+        if (this.set) {
+            this.identity = {...this.setPrompts, ...this.identity};
+            console.log(color("Set prompts used: ","red")+JSON.stringify(this.identity));
+        }
+          
         if (this.chatHistory) {
           if (this.chatLog != "") {
             this.identity[this.appSettings.historyName] = this.chatLog;
@@ -1931,15 +1944,6 @@ ${this.appSettings.invoke}Help${this.appSettings
           return this.sendToClipboard(sendtoclipoardtext);
         }
         if (!this.sendHold) {
-          //set params for outgoing
-          //console.log("params: " + JSON.stringify(this.params));
-          // let outParams = this.params;
-          // if (this.api.params && this.apiConfigSet !== this.api.params) {
-          //   outParams = this.apiParams[this.api.params];
-          //   //todo: build whole engine to transport settings across multiple apis
-          // }
-          // console.log("outParams: " + JSON.stringify(outParams));
-          //console.log(sorted);
           console.log(color("Sending to endpoint: ", "green"));
           
           this.reqCount++;
