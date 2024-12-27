@@ -1131,17 +1131,31 @@ Reccomended use case and operators for assistance:
 
         break;
       case "on":
-        this.on = !this.on;
-        console.log(
+        if (this.on===true) {
+          console.log(
           color(
-            "Enabled firing on all copies. copy " +
+            "Disabled AI Fiesta mode, use invoke. copy " +
               this.appSettings.invoke +
               "on" +
-              this.appSettings.endtag +
-              "to disable",
+              this.appSettings.endTag +
+              "to enable.  No request sent on setting change.",
             "blue"
-          )
-        );
+          ))
+          this.on=false
+        } else {
+          console.log(
+            color(
+              "Enabled firing on all copies. copy " +
+                this.appSettings.invoke +
+                "on" +
+                this.appSettings.endTag +
+                "to disable.  No request sent on setting change.",
+              "blue"
+            )
+          );
+          this.on = true
+        }
+        this.sendHold = true;
         break;
       case "no":
         this.sendHold = true;
@@ -1165,9 +1179,14 @@ Reccomended use case and operators for assistance:
           this.set = true;
           this.setPrompts = this.identity;
           this.setNow = true;
+          console.log(color("Setting prompts preceeding ,set, copy "+this.appSettings.invoke+"set"+this.appSettings.endTag+" to unset and restore default behavior.   No request sent on setting change.", "blue"));
         } else {
           this.set = false;
+          this.setPrompts = {};//reset
+          console.log(color("Releasing set prompts, No request sent on setting change. Copy "+this.appSettings.invoke+"desired,prompts,set"+this.appSettings.endTag+" to override the default prompt.", "blue"));
+          
         }
+        this.sendHold = true;
         outp.work = true;
         break;
       case "e":
@@ -1892,6 +1911,7 @@ ${this.appSettings.invoke}Help${this.appSettings
           setCommand[this.appSettings.rootname] = sorted.tags.command;
           setCommand = {...setCommand, ...this.setPrompts};
           this.setPrompts = setCommand;
+          this.setNow=false;
         }
         if (this.set) {
             this.identity = {...this.setPrompts, ...this.identity};
