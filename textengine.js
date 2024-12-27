@@ -1913,7 +1913,18 @@ ${this.appSettings.invoke}Help${this.appSettings
           this.setPrompts = setCommand;
           this.setNow=false;
         }
-        if (this.set) {
+        if ( this.set ) {
+          if (sorted.tags.hasOwnProperty("command") && sorted.tags.command !== "") {
+            console.log("Updating set "+this.appSettings.invoke + this.appSettings.endTag +"quick system prompt"+ this.appSettings.endTag + " : "+ sorted.tags.command);
+            let setCommand= {}
+            //delete this.setPrompts[rootname];
+            this.setPrompts[this.appSettings.rootname] = sorted.tags.command;
+           
+            if (this.on) {
+              console.log(color(" AI fiesta mode 'on', request not sent on prompt update","red"));
+              this.sendHold=true;
+            }
+          }
             this.identity = {...this.setPrompts, ...this.identity};
             console.log(color("Set prompts used: ","red")+JSON.stringify(this.identity));
         }
