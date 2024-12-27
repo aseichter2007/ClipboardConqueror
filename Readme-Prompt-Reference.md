@@ -58,7 +58,7 @@ Fancy |||`flags`|
 
 `no` prevents sending to AI, useful for copying entire invokes, just add the flag.
 
-`set` or `setDefault` saves Promptss left of it to be included in the system prompt until toggled off like |||set|. Set prompts are not changed with |||e|
+`set` or `setDefault` saves |||Prompts, on, the, left,set|and quick prompt text| to be included in the system prompt until toggled off like |||set|. Set prompts are not changed with |||e|
 
 `rf` will put the last thing you copied at the position of rf in the system prompt. 
 
