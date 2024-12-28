@@ -80,18 +80,20 @@ Clipboard Conqueror does not collect any metrics or send any data behind the sce
 
 - [Toggle Design Mode Bookmarklet](https://www.reddit.com/r/bookmarklets/comments/d8pqe2/toggle_design_mode/)
 
+  You can build a kind of UI into your browser with these:
+
     -Devil's Advocate bookmarklet code. Save this as the link of a bookmark to command Clipboard Conqueror with bookmark buttons. Click to send the current clipboard contents with the devils advocate prompt.  
 
     ```
-    javascript:(function(){var text='|||devil,re|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Requesting Devil's
-    Advocte.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();
+    javascript:(function(){var text='|||devil,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Requesting Devil's
+    Advocate for clipboard assertions.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();
     ```
 
     -Always replace copied text with a points summary bookmarklet: 
 
-      ```
-      javascript:(function(){var text='|||summarypoints,set,on|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Clipboard Conqueror Active Mode Toggled.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='red';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();
-      ```
+    ```
+    javascript:(function(){var text='|||summarypoints,set,on||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Clipboard Conqueror Active Mode Toggled.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='red';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();
+    ```
     -Current copy ELI5 Bookmarklet. 
     ```
     javascript:(function(){var text='|||re|Explain the content in a detailed presentation that a five year old can understand. Briefly review all topics needed to support understanding of the content. |';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Sending last copy to ELI5.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();
