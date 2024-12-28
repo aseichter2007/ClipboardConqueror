@@ -3450,7 +3450,8 @@ _devil:{
         //format:"",
         //params:"",
         //jsonLevel: "",
-        existingPrompts: ["pro"]
+        existingPrompts: ["pro"],
+        newPrompt:"", 
         //continue: ""
     },
     two:{
@@ -3499,13 +3500,21 @@ _brief2:{
 },
 _impactbrief:{
     first: {existingPrompts: ["brief", "c"]},
-    lazy: {existingPrompts: ["impact", "cf", "c"]},//name doesnt matter, only order matters. I bet they can all the same name even. See key on this line for why I didn't test yet.
+    lazy: {existingPrompts: ["impact", "cf", "c"]},//name doesnt matter, only order matters. I think duplicate names will use the last one of the same name and mess up. 
     second: {existingPrompts: ["rbrief", "c"]},
 },
 _impactbrief2:{
-    lazy: {existingPrompts: ["impact", "cf", "c"]},//name doesnt matter, only order matters. I bet they can all the same name even. See key on this line for why I didn't test yet.
+    lazy: {existingPrompts: ["impact", "cf", "c"]},
     first: {existingPrompts: ["brief", "c"]},
     second: {existingPrompts: ["rbrief", "c"]},
+},
+_test:{
+    1:{newPrompt:"One,"},
+    2:{newPrompt:"2"},
+    3:{newPrompt:"one, two, three, four"},
+    4:{newPrompt:"@Letsd : get Groooving. "}
+    //heck yeah.All the special operators should work. Define multistage prompts without naming them above. they go in labeled prompt1: "One" prompt2: "2"... This may have implications with ` json modes that include the key names.
+
 },
 }
 return idents;

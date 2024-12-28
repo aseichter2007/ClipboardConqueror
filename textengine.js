@@ -201,6 +201,13 @@ class TextEngine {
               }
             })
         }
+        if (identity[key].hasOwnProperty("newPrompt")) {
+          console.log(color("Using system prompt : ","yellow") + JSON.stringify(identity[key].newPrompt));
+          this.identities["prompt"+count] = identity[key].newPrompt
+          this.identityHandler(tripcode + "prompt"+count)
+          console.log(color("Setting up Compound System Prompt: " + key + " ","yellow") + tripcode + identity[key].newPrompt);
+            
+        }
         count++;
       }
   }
@@ -1881,7 +1888,7 @@ ${this.appSettings.invoke}Help${this.appSettings
       if (sorted.tags.persona) {
         let persona = sorted.tags.persona.split(this.appSettings.promptSplit);
         this.personaAtor(persona, sorted);
-        if (sorted.tags.persona.length > 7) {
+        if (sorted.tags.persona.length > 744) {
           console.log("The format level, set like " + this.appSettings.invoke + this.appSettings.setJsonLevel+ " markup, json, or partial can help to keep prompts distinct. Markup uses full chat turns, partial is like 'promptname:' ");          
         }
       }
