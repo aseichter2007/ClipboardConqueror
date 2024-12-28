@@ -18,7 +18,7 @@ Clipboard Conqueror works out of the box with
 - [Ollama](https://www.ollama.com),
 - [LMStudio](https://lmstudio.ai)<sup>*closed source</sup>
 
- These local inference servers are generally considered secure and reliable, and can be invoked simply like "|||ollama|" or "|||tgw|". They do not require an internet connection or any sensitive data to be sent on the network. Clipboard Conqeror is very configurable and should be compatibe with any inference server.
+ These local inference servers are generally considered secure and reliable, and can be invoked simply like "|||ollama|" or "|||tgw|". They do not require an internet connection or any sensitive data to be sent on the network. Clipboard Conqeror is very configurable and should be compatible with any inference server.
 
 CC works online via: 
 - [Novita AI](https://novita.ai/model-api/product/llm-api?utm_source=ClipboardConqueror&utm_medium=github_readme&utm_campaign=link)
