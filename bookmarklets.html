@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clipboard Conqueror Bookmarklets</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+            background-color: #f0f8ff;
+            max-width: 1820px;
+            margin: 0 auto;
+        }
+        img {
+        max-width: 1320px; /* This is 2/3 of 1980 */
+        width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+    }
+        .bookmarklet-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+            justify-content: center;
+        }
+        .bookmarklet-wrapper {
+            flex: 1;
+            min-width: 250px;
+            max-width: 350px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            text-align: left;
+        }
+        .bookmarklet {
+            display: block;
+            padding: 10px 15px;
+            background-color: #0078d4;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .bookmarklet:hover {
+            background-color: #005a9e;
+        }
+        .bookmarklet.active {
+            background-color: #00a650;
+        }
+        .description {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .category {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .category h2 {
+            color: #0078d4;
+            margin-bottom: 15px;
+        }
+        p {
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <img src="CCfinal.jpg" alt="Clipboard Conqueror Logo">
+    <h1>Clipboard Conqueror Bookmarklets</h1>
+    <div>Make sure Clipboard Conqueror and your inference engine of choice are ready.</div>
+    <p>Drag links to your bookmarks bar to use them anywhere!</p>
+    <p>Click them here. Note that re sends the last copied text as the user query.</p>
+    <p>Bookmarklets are not a particularly secure thing, make sure you trust the source.</p>
+    <p>Refreshing the page clears any bookmarlet with executing code.</p>
+    
+
+    <div class="category">
+        <h2>Clipboard Conqueror Settings.</h2>
+        <p>These buttons will apply the described setting. </p>
+        <div class="bookmarklet-container">
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||h,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Getting Help.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Help Assistant</a>
+                <p>|||h,re|</p>
+                <div class="description">Copy your question about how to use Clipboard Conqueror and then click this one. I haven't tested it out much. Let me know.</div>
+            </div>
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||`json,no||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='System Prompt Mode: JSON';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">System JSON</a>
+                <p>|||`json,no||</p>
+                <div class="description">Sends the system prompts as a JSON object. No prevents sending to AI. Use it when you want to copy CC invocations without sending to AI.</div>
+            </div>
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||`partial,no||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='System Prompt Mode: Partial';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">System Partial</a>
+                <p>|||`partial,no||</p>
+                <div class="description">Sends system prompts headed by "promptName:"</div>
+            </div>
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||`markup,no||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='System Prompt Mode: Markup';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">System Chat Turns</a>
+                <p>|||`markup,no||</p>
+                <div class="description">Sends the system prompts as seperate chat turns, with the prompt name replacing "assistant" in the prompt format. Some models may ragequit, some love it.</div>
+            </div>
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||`none,no||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='System Prompt Mode: Unformatted';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">System Default</a>
+                <p>|||`none,no||</p>
+                <div class="description">Sends the system prompts as text blocks with no dividers or names. This is the default behavior.</div>
+            </div>
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||agi,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Creating new history with last copied text.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Clipboard To History</a>
+                <p>|||`agi,no||</p>
+                <div class="description">Will clear the history and start a new history with the last copied text as a message from user. Used for priming secondary query.</div>
+            </div>
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||csrh,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Sneaking past the history.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Silent History</a>
+                <p>|||`csrh,no||</p>
+                <div class="description">Sends last copy into the end of the history but does not add user query or assistant response to history this turn.  It might always send as user. </div>
+            </div>
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||clearHistory||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Clearing Chat History.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Clear History</a>
+                <p>|||`clearHistory||</p>
+                <div class="description">Clears Clipboard Conqueror's chat history.</div>
+            </div>
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||sc,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Sneaking past the history.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">silentChat |||sc,re|| </a>
+                <div class="description">Sends the history wihout adding the new turn to the history. For multiple queries against the same history. </div>
+            </div>
+            
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||c,set||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Toggle Chat History for every query.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Use and build History |||c,set|</a>
+                <div class="description">I think this works to enable the history permanently but I can't remember for sure and didn't test.  Will toggle unset with other set prompts. I'd need a whole new page of buttons to cover all the options. Copy |||, prompts,c,set|instant prommt text| to set prompts with the history. Maybe. //todo: Figure this out.
+                </div>
+            </div>
+
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||c,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Toggle Chat History for every query.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Use and build History |||c,re|</a>
+                <div class="description">This sends your copied text to AI and logs the conversation turns to send the next time the c prompt is present.
+                </div>
+            </div>
+          
+
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||on||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='All copied content will be sent to AI until you toggle this off.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet active">Toggle ON |||on|</a>
+                <div class="description">Toggles sending any text copied with the default or set system prompt.</div>
+            </div>
+
+        </div>
+    </div>
+    <div class="category">
+        <h2>Active Mode Bookmarklets (5-minute timer)</h2>
+        <p>These bookmarklets have a 5 minute timer that runs on the page you're viewing when you activate the bookmarklet. If you close or refresh the page the timer is ended without toggling off the mode.</p>
+        <p>The resend timer lives in the bookmarklet, not Clipboard Conqueror.  |||on| Must be toggled off with another copy when used without the bookmark. The very end of the script, 300000, is the default time.</p>
+        <div class="bookmarklet-container">
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||summarypoints,set,on|';var timer=300;var messagetext='Ready to Summarize: ';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');var countdownActive=true;message.textContent = messagetext + timer + 's';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';message.style.cursor='pointer';message.style.opacity='0';message.style.transition='opacity 0.5s';document.body.appendChild(message);setTimeout(function(){message.style.opacity='1';},10);var interval=setInterval(function(){if(countdownActive){timer--;message.textContent=messagetext + timer + 's';if(timer<=0){clearInterval(interval);message.style.opacity='0';setTimeout(function(){document.body.removeChild(message);var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);},500);}}},1000);message.onclick=function(){countdownActive=false;clearInterval(interval);message.style.opacity='0';setTimeout(function(){document.body.removeChild(message);var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);},500);};})();" class="bookmarklet active">5m Points Summary</a>
+                <p>|||summarypoints,set,on|</p>
+                <div class="description">Summarizes content into key points automatically for 5 minutes</div>
+              </div>
+            
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||tot,set,on||';var timer=300;var messagetext='Ready to Expand: ';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');var countdownActive=true;message.textContent = messagetext + timer + 's';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';message.style.cursor='pointer';message.style.opacity='0';message.style.transition='opacity 0.5s';document.body.appendChild(message);setTimeout(function(){message.style.opacity='1';},10);var interval=setInterval(function(){if(countdownActive){timer--;message.textContent=messagetext + timer + 's';if(timer<=0){clearInterval(interval);message.style.opacity='0';setTimeout(function(){document.body.removeChild(message);var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);},500);}}},1000);message.onclick=function(){countdownActive=false;clearInterval(interval);message.style.opacity='0';setTimeout(function(){document.body.removeChild(message);var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);},500);};})();"  class="bookmarklet active">5m Tree of Thought</a>
+                <p>|||tot,set,on|</p>
+                <div class="description">Expands and writes detailed answers with comprehensive analysis for 5 minutes</div>
+            </div>
+
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||writer,set,on|~~~';var timer=300;var messagetext='Ready to write: ';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');var countdownActive=true;message.textContent = messagetext + timer + 's';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';message.style.cursor='pointer';message.style.opacity='0';message.style.transition='opacity 0.5s';document.body.appendChild(message);setTimeout(function(){message.style.opacity='1';},10);var interval=setInterval(function(){if(countdownActive){timer--;message.textContent=messagetext + timer + 's';if(timer<=0){clearInterval(interval);message.style.opacity='0';setTimeout(function(){document.body.removeChild(message);var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);},500);}}},1000);message.onclick=function(){countdownActive=false;clearInterval(interval);message.style.opacity='0';setTimeout(function(){document.body.removeChild(message);var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);},500);};})();"  class="bookmarklet active">Writer</a>
+                <p>|||writer,set,on|~~~</p>
+                <div class="description">Assists with creative writing and storytelling continuously for 5 minutes. I'm not sure ~~~ does any good here when set on... </div>
+            </div>
+
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||coder,set,on|';var timer=300;var messagetext='Ready to code:  ';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');var countdownActive=true;message.textContent = messagetext + timer + 's';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';message.style.cursor='pointer';message.style.opacity='0';message.style.transition='opacity 0.5s';document.body.appendChild(message);setTimeout(function(){message.style.opacity='1';},10);var interval=setInterval(function(){if(countdownActive){timer--;message.textContent=messagetext + timer + 's';if(timer<=0){clearInterval(interval);message.style.opacity='0';setTimeout(function(){document.body.removeChild(message);var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);},500);}}},1000);message.onclick=function(){countdownActive=false;clearInterval(interval);message.style.opacity='0';setTimeout(function(){document.body.removeChild(message);var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);},500);};})();"  class="bookmarklet active">Code Assistant</a>
+                <p>|||coder,set,on|</p>
+                <div class="description">Provides continuous coding assistance and suggestions for 5 minutes. Great for web stuff and quick help in chat. For actual development, get an IDE extention, CC isn't quite for that.  Unless you're in notepad++ or stuck in an IDE with no LLM extension. Then CC may be your only hope...</div>
+            </div>
+        </div>
+        <div class="bookmarklet-container">
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||translateTo,set,on|';var timer=300;var messagetext='Ready to Translate: ';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');var countdownActive=true;message.textContent = messagetext + timer + 's';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';message.style.cursor='pointer';message.style.opacity='0';message.style.transition='opacity 0.5s';document.body.appendChild(message);setTimeout(function(){message.style.opacity='1';},10);var interval=setInterval(function(){if(countdownActive){timer--;message.textContent=messagetext + timer + 's';if(timer<=0){clearInterval(interval);message.style.opacity='0';setTimeout(function(){document.body.removeChild(message);var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);},500);}}},1000);message.onclick=function(){countdownActive=false;clearInterval(interval);message.style.opacity='0';setTimeout(function(){document.body.removeChild(message);var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);},500);};})();"  class="bookmarklet active">Universal Translator</a>
+                <p>|||translateTo,set,on|</p>
+            <div class="description">Continuous translation to any specified language for 5 minutes. Specify a language in the copied text. </div>
+     </div>
+    </div>
+    </div>
+    <div class="category">
+        <h2>Writing & Creative Tools</h2>
+        <p>Assorted Writing prompts.  These will continue the provided text.  I just realized I bet the ~~~ operator doesn't work with last copied text.  //Todo:</p>
+        <div class="bookmarklet-container">
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||author,re||~~~';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Author Writing.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Author</a>
+                <p>|||author,re|</p>
+                <div class="description">Assists with creative writing and storytelling</div>
+            </div>
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||text,re||~~~';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Text Writing';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Text Mode</a>
+                <p>|||text,re|~~~</p>
+                <div class="description">Assists with creative writing and storytelling, continuing the text copied.</div>
+            </div>
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||novel,re||~~~';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Novel Writing ';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Novel Writing</a>
+                <p>|||novel,re|~~~</p>
+                <div class="description">Specialized assistance for novel writing and plotting</div>
+            </div>
+
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||seuss,re| Rewrite the text as Dr. Seuss Would. ~~~';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Dr. Seuss Mode Activated';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Dr. Seuss Style</a>
+                <p>|||novel,re|~~~</p>
+                <div class="description">Write in the style of Dr. Seuss.  This one does not continue, it rewrites.</div>
+            </div>
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||seuss,re| Rewrite the text as Dr. Seuss Would. ~~~';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Dr. Seuss Mode Activated';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Dr. Seuss Style</a>
+                <p>|||novel,re|~~~</p>
+                <div class="description">Write in the style of Dr. Seuss.  This one does not continue, it rewrites.</div>
+            </div>
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||editor,re| Rewrite the text as Dr. Seuss Would. ~~~';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Editor editing.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">editor</a>
+                <p>|||editor,re|~~~</p>
+                <div class="description">Act as an E.</div>
+            </div>
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||seuss,re| Rewrite the text as Dr. Seuss Would. ~~~';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Dr. Seuss Mode Activated';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Dr. Seuss Style</a>
+                <div class="description">Write in the style of Dr. Seuss.  This one does not continue, it rewrites.</div>
+            </div>
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||seuss,re| Rewrite the text as Dr. Seuss Would. ~~~';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Dr. Seuss Mode Activated';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Dr. Seuss Style</a>
+                <div class="description">Write in the style of Dr. Seuss.  This one does not continue, it rewrites.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="category">
+        <h2>Basic Prompts</h2>
+        <p>Single stage quick activators. </p>
+        <div class="bookmarklet-container">
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||dolphin,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Dolphin prompt set';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Dolphin</a>
+                <p>|||novel,re|</p>
+                <div class="description">Standard Dolphin system prompt for general tasks that require obedience.</div>
+            </div>
+
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||pro,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='StarCoder prompt set';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Pro</a>
+                <p>|||pro,re|</p>
+                <div class="description">Think step by step prompt</div>
+            </div>
+
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||hermes,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='OpenHermes prompt sent';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">OpenHermes</a>
+                <p>|||hermes,re|</p>
+                <div class="description">Standard OpenHermes system prompt for general tasks</div>
+            </div>
+
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||agi,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Ai Generate Instructions.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">AI Instruct</a>
+                <p>|||agi,re|</p>
+                <div class="description">AI Generate Instructions. This prompt breaks out steps into expandable invocations for easy expansion of explanations of each step.</div>
+            </div>
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||impact,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Calculating Impact';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Impact</a>
+                <p>|||impact,re|</p>
+                <div class="description">for understanding the ripple effects of any action or decision.</div>
+            </div>
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||devil,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Summoning Devil.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Devil's Advocate</a>
+                <p>|||devil,re|</p>
+                <div class="description">Will play contrarian to presented positions.</div>
+            </div>
+        </div>
+    </div>
+    <div class="category">
+        <h2>Compound Prompts</h2>
+        <p>Compound multi stage prompts. Paste each stage or wait for the end.  Or press escape a bunch to cancel, these can run a minute sometimes. </p>
+        <div class="bookmarklet-container">
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||_devilsAdvocate,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Summoning Big Devil.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">_Devils Advocate</a>
+                <p>|||_devilsAdvocate,re|</p>
+                <div class="description">A multistage combination of pro and devil.</div>
+            </div>
+
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||_brief,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='StarCoder prompt set';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">_brief</a>
+                <p>|||_brief,re||</p>
+                <div class="description">A chain of though prompt that creates an informational guiding brief for the final response.</div>
+            </div>
+
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||dateTime,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Ai Generate Instructions.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">AI Instruct</a>
+                <p>|||dateTime,re||</p>
+                <div class="description">sends the date and time in the system prompt at the position you send it.
+                </div>
+            </div>
+            
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){var text='|||business,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Calculating Impact';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Business</a>
+                <p>|||business,re||</p>
+                <div class="description">for understanding the ripple effects of any action or decision.</div>
+            </div>
+        </div>
+
+    <div class="category">
+        <h2>Translation Tools</h2>
+        <p>Not all models are suitable for translation. Please use these prompts for less critical tasks, or verify the translatoin quality with your selected model.</p>
+        <div class="bookmarklet-container">
+            <div class="bookmarklet-wrapper">
+                <a href="javascript:(function(){function copyText(){var text='|||translateTo,set,on|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);}function showMessage(){var message=document.createElement('div');var countdown=300;message.textContent='Translation Mode Active: '+formatTime(countdown);message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='#00a650';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';message.style.cursor='pointer';document.body.appendChild(message);message.addEventListener('click',function(){copyText();clearInterval(interval);document.body.removeChild(message);});var interval=setInterval(function(){countdown--;if(countdown<=0){clearInterval(interval);document.body.removeChild(message);}else{message.textContent='Translation Mode Active: '+formatTime(countdown);}},1000);}function formatTime(seconds){var minutes=Math.floor(seconds/60);var secs=seconds%60;return minutes+':'+(secs<10?'0':'')+secs;}copyText();showMessage();setTimeout(function(){copyText();showMessage();},300000);})();" class="bookmarklet active">Universal Translator</a>
+                <p>|||translateTo,set,on||</p>
+            <div class="description">Continuous translation to any specified language for 5 minutes. Specify a language in the copied text. </div>
+        </div>
+
+        <div class="bookmarklet-wrapper">
+            <a href="javascript:(function(){var text='|||JPLT,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Japanese Toggle';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Japanese Toggle</a>
+            <p>|||JPLT,re||</p>
+            <div class="description">Toggle between Japanese and English translation. Some models cant. Use caution.</div>
+        </div>
+
+        <div class="bookmarklet-wrapper">
+            <a href="javascript:(function(){var text='|||es,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Spanish Translation';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Spanish</a>
+            <p>|||es,re||</p>
+            <div class="description">Translate text to and from Spanish.</div>
+        </div>
+        <div class="bookmarklet-wrapper">
+            <a href="javascript:(function(){var text='|||gr,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='German Translation';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Spanish</a>
+            <p>|||gr,re||</p>
+            <div class="description">Translate text to and from German.</div>
+        </div>
+        <div class="bookmarklet-wrapper">
+            <a href="javascript:(function(){var text='|||fr,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='French Translation';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Spanish</a>
+            <p>|||fr,re||</p>
+            <div class="description">Translate text to and from French.</div>
+        </div>
+    </div>
+</div>
+
+<div class="category">
+    <h2>Coding & Development</h2>
+    <div class="bookmarklet-container">
+        <div class="bookmarklet-wrapper">
+            <a href="javascript:(function(){var text='|||code,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Code Mode Activated';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Code</a>
+            <p>|||code,re||</p>
+            <div class="description">Focused code-only responses without explanations</div>
+        </div>
+
+        <div class="bookmarklet-wrapper">
+            <a href="javascript:(function(){var text='|||bugfix,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Bug Fix Mode Activated';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Bug Fix</a>
+            <p>|||bugfix,re||</p>
+            <div class="description">Helps identify and fix code issues</div>
+        </div>
+        <div class="bookmarklet-wrapper">
+            <a href="javascript:(function(){var text='|||bugspot,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Bug Fix Mode Activated';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Spot Bugs</a>
+            <p>|||bugspot,re||</p>
+            <div class="description">Helps identify and fix code issues</div>
+        </div>
+        <div class="bookmarklet-wrapper">
+            <a href="javascript:(function(){var text='|||gitCopilot,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='GitHub Copilot Style Activated';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">GitHub Copilot</a>
+            <p>|||gitCopilot,re||</p>
+            <div class="description">A GitHub Copilot System prompt of indeterminate age.</div>
+        </div>
+    </div>
+</div>
+
+<div class="category">
+    <h2>Roleplay & Character Voices</h2>
+    <p>These prompts contain detailed descriptions of the specified character.</p>
+    <div class="bookmarklet-container">
+       
+
+        <div class="bookmarklet-wrapper">
+            <a href="javascript:(function(){var text='|||abe,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Abe Lincoln Mode Activated';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Abe Lincoln</a>
+            <p>|||abe,re||</p>
+            <div class="description">Respond as Abraham Lincoln</div>
+        </div>
+
+        <div class="bookmarklet-wrapper">
+            <a href="javascript:(function(){var text='|||frank,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Frank Mode Activated';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Frank Drebin</a>
+            <p>|||frank,re||</p>
+            <div class="description">Respond as Frank Drebin from Police Squad</div>
+        </div>
+    </div>
+</div>
+
+<div class="category">
+    <h2>Gaming & RPG Tools</h2>
+    <p> These prompts may be useful for curating Roleplay</p>
+    <div class="bookmarklet-container">
+        <div class="bookmarklet-wrapper">
+            <a href="javascript:(function(){var text='|||dndNPC,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='D&D NPC Mode Activated';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">D&D NPCs</a>
+            <p>|||dndNPC,re||</p>
+            <div class="description">Generate D&D NPCs and narratives</div>
+        </div>
+
+        <div class="bookmarklet-wrapper">
+            <a href="javascript:(function(){var text='|||lootbox,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Lootbox Mode Activated';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Loot Generator</a>
+            <p>|||lootbox,re||</p>
+            <div class="description">Generate themed magical items</div>
+        </div>
+
+        <div class="bookmarklet-wrapper">
+            <a href="javascript:(function(){var text='|||dndEvent,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='D&D Event Mode Activated';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">D&D Event Dice</a>
+            <p>|||dndEvent,re||</p>
+            <div class="description">Resolve encounters from attempts</div>
+        </div>
+    </div>
+</div>
+
+<div class="category">
+    <h2>Simple Prompt Popular Characters.</h2>
+    <P>These prompts set the assistant name and provide a brief system prompt describing the character. They toggle indiscriminately, so if you click cowboy, cowboy is set, but clicking yoda after unsets. Click yoda again to set.  Most of these are defined here and don't live in the settings. They are not available like |||deadpool|.</P>
+    <div class="bookmarklet-container">
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||cowboy,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Cowboy Mode Activated';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Cowboy</a>
+        <div class="description">Respond in cowboy style</div>
+        <p>|||cowboy,set||</p>
+    </div>
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||woody,set||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Cowboy Mode Activated';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Woody</a>
+        <p>|||woody,set||</p>
+        <div class="description">Woody and Friends.</div>
+    </div>
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||buzz,set||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Cowboy Mode Activated';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Buzz</a>
+        <p>|||buzz,set||</p>
+        <div class="description">Buzz Lightyear</div>
+    </div>
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Deadpool,set| Respond as Deadpool. A wise-cracking, fourth-wall-breaking mercenary who doesnt shy away from breaking the fourth wall and turning absurd situations into comedy.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Deadpool Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Deadpool</a> 
+        <p>|||!Deadpool,set| Respond as Deadpool. A wise-cracking, fourth-wall-breaking mercenary who doesn't shy away from breaking the fourth wall and turning absurd situations into comedy.|</p>
+        <div class="description">Deadpool simple character prompt.</div> 
+    </div>
+
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Gollum,set| Respond as Gollum. A scheming, obsessively greedy creature from The Lord of the Rings with a tortured soul, driven by the One Ring.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Gollum Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Gollum</a> 
+        <div class="description">Gollum simple character prompt.</div> 
+    </div>
+
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Yoda,set| Respond as Yoda. A wise, ancient Jedi Master from Star Wars with a calm, profound wisdom and a unique way of speaking.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Yoda Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Yoda</a> 
+        <div class="description">Yoda simple character prompt.</div> 
+    </div>
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Rick Sanchez,set| Respond as Rick Sanchez. Rick is an eccentric inventor with a PHD in sarcasm. He is the smartest man in the univers. Play the part authentically to the well known popular character,|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Rick Sanchez Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Rick Sanckez</a> 
+        <div class="description">Rick Sanchez simple character prompt. I've seen real insight out of a Rick prompt</div> 
+    </div>
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Wolverine,set| Respond as Wolverine. A brooding, feral, and fiercely loyal mutant with a healing factor and adamantium claws.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Wolverine Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Wolverine</a> 
+        <div class="description">Wolverine simple character prompt.</div> 
+    </div>
+
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Sheldon Cooper,set| Respond as Sheldon Cooper. An awkward, genius-level physicist from The Big Bang Theory with a meticulous, socially awkward personality.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Sheldon Cooper Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Sheldon</a> 
+        <div class="description">Sheldon Cooper simple character prompt  This one might actualy be good for physics problems.</div> 
+    </div>
+
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Daria Morgendorffer,set| Respond as Daria Morgendorffer. A sarcastic, intellectual outsider from Daria, known for her dry wit and disdain for mainstream society.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Daria Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Daria</a> 
+        <div class="description">Daria simple character prompt.</div> 
+    </div>
+
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Tony Stark,set| Respond as Tony Stark. A billionaire playboy and genius inventor from Iron Man with a cocky, confident, and snarky personality.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Tony Stark Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Tony Stark</a> 
+        <div class="description">Tony Stark simple character prompt.</div> 
+    </div>
+
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Hannibal Lecter,set| Respond as Hannibal Lecter. A sophisticated, manipulative genius with a penchant for high culture and a dark, chilling nature.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Hannibal Lecter Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Hannibal Lecter</a> 
+        <div class="description">Hannibal Lecter simple character prompt.</div> 
+    </div>
+
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Eleven,set| Respond as Eleven. A mysterious, childlike yet powerful character from Stranger Things with telekinetic abilities and a complex past.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Eleven Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Eleven</a> 
+        <div class="description">Eleven simple character prompt.</div> 
+    </div>
+
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Ezio Auditore,set| Respond as Ezio Auditore. A charismatic, skilled assassin from Assassin’s Creed with a quick wit and a deep sense of justice.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Ezio Auditore Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Ezio Auditore</a> 
+        <div class="description">Ezio Auditore simple character prompt.</div> 
+    </div>
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Darth Vader,set| Respond as Darth Vader. A fearsome, Sith Lord from Star Wars with a commanding and intimidating presence.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Darth Vader Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Darth Vader</a>
+        <div class="description">Darth Vader.</div>
+    </div>
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Frodo Baggins,set| Respond as Frodo Baggins. A humble, courageous hobbit from The Lord of the Rings series who is determined and brave.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Frodo Baggins Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Frodo Baggins</a>
+        <div class="description">Frodo Baggins simple character prompt  Perfect for fantasy-related reflections.</div>
+    </div>
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Dr. House,set| Respond as Dr. Gregory House. A brilliant, sarcastic diagnostician from House MD with a sharp, witty, and blunt approach.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Dr. House Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Dr. House</a>
+        <div class="description">Dr. House simple character prompt  Perfect for cutting-edge medical banter.</div>
+    </div>
+    
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Jim Halpert,set| Respond as Jim Halpert. A charming, sarcastic salesman from The Office known for his playful and dry humor.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Jim Halpert Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Jim Halpert</a>
+        <div class="description">Jim Halpert simple character prompt  Great for light-hearted, comedic interactions.</div>
+    </div>
+    
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Sherlock Holmes,set| Respond as Sherlock Holmes. A brilliant, meticulous detective from Sherlock who speaks in a formal and logical manner.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Sherlock Holmes Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Sherlock Holmes</a>
+        <div class="description">Sherlock Holmes simple character prompt  Ideal for logical and deduction-based responses.</div>
+    </div>
+    
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Patrick Bateman,set| Respond as Patrick Bateman. A sociopathic, wealthy investment banker from American Psycho with a cold, calculated, and often delusional speech style.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Patrick Bateman Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Patrick Bateman</a>
+        <div class="description">Patrick Bateman simple character prompt  Great for dark and introspective reflections.</div>
+    </div>
+    
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Captain Jack Sparrow,set| Respond as Captain Jack Sparrow. A cunning, eccentric pirate from Pirates of the Caribbean who speaks with a slurred, adventurous, and whimsical manner.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Captain Jack Sparrow Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Captain Jack Sparrow</a>
+        <div class="description">Captain Jack Sparrow simple character prompt  Ideal for swashbuckling, humorous adventures.</div>
+    </div>
+    
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Leia Organa,set| Respond as Princess Leia. A strong-willed, diplomatic leader from Star Wars who speaks with authority and resilience.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Leia Organa Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Leia Organa</a>
+        <div class="description">Leia Organa simple character prompt  Perfect for strong, diplomatic interactions.</div>
+    </div>
+    
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Joel Miller,set| Respond as Joel Miller. A grizzled, protective survivor from The Last of Us who speaks with a cautious and grounded voice. |';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Joel Miller Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Joel Miller</a>
+        <div class="description">Joel Miller simple character prompt  Great for grounded, survivor-style conversations.</div>
+    </div>
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Walter White,set| Respond as Walter White. A brilliant but morally complex chemistry teacher turned meth kingpin from Breaking Bad with a slow, calculated speech pattern.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Walter White Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Walter White</a>
+        <div class="description">Walter White simple character prompt  Great for complex, moral dilemma-based conversations.</div>
+    </div>
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!SpongeBob,set| Respond as SpongeBob SquarePants. A bubbly, enthusiastic sea sponge from SpongeBob SquarePants who speaks in a high-energy, playful manner.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='SpongeBob Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">SpongeBob</a>
+        <div class="description">SpongeBob simple character prompt  Great for cheerful, optimistic interactions.</div>
+    </div>
+    
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Shrek,set| Respond as Shrek. A lovable, grumpy ogre from Shrek who speaks with a rough, humorous, and sometimes blunt tone.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Shrek Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Shrek</a>
+        <div class="description">Shrek simple character prompt  Perfect for humorous, earthy conversations.</div>
+    </div>
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Velma,set| Respond as Velma Dinkley. A smart, analytical sleuth from Scooby-Doo who speaks in a logical, methodical way.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Velma Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Velma</a>
+        <div class="description">Velma simple character prompt  Perfect for solving mysteries with a logical approach.</div>
+    </div>
+    
+    <div class="bookmarklet-wrapper">
+        <a href="javascript:(function(){var text='|||!Hodor,set| Respond as Hodor. A simple, yet emotionally resonant character from Game of Thrones who speaks with a singular, meaningful phrase.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Hodor Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Hodor</a>
+        <div class="description">Hodor simple character prompt  Ideal for simple, emotional exchanges.</div>
+    </div>
+    <p>Thank you for using Clipboard Conqueror.</p>
+    </div>
+<script>
+    function formatTime(seconds) {
+        var minutes = Math.floor(seconds/60);
+        var secs = seconds%60;
+        return minutes+':'+(secs<10?'0':'')+secs;
+    }
+</script>
+</body>
+</html>
