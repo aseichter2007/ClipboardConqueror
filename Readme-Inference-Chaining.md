@@ -1,12 +1,12 @@
 ![Clipboard Conqueror Graphic logo. The letters are clouds and buildings on a lush estate.](CCfinal.jpg)
 Clipboard Conqueror - Batch Chain Agents
 =============================
-[Home](readme.md), [Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Setup.js](Readme-Setup.md)
+[Home](readme.md), [Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Bookmarklets](bookmarklets.html), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Setup.js](Readme-Setup.md)
 
 ---
 Multi prompt chaining and complex prompt workflows:
 ---
-Clipboard Conqueror is a no code and no code execution, basic multi-agent chat framework ready to operate on or in any context. 
+Clipboard Conqueror is a no code and no code execution, basic multi-agent chat framework ready to operate on or in any context.
 
 CC supports chaining prompts sequentially like:
 
@@ -28,7 +28,9 @@ If you're quick you can just paste out each step.
 
 ### Debug:
 
-return the debug log by copying  |||dw| or |||debugWrite| and paste.  The first turn is the initial query followed by what this contains, and the final output is not contained with d.  "dw" returns the middle for debugging your bot interactions. 
+Clipboard Conqueror's runstate is fragile during multi step queries.  External copies can be inserted into the state. As such you could, but it is not reccomended, have two models race to answer and the third model will respond to the first.  The unpredictable nature makes this a silly way to use CC.  //todo: fix the state management of CC multistage infernce.
+
+return the debug log by copying  |||dw| or |||debugWrite| and paste. Save like ||||d| The first turn is the initial query followed by what this contains, and the final output is not contained with d.  "dw" returns the middle for debugging your bot interactions. 
 
 ## Changing Endpoints:
 endpoints, prompt formats, parameter sets, and prompts as defined in setup.js or 0endpoints.json. can be used and chained by name like |||@textGenWebUiChat,@hightemp,c,@c|
@@ -152,4 +154,4 @@ These summaries are designed to help you easily remember the essence of each pro
 
 ---
 
-[Home](readme.md), [Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Setup.js](Readme-Setup.md)
+[Home](readme.md), [Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Bookmarklets](bookmarklets.html), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Setup.js](Readme-Setup.md)

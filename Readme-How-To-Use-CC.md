@@ -287,7 +287,10 @@ Anywhere. |||`none, } set system name, >set user name, ! set assistant name | qu
 
 
 
-That ought to get you started and covers most operation. Head to [API Switching](Readme-Endpoints.md) or [Chaining Inference](Readme-inferenceChaining.md) for more feature explainations, or check the available default [prompts](Readme-Prompt-Reference.md) for explainations.
+That ought to get you started and covers most operation. 
+If you want an easier way, check out [Bookmarklets](bookmarklets.html), 
+Head to [API Switching](Readme-Endpoints.md) or [Chaining Inference](Readme-inferenceChaining.md) for more feature explainations, or check the available default [prompts](Readme-Prompt-Reference.md) for explainations.
+
 
 ---
-[Home](readme.md), [Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-Inference-Chaining.md), [Setup.js](Readme-Setup.md)
+[Home](readme.md), [Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Bookmarklets](bookmarklets.html), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-Inference-Chaining.md), [Setup.js](Readme-Setup.md)

@@ -4,7 +4,7 @@ Welcome to Clipboard Conqueror, a powerful tool that brings the power of Artific
 
 ![Clipboard Conqueror Logo](CCfinal.jpg)
 
-[Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-Inference-Chaining.md), [Setup.js](Readme-Setup.md)
+[Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Bookmarklets](bookmarklets.html), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-Inference-Chaining.md), [Setup.js](Readme-Setup.md)
 
 ## What is Clipboard Conqueror?
 
@@ -62,6 +62,7 @@ Put your key into the appropriate [endpoint.key](https://github.com/aseichter200
 1. [Installing Clipboard Conqueror](Readme-Install.md)
 2. [Choosing a Model](Readme-Choosing-A-Model.md)
 3. [Basic Use](Readme-How-To-Use-CC.md)
+4. [Bookmarklets](bookmarklets.html)
 4. [Prompt Reference](Readme-Prompt-Reference.md)
 5. [Prompt Formatting](Readme-Prompt-Formatting.md)
 6. [API Switching](Readme-Endpoints.md)
@@ -80,24 +81,6 @@ Clipboard Conqueror does not collect any metrics or send any data behind the sce
 
 - [Toggle Design Mode Bookmarklet](https://www.reddit.com/r/bookmarklets/comments/d8pqe2/toggle_design_mode/)
 
-  You can build a kind of UI into your browser with these:
-
-    -Devil's Advocate bookmarklet code. Save this as the link of a bookmark to command Clipboard Conqueror with bookmark buttons. Click to send the current clipboard contents with the devils advocate prompt.  
-
-    ```
-    javascript:(function(){var text='|||devil,re||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Requesting Devil's
-    Advocate for clipboard assertions.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();
-    ```
-
-    -Always replace copied text with a points summary bookmarklet: 
-
-    ```
-    javascript:(function(){var text='|||summarypoints,set,on||';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Clipboard Conqueror Active Mode Toggled.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='red';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();
-    ```
-    -Current copy ELI5 Bookmarklet. 
-    ```
-    javascript:(function(){var text='|||re|Explain the content in a detailed presentation that a five year old can understand. Briefly review all topics needed to support understanding of the content. |';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Sending last copy to ELI5.';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();
-    ```
   Morph the web on demand as you browse.
 - [Effects of Basic Sampling Parameters](https://artefact2.github.io/llm-sampling/index.xhtml)
 - [Unofficial Kobold Guide and Model Suggestions](https://docs.google.com/document/d/1I1r-NGIxo3Gt0gfOeqJkTxTQEgPQKmy7UZR5wh_aZlY/edit?pli=1)
@@ -181,7 +164,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 Please use Clipboard Conqueror responsibly and respect copyright and laws in your country while generating content. Misuse of this tool might lead to unintended consequences and breaches of privacy or intellectual property rights. I hold no responsibility for the data that passes through this tool on any system.
 
-[Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-Inference-Chaining.md), [Setup.js](Readme-Setup.md)
+[Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Bookmarklets](bookmarklets.html), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-Inference-Chaining.md), [Setup.js](Readme-Setup.md)
 
 I solemnly promise that this application and at least one compatible backend will function in the absence of internet connectivity.
 One of my design inspirations for this application is to spread LLM models to as many computers as possible. I want to ensure at least one intact system is recovered by future archaeologists, a time capsule of culture, science, and data.  We should be sending intelligent boxes to deep space too. Our knowledge and posterity must not go to waste. 
