@@ -4,7 +4,7 @@ Welcome to Clipboard Conqueror, a powerful tool that brings the power of Artific
 
 ![Clipboard Conqueror Logo](CCfinal.jpg)
 
-[Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Bookmarklets](bookmarklets.html), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-Inference-Chaining.md), [Setup.js](Readme-Setup.md)
+[Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Bookmarklets](https://aseichter2007.github.io/ClipboardConqueror/bookmarklets.html), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-Inference-Chaining.md), [Setup.js](Readme-Setup.md)
 
 ## What is Clipboard Conqueror?
 
@@ -62,7 +62,7 @@ Put your key into the appropriate [endpoint.key](https://github.com/aseichter200
 1. [Installing Clipboard Conqueror](Readme-Install.md)
 2. [Choosing a Model](Readme-Choosing-A-Model.md)
 3. [Basic Use](Readme-How-To-Use-CC.md)
-4. [Bookmarklets](bookmarklets.html)
+4. [Bookmarklets](https://aseichter2007.github.io/ClipboardConqueror/bookmarklets.html)
 4. [Prompt Reference](Readme-Prompt-Reference.md)
 5. [Prompt Formatting](Readme-Prompt-Formatting.md)
 6. [API Switching](Readme-Endpoints.md)
@@ -164,7 +164,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 Please use Clipboard Conqueror responsibly and respect copyright and laws in your country while generating content. Misuse of this tool might lead to unintended consequences and breaches of privacy or intellectual property rights. I hold no responsibility for the data that passes through this tool on any system.
 
-[Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Bookmarklets](bookmarklets.html), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-Inference-Chaining.md), [Setup.js](Readme-Setup.md)
+[Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Bookmarklets](https://aseichter2007.github.io/ClipboardConqueror/bookmarklets.html), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-Inference-Chaining.md), [Setup.js](Readme-Setup.md)
 
 I solemnly promise that this application and at least one compatible backend will function in the absence of internet connectivity.
 One of my design inspirations for this application is to spread LLM models to as many computers as possible. I want to ensure at least one intact system is recovered by future archaeologists, a time capsule of culture, science, and data.  We should be sending intelligent boxes to deep space too. Our knowledge and posterity must not go to waste. 

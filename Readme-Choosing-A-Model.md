@@ -1,7 +1,7 @@
 ![Clipboard Conqueror Graphic logo. The letters are clouds and buildings on a lush estate.](CCfinal.jpg)
 Clipboard Conqueror - Choosing A Model:
 =============================
-[Home](readme.md), [Install](Readme-Install.md), [Basic Use](Readme-How-To-Use-CC.md), [Bookmarklets](bookmarklets.html), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-Inference-Chaining.md), [Setup.js](Readme-Setup.md)
+[Home](readme.md), [Install](Readme-Install.md), [Basic Use](Readme-How-To-Use-CC.md), [Bookmarklets](https://aseichter2007.github.io/ClipboardConqueror/bookmarklets.html), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-Inference-Chaining.md), [Setup.js](Readme-Setup.md)
 
 --- 
 
@@ -203,4 +203,4 @@ Winogrande is another benchmark for common sense reasoning
 //Todo, collect more and better test descriptions.
 
 ---
-[Home](readme.md), [Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Bookmarklets](bookmarklets.html), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-Inference-Chaining.md), [Setup.js](Readme-Setup.md)
+[Home](readme.md), [Install](Readme-Install.md), [Choosing a Model](Readme-Choosing-A-Model.md), [Basic Use](Readme-How-To-Use-CC.md), [Bookmarklets](https://aseichter2007.github.io/ClipboardConqueror/bookmarklets.html), [Prompt Reference](Readme-Prompt-Reference.md), [Prompt Formatting](Readme-Prompt-Formatting.md), [API Switching](Readme-Endpoints.md), [Chaining Inference](Readme-Inference-Chaining.md), [Setup.js](Readme-Setup.md)
