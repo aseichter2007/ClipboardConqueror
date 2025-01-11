@@ -153,6 +153,41 @@
         </div>
     </div>
     <div class="category">
+        <h1>Bookmarklet Generator</h1>
+        <p>be sure to use "re" if you want to use the last copied text, or "prompts,set,on" to use every copy</p> 
+        <br>
+        <div>
+            <label for="input-one">||| settings, systemPrompts, operators </label><
+            <input id="input-one" type="text" placeholder="optional"></body>
+        </div>
+        <br>
+        <div>
+        <label for="input-two">Top System Prompt Text</label>
+        <input id="input-two" type="text" placeholder="top system prompt">
+        </div>
+        <br>
+        <div>
+        <label for="input-three">user query text then last copied text:</label>
+        <input id="input-three" type="text" placeholder="optional">
+        </div>
+        <br>
+        <div>
+        <label for="message-text">Message Text:</label>
+        <input id="message-text" type="text" placeholder="Your notification note here.">
+        </div>
+        <br>
+        <div>
+        <label for="timer">Countdown Timer (seconds, leave blank for no timer):</label>
+        <input id="timer" type="number" placeholder="Optional">
+        <p>When the timer is used, the last copy will be sent after the timer.</p>
+    
+        <button onclick="generateBookmarklet()">Generate Bookmarklet</button>
+    
+        <div class="output" id="output"></div>
+        </div>
+    </div>
+    
+    <div class="category">
         <h2>Active Mode Bookmarklets (5-minute timer)</h2>
         <p>These bookmarklets have a 5 minute timer that runs on the page you're viewing when you activate the bookmarklet. If you close or refresh the page the timer is ended without toggling off the mode.</p>
         <p>The resend timer lives in the bookmarklet, not Clipboard Conqueror.  |||on| Must be toggled off with another copy when used without the bookmark. The very end of the script, 300000, is the default time.</p>
@@ -545,7 +580,16 @@
         <a href="javascript:(function(){var text='|||!Hodor,set| Respond as Hodor. A simple, yet emotionally resonant character from Game of Thrones who speaks with a singular, meaningful phrase.|';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');message.textContent='Hodor Personality Selected';message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';document.body.appendChild(message);setTimeout(function(){document.body.removeChild(message);},2000);})();" class="bookmarklet">Hodor</a>
         <div class="description">Hodor simple character prompt  Ideal for simple, emotional exchanges.</div>
     </div>
-    <p>Thank you for using Clipboard Conqueror.</p>
+    </div>
+    <div>
+    <p>Thank you for using Clipboard Conqueror.
+      I worked on this page Christmas morning instead of snuggling my son.
+      Later he sat on my lap while I debugged the mess.
+      She left the 30th, I miss my boy. I kind of knew it was coming but I was finally normalizing at my new job, the finances were holding. I was starting to unclench and shift into a mode where I could lift my head, where I had the capacity to tend the smaller needs around me. Life always slaps back.</p>
+      <p>
+      Donations to CC benefit my son's mother.  The prompts here at the end are a work of racing against madness while my son watched me work and pounded my keyboard in enthusiastic participation. They appear low effort because small models did the lifting with poor instructions.  They represent a moment of working together with my son, which may be too long coming again. We made you free software, deal with it.
+    </p>
+    <p>Clipboard Conqueror was made to support Leonidas.</p>
     </div>
 <script>
     function formatTime(seconds) {
@@ -553,6 +597,31 @@
         var secs = seconds%60;
         return minutes+':'+(secs<10?'0':'')+secs;
     }
+    function generateBookmarklet() {
+            const inputOne = document.getElementById('input-one').value;
+            const inputTwo = document.getElementById('input-two').value;
+            const inputThree = document.getElementById('input-three').value;
+            // Combine the inputs into a single structure or use them directly
+            const combinedInputs = "|||"+ inputOne +"|"+ inputTwo +"|"+ inputThree;
+    
+
+            const text = encodeURIComponent(combinedInputs);
+            const messageText = encodeURIComponent(document.getElementById('message-text').value);
+            const timer = document.getElementById('timer').value;
+
+            const timerLogic = timer ? `var timer=${timer};` : "var timer=2;";
+            const countdownLogic = timer 
+                ? `interval=setInterval(function(){if(countdownActive){timer--;message.textContent=messagetext + timer + 's';if(timer<=0){clearInterval(interval);message.style.opacity='0';setTimeout(function(){document.body.removeChild(message);var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);},500);}}},1000);`
+                : `setTimeout(function(){message.style.opacity='0';},2000);`;
+
+            const bookmarklet = `javascript:(function(){var text='${text}';${timerLogic}var messagetext='${messageText} ';var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);var message=document.createElement('div');var countdownActive=true;message.textContent = messagetext + (timer ? timer + 's' : '');message.style.position='fixed';message.style.bottom='20px';message.style.right='20px';message.style.padding='10px 20px';message.style.backgroundColor='black';message.style.color='white';message.style.borderRadius='5px';message.style.zIndex='10000';message.style.cursor='pointer';message.style.opacity='0';message.style.transition='opacity 0.5s';document.body.appendChild(message);setTimeout(function(){message.style.opacity='1';},10);${countdownLogic}message.onclick=function(){countdownActive=false;clearInterval(interval);message.style.opacity='0';setTimeout(function(){document.body.removeChild(message);var textarea=document.createElement('textarea');textarea.value=text;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);},500);};})();`;
+
+            const output = document.getElementById('output');
+            output.innerHTML = `<p><a href=":${bookmarklet}">Your Bookmarklet</a></p>;document.body.appendChild(output);
+    })();" 
+    style="text-decoration:none; padding:5px 10px; background:#f0f0f0; border:1px solid #ccc; border-radius:4px;"
+    >`;
+        }
 </script>
 </body>
 </html>
