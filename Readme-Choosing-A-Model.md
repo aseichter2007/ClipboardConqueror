@@ -86,7 +86,7 @@ Not all models use the same underpinnings, for example, many older 13B and 20B m
 
 **Alright, now the bit you came here for.**
 
-Model Reccomendations:
+Model Recommendations:
 ---
 Most of links below are to OpenHermes 2.5 Mistral 7B. [Llama 3 Instruct 8B](https://huggingface.co/bartowski/Meta-Llama-3-8B-Instruct-GGUF) is more lively. I also liked Llama 3 8B [Hermes 2 Theta](https://huggingface.co/NousResearch/Hermes-2-Theta-Llama-3-8B-GGUF), [Hermes 2 Pro](https://huggingface.co/NousResearch/Hermes-2-Pro-Llama-3-8B-GGUF), and [SFR](https://huggingface.co/leafspark/SFR-Iterative-DPO-LLaMA-3-8B-R-lora)
 
